@@ -16,7 +16,7 @@ on mac you can use homebrew
 brew install uv
 ```
 
-clone this repo and run in cmd
+clone this repo. then `cd` into it and run in cmd
 ```bash
 uv sync
 ```
@@ -52,16 +52,16 @@ make build-mac
 
 ## for users
 
+![Main app](resources/main_app.png)
 follow the instructions given inside the app. or go to this notion page for more details.
 
-点击browse folder打开文件管理器定位图片
-
-![Now works on mac](resources/browse_on_mac.png)
+- 点击browse folder打开文件管理器定位图片（此时文件夹默认定位在NAS网盘pacdora.com文件中），也可以在上方输入框中手动输入
+![Now works on mac](resources/browse_button_on_mac.png)
 （macos用户也可以直接打开了）
-
-## update logs
-
-2025.6.5 构建了一个初步可用的框架，基于PySide6构建符合Material Design的网页设置自动化app。在前人基础上进行了逻辑优化和视觉效果优化，添加了新的一键从Google Docs解析所有字段功能（待进一步实现）。同时还设置了makefile助于以后打包发布。
+- 点击open folder可以查看已定位的图片文件夹
+- 点击Parse，自动从剪切板中获取已复制的docs文本进行解析，同时更新至上方输入框
+![resources/update_button.png](resources/update_button.png)
+- 点击Generate JSON生成JSON文件，所有信息以文本框展示的为基准
 
 ## problem
 URL
@@ -74,4 +74,8 @@ Breadcrumb
 Aluminium Bottle Mockup
 View all aluminium bottle mockups:/mockups/tumbler-mockup
 Make an aluminium bottle mockup:/mockup-detail/steel-bottle-water-bottle-stainless-steel-mockup-510170
-#
+
+## Acknowledgement
+
+- Shout out to mirtle@pacdora.com for the prototype.
+- contact xolarvill@gmail.com or victorli@pacdora.com
