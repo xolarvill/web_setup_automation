@@ -54,6 +54,11 @@ make build-mac
 
 follow the instructions given inside the app. or go to this notion page for more details.
 
+点击browse folder打开文件管理器定位图片
+
+![Now works on mac](resources/browse_on_mac.png)
+（macos用户也可以直接打开了）
+
 ## update logs
 
 2025.6.5 构建了一个初步可用的框架，基于PySide6构建符合Material Design的网页设置自动化app。在前人基础上进行了逻辑优化和视觉效果优化，添加了新的一键从Google Docs解析所有字段功能（待进一步实现）。同时还设置了makefile助于以后打包发布。

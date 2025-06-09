@@ -135,16 +135,21 @@ class WSA(QMainWindow):
         main_layout.setSpacing(10)
         main_layout.setContentsMargins(20, 20, 20, 20)
         
-        
-        
     def browse_folder(self):
         self.output_box.append(f"#########\nBrowsing action triggered at {self.current_time()}")
         # Set default folder for QFileDialog
-        default_folder = "//nas01.tools.baoxiaohe.com/shared/pacdora.com/"
-        # Check if NAS folder is reachable
+        if sys.platform.startswith('darwin'):
+            # Use NAS path or Desktop as default on macOS
+            default_folder = "/Volumes/shared/pacdora.com/"
+            if not os.path.isdir(default_folder):
+                self.output_box.append(f"<b>Warning</b>: Cannot reach the NAS folder ({default_folder}). Using Desktop instead.")
+                default_folder = os.path.expanduser("~/Desktop")
+        else:
+            default_folder = "//nas01.tools.baoxiaohe.com/shared/pacdora.com/"
+        # Check if default folder exists, else fallback to home
         if not os.path.isdir(default_folder):
-            self.output_box.append("<b>Warning</b>: Cannot reach the NAS folder. Please check your NAS connection.")
-            return
+            self.output_box.append(f"<b>Warning</b>: Cannot reach the default folder ({default_folder}). Using home directory instead.")
+            default_folder = os.path.expanduser("~")
         folder = QFileDialog.getExistingDirectory(self, "Select Folder", default_folder)
         if folder:
             self.pics_path_input.setText(folder)
