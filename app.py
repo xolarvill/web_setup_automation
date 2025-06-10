@@ -9,11 +9,8 @@ from qt_material import apply_stylesheet  # 导入qt-material库
 import os
 from datetime import datetime
 from PySide6.QtGui import QGuiApplication
-from parse import extract_cutout_nextline, extract_cutout_currentline
+from parse import extract_cutout_nextline, extract_cutout_currentline, segment
 from PySide6.QtCore import QTimer
-
-
-
 
 class LabeledLineEditWithCopy(QWidget):
     def __init__(self, label_text="Label:", placeholder= "Click button on the right to copy", parent=None):
@@ -134,7 +131,7 @@ class WSA(QMainWindow):
         pics_path_layout.addWidget(self.pics_path_input)
         left_layout.addLayout(pics_path_layout)
         
-        # URL Path输入框
+        # URL Path输入框，对应关键词URL:
         url_path_layout = QHBoxLayout()
         url_label = QLabel("URL Path:")
         url_label.setMinimumWidth(100)
@@ -393,8 +390,8 @@ class WSA(QMainWindow):
         
         clipboard = QGuiApplication.clipboard()
         clipboard_text = clipboard.text()
-        cutout_keywords_nextline = ["URL", "Title", "Meta description", "Breadcrumb"]
-        cutout_keywords_currentline = ["View all", "Make a"]
+        cutout_keywords_nextline = ["URL", "Title", "Meta Description", "Breadcrumb"]
+        cutout_keywords_currentline = ["View all", "Make a", "Design a"]
         
         if clipboard_text:
             preview_start = clipboard_text[:50]
@@ -410,16 +407,27 @@ class WSA(QMainWindow):
                     self.add_output_message("Article parsed successfully! Keywords detected and extracted.", "success")
                     
                     # 更新界面字段
-                    if "Title" in merged:
-                        self.title_widget.setText(merged["Title"])
-                    if "Meta description" in merged:
-                        self.description_widget.setText(merged["Meta description"])
                     if "URL" in merged:
-                        self.file_path_widget.setText(merged["URL"])
+                        value = merged["URL"]
+                        self.file_path_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
+                    if "Title" in merged:
+                        value = merged["Title"]
+                        self.title_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
+                    if "Meta Description" in merged:
+                        value = merged["Meta Description"]
+                        self.description_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
+                    if "Breadcrumb" in merged:
+                        value = merged["Breadcrumb"]
+                        self.keywords_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
                     if "View all" in merged:
-                        self.view_widget.setText(merged["View all"])
+                        value = merged["View all"]
+                        self.view_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
                     if "Make a" in merged:
-                        self.try_widget.setText(merged["Make a"])
+                        value = merged["Make a"]
+                        # 如果"Make a"为空白，尝试用"Design a"替代
+                        if (not value or (isinstance(value, str) and value.strip() == "")) and "Design a" in merged:
+                            value = merged["Design a"]
+                        self.try_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
                         
                 else:
                     self.add_output_message("No keywords detected. Please ensure you've copied the correct article. This could happen when the article is not correctly formatted. Go check it.", "warning")

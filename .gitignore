@@ -3,6 +3,7 @@
 .AppleDouble
 .LSOverride
 test/
+temp.txt
 
 # Icon must end with two \r
 Icon

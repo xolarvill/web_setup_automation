@@ -2,62 +2,80 @@ from typing import List
 
 def extract_cutout_nextline(text: str, keywords: List[str]) -> dict:
     """
-    从文本中提取以指定关键词开头的行的下一段内容。
+    从文本中提取以指定关键词开头的行的下一行内容（比较时大小写不敏感，提取原文时保留原始大小写）。
 
     :param text: 输入的多行字符串
     :param keywords: 关键词列表
-    :return: dict，key为关键词，value为对应cutout内容
+    :return: dict，key为关键词，value为对应cutout内容（只取下一行）
     """
     lines = text.splitlines()
     cutouts = {}
-    keyword_set = set(keywords)
+    # 构建小写关键词集合用于比较
+    keyword_map = {k.lower(): k for k in keywords}
+    found = set()
     i = 0
     while i < len(lines):
-        line = lines[i].strip()
-        for keyword in keyword_set:
-            if line.startswith(keyword):
-                # 提取下一段内容
-                cutout_lines = []
-                i += 1
-                while i < len(lines) and lines[i].strip() != "":
-                    cutout_lines.append(lines[i])
-                    i += 1
-                cutouts[keyword] = "\n".join(cutout_lines)
+        line = lines[i]
+        stripped = line.strip()
+        for kw_lower, kw_orig in keyword_map.items():
+            if kw_orig not in found and stripped.lower().startswith(kw_lower):
+                # 只提取第一次出现的下一行内容，保留原文
+                if i + 1 < len(lines):
+                    cutouts[kw_orig] = lines[i + 1]
+                else:
+                    cutouts[kw_orig] = ""
+                found.add(kw_orig)
                 break
         i += 1
+    # 保证所有关键词都有返回值
+    for keyword in keywords:
+        if keyword not in cutouts:
+            cutouts[keyword] = ""
     return cutouts
 
-def extract_cutout_currentline(text: str, keywords: List[str])-> dict: 
+def extract_cutout_currentline(text: str, keywords: List[str]) -> dict:
     """
-    提取以指定关键词开头的所有行。
+    提取以指定关键词开头的所有行（比较时大小写不敏感，提取原文时保留原始大小写）。
     :param text: 输入的多行字符串
     :param keywords: 关键词列表
     :return: dict，key为关键词，value为所有匹配行组成的列表
     """
     lines = text.splitlines()
-    keyword_set = set(keywords)
+    # 构建小写关键词集合用于比较
+    keyword_map = {k.lower(): k for k in keywords}
     cutouts = {k: [] for k in keywords}
+    found = set()
     for line in lines:
         stripped = line.strip()
-        for keyword in keyword_set:
-            if stripped.startswith(keyword):
-                cutouts[keyword].append(line)
+        for kw_lower, kw_orig in keyword_map.items():
+            if kw_orig not in found and stripped.lower().startswith(kw_lower):
+                cutouts[kw_orig].append(line)
+                found.add(kw_orig)
     return cutouts
+
+def segment(text: str) -> List[str]:
+    '''
+    将输入的文本按照#进行分割，并返回分割后的结果。
+    '''
+    segments = []
+    current = []
+    for line in text.splitlines():
+        if line.strip() == "#":
+            if current:
+                segments.append('\n'.join(current).strip())
+                current = []
+        else:
+            current.append(line)
+    if current:
+        segments.append('\n'.join(current).strip())
+    return [seg for seg in segments if seg]
 
 # 示例用法
 if __name__ == "__main__":
-    sample_text = """
-    meta description
-    这是描述内容
-    可以有多行
-
-    title
-    这是标题
-
-    meta keywords
-    关键词1, 关键词2
-    """
-    keywords = ["meta description", "title", "meta keywords"]
+    with open("temp.txt", "r") as f:
+        sample_text = f.read()
+    #print(sample_text)
+    keywords = ["meta description:", "title:", "meta keywords:"]
     result = extract_cutout_nextline(sample_text, keywords)
     for k, v in result.items():
         print(f"{k}:\n{v}\n")
