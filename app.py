@@ -1,6 +1,8 @@
 import sys
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-                              QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QTextEdit)
+                              QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QTextEdit, 
+                              QSplitter, QFrame,
+                              QSizePolicy)
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from qt_material import apply_stylesheet  # 导入qt-material库
@@ -11,7 +13,7 @@ from parse import extract_cutout_nextline, extract_cutout_currentline
 from PySide6.QtCore import QTimer
 
 
-# ...existing code...
+
 
 class LabeledLineEditWithCopy(QWidget):
     def __init__(self, label_text="Label:", placeholder= "Click button on the right to copy", parent=None):
@@ -25,16 +27,16 @@ class LabeledLineEditWithCopy(QWidget):
 
         # 输入框和按钮容器
         input_container = QWidget()
-        input_container.setFixedWidth(550)
+        input_container.setFixedWidth(350)
         input_container.setFixedHeight(32)
 
         self.line_edit = QLineEdit(input_container)
-        self.line_edit.setGeometry(0, 0, 490, 32)
+        self.line_edit.setGeometry(0, 0, 290, 32)
         if placeholder is not None:
             self.line_edit.setPlaceholderText(placeholder)
 
         self.copy_btn = QPushButton("📋", input_container)
-        self.copy_btn.setGeometry(495, 2, 50, 28)
+        self.copy_btn.setGeometry(295, 2, 50, 28)
         self.copy_btn.setFocusPolicy(Qt.NoFocus)
         self.copy_btn.setStyleSheet("""
             QPushButton {
@@ -78,88 +80,129 @@ class LabeledLineEditWithCopy(QWidget):
         self.line_edit.setText(text)
 
 
-
-
 class WSA(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Web Setup Automation")
-        self.setMinimumSize(700, 600)  # 增加窗口大小以适应输出框
+        self.setMinimumSize(1000, 700)  # 增加最小窗口大小
         self.setWindowIcon(QIcon("resources/icon.png"))  # 可选：添加图标文件
 
-        # 中心小部件和布局
+        # 中心小部件和主分割器
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
-        main_layout = QVBoxLayout(central_widget)
+        main_layout = QHBoxLayout(central_widget)
+        main_layout.setContentsMargins(10, 10, 10, 10)
+        
+        # 创建水平分割器
+        splitter = QSplitter(Qt.Horizontal)
+        main_layout.addWidget(splitter)
+        
+        # 左侧面板 - 输入控件
+        left_panel = QFrame()
+        left_panel.setFrameStyle(QFrame.StyledPanel)
+        left_panel.setMinimumWidth(500)
+        left_panel.setMaximumWidth(500)
+        
+        left_layout = QVBoxLayout(left_panel)
+        left_layout.setSpacing(12)
+        left_layout.setContentsMargins(15, 15, 15, 15)
+        
+        # 添加标题
+        title_label = QLabel("Configuration Panel")
+        title_label.setStyleSheet("font-size: 16px; font-weight: bold; color: #2c3e50; margin-bottom: 10px;")
+        left_layout.addWidget(title_label)
         
         # Page Type下拉菜单
         page_layout = QHBoxLayout()
-        page_layout.addWidget(QLabel("Type:"))
+        page_label = QLabel("Type:")
+        page_label.setMinimumWidth(100)
+        page_layout.addWidget(page_label)
         self.page_type = QComboBox()
         self.page_type.addItems(["Mockup tool", "Mockup resource", "Mockup content", "Dieline tool", "Dieline resource", "TOOLS","Landing page"])
         self.page_type.setCurrentIndex(0)
+        self.page_type.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         page_layout.addWidget(self.page_type)
-        main_layout.addLayout(page_layout)
+        left_layout.addLayout(page_layout)
         
         # Pics Path输入框
         pics_path_layout = QHBoxLayout()
-        pics_path_layout.addWidget(QLabel("Pics Path:"))
+        pics_label = QLabel("Pics Path:")
+        pics_label.setMinimumWidth(100)
+        pics_path_layout.addWidget(pics_label)
         self.pics_path_input = QLineEdit()
         self.pics_path_input.setPlaceholderText("Enter the path of your pics folder here. OR use the Browse button.")
         pics_path_layout.addWidget(self.pics_path_input)
-        main_layout.addLayout(pics_path_layout)
+        left_layout.addLayout(pics_path_layout)
         
         # URL Path输入框
         url_path_layout = QHBoxLayout()
-        url_path_layout.addWidget(QLabel("URL Path:"))
+        url_label = QLabel("URL Path:")
+        url_label.setMinimumWidth(100)
+        url_path_layout.addWidget(url_label)
         self.url_path_input = QLineEdit()
         self.url_path_input.setPlaceholderText("This is the short fix in the url link.")
         url_path_layout.addWidget(self.url_path_input)
-        main_layout.addLayout(url_path_layout)
+        left_layout.addLayout(url_path_layout)
+        
+        # 分隔线
+        separator1 = QFrame()
+        separator1.setFrameShape(QFrame.HLine)
+        separator1.setFrameShadow(QFrame.Sunken)
+        left_layout.addWidget(separator1)
+        
+        # 输出字段标题
+        output_title = QLabel("Generated Fields")
+        output_title.setStyleSheet("font-size: 14px; font-weight: bold; color: #34495e; margin: 10px 0 5px 0;")
+        left_layout.addWidget(output_title)
         
         # 文件路径
         self.file_path_widget = LabeledLineEditWithCopy("文件路径")
-        main_layout.addWidget(self.file_path_widget)
+        left_layout.addWidget(self.file_path_widget)
         
         # 浏览器title
         self.title_widget = LabeledLineEditWithCopy("浏览器title")
-        main_layout.addWidget(self.title_widget)
+        left_layout.addWidget(self.title_widget)
         
         # 网页描述
         self.description_widget = LabeledLineEditWithCopy("网页描述")
-        main_layout.addWidget(self.description_widget)
+        left_layout.addWidget(self.description_widget)
         
         # 网页关键词
-        self.keywords_widget = LabeledLineEditWithCopy("网页关键词")
-        main_layout.addWidget(self.keywords_widget)
+        self.keywords_widget = LabeledLineEditWithCopy("关键词")
+        left_layout.addWidget(self.keywords_widget)
         
         # View
         self.view_widget = LabeledLineEditWithCopy("View")
-        main_layout.addWidget(self.view_widget)
+        left_layout.addWidget(self.view_widget)
         
         # Try
         self.try_widget = LabeledLineEditWithCopy("Try")
-        main_layout.addWidget(self.try_widget)
+        left_layout.addWidget(self.try_widget)
         
-        # 设置统一的输入框和下拉框宽度
-        input_width = 550
-        self.pics_path_input.setFixedWidth(input_width)
-        self.url_path_input.setFixedWidth(input_width)
-        self.page_type.setFixedWidth(input_width)
+        # 分隔线
+        separator2 = QFrame()
+        separator2.setFrameShape(QFrame.HLine)
+        separator2.setFrameShadow(QFrame.Sunken)
+        left_layout.addWidget(separator2)
         
-
+        # 按钮区域
+        button_title = QLabel("Actions")
+        button_title.setStyleSheet("font-size: 14px; font-weight: bold; color: #34495e; margin: 10px 0 5px 0;")
+        left_layout.addWidget(button_title)
+        
         # 按钮布局（分两行，手动分配按钮）
         button_layout1 = QHBoxLayout()
         button_layout2 = QHBoxLayout()
 
         # 第一行按钮
         buttons_row1 = [
-            ("Browse folder", self.browse_folder),
-            ("Open folder", self.open_folder)
+            ("Browse Folder", self.browse_folder),
+            ("Open Folder", self.open_folder)
         ]
         for text, callback in buttons_row1:
             btn = QPushButton(text)
             btn.clicked.connect(callback)
+            btn.setMinimumHeight(35)
             button_layout1.addWidget(btn)
 
         # 第二行按钮
@@ -170,20 +213,55 @@ class WSA(QMainWindow):
         for text, callback in buttons_row2:
             btn = QPushButton(text)
             btn.clicked.connect(callback)
+            btn.setMinimumHeight(35)
             button_layout2.addWidget(btn)
 
         # 添加按钮布局
-        main_layout.addLayout(button_layout1)
-        main_layout.addLayout(button_layout2)
-
-        # 运行结果输出框和清除按钮容器 Output container
-        output_container = QWidget()
-        output_container.setMinimumHeight(120)
-        output_container.setMaximumHeight(200)
-        output_container.setLayout(None)  # 允许绝对定位
-
+        left_layout.addLayout(button_layout1)
+        left_layout.addLayout(button_layout2)
+        
+        # 添加弹性空间
+        left_layout.addStretch()
+        
+        # 右侧面板 - 输出区域
+        right_panel = QFrame()
+        right_panel.setFrameStyle(QFrame.StyledPanel)
+        right_panel.setMinimumWidth(450)
+        
+        right_layout = QVBoxLayout(right_panel)
+        right_layout.setContentsMargins(15, 15, 15, 15)
+        right_layout.setSpacing(8)
+        
+        # 输出区域标题和清除按钮
+        output_header = QHBoxLayout()
+        output_title = QLabel("Program Output")
+        output_title.setStyleSheet("font-size: 16px; font-weight: bold; color: #2c3e50;")
+        output_header.addWidget(output_title)
+        
+        output_header.addStretch()  # 添加弹性空间
+        
+        # 清除按钮放在标题栏右侧
+        self.clear_button = QPushButton("Clear Output")
+        self.clear_button.setFixedSize(150, 30)
+        self.clear_button.setStyleSheet("""
+            QPushButton {
+                background-color: #e74c3c;
+                color: white;
+                border-radius: 5px;
+                font-weight: bold;
+                border: none;
+            }
+            QPushButton:hover {
+                background-color: #c0392b;
+            }
+        """)
+        self.clear_button.clicked.connect(self.clear_output)
+        output_header.addWidget(self.clear_button)
+        
+        right_layout.addLayout(output_header)
+        
         # 输出框
-        self.output_box = QTextEdit(output_container)
+        self.output_box = QTextEdit()
         self.output_box.setReadOnly(True)
         self.output_box.setPlaceholderText(
             "Program output will be displayed here...\n\n"
@@ -191,34 +269,37 @@ class WSA(QMainWindow):
             "• OPEN FOLDER can open the selected folder for inspection\n"
             "• After copying text from Google Docs, click UPDATE to parse\n"
             "• Click GENERATE JSON for final result\n"
-            "• Use Clear button to reset messages\n"
-            "• Use 📋 button to copy the text"
-            )
-        self.output_box.setGeometry(0, 0, 650, 180)  # 预设大小
-
-        # 清除按钮
-        self.clear_button = QPushButton("C", output_container)
-        self.clear_button.setFixedSize(60, 28)
-        # 放在output_box右下角
-        self.clear_button.setGeometry(self.output_box.width() - 70, self.output_box.height() - 38, 60, 28)
-        self.clear_button.clicked.connect(self.output_box.clear)
-
-        # 响应窗口大小变化，动态调整按钮位置
-        def resize_event(event):
-            self.output_box.setGeometry(0, 0, output_container.width(), output_container.height())
-            self.clear_button.setGeometry(
-            output_container.width() - 70,
-            output_container.height() - 38,
-            60, 28
-            )
-        output_container.resizeEvent = resize_event
-
-        main_layout.addWidget(output_container)
-
-        # 调整布局间距
-        main_layout.setSpacing(10)
-        main_layout.setContentsMargins(20, 20, 20, 20)
+            "• Use Clear Output button to reset messages\n"
+            "• Use 📋 button to copy the text\n"
+            "• If you are on MacOS, make sure you are connected to the NAS server every time you reboot your computer."
+        )
+        self.output_box.setStyleSheet("""
+            QTextEdit {
+                background-color: #f8f9fa;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                padding: 10px;
+                font-family: 'Consolas', 'Monaco', monospace;
+                font-size: 12px;
+                line-height: 1.4;
+            }
+        """)
         
+        right_layout.addWidget(self.output_box)
+        
+        # 将面板添加到分割器
+        splitter.addWidget(left_panel)
+        splitter.addWidget(right_panel)
+        
+        # 设置分割器初始比例 (左:右 = 2:3)
+        splitter.setSizes([400, 600])
+        splitter.setStretchFactor(0, 0)  # 左侧面板不拉伸
+        splitter.setStretchFactor(1, 1)  # 右侧面板可拉伸
+        
+    def clear_output(self):
+        """清除输出框内容"""
+        self.output_box.clear()
+
     def add_output_message(self, message, msg_type="info"):
         """Add styled message to output"""
         timestamp = self.current_time()
@@ -240,16 +321,20 @@ class WSA(QMainWindow):
             icon = "•"
         
         formatted_message = f"""
-        <div style="margin: 8px 0; padding: 12px; border-radius: 8px; border-left: 3px solid {color};">
-            <div style="font-weight: 600; color: {color}; margin-bottom: 4px;">
+        <div style="margin: 8px 0; padding: 0; border-left: 3px solid {color};">
+            <div style="font-weight: 600; color: white; background-color: {color}; padding: 6px 12px; margin-bottom: 4px; border-radius: 4px;">
             {icon} {timestamp}
             </div>
-            <div style="color: #1D1D1F; line-height: 1.3;">
+            <div style="color: #1D1D1F; line-height: 1.3; padding: 0 12px;">
             {message}
             </div>
         </div>
         """
         self.output_box.append(formatted_message)
+        
+        # 自动滚动到底部
+        scrollbar = self.output_box.verticalScrollBar()
+        scrollbar.setValue(scrollbar.maximum())
 
     def browse_folder(self):
         self.add_output_message("Browsing for folder...", "info")
@@ -323,6 +408,19 @@ class WSA(QMainWindow):
                     merged = dict_parsed1.copy()
                     merged.update(dict_parse2)
                     self.add_output_message("Article parsed successfully! Keywords detected and extracted.", "success")
+                    
+                    # 更新界面字段
+                    if "Title" in merged:
+                        self.title_widget.setText(merged["Title"])
+                    if "Meta description" in merged:
+                        self.description_widget.setText(merged["Meta description"])
+                    if "URL" in merged:
+                        self.file_path_widget.setText(merged["URL"])
+                    if "View all" in merged:
+                        self.view_widget.setText(merged["View all"])
+                    if "Make a" in merged:
+                        self.try_widget.setText(merged["Make a"])
+                        
                 else:
                     self.add_output_message("No keywords detected. Please ensure you've copied the correct article. This could happen when the article is not correctly formatted. Go check it.", "warning")
             except Exception as e:
@@ -345,14 +443,27 @@ class WSA(QMainWindow):
             self.add_output_message(f"Missing required fields: {', '.join(missing_fields)}", "warning")
             return
         
-        # Simulate JSON generation (replace with actual logic)
-        criterion = True  # Replace with actual validation logic
+        # 生成JSON数据
+        json_data = {
+            "type": self.page_type.currentText(),
+            "pics_path": self.pics_path_input.text().strip(),
+            "url_path": self.url_path_input.text().strip(),
+            "file_path": self.file_path_widget.text(),
+            "title": self.title_widget.text(),
+            "description": self.description_widget.text(),
+            "keywords": self.keywords_widget.text(),
+            "view": self.view_widget.text(),
+            "try": self.try_widget.text()
+        }
         
-        if criterion:
+        try:
+            import json
+            json_string = json.dumps(json_data, indent=2, ensure_ascii=False)
+            QGuiApplication.clipboard().setText(json_string)
             self.add_output_message("JSON generated successfully and copied to clipboard!", "success")
-            # Here you would implement the actual JSON generation and clipboard copying
-        else:
-            self.add_output_message("Generation failed. Please check all requirements are met.", "error")
+            self.add_output_message(f"Generated JSON:\n{json_string}", "info")
+        except Exception as e:
+            self.add_output_message(f"Generation failed: {e}", "error")
 
     def current_time(self):
         return datetime.now().strftime("%H:%M:%S")
