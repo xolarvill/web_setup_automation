@@ -1,6 +1,16 @@
 # WSA
 
-this is a project using PySide6 for gui, avoiding cross-platform issues.
+WSA is a cross-platform desktop application built with PySide6 designed to streamline the process of generating web setup configurations. It automates the extraction of key information from text and facilitates the creation of JSON output for various web page types, helping users efficiently prepare content for web deployment.
+
+## Features
+
+* **Cross-Platform Compatibility:** Built with PySide6 to ensure smooth operation on Windows and macOS.
+* **Automated Data Extraction:** Parses copied text from sources like Google Docs to automatically populate fields for URL, Title, Meta Description, Keywords, and more.
+* **Intuitive User Interface:** A clear and organized interface with input fields, output display, and action buttons.
+* **Folder Management:** Easily browse and open local or network folders for managing associated assets (e.g., images).
+* **JSON Generation:** Compiles all collected data into a well-formatted JSON output, ready for use in web setup processes.
+* **Clipboard Integration:** Seamlessly copies extracted data and generated JSON to the clipboard for quick pasting.
+* **Real-time Feedback:** Provides informative messages and status updates in the output console.
 
 ## for developers
 
@@ -50,7 +60,24 @@ build for mac only
 make build-mac
 ```
 
+Automated packaging and releasing is now made possible by github action. Workflow file is stored at `.github/workflows/build.yaml`.
+
+
 ## for users
+
+### 部署
+
+- Now it also supports github action automated release.
+![release](resources/github_release.png)
+    > 但是根据公式的知识产权协定，仅此项目的署名权归我本人，所以此 repository为private，必须dd我进行权限开放。
+- 或者使用其他途径得到的压缩包等
+
+### 使用
+大幅简化了使用流程，现在你只需要：
+1. 进入对应的Google docs文档，简易格式化
+2. 对已格式化的文本使用`cmd + A` + `cmd + C`复制全文
+3. 进入WSA程序，选择对应的页面类型`Type`
+4. 点击`Update`全部自动更新
 
 ![Main app](resources/main_app.png)
 follow the instructions given inside the app. or go to this notion page for more details.
@@ -60,20 +87,12 @@ follow the instructions given inside the app. or go to this notion page for more
 （macos用户也可以直接打开了）
 - 点击open folder可以查看已定位的图片文件夹
 - 点击Parse，自动从剪切板中获取已复制的docs文本进行解析，同时更新至上方输入框
-![resources/update_button.png](resources/update_button.png)
 - 点击Generate JSON生成JSON文件，所有信息以文本框展示的为基准
 
-## problem
-URL
-aluminium-bottle-mockup
-Title:
-Free Aluminium Bottle Mockup Design
-Meta Description
-Create stunning aluminium bottle mockups with Pacdora. Choose from 16.6 oz, 33.8 oz or other capacities, customize label, color. Download HD images instantly.
-Breadcrumb
-Aluminium Bottle Mockup
-View all aluminium bottle mockups:/mockups/tumbler-mockup
-Make an aluminium bottle mockup:/mockup-detail/steel-bottle-water-bottle-stainless-steel-mockup-510170
+### Important Notes
+
+- If you are on macOS, ensure you are connected to the NAS server (`/Volumes/shared/pacdora.com/`) every time you reboot your computer for the "Browse Folder" functionality to work as expected.
+- If parsing fails or shows warnings, verify that the copied article is correctly formatted and contains the expected keywords.
 
 ## Acknowledgement
 

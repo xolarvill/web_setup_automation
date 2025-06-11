@@ -50,7 +50,7 @@ class LabeledLineEditWithCopy(QWidget):
             QGuiApplication.clipboard().setText(self.line_edit.text())
             original_text = self.copy_btn.text()
             original_style = self.copy_btn.styleSheet()
-            self.copy_btn.setText("✔️")
+            self.copy_btn.setText("☑️")
             self.copy_btn.setStyleSheet("""
             QPushButton {
             background-color: #8FB236;
@@ -75,6 +75,11 @@ class LabeledLineEditWithCopy(QWidget):
 
     def setText(self, text):
         self.line_edit.setText(text)
+        
+    def set_dimensions(self,height: int, width: int):
+        self.line_edit.setFixedHeight(height)
+        self.line_edit.setFixedWidth(width)
+        # 不改变 self.copy_btn 尺寸
 
 
 class WSA(QMainWindow):
@@ -131,16 +136,6 @@ class WSA(QMainWindow):
         pics_path_layout.addWidget(self.pics_path_input)
         left_layout.addLayout(pics_path_layout)
         
-        # URL Path输入框，对应关键词URL:
-        url_path_layout = QHBoxLayout()
-        url_label = QLabel("URL Path:")
-        url_label.setMinimumWidth(100)
-        url_path_layout.addWidget(url_label)
-        self.url_path_input = QLineEdit()
-        self.url_path_input.setPlaceholderText("This is the short fix in the url link.")
-        url_path_layout.addWidget(self.url_path_input)
-        left_layout.addLayout(url_path_layout)
-        
         # 分隔线
         separator1 = QFrame()
         separator1.setFrameShape(QFrame.HLine)
@@ -175,6 +170,10 @@ class WSA(QMainWindow):
         # Try
         self.try_widget = LabeledLineEditWithCopy("Try")
         left_layout.addWidget(self.try_widget)
+        
+        # JSON
+        self.json_widget = LabeledLineEditWithCopy("JSON", "Click button on the right to copy")
+        left_layout.addWidget(self.json_widget)
         
         # 分隔线
         separator2 = QFrame()
@@ -362,7 +361,7 @@ class WSA(QMainWindow):
         folder_path = self.pics_path_input.text().strip()
         
         if not folder_path or not os.path.isdir(folder_path):
-            self.add_output_message("Please select a valid folder path before opening.", "warning")
+            self.add_output_message("Please select a valid folder path before opening. Maybe the folder is not created yet. Check the process in notion.", "warning")
             return
         
         try:
@@ -391,12 +390,14 @@ class WSA(QMainWindow):
         clipboard = QGuiApplication.clipboard()
         clipboard_text = clipboard.text()
         cutout_keywords_nextline = ["URL", "Title", "Meta Description", "Breadcrumb"]
-        cutout_keywords_currentline = ["View all", "Make a", "Design a"]
+        cutout_keywords_currentline = ["View all", "Make a", "Design a", "Create a"]
         
+        # 如果剪切板非空
         if clipboard_text:
             preview_start = clipboard_text[:50]
             self.add_output_message(f"Clipboard content captured: {preview_start}...", "info")
             
+            # 先解析关键词字段返回到field中
             try:
                 dict_parsed1 = extract_cutout_nextline(text=clipboard_text, keywords=cutout_keywords_nextline)
                 dict_parse2 = extract_cutout_currentline(text=clipboard_text, keywords=cutout_keywords_currentline)
@@ -404,12 +405,29 @@ class WSA(QMainWindow):
                 if dict_parsed1 and dict_parse2:
                     merged = dict_parsed1.copy()
                     merged.update(dict_parse2)
-                    self.add_output_message("Article parsed successfully! Keywords detected and extracted.", "success")
+                    # 检查所有关键字段是否为空
+                    required_fields = ["URL", "Title", "Meta Description", "Breadcrumb", "View all", "Make a"]
+                    empty_fields = [field for field in required_fields if not merged.get(field) or (isinstance(merged.get(field), str) and merged.get(field).strip() == "")]
+                    
+                    if len(empty_fields) == len(required_fields):
+                        self.add_output_message("Parsing failed: All required fields are empty. Please check your input format.", "error")
+                    elif empty_fields:
+                        self.add_output_message(f"Parsing partially failed: The following fields are empty: {', '.join(empty_fields)}", "warning")
+                    else:
+                        self.add_output_message("Article parsed successfully! Keywords detected and extracted.", "success")
                     
                     # 更新界面字段
                     if "URL" in merged:
                         value = merged["URL"]
+                        # 判断系统是Windows还是Mac
+                        if sys.platform.startswith('darwin'):
+                            self.pics_path_input.setText(f"/Volumes/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
+                        elif os.name == 'nt':
+                            self.pics_path_input.setText(f"//nas01.tools.baoxiaohe.com/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
+                        else:
+                            self.add_output_message(f"Detected system: {sys.platform}", "info")
                         self.file_path_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
+
                     if "Title" in merged:
                         value = merged["Title"]
                         self.title_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
@@ -424,15 +442,36 @@ class WSA(QMainWindow):
                         self.view_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
                     if "Make a" in merged:
                         value = merged["Make a"]
-                        # 如果"Make a"为空白，尝试用"Design a"替代
-                        if (not value or (isinstance(value, str) and value.strip() == "")) and "Design a" in merged:
-                            value = merged["Design a"]
+                        # 如果"Make a"为空白，尝试用"Design a"或"Create a"中的非空值替代
+                        if (not value or (isinstance(value, str) and value.strip() == "")):
+                            if "Design a" in merged and merged["Design a"] and (not isinstance(merged["Design a"], str) or merged["Design a"].strip() != ""):
+                                value = merged["Design a"]
+                            elif "Create a" in merged and merged["Create a"] and (not isinstance(merged["Create a"], str) or merged["Create a"].strip() != ""):
+                                value = merged["Create a"]
                         self.try_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
-                        
                 else:
-                    self.add_output_message("No keywords detected. Please ensure you've copied the correct article. This could happen when the article is not correctly formatted. Go check it.", "warning")
+                    self.add_output_message("Parsing failed: No keywords detected. Please ensure you've copied the correct article. This could happen when the article is not correctly formatted. Go check it.", "error")
             except Exception as e:
                 self.add_output_message(f"Error parsing content: {e}", "error")
+            
+            # 再解析本文，验证是否正确，最终返回json
+            try:
+                segments = segment(clipboard_text)
+                self.add_output_message(f"Text segmented into {len(segments)} parts.", "info")
+                if len(segments) != 8:
+                    self.add_output_message("Wrong number of segments: The number of segments is not 8. Please check the input text. Maybe you added the wrong number of #. There should be 7 of them.", "error")
+                else:
+                    self.add_output_message("Text segmented successfully.", "success")
+                    json = 'json'
+                    self.add_output_message(f"Generating JSON", "info")
+                    json_string = json.dumps(json, indent=2, ensure_ascii=False)
+                    QGuiApplication.clipboard().setText(json_string)
+                    self.add_output_message("JSON copied to clipboard!", "success")
+                    
+            except Exception as e:
+                self.add_output_message(f"Error segmenting text: {e}", "error")
+        
+        # 如果剪切板为空      
         else:
             self.add_output_message("Clipboard is empty or does not contain text.", "warning")
         
@@ -467,9 +506,8 @@ class WSA(QMainWindow):
         try:
             import json
             json_string = json.dumps(json_data, indent=2, ensure_ascii=False)
-            QGuiApplication.clipboard().setText(json_string)
-            self.add_output_message("JSON generated successfully and copied to clipboard!", "success")
-            self.add_output_message(f"Generated JSON:\n{json_string}", "info")
+            self.json_widget.setText(json_string)
+            self.add_output_message(f"Generated JSON", "info")
         except Exception as e:
             self.add_output_message(f"Generation failed: {e}", "error")
 
