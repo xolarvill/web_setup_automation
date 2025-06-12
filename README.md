@@ -12,6 +12,10 @@ WSA is a cross-platform desktop application built with PySide6 designed to strea
 * **Clipboard Integration:** Seamlessly copies extracted data and generated JSON to the clipboard for quick pasting.
 * **Real-time Feedback:** Provides informative messages and status updates in the output console.
 
+Future todos:
+- [ ] complete automation either using MCP or PRA
+- [ ] daily report using simpleLLMfunc
+
 ## for developers
 
 first make sure `uv` is installed, if not:

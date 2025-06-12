@@ -1,7 +1,7 @@
 import sys
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                               QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QTextEdit, 
-                              QSplitter, QFrame,
+                              QSplitter, QFrame, QCheckBox,
                               QSizePolicy)
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
@@ -9,7 +9,7 @@ from qt_material import apply_stylesheet  # 导入qt-material库
 import os
 from datetime import datetime
 from PySide6.QtGui import QGuiApplication
-from parse import extract_cutout_nextline, extract_cutout_currentline, segment
+from utils.parse import extract_cutout_nextline, extract_cutout_currentline, segment
 from PySide6.QtCore import QTimer
 
 class LabeledLineEditWithCopy(QWidget):
@@ -80,13 +80,20 @@ class LabeledLineEditWithCopy(QWidget):
         self.line_edit.setFixedHeight(height)
         self.line_edit.setFixedWidth(width)
         # 不改变 self.copy_btn 尺寸
+        
+    def turn_off_text_input(self):
+        """禁用文本输入"""
+        self.line_edit.setReadOnly(True)
+        self.copy_btn.setEnabled(False)
+
+
 
 
 class WSA(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Web Setup Automation")
-        self.setMinimumSize(1000, 700)  # 增加最小窗口大小
+        self.setMinimumSize(1000, 800)  # 增加最小窗口大小
         self.setWindowIcon(QIcon("resources/icon.png"))  # 可选：添加图标文件
 
         # 中心小部件和主分割器
@@ -136,7 +143,41 @@ class WSA(QMainWindow):
         pics_path_layout.addWidget(self.pics_path_input)
         left_layout.addLayout(pics_path_layout)
         
-        # 分隔线
+        # 分隔线，section选择框
+        separator0 = QFrame()
+        separator0.setFrameShape(QFrame.HLine)
+        separator0.setFrameShadow(QFrame.Sunken)
+        left_layout.addWidget(separator0)
+        
+        checkbox_layout = QHBoxLayout()
+        self.single_image_checkbox = QCheckBox("传图单张")
+        self.single_image_checkbox.setChecked(True)
+        checkbox_layout.addWidget(self.single_image_checkbox)
+
+        self.scroll_to_mockup_checkbox = QCheckBox("下滑到样机")
+        self.scroll_to_mockup_checkbox.setChecked(True)
+        checkbox_layout.addWidget(self.scroll_to_mockup_checkbox)
+        
+        self.color_diy_checkbox = QCheckBox("颜色自定义")
+        self.color_diy_checkbox.setChecked(True)
+        checkbox_layout.addWidget(self.color_diy_checkbox)
+        
+        self.color_label_diy_checkbox = QCheckBox("颜色标签自定义")
+        self.color_label_diy_checkbox.setChecked(False)
+        checkbox_layout.addWidget(self.color_label_diy_checkbox)
+        
+        # 自定义颜色输入选项
+        self.color_diy_choice_widget = LabeledLineEditWithCopy("颜色自定义", "Enter color hex codes'")
+        self.color_diy_choice_widget.setText("#FFFFFF")  # 默认颜色
+        
+        # 自定义颜色标签
+        self.color_label_diy_choice_widget = LabeledLineEditWithCopy("颜色标签自定义", "Enter color label text'")
+        
+        left_layout.addLayout(checkbox_layout)
+        left_layout.addWidget(self.color_diy_choice_widget)
+        left_layout.addWidget(self.color_label_diy_choice_widget)
+
+        # 分隔线，section输出栏
         separator1 = QFrame()
         separator1.setFrameShape(QFrame.HLine)
         separator1.setFrameShadow(QFrame.Sunken)

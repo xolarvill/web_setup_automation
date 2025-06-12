@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "pydrive2>=1.21.3",
     "pyinstaller>=6.14.0",
     "pyside6>=6.9.1",
     "qt-material>=2.17",

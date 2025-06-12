@@ -21,7 +21,7 @@ def extract_cutout_nextline(text: str, keywords: List[str]) -> dict:
             if kw_orig not in found and stripped.lower().startswith(kw_lower):
                 # 只提取第一次出现的下一行内容，保留原文
                 if i + 1 < len(lines):
-                    cutouts[kw_orig] = lines[i + 1]
+                    cutouts[kw_orig] = lines[i + 1].rstrip()
                 else:
                     cutouts[kw_orig] = ""
                 found.add(kw_orig)
@@ -49,7 +49,7 @@ def extract_cutout_currentline(text: str, keywords: List[str]) -> dict:
         stripped = line.strip()
         for kw_lower, kw_orig in keyword_map.items():
             if kw_orig not in found and stripped.lower().startswith(kw_lower):
-                cutouts[kw_orig].append(line)
+                cutouts[kw_orig].append(line.rstrip())
                 found.add(kw_orig)
     return cutouts
 
