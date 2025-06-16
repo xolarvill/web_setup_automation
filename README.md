@@ -1,5 +1,7 @@
 # WSA
 
+> 人中会犯错，特别是在重复性高、容错度低的网页配置环境下，好消息是机器不会。
+
 WSA is a cross-platform desktop application built with PySide6 designed to streamline the process of generating web setup configurations. It automates the extraction of key information from text and facilitates the creation of JSON output for various web page types, helping users efficiently prepare content for web deployment.
 
 ## Features
@@ -83,15 +85,25 @@ Automated packaging and releasing is now made possible by github action. Workflo
 3. 进入WSA程序，选择对应的页面类型`Type`
 4. 点击`Update`全部自动更新
 
+还可以进行cdn图片一键上传
+1. 确保已经连接上NAS云盘（可以点击Open folder打开，手动查看）
+2. 点击Activate，初始化bot
+3. 点击upload
+
 ![Main app](resources/main_app.png)
 follow the instructions given inside the app. or go to this notion page for more details.
 
+**Configuration panel字段面板**
+- 点击update，自动从剪切板中获取已复制的docs文本进行解析，同时更新至上方输入框
+- 点击Generate JSON生成JSON文件，所有信息以文本框展示的为基准
+
+**CDN panel图片链接面板**
 - 点击browse folder打开文件管理器定位图片（此时文件夹默认定位在NAS网盘pacdora.com文件中），也可以在上方输入框中手动输入
 ![Now works on mac](resources/browse_button_on_mac.png)
 （macos用户也可以直接打开了）
-- 点击open folder可以查看已定位的图片文件夹
-- 点击Parse，自动从剪切板中获取已复制的docs文本进行解析，同时更新至上方输入框
-- 点击Generate JSON生成JSON文件，所有信息以文本框展示的为基准
+- 点击open folder可以查看已定位的图片文件夹（需要连接到NAS网络）
+- 点击activate激活bot
+- 点击upload将图片上传，自动获取链接，存储到本地
 
 ### Important Notes
 

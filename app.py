@@ -1,7 +1,7 @@
 import sys
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                               QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QTextEdit, 
-                              QSplitter, QFrame, QCheckBox,
+                              QFrame, QCheckBox,
                               QSizePolicy)
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
@@ -87,61 +87,51 @@ class LabeledLineEditWithCopy(QWidget):
         self.copy_btn.setEnabled(False)
 
 
-
-
 class WSA(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Web Setup Automation")
-        self.setMinimumSize(1000, 800)  # 增加最小窗口大小
+        self.setMinimumSize(1330, 795)  # 增加最小窗口大小
         self.setWindowIcon(QIcon("resources/icon.png"))  # 可选：添加图标文件
 
-        # 中心小部件和主分割器
+        # 0. 中心小部件和主布局
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         main_layout = QHBoxLayout(central_widget)
         main_layout.setContentsMargins(10, 10, 10, 10)
+        main_layout.setSpacing(5)
         
-        # 创建水平分割器
-        splitter = QSplitter(Qt.Horizontal)
-        main_layout.addWidget(splitter)
-        
-        # 左侧面板 - 输入控件
-        left_panel = QFrame()
-        left_panel.setFrameStyle(QFrame.StyledPanel)
-        left_panel.setMinimumWidth(500)
-        left_panel.setMaximumWidth(500)
+        # 1. 左侧面板 - 输入控件
+        left_panel = QWidget()
+        left_panel.setFixedWidth(490)
         
         left_layout = QVBoxLayout(left_panel)
         left_layout.setSpacing(12)
-        left_layout.setContentsMargins(15, 15, 15, 15)
+        left_layout.setContentsMargins(20, 20, 20, 20)
         
         # 添加标题
-        title_label = QLabel("Configuration Panel")
-        title_label.setStyleSheet("font-size: 16px; font-weight: bold; color: #2c3e50; margin-bottom: 10px;")
-        left_layout.addWidget(title_label)
+        left_title_label = QLabel("Configuration Panel")
+        left_title_label.setStyleSheet("font-size: 16px; font-weight: bold; color: #2c3e50; background-color: transparent;")
+        left_layout.addWidget(left_title_label)
+        
+        # 1.1 first group，因为没有命名的必要
+        first_group_layout = QVBoxLayout()
         
         # Page Type下拉菜单
-        page_layout = QHBoxLayout()
+        # 单独定义Page Type选项，在一个Hbox里放label + Combobox
+        page_type_layout = QHBoxLayout()
         page_label = QLabel("Type:")
         page_label.setMinimumWidth(100)
-        page_layout.addWidget(page_label)
         self.page_type = QComboBox()
-        self.page_type.addItems(["Mockup tool", "Mockup resource", "Mockup content", "Dieline tool", "Dieline resource", "TOOLS","Landing page"])
+        self.page_type.addItems(["Mockup tool", "Mockup resource", "Mockup content", "Dieline tool", "Dieline resource", "TOOLS", "Landing page"])
         self.page_type.setCurrentIndex(0)
         self.page_type.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        page_layout.addWidget(self.page_type)
-        left_layout.addLayout(page_layout)
-        
-        # Pics Path输入框
-        pics_path_layout = QHBoxLayout()
-        pics_label = QLabel("Pics Path:")
-        pics_label.setMinimumWidth(100)
-        pics_path_layout.addWidget(pics_label)
-        self.pics_path_input = QLineEdit()
-        self.pics_path_input.setPlaceholderText("Enter the path of your pics folder here. OR use the Browse button.")
-        pics_path_layout.addWidget(self.pics_path_input)
-        left_layout.addLayout(pics_path_layout)
+        page_type_layout.addWidget(page_label)
+        page_type_layout.addWidget(self.page_type)
+        first_group_layout.addLayout(page_type_layout)
+
+        # 将first_group添加到left_layout
+        left_layout.addLayout(first_group_layout)
         
         # 分隔线，section选择框
         separator0 = QFrame()
@@ -149,6 +139,8 @@ class WSA(QMainWindow):
         separator0.setFrameShadow(QFrame.Sunken)
         left_layout.addWidget(separator0)
         
+        # 1.2 Notion PRD中对应的自定义选项
+        # 1.2.1
         checkbox_layout = QHBoxLayout()
         self.single_image_checkbox = QCheckBox("传图单张")
         self.single_image_checkbox.setChecked(True)
@@ -162,10 +154,22 @@ class WSA(QMainWindow):
         self.color_diy_checkbox.setChecked(True)
         checkbox_layout.addWidget(self.color_diy_checkbox)
         
+        # 1.2.2
+        another_checkbox_layout = QHBoxLayout()
+        
         self.color_label_diy_checkbox = QCheckBox("颜色标签自定义")
         self.color_label_diy_checkbox.setChecked(False)
-        checkbox_layout.addWidget(self.color_label_diy_checkbox)
+        another_checkbox_layout.addWidget(self.color_label_diy_checkbox)
         
+        self.cover_label_diy_checkbox = QCheckBox("cover标题自定义")
+        self.cover_label_diy_checkbox.setChecked(False)
+        another_checkbox_layout.addWidget(self.cover_label_diy_checkbox)
+        
+        self.another_checkbox = QCheckBox("待实现功能")
+        self.another_checkbox.setChecked(False)
+        another_checkbox_layout.addWidget(self.another_checkbox)
+        
+        # 1.2.3
         # 自定义颜色输入选项
         self.color_diy_choice_widget = LabeledLineEditWithCopy("颜色自定义", "Enter color hex codes'")
         self.color_diy_choice_widget.setText("#FFFFFF")  # 默认颜色
@@ -173,9 +177,14 @@ class WSA(QMainWindow):
         # 自定义颜色标签
         self.color_label_diy_choice_widget = LabeledLineEditWithCopy("颜色标签自定义", "Enter color label text'")
         
+        # 自定义封面标题标签
+        self.cover_label_diy_widget = LabeledLineEditWithCopy("Cover标题标签", "有自定义需求可以加入")
+        
         left_layout.addLayout(checkbox_layout)
+        left_layout.addLayout(another_checkbox_layout)
         left_layout.addWidget(self.color_diy_choice_widget)
         left_layout.addWidget(self.color_label_diy_choice_widget)
+        left_layout.addWidget(self.cover_label_diy_widget)
 
         # 分隔线，section输出栏
         separator1 = QFrame()
@@ -183,11 +192,7 @@ class WSA(QMainWindow):
         separator1.setFrameShadow(QFrame.Sunken)
         left_layout.addWidget(separator1)
         
-        # 输出字段标题
-        output_title = QLabel("Generated Fields")
-        output_title.setStyleSheet("font-size: 14px; font-weight: bold; color: #34495e; margin: 10px 0 5px 0;")
-        left_layout.addWidget(output_title)
-        
+        # 1.3 输出字段
         # 文件路径
         self.file_path_widget = LabeledLineEditWithCopy("文件路径")
         left_layout.addWidget(self.file_path_widget)
@@ -222,16 +227,131 @@ class WSA(QMainWindow):
         separator2.setFrameShadow(QFrame.Sunken)
         left_layout.addWidget(separator2)
         
-        # 按钮区域
-        button_title = QLabel("Actions")
-        button_title.setStyleSheet("font-size: 14px; font-weight: bold; color: #34495e; margin: 10px 0 5px 0;")
-        left_layout.addWidget(button_title)
+        # 1.4 按钮
+        button_layout = QVBoxLayout()
         
-        # 按钮布局（分两行，手动分配按钮）
-        button_layout1 = QHBoxLayout()
-        button_layout2 = QHBoxLayout()
+        buttons = [
+            ("Update", self.update_action),
+            ("Generate JSON", self.generate_json_action)
+        ]
+        for text, callback in buttons:
+            btn = QPushButton(text)
+            btn.clicked.connect(callback)
+            btn.setMinimumHeight(35)
+            button_layout.addWidget(btn)
+            
+        left_layout.addLayout(button_layout)
+        
+        # 添加弹性空间
+        left_layout.addStretch()
+        
+        # 垂直分隔线
+        vertical_separator1 = QFrame()
+        vertical_separator1.setFrameShape(QFrame.VLine)
+        vertical_separator1.setFrameShadow(QFrame.Sunken)
+        
+        # 2. 中间面板 - 图片cdn地址
+        mid_panel = QWidget()
+        mid_panel.setFixedWidth(490)
 
+        mid_layout = QVBoxLayout(mid_panel)
+        mid_layout.setSpacing(12)
+        mid_layout.setContentsMargins(20, 20, 20, 20)
+
+        # 标题
+        mid_title_label = QLabel("CDN Panel")
+        mid_title_label.setStyleSheet("font-size: 16px; font-weight: bold; color: #2c3e50; background-color: transparent;")
+        mid_layout.addWidget(mid_title_label)
+        
+        # 添加空白spacing 解决左右不平齐问题
+        #spacer = QWidget()
+        #spacer.setFixedHeight(6)
+        #mid_layout.addWidget(spacer)
+        
+        # 2.1 pic path folder in NAS
+        self.pics_path_widget = LabeledLineEditWithCopy("NAS path","Enter the path of your pics folder here. OR use the Browse button.")
+        mid_layout.addWidget(self.pics_path_widget)
+        
+        # 分隔线
+        separator_mid0 = QFrame()
+        separator_mid0.setFrameShape(QFrame.HLine)
+        separator_mid0.setFrameShadow(QFrame.Sunken)
+        mid_layout.addWidget(separator_mid0)
+        
+
+        # 2.2 Cover photos区域
+        cover_group_layout = QVBoxLayout()
+        cover_group_layout.setSpacing(8)
+        cover_group_layout.setContentsMargins(0, 0, 0, 0)
+        
+        self.cover1_cdn_widget = LabeledLineEditWithCopy("Cover", placeholder="Cover封面")
+        cover_group_layout.addWidget(self.cover1_cdn_widget)
+        self.cover2_cdn_widget = LabeledLineEditWithCopy("Cover more", placeholder="More封面")
+        cover_group_layout.addWidget(self.cover2_cdn_widget)
+        mid_layout.addLayout(cover_group_layout)
+
+        # 分隔线
+        separator_mid1 = QFrame()
+        separator_mid1.setFrameShape(QFrame.HLine)
+        separator_mid1.setFrameShadow(QFrame.Sunken)
+        mid_layout.addWidget(separator_mid1)
+
+        # 2.3 Steps pics区域
+        steps_group_layout = QVBoxLayout()
+        steps_group_layout.setSpacing(8)
+        steps_group_layout.setContentsMargins(0, 0, 0, 0)
+        
+        self.step1_cdn_widget = LabeledLineEditWithCopy("Step 1")
+        steps_group_layout.addWidget(self.step1_cdn_widget)
+        self.step2_cdn_widget = LabeledLineEditWithCopy("Step 2")
+        steps_group_layout.addWidget(self.step2_cdn_widget)
+        self.step3_cdn_widget = LabeledLineEditWithCopy("Step 3")
+        steps_group_layout.addWidget(self.step3_cdn_widget)
+        mid_layout.addLayout(steps_group_layout)
+
+        # 分隔线
+        separator_mid2 = QFrame()
+        separator_mid2.setFrameShape(QFrame.HLine)
+        separator_mid2.setFrameShadow(QFrame.Sunken)
+        mid_layout.addWidget(separator_mid2)
+
+        # 2.4 Features区域
+        features_group_layout = QVBoxLayout()
+        features_group_layout.setSpacing(8)
+        features_group_layout.setContentsMargins(0, 0, 0, 0)
+        
+        self.feature1_cdn_widget = LabeledLineEditWithCopy("Feature 1")
+        features_group_layout.addWidget(self.feature1_cdn_widget)
+        self.feature2_cdn_widget = LabeledLineEditWithCopy("Feature 2")
+        features_group_layout.addWidget(self.feature2_cdn_widget)
+        self.feature3_cdn_widget = LabeledLineEditWithCopy("Feature 3")
+        features_group_layout.addWidget(self.feature3_cdn_widget)
+        self.feature4_cdn_widget = LabeledLineEditWithCopy("Feature 4")
+        features_group_layout.addWidget(self.feature4_cdn_widget)
+        mid_layout.addLayout(features_group_layout)
+
+        # 分隔线
+        separator_mid3 = QFrame()
+        separator_mid3.setFrameShape(QFrame.HLine)
+        separator_mid3.setFrameShadow(QFrame.Sunken)
+        mid_layout.addWidget(separator_mid3)
+        
+        # 添加Notion地址
+        self.notion_url_widget = LabeledLineEditWithCopy("Notion URL")
+        mid_layout.addWidget(self.notion_url_widget)
+        
+        # 添加Slack表格地址
+        self.slack_url_widget = LabeledLineEditWithCopy("Slack URL")
+        mid_layout.addWidget(self.slack_url_widget)
+        
+        # 分隔线
+        separator_mid4 = QFrame()
+        separator_mid4.setFrameShape(QFrame.HLine)
+        separator_mid4.setFrameShadow(QFrame.Sunken)
+        mid_layout.addWidget(separator_mid4)
+        
         # 第一行按钮
+        mid_buttons_layout1 = QHBoxLayout()
         buttons_row1 = [
             ("Browse Folder", self.browse_folder),
             ("Open Folder", self.open_folder)
@@ -240,39 +360,43 @@ class WSA(QMainWindow):
             btn = QPushButton(text)
             btn.clicked.connect(callback)
             btn.setMinimumHeight(35)
-            button_layout1.addWidget(btn)
-
-        # 第二行按钮
-        buttons_row2 = [
-            ("Update", self.update_action),
-            ("Generate JSON", self.generate_json_action)
-        ]
-        for text, callback in buttons_row2:
-            btn = QPushButton(text)
-            btn.clicked.connect(callback)
-            btn.setMinimumHeight(35)
-            button_layout2.addWidget(btn)
-
-        # 添加按钮布局
-        left_layout.addLayout(button_layout1)
-        left_layout.addLayout(button_layout2)
+            mid_buttons_layout1.addWidget(btn)
         
+        # 添加Activate按钮
+        mid_buttons_layout2 = QHBoxLayout()
+        
+        self.activate_button = QPushButton("Activate")
+        self.activate_button.setMinimumHeight(35)
+        mid_buttons_layout2.addWidget(self.activate_button)
+
+        # 添加Upload按钮
+        self.upload_button = QPushButton("Upload")
+        self.upload_button.setMinimumHeight(35)
+        mid_buttons_layout2.addWidget(self.upload_button)
+        
+        mid_layout.addLayout(mid_buttons_layout1)
+        mid_layout.addLayout(mid_buttons_layout2)
+        
+        # 添加退出按钮
+        self.quit_button = QPushButton("Quit")
+        self.quit_button.setMinimumHeight(35)
+        mid_layout.addWidget(self.quit_button)
+
         # 添加弹性空间
-        left_layout.addStretch()
+        mid_layout.addStretch()
         
-        # 右侧面板 - 输出区域
-        right_panel = QFrame()
-        right_panel.setFrameStyle(QFrame.StyledPanel)
-        right_panel.setMinimumWidth(450)
+        # 3. 右侧面板 - 输出区域
+        right_panel = QWidget()
+        right_panel.setMinimumWidth(100)
         
         right_layout = QVBoxLayout(right_panel)
-        right_layout.setContentsMargins(15, 15, 15, 15)
+        right_layout.setContentsMargins(20, 20, 20, 20)
         right_layout.setSpacing(8)
         
         # 输出区域标题和清除按钮
         output_header = QHBoxLayout()
         output_title = QLabel("Program Output")
-        output_title.setStyleSheet("font-size: 16px; font-weight: bold; color: #2c3e50;")
+        output_title.setStyleSheet("font-size: 16px; font-weight: bold; color: #2c3e50; background-color: transparent;")
         output_header.addWidget(output_title)
         
         output_header.addStretch()  # 添加弹性空间
@@ -312,11 +436,10 @@ class WSA(QMainWindow):
         )
         self.output_box.setStyleSheet("""
             QTextEdit {
-                background-color: #f8f9fa;
+                background-color: white;
                 border: 1px solid #dee2e6;
                 border-radius: 8px;
                 padding: 10px;
-                font-family: 'Consolas', 'Monaco', monospace;
                 font-size: 12px;
                 line-height: 1.4;
             }
@@ -324,14 +447,17 @@ class WSA(QMainWindow):
         
         right_layout.addWidget(self.output_box)
         
-        # 将面板添加到分割器
-        splitter.addWidget(left_panel)
-        splitter.addWidget(right_panel)
+        # 将面板添加到主布局
+        main_layout.addWidget(left_panel)
+        main_layout.addWidget(vertical_separator1)
+        main_layout.addWidget(mid_panel)
+        main_layout.addWidget(vertical_separator1)
+        main_layout.addWidget(right_panel)
         
-        # 设置分割器初始比例 (左:右 = 2:3)
-        splitter.setSizes([400, 600])
-        splitter.setStretchFactor(0, 0)  # 左侧面板不拉伸
-        splitter.setStretchFactor(1, 1)  # 右侧面板可拉伸
+        # 设置布局比例
+        main_layout.setStretch(0, 0)  # 左侧面板固定宽度
+        main_layout.setStretch(1, 0)  # 中间面板可拉伸
+        main_layout.setStretch(2, 0)  # 右侧面板可拉伸
         
     def clear_output(self):
         """清除输出框内容"""
@@ -392,14 +518,14 @@ class WSA(QMainWindow):
         
         folder = QFileDialog.getExistingDirectory(self, "Select Folder", default_folder)
         if folder:
-            self.pics_path_input.setText(folder)
+            self.pics_path_widget.setText(folder)
             self.add_output_message(f"Selected folder: {folder}", "success")
         else:
             self.add_output_message("No folder selected", "warning")
     
     def open_folder(self):
         self.add_output_message("Opening folder...", "info")
-        folder_path = self.pics_path_input.text().strip()
+        folder_path = self.pics_path_widget.text().strip()
         
         if not folder_path or not os.path.isdir(folder_path):
             self.add_output_message("Please select a valid folder path before opening. Maybe the folder is not created yet. Check the process in notion.", "warning")
@@ -452,8 +578,6 @@ class WSA(QMainWindow):
                     
                     if len(empty_fields) == len(required_fields):
                         self.add_output_message("Parsing failed: All required fields are empty. Please check your input format.", "error")
-                    elif empty_fields:
-                        self.add_output_message(f"Parsing partially failed: The following fields are empty: {', '.join(empty_fields)}", "warning")
                     else:
                         self.add_output_message("Article parsed successfully! Keywords detected and extracted.", "success")
                     
@@ -462,9 +586,9 @@ class WSA(QMainWindow):
                         value = merged["URL"]
                         # 判断系统是Windows还是Mac
                         if sys.platform.startswith('darwin'):
-                            self.pics_path_input.setText(f"/Volumes/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
+                            self.pics_path_widget.setText(f"/Volumes/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
                         elif os.name == 'nt':
-                            self.pics_path_input.setText(f"//nas01.tools.baoxiaohe.com/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
+                            self.pics_path_widget.setText(f"//nas01.tools.baoxiaohe.com/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
                         else:
                             self.add_output_message(f"Detected system: {sys.platform}", "info")
                         self.file_path_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
@@ -521,8 +645,7 @@ class WSA(QMainWindow):
         
         # Check if all required fields are filled
         required_fields = [
-            (self.pics_path_input.text().strip(), "Pictures Path"),
-            (self.url_path_input.text().strip(), "URL Path"),
+            (self.pics_path_widget.text().strip(), "Pictures Path"),
         ]
         
         missing_fields = [field_name for field_value, field_name in required_fields if not field_value]
@@ -534,8 +657,7 @@ class WSA(QMainWindow):
         # 生成JSON数据
         json_data = {
             "type": self.page_type.currentText(),
-            "pics_path": self.pics_path_input.text().strip(),
-            "url_path": self.url_path_input.text().strip(),
+            "pics_path": self.pics_path_widget.text().strip(),
             "file_path": self.file_path_widget.text(),
             "title": self.title_widget.text(),
             "description": self.description_widget.text(),
