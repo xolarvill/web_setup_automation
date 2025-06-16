@@ -68,6 +68,25 @@ make build-mac
 
 Automated packaging and releasing is now made possible by github action. Workflow file is stored at `.github/workflows/build.yaml`.
 
+`upload_boto.py` contains a class to upload images and return CDN adress.
+
+make sure S3 configuration is set up
+- 使用`awscli`的命令来控制
+```bash
+aws configure
+```
+- 使用环境变量
+```bash
+export AWS_ACCESS_KEY_ID=your-access-key-id
+export AWS_SECRET_ACCESS_KEY=your-secret-access-key
+export AWS_DEFAULT_REGION=your-region
+```
+- 或者在本地保存所有key信息，命名为`aws_config.json`
+
+`upload_selenium.py`使用selenium模仿登陆操作，一键自动完成图片的批量上传
+
+- 使用cookie存储登陆信息
+- 首次需要手动登陆一次，后续可以自动完成
 
 ## for users
 
@@ -104,6 +123,19 @@ follow the instructions given inside the app. or go to this notion page for more
 - 点击open folder可以查看已定位的图片文件夹（需要连接到NAS网络）
 - 点击activate激活bot
 - 点击upload将图片上传，自动获取链接，存储到本地
+
+存在两种方法进行图片上传
+
+第一种：使用selenium创建一个bot自动上传并获取cdn链接
+1. 确保你已经安装了chrome
+2. 更新相应链接
+3. 使用open folder功能打开文件进行核查（推荐在第一次使用时进行）
+4. 在使用activate后，进行登陆
+![sel](resources/upload_selenium.png)
+5. 自动开始上传并保存最后的链接
+
+第二种：直接沟通aws api，使用boto3库进行图片上传
+
 
 ### Important Notes
 
