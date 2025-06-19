@@ -1,0 +1,646 @@
+{
+  "origin": "componentCopy",
+  "data": {
+    "name": "Row",
+    "label": "块容器",
+    "uuid": "62856159-b2b4-46d6-810b-336f83da1837",
+    "style": {
+      "<980": { "width": "calc(100% - 24px)" },
+      "980-1023": { "width": "calc(100% - 64px)" },
+      "1024-1279": { "width": "calc(100% - 48px)" },
+      "1280-1679": { "width": "calc(100% - 80px)" },
+      "1680-1920": { "width": "calc(100% - 48px)" },
+      ">1920": { "width": "calc(100% - 48px)" }
+    },
+    "props": {
+      "1024-1279": { "isShow": false },
+      "1280-1679": { "isShow": false },
+      "1680-1920": { "isShow": false },
+      ">1920": { "isShow": false },
+      "980-1023": { "isShow": false }
+    },
+    "containerStyle": { ">1920": {}, "<980": {} },
+    "isBlock": true,
+    "isContainer": true,
+    "children": [
+      {
+        "name": "Row",
+        "label": "块容器",
+        "uuid": "5b839bbb-1514-4b7d-81fd-ecaffc514fda",
+        "style": {},
+        "props": {
+          "<980": { "isOpenAnimation": true },
+          "980-1023": { "isOpenAnimation": true },
+          "1024-1279": { "isOpenAnimation": false },
+          "1280-1679": { "isOpenAnimation": false },
+          "1680-1920": { "isOpenAnimation": false },
+          ">1920": { "isOpenAnimation": false }
+        },
+        "containerStyle": {},
+        "isBlock": true,
+        "isContainer": true,
+        "children": [
+          {
+            "name": "Img",
+            "label": "Img",
+            "uuid": "060086ca-3e01-4177-a63c-94690a5b0018",
+            "style": {
+              "<980": { "borderRadius": "12px", "border": "solid 1px #191919" },
+              "980-1023": { "borderRadius": "16px" },
+              "1024-1279": { "borderRadius": "24px" },
+              "1280-1679": { "borderRadius": "24px" },
+              "1680-1920": { "borderRadius": "24px" },
+              ">1920": { "borderRadius": "24px" }
+            },
+            "props": {},
+            "containerStyle": {
+              "<980": {},
+              "980-1023": {},
+              "1024-1279": {},
+              "1280-1679": {},
+              "1680-1920": {},
+              ">1920": {}
+            },
+            "isBlock": true,
+            "isContainer": false,
+            "children": [],
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "transition": [],
+            "globalStyle": {
+              "width": "100%",
+              "display": "inline-block",
+              "position": "static",
+              "top": "0",
+              "left": "0",
+              "right": "0",
+              "bottom": "0",
+              "zIndex": "auto",
+              "border": "solid 1.5px #191919"
+            },
+            "globalProps": {
+              "url": "https://cdn.pacdora.com/page-img/op/step_1_image_url.png",
+              "title": "step_1_image_title",
+              "alt": "step_1_image_alt",
+              "isOpenAnimation": true,
+              "size1": 1200,
+              "size2": 1200,
+              "size3": 1600,
+              "size4": 1600,
+              "size5": 1800,
+              "size6": 2000
+            },
+            "globalContainerStyle": {}
+          },
+          {
+            "name": "P",
+            "label": "P",
+            "uuid": "8e7b490f-a986-47cc-a9c9-7a07a4c3b284",
+            "style": { "<980": { "color": "rgba(25, 25, 25, 1)" } },
+            "props": {},
+            "containerStyle": {},
+            "isBlock": true,
+            "isContainer": false,
+            "children": [],
+            "globalStyle": {
+              "color": "#000000",
+              "fontSize": "var(--fs-base)",
+              "lineHeight": "var(--lh-tight)",
+              "fontWeight": "var(--fw-medium)",
+              "display": "block",
+              "-webkit-box-orient": "initial",
+              "-webkit-line-clamp": "initial",
+              "overflow": "initial",
+              "textOverflow": "initial",
+              "width": "100%",
+              "marginTop": "10px",
+              "marginBottom": "6px"
+            },
+            "globalContainerStyle": {},
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "globalProps": {
+              "text": "<p>step_1_title</p>",
+              "isOpenAnimation": false,
+              "isShow": true,
+              "isNeedTranslate": true
+            },
+            "transition": []
+          },
+          {
+            "name": "P",
+            "label": "P",
+            "uuid": "6cadd9e9-e720-4f08-b440-998c18afb6ff",
+            "style": {
+              "<980": {
+                "marginBottom": "24px",
+                "fontSize": "var(--fs-sm)",
+                "lineHeight": "var(--lh-tight)"
+              },
+              "980-1023": { "marginBottom": "48px" },
+              "1024-1279": { "marginBottom": "40px" },
+              "1280-1679": { "marginBottom": "40px" },
+              "1680-1920": { "marginBottom": "40px" },
+              ">1920": { "marginBottom": "40px" }
+            },
+            "props": {},
+            "containerStyle": {
+              "<980": {},
+              "980-1023": {},
+              "1024-1279": {},
+              "1280-1679": {},
+              "1680-1920": {},
+              ">1920": {}
+            },
+            "isBlock": true,
+            "isContainer": false,
+            "children": [],
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "transition": [],
+            "globalStyle": {
+              "color": "#4C4C4C",
+              "fontSize": "var(--fs-base)",
+              "lineHeight": "var(--lh-normal)",
+              "fontWeight": "var(--fw-normal)",
+              "display": "block",
+              "-webkit-box-orient": "initial",
+              "-webkit-line-clamp": "initial",
+              "overflow": "initial",
+              "textOverflow": "initial",
+              "width": "100%"
+            },
+            "globalProps": {
+              "text": "<p>step_1_p</p>",
+              "isOpenAnimation": true
+            },
+            "globalContainerStyle": {}
+          }
+        ],
+        "statusArr": [],
+        "curStatus": "default",
+        "status": {},
+        "transition": [],
+        "globalStyle": {
+          "marginTop": 0,
+          "marginBottom": 0,
+          "marginLeft": 0,
+          "marginRight": 0,
+          "paddingTop": 0,
+          "paddingBottom": 0,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "borderRadius": 0,
+          "background": "#ffffff",
+          "width": "100%",
+          "height": "auto",
+          "display": "block",
+          "borderWidth": "0",
+          "borderColor": "#000000",
+          "borderStyle": "solid"
+        },
+        "globalProps": {
+          "linkId": "",
+          "isShowBoxShadow": false,
+          "dx": "0px",
+          "dy": "0px",
+          "blur": "0px",
+          "spread": "0px",
+          "color": "#000000"
+        },
+        "globalContainerStyle": {
+          "alignItems": "initial",
+          "justifyContent": "initial",
+          "flexDirection": "row",
+          "flexWrap": "nowrap"
+        }
+      },
+      {
+        "name": "Row",
+        "label": "块容器",
+        "uuid": "1e47606e-036b-4945-aabf-bcc4e2217763",
+        "style": {},
+        "props": {
+          "<980": { "isOpenAnimation": true },
+          "980-1023": { "isOpenAnimation": true },
+          "1024-1279": { "isOpenAnimation": false },
+          "1280-1679": { "isOpenAnimation": false },
+          "1680-1920": { "isOpenAnimation": false },
+          ">1920": { "isOpenAnimation": false }
+        },
+        "containerStyle": {},
+        "isBlock": true,
+        "isContainer": true,
+        "children": [
+          {
+            "name": "Img",
+            "label": "Img",
+            "uuid": "d4a714d4-6f9e-4548-a476-20dcd9718fbe",
+            "style": {
+              "<980": { "borderRadius": "12px", "border": "solid 1px #191919" },
+              "980-1023": { "borderRadius": "16px" },
+              "1024-1279": { "borderRadius": "24px" },
+              "1280-1679": { "borderRadius": "24px" },
+              "1680-1920": { "borderRadius": "24px" },
+              ">1920": { "borderRadius": "24px" }
+            },
+            "props": {},
+            "containerStyle": {
+              "<980": {},
+              "980-1023": {},
+              "1024-1279": {},
+              "1280-1679": {},
+              "1680-1920": {},
+              ">1920": {}
+            },
+            "isBlock": true,
+            "isContainer": false,
+            "children": [],
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "transition": [],
+            "globalStyle": {
+              "width": "100%",
+              "display": "inline-block",
+              "position": "static",
+              "top": "0",
+              "left": "0",
+              "right": "0",
+              "bottom": "0",
+              "zIndex": "auto",
+              "border": "solid 1.5px #191919"
+            },
+            "globalProps": {
+              "url": "https://cdn.pacdora.com/page-img/op/step_2_image_url.png",
+              "title": "step_2_image_title",
+              "alt": "step_2_image_alt",
+              "isOpenAnimation": true,
+              "size1": 1200,
+              "size2": 1200,
+              "size3": 1600,
+              "size4": 1600,
+              "size5": 1800,
+              "size6": 2000
+            },
+            "globalContainerStyle": {}
+          },
+          {
+            "name": "P",
+            "label": "P",
+            "uuid": "cdfdef64-fd61-4fdb-a79f-56cf1ae6e230",
+            "style": { "<980": { "color": "rgba(25, 25, 25, 1)" } },
+            "props": {},
+            "containerStyle": {},
+            "isBlock": true,
+            "isContainer": false,
+            "children": [],
+            "globalStyle": {
+              "color": "#000000",
+              "fontSize": "var(--fs-base)",
+              "lineHeight": "var(--lh-tight)",
+              "fontWeight": "var(--fw-medium)",
+              "display": "block",
+              "-webkit-box-orient": "initial",
+              "-webkit-line-clamp": "initial",
+              "overflow": "initial",
+              "textOverflow": "initial",
+              "width": "100%",
+              "marginTop": "10px",
+              "marginBottom": "6px"
+            },
+            "globalContainerStyle": {},
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "globalProps": {
+              "text": "<p>step_2_title</p>",
+              "isOpenAnimation": false,
+              "isShow": true,
+              "isNeedTranslate": true
+            },
+            "transition": []
+          },
+          {
+            "name": "P",
+            "label": "P",
+            "uuid": "40305b09-a627-4c56-a1e4-1186c7df7550",
+            "style": {
+              "<980": {
+                "marginBottom": "24px",
+                "fontSize": "var(--fs-sm)",
+                "lineHeight": "var(--lh-tight)"
+              },
+              "980-1023": { "marginBottom": "48px" },
+              "1024-1279": { "marginBottom": "40px" },
+              "1280-1679": { "marginBottom": "40px" },
+              "1680-1920": { "marginBottom": "40px" },
+              ">1920": { "marginBottom": "40px" }
+            },
+            "props": {},
+            "containerStyle": {
+              "<980": {},
+              "980-1023": {},
+              "1024-1279": {},
+              "1280-1679": {},
+              "1680-1920": {},
+              ">1920": {}
+            },
+            "isBlock": true,
+            "isContainer": false,
+            "children": [],
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "transition": [],
+            "globalStyle": {
+              "color": "#4C4C4C",
+              "fontSize": "var(--fs-base)",
+              "lineHeight": "var(--lh-normal)",
+              "fontWeight": "var(--fw-normal)",
+              "display": "block",
+              "-webkit-box-orient": "initial",
+              "-webkit-line-clamp": "initial",
+              "overflow": "initial",
+              "textOverflow": "initial",
+              "width": "100%"
+            },
+            "globalProps": {
+              "text": "<p>step_2_p</p>",
+              "isOpenAnimation": true
+            },
+            "globalContainerStyle": {}
+          }
+        ],
+        "statusArr": [],
+        "curStatus": "default",
+        "status": {},
+        "transition": [],
+        "globalStyle": {
+          "marginTop": 0,
+          "marginBottom": 0,
+          "marginLeft": 0,
+          "marginRight": 0,
+          "paddingTop": 0,
+          "paddingBottom": 0,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "borderRadius": 0,
+          "background": "#ffffff",
+          "width": "100%",
+          "height": "auto",
+          "display": "block",
+          "borderWidth": "0",
+          "borderColor": "#000000",
+          "borderStyle": "solid"
+        },
+        "globalProps": {
+          "linkId": "",
+          "isShowBoxShadow": false,
+          "dx": "0px",
+          "dy": "0px",
+          "blur": "0px",
+          "spread": "0px",
+          "color": "#000000"
+        },
+        "globalContainerStyle": {
+          "alignItems": "initial",
+          "justifyContent": "initial",
+          "flexDirection": "row",
+          "flexWrap": "nowrap"
+        }
+      },
+      {
+        "name": "Row",
+        "label": "块容器",
+        "uuid": "d6641f1e-42e1-40cb-b667-a58ddd8dcacd",
+        "style": {},
+        "props": {
+          "<980": { "isOpenAnimation": true },
+          "980-1023": { "isOpenAnimation": true },
+          "1024-1279": { "isOpenAnimation": false },
+          "1280-1679": { "isOpenAnimation": false },
+          "1680-1920": { "isOpenAnimation": false },
+          ">1920": { "isOpenAnimation": false }
+        },
+        "containerStyle": {},
+        "isBlock": true,
+        "isContainer": true,
+        "children": [
+          {
+            "name": "Img",
+            "label": "Img",
+            "uuid": "eb738dd3-18a3-4629-8b6b-9ffd1efdf68d",
+            "style": {
+              "<980": { "borderRadius": "12px", "border": "solid 1px #191919" },
+              "980-1023": { "borderRadius": "16px" },
+              "1024-1279": { "borderRadius": "24px" },
+              "1280-1679": { "borderRadius": "24px" },
+              "1680-1920": { "borderRadius": "24px" },
+              ">1920": { "borderRadius": "24px" }
+            },
+            "props": {},
+            "containerStyle": {
+              "<980": {},
+              "980-1023": {},
+              "1024-1279": {},
+              "1280-1679": {},
+              "1680-1920": {},
+              ">1920": {}
+            },
+            "isBlock": true,
+            "isContainer": false,
+            "children": [],
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "transition": [],
+            "globalStyle": {
+              "width": "100%",
+              "display": "inline-block",
+              "position": "static",
+              "top": "0",
+              "left": "0",
+              "right": "0",
+              "bottom": "0",
+              "zIndex": "auto",
+              "border": "solid 1.5px #191919"
+            },
+            "globalProps": {
+              "url": "https://cdn.pacdora.com/page-img/op/step_3_image_url.png",
+              "title": "step_3_image_title",
+              "alt": "step_3_image_alt",
+              "isOpenAnimation": true,
+              "size1": 1200,
+              "size2": 1200,
+              "size3": 1600,
+              "size4": 1600,
+              "size5": 1800,
+              "size6": 2000
+            },
+            "globalContainerStyle": {}
+          },
+          {
+            "name": "P",
+            "label": "P",
+            "uuid": "9b0fdc87-a529-4ce3-8c65-86447f7a1337",
+            "style": { "<980": { "color": "rgba(25, 25, 25, 1)" } },
+            "props": {},
+            "containerStyle": {},
+            "isBlock": true,
+            "isContainer": false,
+            "children": [],
+            "globalStyle": {
+              "color": "#000000",
+              "fontSize": "var(--fs-base)",
+              "lineHeight": "var(--lh-tight)",
+              "fontWeight": "var(--fw-medium)",
+              "display": "block",
+              "-webkit-box-orient": "initial",
+              "-webkit-line-clamp": "initial",
+              "overflow": "initial",
+              "textOverflow": "initial",
+              "width": "100%",
+              "marginTop": "10px",
+              "marginBottom": "6px"
+            },
+            "globalContainerStyle": {},
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "globalProps": {
+              "text": "<p>step_3_title</p>",
+              "isOpenAnimation": false,
+              "isShow": true,
+              "isNeedTranslate": true
+            },
+            "transition": []
+          },
+          {
+            "name": "P",
+            "label": "P",
+            "uuid": "9495da25-a0b4-41eb-aec5-29fe419d8b9a",
+            "style": {
+              "<980": {
+                "fontSize": "var(--fs-sm)",
+                "lineHeight": "var(--lh-tight)"
+              }
+            },
+            "props": {},
+            "containerStyle": {
+              "<980": {},
+              "980-1023": {},
+              "1024-1279": {},
+              "1280-1679": {},
+              "1680-1920": {},
+              ">1920": {}
+            },
+            "isBlock": true,
+            "isContainer": false,
+            "children": [],
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "transition": [],
+            "globalStyle": {
+              "color": "#4C4C4C",
+              "fontSize": "var(--fs-base)",
+              "lineHeight": "var(--lh-normal)",
+              "fontWeight": "var(--fw-normal)",
+              "display": "block",
+              "-webkit-box-orient": "initial",
+              "-webkit-line-clamp": "initial",
+              "overflow": "initial",
+              "textOverflow": "initial",
+              "width": "100%"
+            },
+            "globalProps": {
+              "text": "<p>step_3_p</p>",
+              "isOpenAnimation": true
+            },
+            "globalContainerStyle": {}
+          }
+        ],
+        "statusArr": [],
+        "curStatus": "default",
+        "status": {},
+        "transition": [],
+        "globalStyle": {
+          "marginTop": 0,
+          "marginBottom": 0,
+          "marginLeft": 0,
+          "marginRight": 0,
+          "paddingTop": 0,
+          "paddingBottom": 0,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "borderRadius": 0,
+          "background": "#ffffff",
+          "width": "100%",
+          "height": "auto",
+          "display": "block",
+          "borderWidth": "0",
+          "borderColor": "#000000",
+          "borderStyle": "solid"
+        },
+        "globalProps": {
+          "linkId": "",
+          "isShowBoxShadow": false,
+          "dx": "0px",
+          "dy": "0px",
+          "blur": "0px",
+          "spread": "0px",
+          "color": "#000000"
+        },
+        "globalContainerStyle": {
+          "alignItems": "initial",
+          "justifyContent": "initial",
+          "flexDirection": "row",
+          "flexWrap": "nowrap"
+        }
+      }
+    ],
+    "statusArr": [],
+    "curStatus": "default",
+    "status": {},
+    "transition": [],
+    "globalStyle": {
+      "marginTop": 0,
+      "marginBottom": 0,
+      "marginLeft": "auto",
+      "marginRight": "auto",
+      "paddingTop": 0,
+      "paddingBottom": 0,
+      "paddingLeft": 0,
+      "paddingRight": 0,
+      "borderRadius": 0,
+      "background": "#ffffff",
+      "height": "auto",
+      "display": "block",
+      "borderWidth": "0",
+      "borderColor": "#000000",
+      "borderStyle": "solid",
+      "textAlign": "left"
+    },
+    "globalProps": {
+      "isOpenAnimation": false,
+      "linkId": "",
+      "isShowBoxShadow": false,
+      "dx": "0px",
+      "dy": "0px",
+      "blur": "0px",
+      "spread": "0px",
+      "color": "#000000"
+    },
+    "globalContainerStyle": {
+      "alignItems": "initial",
+      "justifyContent": "initial",
+      "flexDirection": "column",
+      "flexWrap": "nowrap",
+      "display": "flex"
+    }
+  }
+}

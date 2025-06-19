@@ -1,0 +1,86 @@
+{
+  "name": "Row",
+  "label": "块容器",
+  "uuid": "uuid_1",
+  "style": {},
+  "props": {},
+  "containerStyle": {},
+  "isBlock": true,
+  "isContainer": true,
+  "children": [
+    {
+      "name": "ALink",
+      "label": "A标签",
+      "uuid": "uuid_2",
+      "style": {},
+      "props": {},
+      "containerStyle": {},
+      "isBlock": true,
+      "isContainer": true,
+      "children": [],
+      "globalStyle": {
+        "fontSize": "var(--fs-base)",
+        "fontWeight": "var(--fw-normal)",
+        "lineHeight": "var(--lh-normal)",
+        "color": "rgba(69, 152, 248, 1)",
+        "--hover-underline": "underline",
+        "--font-color": "rgba(69, 152, 248, 1)",
+        "--hover-font-color": "rgba(69, 152, 248, 1)",
+        "--active-font-color": "rgba(48, 118, 209, 1)",
+        "--active-underline": "underline"
+      },
+      "globalContainerStyle": {},
+      "statusArr": [],
+      "curStatus": "default",
+      "status": {},
+      "globalProps": {
+        "gtm": "",
+        "href": "tools_href",
+        "text": "tools_title",
+        "type": "link-1",
+        "target": "_self",
+        "isOpenAnimation": true,
+        "fontColor": "#4598F8",
+        "underline": "none",
+        "hoverFontColor": "rgba(48, 118, 209, 1)",
+        "hoverUnderline": "underline",
+        "activeFontColor": "rgba(48, 118, 209, 1)",
+        "activeUnderline": "none",
+        "iconUrl": "",
+        "direction": "right",
+        "distance": "10px",
+        "iconWidth": "20px"
+      },
+      "transition": []
+    }
+  ],
+  "globalStyle": {
+    "width": "100%",
+    "height": "auto",
+    "display": "block",
+    "borderWidth": "0",
+    "borderColor": "#000000",
+    "borderStyle": "solid"
+  },
+  "globalContainerStyle": {
+    "alignItems": "initial",
+    "justifyContent": "initial",
+    "flexDirection": "row",
+    "flexWrap": "nowrap"
+  },
+  "statusArr": [],
+  "curStatus": "default",
+  "status": {},
+  "globalProps": {
+    "isOpenAnimation": false,
+    "linkId": "",
+    "isShowBoxShadow": false,
+    "dx": "0px",
+    "dy": "0px",
+    "blur": "0px",
+    "spread": "0px",
+    "color": "#000000",
+    "gtm": "tools_ga"
+  },
+  "transition": []
+}

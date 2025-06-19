@@ -1,0 +1,280 @@
+{
+  "origin": "componentCopy",
+  "data": {
+    "name": "Row",
+    "label": "块容器",
+    "uuid": "f76b7c62-c010-45f6-823b-84ed98f81cdb",
+    "style": {
+      "1280-1679": { "borderRadius": "32px", "width": "calc(100% - 80px)" },
+      "1024-1279": { "borderRadius": "24px", "width": "calc(100% - 80px)" },
+      "980-1023": { "borderRadius": "24px", "width": "calc(100% - 80px)" },
+      "<980": { "width": "calc(100% - 40px)", "borderRadius": "16px" }
+    },
+    "props": {},
+    "containerStyle": {},
+    "isBlock": true,
+    "isContainer": true,
+    "children": [
+      {
+        "name": "Row",
+        "label": "块容器",
+        "uuid": "09f87914-6160-4bde-a4d8-fbadccd1eb0c",
+        "style": {
+          "1680-1920": { "width": "calc(100% - 400px)" },
+          "1280-1679": { "width": "calc(100% - 200px)" },
+          "1024-1279": {
+            "width": "calc(100% - 96px)",
+            "marginTop": "56px",
+            "marginBottom": "56px"
+          },
+          "980-1023": {
+            "width": "calc(100% - 96px)",
+            "marginTop": "56px",
+            "marginBottom": "56px"
+          },
+          "<980": {
+            "width": "calc(100% - 48px)",
+            "marginTop": "24px",
+            "marginBottom": "24px"
+          }
+        },
+        "props": {},
+        "containerStyle": { "<980": { "flexDirection": "column" } },
+        "isBlock": true,
+        "isContainer": true,
+        "children": [
+          {
+            "name": "Row",
+            "label": "块容器",
+            "uuid": "bb3ee684-ad31-4c01-8e16-1ea7d89be411",
+            "style": {
+              "1024-1279": { "marginRight": "52px" },
+              "980-1023": { "marginRight": "unset" },
+              "<980": { "width": "100%" }
+            },
+            "props": {},
+            "containerStyle": {},
+            "isBlock": true,
+            "isContainer": true,
+            "children": [
+              {
+                "name": "Img",
+                "label": "Img",
+                "uuid": "be4754dd-bae7-4ff2-bf13-95942ea2d076",
+                "style": {
+                  "<980": { "marginBottom": "8px", "width": "36px" },
+                  "1280-1679": { "width": "48px", "marginBottom": "16px" },
+                  "1024-1279": { "width": "40px", "marginBottom": "12px" },
+                  "980-1023": { "width": "40px", "marginBottom": "12px" }
+                },
+                "props": {},
+                "containerStyle": {},
+                "isBlock": true,
+                "isContainer": false,
+                "children": [],
+                "globalStyle": {
+                  "width": "56px",
+                  "display": "inline-block",
+                  "position": "static",
+                  "top": "0",
+                  "left": "0",
+                  "right": "0",
+                  "bottom": "0",
+                  "zIndex": "auto",
+                  "marginBottom": "20px"
+                },
+                "globalContainerStyle": {},
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "globalProps": {
+                  "url": "//cdn.pacdora.com/ui/topic/318dfd93-b229-45f4-a4d6-53111772aabe.png",
+                  "title": "title",
+                  "alt": "alt",
+                  "isOpenAnimation": false,
+                  "size1": 1200,
+                  "size2": 1200,
+                  "size3": 1600,
+                  "size4": 1600,
+                  "size5": 1800,
+                  "size6": 2000,
+                  "isShow": true
+                },
+                "transition": []
+              },
+              {
+                "name": "H",
+                "label": "标题H",
+                "uuid": "813bc6ca-7d36-43fc-b378-df366261a776",
+                "style": {
+                  "1280-1679": { "fontSize": "var(--fs-2xl)" },
+                  "1024-1279": { "fontSize": "var(--fs-xl)" },
+                  "980-1023": { "fontSize": "var(--fs-l)" },
+                  "<980": { "marginBottom": "12px", "fontSize": "var(--fs-lg)" }
+                },
+                "props": {},
+                "containerStyle": {},
+                "isBlock": true,
+                "isContainer": false,
+                "children": [],
+                "globalStyle": {
+                  "color": "#000000",
+                  "fontSize": "var(--fs-3xl)",
+                  "display": "block",
+                  "textAlign": "left",
+                  "overflowWrap": "break-word",
+                  "width": "100%",
+                  "fontWeight": "var(--fw-medium)",
+                  "lineHeight": "var(--lh-tight)",
+                  "marginRight": "0px"
+                },
+                "globalContainerStyle": {},
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "globalProps": {
+                  "text": "<p>primary_text_placeholder</p>",
+                  "tag": "h2",
+                  "isOpenAnimation": true
+                },
+                "transition": []
+              }
+            ],
+            "globalStyle": {
+              "width": "35%",
+              "height": "auto",
+              "display": "block",
+              "borderWidth": "0",
+              "borderColor": "#000000",
+              "borderStyle": "solid",
+              "marginRight": "100px"
+            },
+            "globalContainerStyle": {
+              "alignItems": "initial",
+              "justifyContent": "initial",
+              "flexDirection": "row",
+              "flexWrap": "nowrap",
+              "display": "block"
+            },
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "globalProps": {
+              "isOpenAnimation": false,
+              "linkId": "",
+              "isShowBoxShadow": false,
+              "dx": "0px",
+              "dy": "0px",
+              "blur": "0px",
+              "spread": "0px",
+              "color": "#000000",
+              "isShow": true
+            },
+            "transition": []
+          },
+          {
+            "name": "P",
+            "label": "P",
+            "uuid": "b210b375-093d-4273-aeae-092e2091072e",
+            "style": {
+              "1280-1679": { "fontSize": "var(--fs-lg)" },
+              "1024-1279": { "fontSize": "var(--fs-base)" },
+              "980-1023": { "fontSize": "var(--fs-base)" },
+              "<980": { "width": "100%", "fontSize": "var(--fs-xsm)" }
+            },
+            "props": {},
+            "containerStyle": {},
+            "isBlock": true,
+            "isContainer": false,
+            "children": [],
+            "globalStyle": {
+              "color": "rgba(76, 76, 76, 1)",
+              "fontSize": "var(--fs-l)",
+              "lineHeight": "var(--lh-normal)",
+              "fontWeight": "var(--fw-normal)",
+              "display": "block",
+              "-webkit-box-orient": "initial",
+              "-webkit-line-clamp": "initial",
+              "overflow": "initial",
+              "textOverflow": "initial",
+              "width": "60%"
+            },
+            "globalContainerStyle": {},
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "globalProps": {
+              "text": "<p>secondary_text_placeholder</p>",
+              "isOpenAnimation": false,
+              "isShow": true
+            },
+            "transition": []
+          }
+        ],
+        "globalStyle": {
+          "width": "1528px",
+          "height": "auto",
+          "display": "block",
+          "borderWidth": "0",
+          "borderColor": "#000000",
+          "borderStyle": "solid",
+          "marginTop": "100px",
+          "marginBottom": "100px"
+        },
+        "globalContainerStyle": {
+          "alignItems": "flex-start",
+          "justifyContent": "space-between",
+          "flexDirection": "row",
+          "flexWrap": "nowrap",
+          "display": "flex"
+        },
+        "statusArr": [],
+        "curStatus": "default",
+        "status": {},
+        "globalProps": {
+          "isOpenAnimation": false,
+          "linkId": "",
+          "isShowBoxShadow": false,
+          "dx": "0px",
+          "dy": "0px",
+          "blur": "0px",
+          "spread": "0px",
+          "color": "#000000"
+        },
+        "transition": []
+      }
+    ],
+    "globalStyle": {
+      "width": "calc(100% - 64px)",
+      "height": "auto",
+      "display": "block",
+      "borderWidth": "0",
+      "borderColor": "#000000",
+      "borderStyle": "solid",
+      "marginTop": "0px",
+      "background": "#FFFFFF",
+      "borderRadius": "40px"
+    },
+    "globalContainerStyle": {
+      "alignItems": "center",
+      "justifyContent": "center",
+      "flexDirection": "column",
+      "flexWrap": "nowrap",
+      "display": "flex"
+    },
+    "statusArr": [],
+    "curStatus": "default",
+    "status": {},
+    "globalProps": {
+      "isOpenAnimation": true,
+      "linkId": "",
+      "isShowBoxShadow": false,
+      "dx": "0px",
+      "dy": "0px",
+      "blur": "0px",
+      "spread": "0px",
+      "color": "#000000"
+    },
+    "transition": []
+  }
+}

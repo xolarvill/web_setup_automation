@@ -1,0 +1,198 @@
+{
+  "origin": "componentCopy",
+  "data": {
+    "name": "Row",
+    "label": "块容器",
+    "uuid": "7d53d5b1-d00c-4bfa-9a5c-892efa7c76b2",
+    "style": {
+      "1280-1679": {
+        "borderRadius": "32px",
+        "marginTop": "24px",
+        "width": "calc(100% - 80px)"
+      },
+      "1024-1279": {
+        "borderRadius": "24px",
+        "width": "calc(100% - 80px)",
+        "marginTop": "24px"
+      },
+      "980-1023": {
+        "borderRadius": "24px",
+        "width": "calc(100% - 80px)",
+        "marginTop": "24px"
+      },
+      "<980": {
+        "borderRadius": "16px",
+        "width": "calc(100% - 40px)",
+        "marginTop": "12px"
+      }
+    },
+    "props": {},
+    "containerStyle": {},
+    "isBlock": true,
+    "isContainer": true,
+    "children": [
+      {
+        "name": "H",
+        "label": "标题H",
+        "uuid": "acc3ec6f-fb46-497c-9865-057b7e4ec24a",
+        "style": {
+          "1680-1920": { "width": "calc(100% - 400px)" },
+          "1280-1679": {
+            "marginTop": "72px",
+            "marginBottom": "20px",
+            "fontSize": "var(--fs-4xl)",
+            "width": "calc(100% - 64px)"
+          },
+          "1024-1279": {
+            "width": "calc(100% - 48px)",
+            "fontSize": "var(--fs-3xl)",
+            "marginTop": "56px",
+            "marginBottom": "12px"
+          },
+          "980-1023": {
+            "width": "calc(100% - 48px)",
+            "fontSize": "var(--fs-3xl)",
+            "marginTop": "56px",
+            "marginBottom": "12px"
+          },
+          "<980": {
+            "width": "calc(100% - 24px)",
+            "fontSize": "var(--fs-lg)",
+            "marginTop": "24px",
+            "marginBottom": "1px"
+          }
+        },
+        "props": {},
+        "containerStyle": {},
+        "isBlock": true,
+        "isContainer": false,
+        "children": [],
+        "globalStyle": {
+          "color": "#000000",
+          "fontSize": "var(--fs-5xl)",
+          "display": "block",
+          "textAlign": "center",
+          "overflowWrap": "break-word",
+          "width": "1528px",
+          "marginTop": "100px",
+          "marginBottom": "36px",
+          "fontWeight": "var(--fw-medium)",
+          "lineHeight": "var(--lh-tight)"
+        },
+        "globalContainerStyle": {},
+        "statusArr": [],
+        "curStatus": "default",
+        "status": {},
+        "globalProps": {
+          "text": "FAQ",
+          "tag": "h2",
+          "isNeedTranslate": false,
+          "isOpenAnimation": true
+        },
+        "transition": []
+      },
+      {
+        "name": "Faq",
+        "label": "FAQ",
+        "uuid": "e3734b4b-a7d6-44c3-b97b-74deb6c19de6",
+        "style": {
+          "1280-1679": { "marginBottom": "72px" },
+          "1024-1279": {
+            "marginBottom": "56px",
+            "width": "calc(100% - 200px)"
+          },
+          "980-1023": { "marginBottom": "56px", "width": "calc(100% - 200px)" },
+          "<980": {
+            "width": "calc(100% - 48px)",
+            "marginBottom": "24px",
+            "--question-font-size": "var(--fs-base)",
+            "--answer-font-size": "var(--fs-sm)",
+            "height": "auto",
+            "--question-line-height": "var(--lh-tight)",
+            "marginTop": "-16px"
+          }
+        },
+        "props": {},
+        "containerStyle": {},
+        "isBlock": true,
+        "isContainer": false,
+        "children": [],
+        "globalStyle": {
+          "display": "block",
+          "--question-font-size": "var(--fs-lg)",
+          "--question-line-height": "var(--lh-normal)",
+          "--question-font-weight": "var(--fw-normal)",
+          "--answer-font-size": "var(--fs-base)",
+          "--answer-line-height": "var(--lh-tight)",
+          "--answer-font-weight": "var(--fw-normal)",
+          "width": "1000px",
+          "marginBottom": "100px"
+        },
+        "globalContainerStyle": {},
+        "statusArr": [],
+        "curStatus": "default",
+        "status": {},
+        "globalProps": {
+          "dataList": [
+            {
+              "question": "FAQ_1_question",
+              "answer": "FAQ_1_answer"
+            },
+            {
+              "question": "FAQ_2_question",
+              "answer": "FAQ_2_answer"
+            },
+            {
+              "question": "FAQ_3_question",
+              "answer": "FAQ_3_answer"
+            },
+            {
+              "question": "FAQ_4_question",
+              "answer": "FAQ_4_answer"
+            },
+            {
+              "question": "FAQ_5_question",
+              "answer": "FAQ_5_answer"
+            }
+          ],
+          "title": "",
+          "isOpenAnimation": true,
+          "isOpenAnswer": false
+        },
+        "transition": []
+      }
+    ],
+    "globalStyle": {
+      "width": "calc(100% - 64px)",
+      "height": "auto",
+      "display": "block",
+      "borderWidth": "0",
+      "borderColor": "#000000",
+      "borderStyle": "solid",
+      "marginTop": "32px",
+      "background": "#FFFFFF",
+      "borderRadius": "40px"
+    },
+    "globalContainerStyle": {
+      "alignItems": "center",
+      "justifyContent": "center",
+      "flexDirection": "column",
+      "flexWrap": "nowrap",
+      "display": "flex"
+    },
+    "statusArr": [],
+    "curStatus": "default",
+    "status": {},
+    "globalProps": {
+      "isOpenAnimation": true,
+      "linkId": "",
+      "isShowBoxShadow": false,
+      "dx": "0px",
+      "dy": "0px",
+      "blur": "0px",
+      "spread": "0px",
+      "color": "#000000"
+    },
+    "transition": []
+  }
+}

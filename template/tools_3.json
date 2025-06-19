@@ -1,0 +1,50 @@
+{
+  "name": "Grid",
+  "label": "网格",
+  "uuid": "cff81cf1-ee42-4493-b4e3-c630228fb7d9",
+  "style": {
+    "1280-1679": { "marginBottom": "200px" },
+    "1024-1279": { "marginBottom": "160px" },
+    "980-1023": { "marginBottom": "160px" },
+    "<980": { "marginBottom": "56px" },
+    ">1920": { "marginBottom": "200px" },
+    "1680-1920": { "marginBottom": "200px" }
+  },
+  "props": { "<980": { "isOpenAnimation": true } },
+  "containerStyle": {
+    "1024-1279": {
+      "columnGap": "24px",
+      "rowGap": "20px",
+      "gridTemplateColumns": "repeat(3, 1fr)"
+    },
+    "980-1023": {
+      "columnGap": "24px",
+      "rowGap": "20px",
+      "gridTemplateColumns": "repeat(2, 1fr)"
+    },
+    "<980": {
+      "gridTemplateColumns": "repeat(1, 1fr)",
+      "columnGap": "24px",
+      "rowGap": "20px"
+    }
+  },
+  "isBlock": true,
+  "isContainer": true,
+  "children": [],
+  "globalStyle": {
+    "width": "100%",
+    "marginBottom": "160px",
+    "textAlign": "left"
+  },
+  "globalContainerStyle": {
+    "display": "grid",
+    "gridTemplateColumns": "repeat(4, 1fr)",
+    "columnGap": "32px",
+    "rowGap": "28px"
+  },
+  "statusArr": [],
+  "curStatus": "default",
+  "status": {},
+  "globalProps": { "linkId": "" },
+  "transition": []
+}

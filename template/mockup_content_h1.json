@@ -1,0 +1,2503 @@
+{
+  "origin": "componentCopy",
+  "data": {
+    "name": "Row",
+    "label": "块容器",
+    "uuid": "e75992b1-0332-481e-b8bb-dd79426b1368",
+    "style": {},
+    "props": {},
+    "containerStyle": {},
+    "isBlock": true,
+    "isContainer": true,
+    "children": [
+      {
+        "name": "Row",
+        "label": "块容器",
+        "uuid": "9484c1b8-8b36-44e0-8f83-e9e19ccb427b",
+        "style": {
+          "1280-1679": { "width": "calc(100% - 80px)" },
+          "1024-1279": { "width": "calc(100% - 80px)" },
+          "980-1023": { "width": "calc(100% - 80px)" },
+          "<980": { "width": "calc(100% - 40px)" },
+          ">1920": { "width": "1528px" }
+        },
+        "props": {},
+        "containerStyle": {
+          ">1920": { "flexDirection": "column", "alignItems": "center" }
+        },
+        "isBlock": true,
+        "isContainer": true,
+        "children": [
+          {
+            "name": "BrandCrumb",
+            "label": "面包屑",
+            "uuid": "ff85a37b-0110-46dc-8d9c-4f4b91b0d137",
+            "style": {},
+            "props": {},
+            "containerStyle": {
+              "<980": {},
+              "980-1023": {},
+              "1024-1279": {},
+              "1280-1679": {},
+              "1680-1920": {},
+              ">1920": {}
+            },
+            "isBlock": true,
+            "isContainer": false,
+            "children": [],
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "transition": [],
+            "globalStyle": {
+              "color": "#000000",
+              "fontSize": "var(--fs-sm)",
+              "lineHeight": "var(--lh-tight)",
+              "fontWeight": "var(--fw-normal)",
+              "display": "flex",
+              "marginTop": "0px"
+            },
+            "globalContainerStyle": {},
+            "globalProps": {
+              "options": [
+                { "label": "Home", "href": "/" },
+                { "label": "Tools", "href": "/tools" },
+                { "label": "breadcrumbs_placeholder", "href": "" }
+              ],
+              "separator": "/",
+              "isOpenAnimation": true
+            }
+          },
+          {
+            "name": "Row",
+            "label": "块容器",
+            "uuid": "88bb1fa2-b64e-44a4-a13e-b558d8041879",
+            "style": { "<980": { "marginTop": "48px" } },
+            "props": {},
+            "containerStyle": {
+              "<980": {
+                "flexDirection": "column",
+                "justifyContent": "space-between",
+                "alignItems": "center"
+              }
+            },
+            "isBlock": true,
+            "isContainer": true,
+            "children": [
+              {
+                "name": "Row",
+                "label": "块容器",
+                "uuid": "146832c1-9ec7-44b4-915b-4b1d240addd8",
+                "style": {
+                  "1680-1920": { "width": "560px" },
+                  "1280-1679": { "width": "40%", "marginRight": "80px" },
+                  "1024-1279": { "width": "50%", "marginRight": "40px" },
+                  "980-1023": { "width": "50%", "marginRight": "40px" },
+                  "<980": { "marginRight": "1px", "width": "100%" }
+                },
+                "props": {},
+                "containerStyle": {
+                  "<980": {
+                    "justifyContent": "center",
+                    "alignItems": "center"
+                  }
+                },
+                "isBlock": true,
+                "isContainer": true,
+                "children": [
+                  {
+                    "name": "Row",
+                    "label": "块容器",
+                    "uuid": "6ea7dda3-7c40-4f9c-b338-d53393b8ee6f",
+                    "style": {
+                      "1024-1279": { "width": "120%" },
+                      "980-1023": { "width": "100%" },
+                      "1280-1679": { "width": "120%" }
+                    },
+                    "props": {},
+                    "containerStyle": {
+                      "<980": { "justifyContent": "center" }
+                    },
+                    "isBlock": true,
+                    "isContainer": true,
+                    "children": [
+                      {
+                        "name": "A",
+                        "label": "A跳转容器",
+                        "uuid": "b56d1403-e378-4ed1-901e-34f913a83583",
+                        "style": {
+                          "980-1023": {
+                            "transform": "translate(0px, 0px) scale(1)"
+                          }
+                        },
+                        "props": {},
+                        "containerStyle": {},
+                        "isBlock": true,
+                        "isContainer": true,
+                        "children": [
+                          {
+                            "name": "Row",
+                            "label": "块容器",
+                            "uuid": "4d8280ba-5de2-4a2f-82c2-359d21432faf",
+                            "style": {
+                              "<980": {
+                                "marginRight": "8px",
+                                "paddingRight": "6px",
+                                "height": "20px"
+                              },
+                              "980-1023": {
+                                "transform": "translate(0px, 0px) scale(1)",
+                                "paddingRight": "12px",
+                                "height": "28px"
+                              },
+                              "1024-1279": {
+                                "paddingRight": "12px",
+                                "height": "28px"
+                              }
+                            },
+                            "props": {},
+                            "containerStyle": {},
+                            "isBlock": true,
+                            "isContainer": true,
+                            "children": [
+                              {
+                                "name": "Row",
+                                "label": "块容器",
+                                "uuid": "a55f536c-125b-4780-a499-c186788c7505",
+                                "style": {
+                                  "<980": {
+                                    "paddingLeft": "6px",
+                                    "paddingRight": "4px"
+                                  },
+                                  "1024-1279": { "paddingRight": "8px" },
+                                  "980-1023": { "paddingRight": "8px" }
+                                },
+                                "props": {},
+                                "containerStyle": {},
+                                "isBlock": true,
+                                "isContainer": true,
+                                "children": [
+                                  {
+                                    "name": "Img",
+                                    "label": "Img",
+                                    "uuid": "0f53a27c-ac91-4e93-95b6-40eb23ba7924",
+                                    "style": {
+                                      "<980": { "width": "14px" }
+                                    },
+                                    "props": {},
+                                    "containerStyle": {},
+                                    "isBlock": true,
+                                    "isContainer": false,
+                                    "children": [],
+                                    "globalStyle": {
+                                      "width": "20px",
+                                      "display": "inline-block",
+                                      "position": "static",
+                                      "top": "0",
+                                      "left": "0",
+                                      "right": "0",
+                                      "bottom": "0",
+                                      "zIndex": "auto"
+                                    },
+                                    "globalContainerStyle": {},
+                                    "statusArr": [],
+                                    "curStatus": "default",
+                                    "status": {},
+                                    "globalProps": {
+                                      "url": "https://cdn.pacdora.com/ui/topic/d7826d09-5f1c-4a8d-8772-6b21d222ab0e.svg",
+                                      "title": "title",
+                                      "alt": "alt",
+                                      "isOpenAnimation": false,
+                                      "size1": 1200,
+                                      "size2": 1200,
+                                      "size3": 1600,
+                                      "size4": 1600,
+                                      "size5": 1800,
+                                      "size6": 2000
+                                    },
+                                    "transition": []
+                                  }
+                                ],
+                                "globalStyle": {
+                                  "width": "auto",
+                                  "height": "100%",
+                                  "display": "block",
+                                  "borderWidth": "0",
+                                  "borderColor": "#000000",
+                                  "borderStyle": "solid",
+                                  "borderRight": "solid 1px rgba(25, 25, 25, 0.25)",
+                                  "color": "#191919",
+                                  "paddingLeft": "12px",
+                                  "paddingRight": "12px"
+                                },
+                                "globalContainerStyle": {
+                                  "alignItems": "center",
+                                  "justifyContent": "center",
+                                  "flexDirection": "row",
+                                  "flexWrap": "nowrap",
+                                  "display": "flex"
+                                },
+                                "statusArr": [],
+                                "curStatus": "default",
+                                "status": {},
+                                "globalProps": {
+                                  "isOpenAnimation": false,
+                                  "linkId": "",
+                                  "isShowBoxShadow": false,
+                                  "dx": "0px",
+                                  "dy": "0px",
+                                  "blur": "0px",
+                                  "spread": "0px",
+                                  "color": "#000000"
+                                },
+                                "transition": []
+                              },
+                              {
+                                "name": "P",
+                                "label": "P",
+                                "uuid": "83c8d2e5-3aba-42d8-900c-8acad7da0622",
+                                "style": {
+                                  "<980": {
+                                    "fontSize": "var(--fs-xsm)",
+                                    "marginLeft": "6px"
+                                  },
+                                  "1024-1279": {
+                                    "fontSize": "var(--fs-sm)",
+                                    "marginLeft": "8px"
+                                  },
+                                  "980-1023": {
+                                    "marginLeft": "8px",
+                                    "fontSize": "var(--fs-sm)"
+                                  }
+                                },
+                                "props": {},
+                                "containerStyle": {},
+                                "isBlock": true,
+                                "isContainer": false,
+                                "children": [],
+                                "globalStyle": {
+                                  "color": "#000000",
+                                  "fontSize": "var(--fs-base)",
+                                  "lineHeight": "var(--lh-tight)",
+                                  "fontWeight": "var(--fw-medium)",
+                                  "display": "block",
+                                  "-webkit-box-orient": "initial",
+                                  "-webkit-line-clamp": "initial",
+                                  "overflow": "initial",
+                                  "textOverflow": "initial",
+                                  "width": "auto",
+                                  "textAlign": "center",
+                                  "marginLeft": "12px",
+                                  "whiteSpace": "nowrap"
+                                },
+                                "globalContainerStyle": {},
+                                "statusArr": [],
+                                "curStatus": "default",
+                                "status": {},
+                                "globalProps": {
+                                  "text": "<p>4.9</p>",
+                                  "isOpenAnimation": false
+                                },
+                                "transition": []
+                              },
+                              {
+                                "name": "Img",
+                                "label": "Img",
+                                "uuid": "c7dc1ca7-9182-4c9f-b664-876963e04f39",
+                                "style": {
+                                  "<980": {
+                                    "height": "10px",
+                                    "marginLeft": "4px"
+                                  },
+                                  "1024-1279": { "height": "14px" },
+                                  "980-1023": { "height": "14px" }
+                                },
+                                "props": {},
+                                "containerStyle": {},
+                                "isBlock": true,
+                                "isContainer": false,
+                                "children": [],
+                                "globalStyle": {
+                                  "width": "auto",
+                                  "display": "inline-block",
+                                  "position": "static",
+                                  "top": "0",
+                                  "left": "0",
+                                  "right": "0",
+                                  "bottom": "0",
+                                  "zIndex": "auto",
+                                  "height": "16px",
+                                  "marginLeft": "8px"
+                                },
+                                "globalContainerStyle": {},
+                                "statusArr": [],
+                                "curStatus": "default",
+                                "status": {},
+                                "globalProps": {
+                                  "url": "//cdn.pacdora.com/ui/topic/19f9a89e-9077-4365-a544-bfb737bb7bb1.svg",
+                                  "title": "Trustpilot logo",
+                                  "alt": "Trustpilot logo",
+                                  "isOpenAnimation": false,
+                                  "size1": 1200,
+                                  "size2": 1200,
+                                  "size3": 1600,
+                                  "size4": 1600,
+                                  "size5": 1800,
+                                  "size6": 2000
+                                },
+                                "transition": []
+                              }
+                            ],
+                            "globalStyle": {
+                              "width": "auto",
+                              "height": "34px",
+                              "display": "block",
+                              "borderWidth": "0",
+                              "borderColor": "#000000",
+                              "borderStyle": "solid",
+                              "borderRadius": "18px",
+                              "border": "solid 1px rgba(25, 25, 25, 0.25)",
+                              "borderRight": "solid 1px rgba(25, 25, 25, 0.25)",
+                              "transition": "border-color 200ms linear 0ms",
+                              "paddingRight": "14px",
+                              "marginRight": "16px",
+                              "background": "rgba(255, 255, 255, 0.7)"
+                            },
+                            "globalContainerStyle": {
+                              "alignItems": "center",
+                              "justifyContent": "initial",
+                              "flexDirection": "row",
+                              "flexWrap": "nowrap",
+                              "display": "flex"
+                            },
+                            "statusArr": [
+                              {
+                                "uuid": "0d9de662-0b10-431a-9799-972809ad3f06",
+                                "name": "hover",
+                                "conditions": []
+                              }
+                            ],
+                            "curStatus": "default",
+                            "status": {
+                              "hover": {
+                                "<980": {},
+                                "980-1023": {},
+                                "1024-1279": {},
+                                "1280-1679": {},
+                                "1680-1920": {},
+                                ">1920": {},
+                                "globalStyle": {
+                                  "border": "solid 1px rgba(25, 25, 25, 1)"
+                                }
+                              }
+                            },
+                            "globalProps": {
+                              "isOpenAnimation": true,
+                              "linkId": "",
+                              "isShowBoxShadow": false,
+                              "dx": "0px",
+                              "dy": "0px",
+                              "blur": "0px",
+                              "spread": "0px",
+                              "color": "#000000"
+                            },
+                            "transition": []
+                          }
+                        ],
+                        "globalStyle": { "width": "auto" },
+                        "globalContainerStyle": {},
+                        "statusArr": [],
+                        "curStatus": "default",
+                        "status": {},
+                        "globalProps": {
+                          "href": "https://www.trustpilot.com/review/pacdora.com",
+                          "target": "_blank",
+                          "isOpenAnimation": false,
+                          "linkId": "",
+                          "isShow": true,
+                          "gtm": "ga-review_platform"
+                        },
+                        "transition": []
+                      },
+                      {
+                        "name": "A",
+                        "label": "A跳转容器",
+                        "uuid": "181636a7-9ad8-4125-8dde-b4a3ee4c26b1",
+                        "style": {
+                          "980-1023": {
+                            "transform": "translate(0px, 0px) scale(1)"
+                          }
+                        },
+                        "props": {},
+                        "containerStyle": {},
+                        "isBlock": true,
+                        "isContainer": true,
+                        "children": [
+                          {
+                            "name": "Row",
+                            "label": "块容器",
+                            "uuid": "6c258051-fbe3-4ba9-a380-cfe32a4c2302",
+                            "style": {
+                              "<980": {
+                                "marginRight": "8px",
+                                "paddingRight": "6px",
+                                "height": "20px"
+                              },
+                              "1024-1279": {
+                                "paddingRight": "12px",
+                                "height": "28px"
+                              },
+                              "980-1023": {
+                                "height": "28px",
+                                "paddingRight": "12px"
+                              }
+                            },
+                            "props": {},
+                            "containerStyle": {},
+                            "isBlock": true,
+                            "isContainer": true,
+                            "children": [
+                              {
+                                "name": "Row",
+                                "label": "块容器",
+                                "uuid": "076eb59a-0dde-476a-836e-d055f22b6351",
+                                "style": {
+                                  "<980": {
+                                    "paddingLeft": "6px",
+                                    "paddingRight": "4px"
+                                  },
+                                  "1024-1279": { "paddingRight": "8px" },
+                                  "980-1023": { "paddingRight": "8px" }
+                                },
+                                "props": {},
+                                "containerStyle": {},
+                                "isBlock": true,
+                                "isContainer": true,
+                                "children": [
+                                  {
+                                    "name": "Img",
+                                    "label": "Img",
+                                    "uuid": "c5e2643f-6bb0-40f7-bdde-ca4775289e2f",
+                                    "style": {
+                                      "<980": { "width": "14px" }
+                                    },
+                                    "props": {},
+                                    "containerStyle": {},
+                                    "isBlock": true,
+                                    "isContainer": false,
+                                    "children": [],
+                                    "globalStyle": {
+                                      "width": "20px",
+                                      "display": "inline-block",
+                                      "position": "static",
+                                      "top": "0",
+                                      "left": "0",
+                                      "right": "0",
+                                      "bottom": "0",
+                                      "zIndex": "auto"
+                                    },
+                                    "globalContainerStyle": {},
+                                    "statusArr": [],
+                                    "curStatus": "default",
+                                    "status": {},
+                                    "globalProps": {
+                                      "url": "//cdn.pacdora.com/ui/topic/b5fabcf8-e0f4-4e2c-9be1-27c30e7edcce.svg",
+                                      "title": "title",
+                                      "alt": "alt",
+                                      "isOpenAnimation": false,
+                                      "size1": 1200,
+                                      "size2": 1200,
+                                      "size3": 1600,
+                                      "size4": 1600,
+                                      "size5": 1800,
+                                      "size6": 2000
+                                    },
+                                    "transition": []
+                                  }
+                                ],
+                                "globalStyle": {
+                                  "width": "auto",
+                                  "height": "100%",
+                                  "display": "block",
+                                  "borderWidth": "0",
+                                  "borderColor": "#000000",
+                                  "borderStyle": "solid",
+                                  "borderRight": "solid 1px rgba(25, 25, 25, 0.25)",
+                                  "color": "#191919",
+                                  "paddingLeft": "12px",
+                                  "paddingRight": "12px"
+                                },
+                                "globalContainerStyle": {
+                                  "alignItems": "center",
+                                  "justifyContent": "center",
+                                  "flexDirection": "row",
+                                  "flexWrap": "nowrap",
+                                  "display": "flex"
+                                },
+                                "statusArr": [],
+                                "curStatus": "default",
+                                "status": {},
+                                "globalProps": {
+                                  "isOpenAnimation": false,
+                                  "linkId": "",
+                                  "isShowBoxShadow": false,
+                                  "dx": "0px",
+                                  "dy": "0px",
+                                  "blur": "0px",
+                                  "spread": "0px",
+                                  "color": "#000000"
+                                },
+                                "transition": []
+                              },
+                              {
+                                "name": "P",
+                                "label": "P",
+                                "uuid": "ffa76656-d8bd-44df-bc92-d75478bf3244",
+                                "style": {
+                                  "<980": {
+                                    "fontSize": "var(--fs-xsm)",
+                                    "marginLeft": "6px"
+                                  },
+                                  "1024-1279": {
+                                    "fontSize": "var(--fs-sm)",
+                                    "marginLeft": "8px"
+                                  },
+                                  "980-1023": {
+                                    "fontSize": "var(--fs-sm)",
+                                    "marginLeft": "8px"
+                                  }
+                                },
+                                "props": {},
+                                "containerStyle": {},
+                                "isBlock": true,
+                                "isContainer": false,
+                                "children": [],
+                                "globalStyle": {
+                                  "color": "#000000",
+                                  "fontSize": "var(--fs-base)",
+                                  "lineHeight": "var(--lh-tight)",
+                                  "fontWeight": "var(--fw-medium)",
+                                  "display": "block",
+                                  "-webkit-box-orient": "initial",
+                                  "-webkit-line-clamp": "initial",
+                                  "overflow": "initial",
+                                  "textOverflow": "initial",
+                                  "width": "auto",
+                                  "textAlign": "center",
+                                  "marginLeft": "12px",
+                                  "whiteSpace": "nowrap"
+                                },
+                                "globalContainerStyle": {},
+                                "statusArr": [],
+                                "curStatus": "default",
+                                "status": {},
+                                "globalProps": {
+                                  "text": "<p>4.9</p>",
+                                  "isOpenAnimation": false
+                                },
+                                "transition": []
+                              },
+                              {
+                                "name": "Img",
+                                "label": "Img",
+                                "uuid": "29de7737-f414-4cc6-9325-9cdbc3131a77",
+                                "style": {
+                                  "<980": {
+                                    "height": "10px",
+                                    "marginLeft": "4px"
+                                  },
+                                  "1024-1279": { "height": "14px" },
+                                  "980-1023": { "height": "14px" }
+                                },
+                                "props": {},
+                                "containerStyle": {},
+                                "isBlock": true,
+                                "isContainer": false,
+                                "children": [],
+                                "globalStyle": {
+                                  "width": "auto",
+                                  "display": "inline-block",
+                                  "position": "static",
+                                  "top": "0",
+                                  "left": "0",
+                                  "right": "0",
+                                  "bottom": "0",
+                                  "zIndex": "auto",
+                                  "height": "16px",
+                                  "marginLeft": "8px"
+                                },
+                                "globalContainerStyle": {},
+                                "statusArr": [],
+                                "curStatus": "default",
+                                "status": {},
+                                "globalProps": {
+                                  "url": "//cdn.pacdora.com/ui/topic/b54ed4c9-1adc-4380-98ca-6b979712687f.svg",
+                                  "title": "G2 logo",
+                                  "alt": "G2 logo",
+                                  "isOpenAnimation": false,
+                                  "size1": 1200,
+                                  "size2": 1200,
+                                  "size3": 1600,
+                                  "size4": 1600,
+                                  "size5": 1800,
+                                  "size6": 2000
+                                },
+                                "transition": []
+                              }
+                            ],
+                            "globalStyle": {
+                              "width": "auto",
+                              "height": "34px",
+                              "display": "block",
+                              "borderWidth": "0",
+                              "borderColor": "#000000",
+                              "borderStyle": "solid",
+                              "borderRadius": "18px",
+                              "border": "solid 1px rgba(25, 25, 25, 0.25)",
+                              "borderRight": "solid 1px rgba(25, 25, 25, 0.25)",
+                              "transition": "border-color 200ms linear 0ms",
+                              "paddingRight": "14px",
+                              "marginRight": "16px",
+                              "background": "rgba(255, 255, 255, 0.7)"
+                            },
+                            "globalContainerStyle": {
+                              "alignItems": "center",
+                              "justifyContent": "initial",
+                              "flexDirection": "row",
+                              "flexWrap": "nowrap",
+                              "display": "flex"
+                            },
+                            "statusArr": [
+                              {
+                                "uuid": "0d9de662-0b10-431a-9799-972809ad3f06",
+                                "name": "hover",
+                                "conditions": []
+                              }
+                            ],
+                            "curStatus": "default",
+                            "status": {
+                              "hover": {
+                                "<980": {},
+                                "980-1023": {},
+                                "1024-1279": {},
+                                "1280-1679": {},
+                                "1680-1920": {},
+                                ">1920": {},
+                                "globalStyle": {
+                                  "border": "solid 1px rgba(25, 25, 25, 1)"
+                                }
+                              }
+                            },
+                            "globalProps": {
+                              "isOpenAnimation": true,
+                              "linkId": "",
+                              "isShowBoxShadow": false,
+                              "dx": "0px",
+                              "dy": "0px",
+                              "blur": "0px",
+                              "spread": "0px",
+                              "color": "#000000"
+                            },
+                            "transition": []
+                          }
+                        ],
+                        "globalStyle": { "width": "auto" },
+                        "globalContainerStyle": {},
+                        "statusArr": [],
+                        "curStatus": "default",
+                        "status": {},
+                        "globalProps": {
+                          "href": "https://www.g2.com/products/pacdora/reviews",
+                          "target": "_blank",
+                          "isOpenAnimation": false,
+                          "linkId": "",
+                          "isShow": true,
+                          "gtm": "ga-review_platform"
+                        },
+                        "transition": []
+                      }
+                    ],
+                    "globalStyle": {
+                      "width": "100%",
+                      "height": "auto",
+                      "display": "block",
+                      "borderWidth": "0",
+                      "borderColor": "#000000",
+                      "borderStyle": "solid"
+                    },
+                    "globalContainerStyle": {
+                      "alignItems": "initial",
+                      "justifyContent": "flex-start",
+                      "flexDirection": "row",
+                      "flexWrap": "nowrap",
+                      "display": "flex"
+                    },
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "globalProps": {
+                      "isOpenAnimation": false,
+                      "linkId": "",
+                      "isShowBoxShadow": false,
+                      "dx": "0px",
+                      "dy": "0px",
+                      "blur": "0px",
+                      "spread": "0px",
+                      "color": "#000000"
+                    },
+                    "transition": []
+                  },
+                  {
+                    "name": "Row",
+                    "label": "块容器",
+                    "uuid": "38fcefa5-f81e-4fc9-8815-cf67689c4d07",
+                    "style": {},
+                    "props": {},
+                    "containerStyle": {
+                      "<980": { "justifyContent": "center" }
+                    },
+                    "isBlock": true,
+                    "isContainer": true,
+                    "children": [
+                      {
+                        "name": "H",
+                        "label": "标题H",
+                        "uuid": "0c4cba34-73ae-4f71-bd63-fe23e8a1e8c5",
+                        "style": {
+                          "<980": {
+                            "marginBottom": "8px",
+                            "fontSize": "var(--fs-2xl)",
+                            "textAlign": "center",
+                            "marginTop": "12px",
+                            "lineHeight": "var(--lh-tight)"
+                          },
+                          "1280-1679": { "fontSize": "var(--fs-5xl)" },
+                          "1024-1279": { "fontSize": "var(--fs-4xl)" },
+                          "980-1023": { "fontSize": "var(--fs-4xl)" }
+                        },
+                        "props": {},
+                        "containerStyle": {},
+                        "isBlock": true,
+                        "isContainer": false,
+                        "children": [],
+                        "globalStyle": {
+                          "color": "#000000",
+                          "fontSize": "var(--fs-6xl)",
+                          "display": "block",
+                          "textAlign": "left",
+                          "overflowWrap": "break-word",
+                          "width": "auto",
+                          "marginTop": "20px",
+                          "marginBottom": "16px",
+                          "fontWeight": "var(--fw-medium)",
+                          "lineHeight": "var(--lh-none)"
+                        },
+                        "globalContainerStyle": {},
+                        "statusArr": [],
+                        "curStatus": "default",
+                        "status": {},
+                        "globalProps": {
+                          "text": "<p>h1_primary_text_placeholder</p>",
+                          "tag": "h1",
+                          "isOpenAnimation": true
+                        },
+                        "transition": []
+                      },
+                      {
+                        "name": "P",
+                        "label": "P",
+                        "uuid": "646ee18d-257f-4f9a-9c27-242a006555fc",
+                        "style": {
+                          "1280-1679": { "fontSize": "var(--fs-base)" },
+                          "1024-1279": { "fontSize": "var(--fs-base)" },
+                          "980-1023": { "fontSize": "var(--fs-base)" },
+                          "<980": {
+                            "textAlign": "center",
+                            "fontSize": "var(--fs-sm)"
+                          }
+                        },
+                        "props": {},
+                        "containerStyle": {},
+                        "isBlock": true,
+                        "isContainer": false,
+                        "children": [],
+                        "globalStyle": {
+                          "color": "rgba(76, 76, 76, 1)",
+                          "fontSize": "var(--fs-lg)",
+                          "lineHeight": "var(--lh-normal)",
+                          "fontWeight": "var(--fw-normal)",
+                          "display": "block",
+                          "-webkit-box-orient": "initial",
+                          "-webkit-line-clamp": "initial",
+                          "overflow": "initial",
+                          "textOverflow": "initial",
+                          "width": "100%"
+                        },
+                        "globalContainerStyle": {},
+                        "statusArr": [],
+                        "curStatus": "default",
+                        "status": {},
+                        "globalProps": {
+                          "text": "<p>h1_secondary_text_placeholder</p>",
+                          "isOpenAnimation": true,
+                          "isShow": true
+                        },
+                        "transition": []
+                      }
+                    ],
+                    "globalStyle": {
+                      "width": "100%",
+                      "height": "auto",
+                      "display": "block",
+                      "borderWidth": "0",
+                      "borderColor": "#000000",
+                      "borderStyle": "solid"
+                    },
+                    "globalContainerStyle": {
+                      "alignItems": "initial",
+                      "justifyContent": "flex-start",
+                      "flexDirection": "column",
+                      "flexWrap": "nowrap",
+                      "display": "flex"
+                    },
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "globalProps": {
+                      "isOpenAnimation": false,
+                      "linkId": "",
+                      "isShowBoxShadow": false,
+                      "dx": "0px",
+                      "dy": "0px",
+                      "blur": "0px",
+                      "spread": "0px",
+                      "color": "#000000",
+                      "isShow": true
+                    },
+                    "transition": []
+                  },
+                  {
+                    "name": "Row",
+                    "label": "块容器",
+                    "uuid": "39ffeeb5-ac83-459a-ae30-da344e015299",
+                    "style": {},
+                    "props": {},
+                    "containerStyle": {
+                      "<980": { "justifyContent": "center" }
+                    },
+                    "isBlock": true,
+                    "isContainer": true,
+                    "children": [
+                      {
+                        "name": "ButtonNew",
+                        "label": "ButtonNew",
+                        "uuid": "478fb88d-a5be-47c6-b07d-4384f44bf91f",
+                        "style": {
+                          "1280-1679": {
+                            "height": "56px",
+                            "minWidth": "270px",
+                            "paddingLeft": "36px",
+                            "paddingRight": "36px"
+                          },
+                          "1024-1279": {
+                            "height": "48px",
+                            "--distance": "8px",
+                            "--icon-width": "16px",
+                            "minWidth": "200px",
+                            "borderRadius": "8px 8px 8px 8px",
+                            "marginTop": "32px",
+                            "paddingLeft": "24px",
+                            "paddingRight": "24px",
+                            "fontSize": "var(--fs-base)"
+                          },
+                          "980-1023": {
+                            "height": "48px",
+                            "minWidth": "200px",
+                            "--distance": "8px",
+                            "--icon-width": "16px",
+                            "borderRadius": "8px 8px 8px 8px",
+                            "marginTop": "32px",
+                            "paddingLeft": "24px",
+                            "paddingRight": "24px",
+                            "fontSize": "var(--fs-base)"
+                          },
+                          "<980": {
+                            "--distance": "6px",
+                            "--icon-width": "12px",
+                            "height": "40px",
+                            "minWidth": "172px",
+                            "borderRadius": "8px 8px 8px 8px",
+                            "marginTop": "16px",
+                            "fontSize": "var(--fs-sm)",
+                            "marginBottom": "28px"
+                          },
+                          ">1920": { "height": "56px" },
+                          "1680-1920": { "height": "56px" }
+                        },
+                        "props": {},
+                        "containerStyle": {},
+                        "isBlock": true,
+                        "isContainer": false,
+                        "children": [],
+                        "globalStyle": {
+                          "fontSize": "var(--fs-lg)",
+                          "lineHeight": "var(--lh-tight)",
+                          "fontWeight": "var(--fw-normal)",
+                          "height": "64px",
+                          "display": "flex",
+                          "borderRadius": "12px 12px 12px 12px",
+                          "minWidth": "300px",
+                          "--font-color": "#FFFFFF",
+                          "--hover-font-color": "#FFFFFF",
+                          "--active-font-color": "#FFFFFF",
+                          "--hover-border": "",
+                          "--active-border": "",
+                          "--hover-background": "rgba(76, 76, 76, 1)",
+                          "--active-background": "rgba(25, 25, 25, 1)",
+                          "--icon-width": "20px",
+                          "--distance": "12px",
+                          "paddingLeft": "48px",
+                          "paddingRight": "48px",
+                          "background": "rgba(25, 25, 25, 1)",
+                          "color": "rgba(255, 255, 255, 1)",
+                          "width": "auto",
+                          "marginTop": "40px"
+                        },
+                        "globalContainerStyle": {},
+                        "statusArr": [],
+                        "curStatus": "default",
+                        "status": {},
+                        "globalProps": {
+                          "text": "try_button_text_placeholder",
+                          "link": "try_button_link_placeholder",
+                          "gtm": "ga-seo_tools_try",
+                          "target": "_blank",
+                          "colorType": "custom",
+                          "iconUrl": "//cdn.pacdora.com/ui/topic/45a61bc0-5762-4001-aad8-1c53c4aed05d.svg",
+                          "direction": "right",
+                          "isShow": true,
+                          "hoverBackground": "rgba(76, 76, 76, 1)",
+                          "fontColor": "rgba(255, 255, 255, 1)",
+                          "hoverFontColor": "rgba(255, 255, 255, 1)",
+                          "activeFontColor": "rgba(255, 255, 255, 1)",
+                          "activeBackground": "rgba(25, 25, 25, 1)",
+                          "isOpenAnimation": true
+                        },
+                        "transition": []
+                      }
+                    ],
+                    "globalStyle": {
+                      "width": "100%",
+                      "height": "auto",
+                      "display": "block",
+                      "borderWidth": "0",
+                      "borderColor": "#000000",
+                      "borderStyle": "solid"
+                    },
+                    "globalContainerStyle": {
+                      "alignItems": "initial",
+                      "justifyContent": "flex-start",
+                      "flexDirection": "row",
+                      "flexWrap": "nowrap",
+                      "display": "flex"
+                    },
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "globalProps": {
+                      "isOpenAnimation": false,
+                      "linkId": "",
+                      "isShowBoxShadow": false,
+                      "dx": "0px",
+                      "dy": "0px",
+                      "blur": "0px",
+                      "spread": "0px",
+                      "color": "#000000",
+                      "isShow": true
+                    },
+                    "transition": []
+                  }
+                ],
+                "globalStyle": {
+                  "width": "560px",
+                  "height": "auto",
+                  "display": "block",
+                  "borderWidth": "0",
+                  "borderColor": "#000000",
+                  "borderStyle": "solid",
+                  "marginRight": "120px"
+                },
+                "globalContainerStyle": {
+                  "alignItems": "initial",
+                  "justifyContent": "flex-start",
+                  "flexDirection": "column",
+                  "flexWrap": "nowrap",
+                  "display": "flex"
+                },
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "globalProps": {
+                  "isOpenAnimation": false,
+                  "linkId": "",
+                  "isShowBoxShadow": false,
+                  "dx": "0px",
+                  "dy": "0px",
+                  "blur": "0px",
+                  "spread": "0px",
+                  "color": "#000000",
+                  "isShow": true
+                },
+                "transition": []
+              },
+              {
+                "name": "Row",
+                "label": "块容器",
+                "uuid": "c5ecd2a0-2631-410e-8433-dda2fd0fa359",
+                "style": {
+                  "1680-1920": { "width": "55%" },
+                  "1280-1679": { "width": "60%" },
+                  "1024-1279": { "width": "55%" },
+                  "980-1023": { "width": "50%" },
+                  "<980": { "width": "100%" }
+                },
+                "props": {},
+                "containerStyle": {},
+                "isBlock": true,
+                "isContainer": true,
+                "children": [
+                  {
+                    "name": "Img",
+                    "label": "Img",
+                    "uuid": "086142bc-6de0-49e2-9d5d-034f255dec59",
+                    "style": {
+                      "1680-1920": { "width": "unset" },
+                      "1280-1679": {
+                        "borderRadius": "20px 20px 20px 20px"
+                      },
+                      "1024-1279": {
+                        "borderRadius": "16px 16px 16px 16px"
+                      },
+                      "980-1023": {
+                        "borderRadius": "16px 16px 16px 16px"
+                      },
+                      "<980": {
+                        "borderRadius": "12px 12px 12px 12px",
+                        "boxShadow": "2px 2px 0px 0px rgba(25, 25, 25, 1)"
+                      }
+                    },
+                    "props": {},
+                    "containerStyle": {},
+                    "isBlock": true,
+                    "isContainer": false,
+                    "children": [],
+                    "globalStyle": {
+                      "width": "100%",
+                      "display": "inline-block",
+                      "position": "static",
+                      "top": "0",
+                      "left": "0",
+                      "right": "0",
+                      "bottom": "0",
+                      "zIndex": "auto",
+                      "borderRadius": "24px 24px 24px 24px",
+                      "border": "solid 1px rgba(25, 25, 25, 1)",
+                      "boxShadow": "4px 4px 0px 0px rgba(25, 25, 25, 1)"
+                    },
+                    "globalContainerStyle": {},
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "globalProps": {
+                      "url": "https://cdn.pacdora.com/page-img/op/page_image_url_placeholder.png",
+                      "title": "h1_primary_text_placeholder",
+                      "alt": "h1_primary_text_placeholder",
+                      "isOpenAnimation": true,
+                      "size1": 1200,
+                      "size2": 1200,
+                      "size3": 1600,
+                      "size4": 1600,
+                      "size5": 1800,
+                      "size6": 2000,
+                      "isShow": true
+                    },
+                    "transition": []
+                  }
+                ],
+                "globalStyle": {
+                  "width": "844px",
+                  "height": "auto",
+                  "display": "block",
+                  "borderWidth": "0",
+                  "borderColor": "#000000",
+                  "borderStyle": "solid"
+                },
+                "globalContainerStyle": {
+                  "alignItems": "initial",
+                  "justifyContent": "initial",
+                  "flexDirection": "row",
+                  "flexWrap": "nowrap"
+                },
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "globalProps": {
+                  "isOpenAnimation": false,
+                  "linkId": "",
+                  "isShowBoxShadow": false,
+                  "dx": "0px",
+                  "dy": "0px",
+                  "blur": "0px",
+                  "spread": "0px",
+                  "color": "#000000",
+                  "isShow": true
+                },
+                "transition": []
+              }
+            ],
+            "globalStyle": {
+              "width": "100%",
+              "height": "auto",
+              "display": "block",
+              "borderWidth": "0",
+              "borderColor": "#000000",
+              "borderStyle": "solid",
+              "marginTop": "70px"
+            },
+            "globalContainerStyle": {
+              "alignItems": "center",
+              "justifyContent": "space-between",
+              "flexDirection": "row",
+              "flexWrap": "nowrap",
+              "display": "flex"
+            },
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "globalProps": {
+              "isOpenAnimation": false,
+              "linkId": "",
+              "isShowBoxShadow": false,
+              "dx": "0px",
+              "dy": "0px",
+              "blur": "0px",
+              "spread": "0px",
+              "color": "#000000",
+              "isShow": true
+            },
+            "transition": []
+          },
+          {
+            "name": "P",
+            "label": "P",
+            "uuid": "a25a72e5-80e4-4bde-8ebd-25a3910ad86c",
+            "style": {
+              "1024-1279": { "marginTop": "48px" },
+              "980-1023": {
+                "marginTop": "48px",
+                "fontSize": "var(--fs-base)"
+              },
+              "<980": {
+                "fontSize": "var(--fs-xsm)",
+                "marginTop": "28px"
+              },
+              "1280-1679": { "marginTop": "64px" }
+            },
+            "props": {},
+            "containerStyle": {},
+            "isBlock": true,
+            "isContainer": false,
+            "children": [],
+            "globalStyle": {
+              "color": "rgba(127, 127, 127, 1)",
+              "fontSize": "var(--fs-base)",
+              "lineHeight": "var(--lh-normal)",
+              "fontWeight": "var(--fw-normal)",
+              "display": "block",
+              "-webkit-box-orient": "initial",
+              "-webkit-line-clamp": "initial",
+              "overflow": "initial",
+              "textOverflow": "initial",
+              "width": "100%",
+              "textAlign": "center",
+              "marginTop": "72px",
+              "marginBottom": "0px"
+            },
+            "globalContainerStyle": {},
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "globalProps": {
+              "text": "<p>Trusted by leading companies</p>",
+              "isOpenAnimation": true
+            },
+            "transition": []
+          }
+        ],
+        "globalStyle": {
+          "width": "calc(100% - 400px)",
+          "height": "auto",
+          "display": "block",
+          "borderWidth": "0",
+          "borderColor": "#000000",
+          "borderStyle": "solid",
+          "marginLeft": "auto",
+          "marginRight": "auto",
+          "paddingTop": "40px"
+        },
+        "globalContainerStyle": {
+          "alignItems": "initial",
+          "justifyContent": "initial",
+          "flexDirection": "row",
+          "flexWrap": "nowrap",
+          "display": "block"
+        },
+        "statusArr": [],
+        "curStatus": "default",
+        "status": {},
+        "globalProps": {
+          "isOpenAnimation": false,
+          "linkId": "",
+          "isShowBoxShadow": false,
+          "dx": "0px",
+          "dy": "0px",
+          "blur": "0px",
+          "spread": "0px",
+          "color": "#000000"
+        },
+        "transition": []
+      },
+      {
+        "name": "SeamlessRolling",
+        "label": "无缝滚动容器",
+        "uuid": "475a2646-abc8-4734-a3ea-38109ab46e55",
+        "style": {
+          "1024-1279": { "marginBottom": "40px", "marginTop": "16px" },
+          "<980": { "marginBottom": "28px", "marginTop": "12px" },
+          "980-1023": { "marginBottom": "40px", "marginTop": "16px" },
+          "1280-1679": { "marginBottom": "56px", "marginTop": "24px" },
+          ">1920": {
+            "marginBottom": "80px",
+            "width": "1528px",
+            "marginTop": "24px"
+          },
+          "1680-1920": {
+            "marginBottom": "80px",
+            "width": "80%",
+            "marginTop": "24px"
+          }
+        },
+        "props": {
+          "<980": { "itemGap": "24px", "maskWidth": "60px" },
+          "980-1023": { "itemGap": "24px", "maskWidth": "60px" }
+        },
+        "containerStyle": {},
+        "isBlock": true,
+        "isContainer": true,
+        "children": [
+          {
+            "name": "Row",
+            "label": "块容器",
+            "uuid": "33bea61d-9aa2-407f-8ff4-a1cf956b60a8",
+            "style": {},
+            "props": {},
+            "containerStyle": {},
+            "isBlock": true,
+            "isContainer": true,
+            "children": [
+              {
+                "name": "Column",
+                "label": "内联容器",
+                "uuid": "7aa3ea76-7aee-41fd-9327-c8db1e49f53f",
+                "style": {
+                  "1024-1279": {
+                    "width": "110px",
+                    "marginRight": "32px"
+                  },
+                  "<980": { "width": "110px", "marginRight": "24px" },
+                  "980-1023": { "width": "110px", "marginRight": "24px" },
+                  ">1920": { "width": "150px" },
+                  "1680-1920": { "width": "150px" },
+                  "1280-1679": { "width": "150px" }
+                },
+                "props": {},
+                "containerStyle": {
+                  "<980": {},
+                  "980-1023": {},
+                  "1024-1279": {},
+                  "1280-1679": {},
+                  "1680-1920": {},
+                  ">1920": {}
+                },
+                "isBlock": true,
+                "isContainer": true,
+                "children": [
+                  {
+                    "name": "Img",
+                    "label": "Img",
+                    "uuid": "d686e331-da84-4b15-b479-409db2ebf5c5",
+                    "style": {
+                      "1024-1279": { "width": "110px", "height": "28px" },
+                      "<980": { "width": "auto", "height": "24px" },
+                      "980-1023": { "width": "auto", "height": "24px" },
+                      ">1920": { "width": "auto" },
+                      "1680-1920": { "width": "auto" },
+                      "1280-1679": { "width": "auto" }
+                    },
+                    "props": {},
+                    "containerStyle": {
+                      "<980": {},
+                      "980-1023": {},
+                      "1024-1279": {},
+                      "1280-1679": {},
+                      "1680-1920": {},
+                      ">1920": {}
+                    },
+                    "isBlock": true,
+                    "isContainer": false,
+                    "children": [],
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "transition": [],
+                    "globalStyle": {
+                      "width": "162px",
+                      "borderRadius": "0px",
+                      "display": "inline-block",
+                      "position": "static",
+                      "top": "0",
+                      "left": "0",
+                      "right": "0",
+                      "bottom": "0",
+                      "zIndex": "auto",
+                      "height": "40px"
+                    },
+                    "globalProps": {
+                      "url": "//cdn.pacdora.com/ui/topic/bb941714-9af4-42d5-872b-2063c9349013.svg",
+                      "title": "HUAWEI logo",
+                      "alt": "HUAWEI logo",
+                      "isOpenAnimation": false,
+                      "size1": 1200,
+                      "size2": 1200,
+                      "size3": 1600,
+                      "size4": 1600,
+                      "size5": 1800,
+                      "size6": 2000
+                    },
+                    "globalContainerStyle": {}
+                  }
+                ],
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "transition": [],
+                "globalStyle": {
+                  "marginLeft": 0,
+                  "marginTop": 0,
+                  "marginRight": "48px",
+                  "marginBottom": 0,
+                  "paddingLeft": 0,
+                  "paddingTop": 0,
+                  "paddingRight": 0,
+                  "paddingBottom": 0,
+                  "width": "162px",
+                  "display": "inline-block",
+                  "borderWidth": "0",
+                  "borderColor": "#000000",
+                  "borderStyle": "solid"
+                },
+                "globalProps": {
+                  "linkId": "",
+                  "isShowBoxShadow": false,
+                  "dx": "0px",
+                  "dy": "0px",
+                  "blur": "0px",
+                  "spread": "0px",
+                  "color": "#000000"
+                },
+                "globalContainerStyle": {}
+              },
+              {
+                "name": "Column",
+                "label": "内联容器",
+                "uuid": "5ecfccad-94d9-4bec-a849-31c671e16e95",
+                "style": {
+                  "<980": { "marginRight": "24px", "width": "70px" },
+                  ">1920": { "width": "100px" },
+                  "1680-1920": { "width": "100px" },
+                  "1280-1679": { "width": "100px" },
+                  "1024-1279": { "marginRight": "32px", "width": "auto" },
+                  "980-1023": { "marginRight": "24px", "width": "70px" }
+                },
+                "props": {},
+                "containerStyle": {
+                  "<980": {},
+                  "980-1023": {},
+                  "1024-1279": {},
+                  "1280-1679": {},
+                  "1680-1920": {},
+                  ">1920": {}
+                },
+                "isBlock": true,
+                "isContainer": true,
+                "children": [
+                  {
+                    "name": "Img",
+                    "label": "Img",
+                    "uuid": "3c22dede-9820-45d7-b3d6-b8b30b815605",
+                    "style": {
+                      "1024-1279": { "height": "28px" },
+                      "<980": { "height": "24px", "width": "auto" },
+                      "980-1023": { "height": "24px", "width": "auto" },
+                      ">1920": { "width": "auto" },
+                      "1680-1920": { "width": "auto" }
+                    },
+                    "props": {},
+                    "containerStyle": {
+                      "<980": {},
+                      "980-1023": {},
+                      "1024-1279": {},
+                      "1280-1679": {},
+                      "1680-1920": {},
+                      ">1920": {}
+                    },
+                    "isBlock": true,
+                    "isContainer": false,
+                    "children": [],
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "transition": [],
+                    "globalStyle": {
+                      "width": "78px",
+                      "borderRadius": "0px",
+                      "display": "inline-block",
+                      "position": "static",
+                      "top": "0",
+                      "left": "0",
+                      "right": "0",
+                      "bottom": "0",
+                      "zIndex": "auto",
+                      "height": "40px"
+                    },
+                    "globalProps": {
+                      "url": "//cdn.pacdora.com/ui/topic/2ebfce85-ce24-4529-97ba-f514d55d8ff4.svg",
+                      "title": "Figma logo",
+                      "alt": "Figma logo",
+                      "isOpenAnimation": false,
+                      "size1": 1200,
+                      "size2": 1200,
+                      "size3": 1600,
+                      "size4": 1600,
+                      "size5": 1800,
+                      "size6": 2000
+                    },
+                    "globalContainerStyle": {}
+                  }
+                ],
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "transition": [],
+                "globalStyle": {
+                  "marginLeft": 0,
+                  "marginTop": 0,
+                  "marginRight": "48px",
+                  "marginBottom": 0,
+                  "paddingLeft": 0,
+                  "paddingTop": 0,
+                  "paddingRight": 0,
+                  "paddingBottom": 0,
+                  "width": "auto",
+                  "display": "inline-block",
+                  "borderWidth": "0",
+                  "borderColor": "#000000",
+                  "borderStyle": "solid"
+                },
+                "globalProps": {
+                  "linkId": "",
+                  "isShowBoxShadow": false,
+                  "dx": "0px",
+                  "dy": "0px",
+                  "blur": "0px",
+                  "spread": "0px",
+                  "color": "#000000"
+                },
+                "globalContainerStyle": {}
+              },
+              {
+                "name": "Column",
+                "label": "内联容器",
+                "uuid": "8b06c380-b32d-4d78-b80a-2cb125afd438",
+                "style": {
+                  "<980": { "marginRight": "24px", "width": "50px" },
+                  ">1920": { "width": "80px" },
+                  "1680-1920": { "width": "80px" },
+                  "1280-1679": { "width": "80px" },
+                  "1024-1279": { "marginRight": "32px" },
+                  "980-1023": { "marginRight": "24px", "width": "50px" }
+                },
+                "props": {},
+                "containerStyle": {
+                  "<980": {},
+                  "980-1023": {},
+                  "1024-1279": {},
+                  "1280-1679": {},
+                  "1680-1920": {},
+                  ">1920": {}
+                },
+                "isBlock": true,
+                "isContainer": true,
+                "children": [
+                  {
+                    "name": "Img",
+                    "label": "Img",
+                    "uuid": "dc0cd2f7-e0b6-495a-bea2-c69cf332aeb6",
+                    "style": {
+                      "1024-1279": { "height": "28px" },
+                      "<980": { "height": "24px", "width": "auto" },
+                      "980-1023": { "height": "24px", "width": "auto" },
+                      ">1920": { "width": "auto" },
+                      "1680-1920": { "width": "auto" }
+                    },
+                    "props": {},
+                    "containerStyle": {
+                      "<980": {},
+                      "980-1023": {},
+                      "1024-1279": {},
+                      "1280-1679": {},
+                      "1680-1920": {},
+                      ">1920": {}
+                    },
+                    "isBlock": true,
+                    "isContainer": false,
+                    "children": [],
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "transition": [],
+                    "globalStyle": {
+                      "width": "60px",
+                      "borderRadius": "0px",
+                      "display": "inline-block",
+                      "position": "static",
+                      "top": "0",
+                      "left": "0",
+                      "right": "0",
+                      "bottom": "0",
+                      "zIndex": "auto",
+                      "height": "40px"
+                    },
+                    "globalProps": {
+                      "url": "//cdn.pacdora.com/ui/topic/128b23f6-effd-4ad4-ad25-585c0055abda.svg",
+                      "title": "IBM logo",
+                      "alt": "IBM logo",
+                      "isOpenAnimation": false,
+                      "size1": 1200,
+                      "size2": 1200,
+                      "size3": 1600,
+                      "size4": 1600,
+                      "size5": 1800,
+                      "size6": 2000
+                    },
+                    "globalContainerStyle": {}
+                  }
+                ],
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "transition": [],
+                "globalStyle": {
+                  "marginLeft": 0,
+                  "marginTop": 0,
+                  "marginRight": "48px",
+                  "marginBottom": 0,
+                  "paddingLeft": 0,
+                  "paddingTop": 0,
+                  "paddingRight": 0,
+                  "paddingBottom": 0,
+                  "width": "auto",
+                  "display": "inline-block",
+                  "borderWidth": "0",
+                  "borderColor": "#000000",
+                  "borderStyle": "solid"
+                },
+                "globalProps": {
+                  "linkId": "",
+                  "isShowBoxShadow": false,
+                  "dx": "0px",
+                  "dy": "0px",
+                  "blur": "0px",
+                  "spread": "0px",
+                  "color": "#000000"
+                },
+                "globalContainerStyle": {}
+              },
+              {
+                "name": "Column",
+                "label": "内联容器",
+                "uuid": "e40a23e9-052a-4bf4-9946-6f370393fa3f",
+                "style": {
+                  "1024-1279": { "width": "90px", "marginRight": "32px" },
+                  "<980": { "marginRight": "24px", "width": "70px" },
+                  "980-1023": { "marginRight": "24px", "width": "70px" },
+                  ">1920": { "width": "105px" },
+                  "1680-1920": { "width": "105px" },
+                  "1280-1679": { "width": "110px" }
+                },
+                "props": {},
+                "containerStyle": {
+                  "<980": {},
+                  "980-1023": {},
+                  "1024-1279": {},
+                  "1280-1679": {},
+                  "1680-1920": {},
+                  ">1920": {}
+                },
+                "isBlock": true,
+                "isContainer": true,
+                "children": [
+                  {
+                    "name": "Img",
+                    "label": "Img",
+                    "uuid": "36d0cf9f-49fd-4e17-b21b-d493b12bf8ea",
+                    "style": {
+                      "1024-1279": { "width": "auto", "height": "28px" },
+                      "<980": { "width": "auto", "height": "24px" },
+                      "980-1023": { "width": "auto", "height": "24px" },
+                      ">1920": { "width": "auto" },
+                      "1680-1920": { "width": "auto" },
+                      "1280-1679": { "width": "105px" }
+                    },
+                    "props": {},
+                    "containerStyle": {
+                      "<980": {},
+                      "980-1023": {},
+                      "1024-1279": {},
+                      "1280-1679": {},
+                      "1680-1920": {},
+                      ">1920": {}
+                    },
+                    "isBlock": true,
+                    "isContainer": false,
+                    "children": [],
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "transition": [],
+                    "globalStyle": {
+                      "width": "162px",
+                      "borderRadius": "0px",
+                      "display": "inline-block",
+                      "position": "static",
+                      "top": "0",
+                      "left": "0",
+                      "right": "0",
+                      "bottom": "0",
+                      "zIndex": "auto",
+                      "height": "40px"
+                    },
+                    "globalProps": {
+                      "url": "//cdn.pacdora.com/ui/topic/4a39eea9-ff20-4431-9d9e-f10fa66cfa7e.svg",
+                      "title": "NETFLIX",
+                      "alt": "NETFLIX",
+                      "isOpenAnimation": false,
+                      "size1": 1200,
+                      "size2": 1200,
+                      "size3": 1600,
+                      "size4": 1600,
+                      "size5": 1800,
+                      "size6": 2000
+                    },
+                    "globalContainerStyle": {}
+                  }
+                ],
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "transition": [],
+                "globalStyle": {
+                  "marginLeft": 0,
+                  "marginTop": 0,
+                  "marginRight": "48px",
+                  "marginBottom": 0,
+                  "paddingLeft": 0,
+                  "paddingTop": 0,
+                  "paddingRight": 0,
+                  "paddingBottom": 0,
+                  "width": "auto",
+                  "display": "inline-block",
+                  "borderWidth": "0",
+                  "borderColor": "#000000",
+                  "borderStyle": "solid"
+                },
+                "globalProps": {
+                  "linkId": "",
+                  "isShowBoxShadow": false,
+                  "dx": "0px",
+                  "dy": "0px",
+                  "blur": "0px",
+                  "spread": "0px",
+                  "color": "#000000"
+                },
+                "globalContainerStyle": {}
+              },
+              {
+                "name": "Column",
+                "label": "内联容器",
+                "uuid": "4a31679e-ef72-42b0-bfc6-9ed17786c2e9",
+                "style": {
+                  "1024-1279": { "width": "90px", "marginRight": "32px" },
+                  "<980": { "width": "70px", "marginRight": "24px" },
+                  "980-1023": { "width": "70px", "marginRight": "24px" },
+                  ">1920": { "width": "102px" },
+                  "1680-1920": { "width": "102px" },
+                  "1280-1679": { "width": "102px" }
+                },
+                "props": {},
+                "containerStyle": {
+                  "<980": {},
+                  "980-1023": {},
+                  "1024-1279": {},
+                  "1280-1679": {},
+                  "1680-1920": {},
+                  ">1920": {}
+                },
+                "isBlock": true,
+                "isContainer": true,
+                "children": [
+                  {
+                    "name": "Img",
+                    "label": "Img",
+                    "uuid": "55f6a812-556a-4edd-a6d2-927c45cc0b59",
+                    "style": {
+                      "1024-1279": { "width": "auto", "height": "28px" },
+                      "<980": { "width": "auto", "height": "24px" },
+                      "980-1023": { "width": "auto", "height": "24px" },
+                      ">1920": { "width": "unset" },
+                      "1680-1920": { "width": "auto" },
+                      "1280-1679": { "width": "102px" }
+                    },
+                    "props": {},
+                    "containerStyle": {
+                      "<980": {},
+                      "980-1023": {},
+                      "1024-1279": {},
+                      "1280-1679": {},
+                      "1680-1920": {},
+                      ">1920": {}
+                    },
+                    "isBlock": true,
+                    "isContainer": false,
+                    "children": [],
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "transition": [],
+                    "globalStyle": {
+                      "width": "162px",
+                      "borderRadius": "0px",
+                      "display": "inline-block",
+                      "position": "static",
+                      "top": "0",
+                      "left": "0",
+                      "right": "0",
+                      "bottom": "0",
+                      "zIndex": "auto",
+                      "height": "40px"
+                    },
+                    "globalProps": {
+                      "url": "//cdn.pacdora.com/ui/topic/42320d44-acaf-4fe7-9eac-b53b494fde4c.svg",
+                      "title": "Amazon logo",
+                      "alt": "Amazon logo",
+                      "isOpenAnimation": false,
+                      "size1": 1200,
+                      "size2": 1200,
+                      "size3": 1600,
+                      "size4": 1600,
+                      "size5": 1800,
+                      "size6": 2000
+                    },
+                    "globalContainerStyle": {}
+                  }
+                ],
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "transition": [],
+                "globalStyle": {
+                  "marginLeft": 0,
+                  "marginTop": 0,
+                  "marginRight": "48px",
+                  "marginBottom": 0,
+                  "paddingLeft": 0,
+                  "paddingTop": 0,
+                  "paddingRight": 0,
+                  "paddingBottom": 0,
+                  "width": "162px",
+                  "display": "inline-block",
+                  "borderWidth": "0",
+                  "borderColor": "#000000",
+                  "borderStyle": "solid"
+                },
+                "globalProps": {
+                  "linkId": "",
+                  "isShowBoxShadow": false,
+                  "dx": "0px",
+                  "dy": "0px",
+                  "blur": "0px",
+                  "spread": "0px",
+                  "color": "#000000"
+                },
+                "globalContainerStyle": {}
+              },
+              {
+                "name": "Column",
+                "label": "内联容器",
+                "uuid": "1db2b9f9-8d16-4262-851d-d33d35bbff33",
+                "style": {
+                  "1024-1279": { "width": "90px", "marginRight": "32px" },
+                  "<980": { "width": "70px", "marginRight": "24px" },
+                  "980-1023": { "width": "70px", "marginRight": "24px" },
+                  ">1920": { "width": "100px" },
+                  "1680-1920": { "width": "100px" },
+                  "1280-1679": { "width": "100px" }
+                },
+                "props": {},
+                "containerStyle": {
+                  "<980": {},
+                  "980-1023": {},
+                  "1024-1279": {},
+                  "1280-1679": {},
+                  "1680-1920": {},
+                  ">1920": {}
+                },
+                "isBlock": true,
+                "isContainer": true,
+                "children": [
+                  {
+                    "name": "Img",
+                    "label": "Img",
+                    "uuid": "fad14606-1b39-423a-a40a-d16d4cf1b1f2",
+                    "style": {
+                      "1024-1279": { "height": "28px" },
+                      "<980": { "height": "24px" },
+                      "980-1023": { "height": "24px" }
+                    },
+                    "props": {},
+                    "containerStyle": {
+                      "<980": {},
+                      "980-1023": {},
+                      "1024-1279": {},
+                      "1280-1679": {},
+                      "1680-1920": {},
+                      ">1920": {}
+                    },
+                    "isBlock": true,
+                    "isContainer": false,
+                    "children": [],
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "transition": [],
+                    "globalStyle": {
+                      "width": "auto",
+                      "borderRadius": "0px",
+                      "display": "inline-block",
+                      "position": "static",
+                      "top": "0",
+                      "left": "0",
+                      "right": "0",
+                      "bottom": "0",
+                      "zIndex": "auto",
+                      "height": "40px"
+                    },
+                    "globalProps": {
+                      "url": "//cdn.pacdora.com/ui/topic/259cfcb1-c5fd-4fa6-9308-ba8f372d71e0.svg",
+                      "title": "Google logo",
+                      "alt": "Google logo",
+                      "isOpenAnimation": false,
+                      "size1": 1200,
+                      "size2": 1200,
+                      "size3": 1600,
+                      "size4": 1600,
+                      "size5": 1800,
+                      "size6": 2000
+                    },
+                    "globalContainerStyle": {}
+                  }
+                ],
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "transition": [],
+                "globalStyle": {
+                  "marginLeft": 0,
+                  "marginTop": 0,
+                  "marginRight": "48px",
+                  "marginBottom": 0,
+                  "paddingLeft": 0,
+                  "paddingTop": 0,
+                  "paddingRight": 0,
+                  "paddingBottom": 0,
+                  "width": "162px",
+                  "display": "inline-block",
+                  "borderWidth": "0",
+                  "borderColor": "#000000",
+                  "borderStyle": "solid"
+                },
+                "globalProps": {
+                  "linkId": "",
+                  "isShowBoxShadow": false,
+                  "dx": "0px",
+                  "dy": "0px",
+                  "blur": "0px",
+                  "spread": "0px",
+                  "color": "#000000"
+                },
+                "globalContainerStyle": {}
+              },
+              {
+                "name": "Column",
+                "label": "内联容器",
+                "uuid": "a15401ec-0448-485b-b7c4-ca8bfc7ff44f",
+                "style": {
+                  "1024-1279": { "width": "80px", "marginRight": "32px" },
+                  "<980": { "width": "70px", "marginRight": "24px" },
+                  "980-1023": { "width": "70px", "marginRight": "24px" },
+                  ">1920": { "width": "100px" },
+                  "1680-1920": { "width": "100px" },
+                  "1280-1679": { "width": "100px" }
+                },
+                "props": {},
+                "containerStyle": {
+                  "<980": {},
+                  "980-1023": {},
+                  "1024-1279": {},
+                  "1280-1679": {},
+                  "1680-1920": {},
+                  ">1920": {}
+                },
+                "isBlock": true,
+                "isContainer": true,
+                "children": [
+                  {
+                    "name": "Img",
+                    "label": "Img",
+                    "uuid": "791895b3-69ba-4ae6-9fc9-c050b9927753",
+                    "style": {
+                      "1024-1279": { "width": "auto", "height": "28px" },
+                      "<980": { "width": "auto", "height": "24px" },
+                      "980-1023": { "width": "auto", "height": "24px" },
+                      ">1920": { "width": "auto" },
+                      "1680-1920": { "width": "100px" },
+                      "1280-1679": { "width": "auto" }
+                    },
+                    "props": {
+                      ">1920": {
+                        "url": "//cdn.pacdora.com/ui/topic/88fcee21-a2bc-496f-80a4-970ae698acc4.svg"
+                      }
+                    },
+                    "containerStyle": {
+                      "<980": {},
+                      "980-1023": {},
+                      "1024-1279": {},
+                      "1280-1679": {},
+                      "1680-1920": {},
+                      ">1920": {}
+                    },
+                    "isBlock": true,
+                    "isContainer": false,
+                    "children": [],
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "transition": [],
+                    "globalStyle": {
+                      "width": "162px",
+                      "borderRadius": "0px",
+                      "display": "inline-block",
+                      "position": "static",
+                      "top": "0",
+                      "left": "0",
+                      "right": "0",
+                      "bottom": "0",
+                      "zIndex": "auto",
+                      "height": "40px"
+                    },
+                    "globalProps": {
+                      "url": "//cdn.pacdora.com/ui/topic/579b1e94-557b-4953-be95-b9fcf48310c1.svg",
+                      "title": "Canva logo",
+                      "alt": "Canva logo",
+                      "isOpenAnimation": false,
+                      "size1": 1200,
+                      "size2": 1200,
+                      "size3": 1600,
+                      "size4": 1600,
+                      "size5": 1800,
+                      "size6": 2000
+                    },
+                    "globalContainerStyle": {}
+                  }
+                ],
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "transition": [],
+                "globalStyle": {
+                  "marginLeft": 0,
+                  "marginTop": 0,
+                  "marginRight": "48px",
+                  "marginBottom": 0,
+                  "paddingLeft": 0,
+                  "paddingTop": 0,
+                  "paddingRight": 0,
+                  "paddingBottom": 0,
+                  "width": "162px",
+                  "display": "inline-block",
+                  "borderWidth": "0",
+                  "borderColor": "#000000",
+                  "borderStyle": "solid"
+                },
+                "globalProps": {
+                  "linkId": "",
+                  "isShowBoxShadow": false,
+                  "dx": "0px",
+                  "dy": "0px",
+                  "blur": "0px",
+                  "spread": "0px",
+                  "color": "#000000"
+                },
+                "globalContainerStyle": {}
+              },
+              {
+                "name": "Column",
+                "label": "内联容器",
+                "uuid": "a678fe72-9db2-4946-b0da-5ea7f7a67b97",
+                "style": {
+                  "1024-1279": {
+                    "width": "110px",
+                    "marginRight": "32px"
+                  },
+                  "<980": { "width": "70px", "marginRight": "24px" },
+                  "980-1023": { "width": "70px", "marginRight": "24px" },
+                  ">1920": { "width": "110px" },
+                  "1680-1920": { "width": "110px" },
+                  "1280-1679": { "width": "110px" }
+                },
+                "props": {},
+                "containerStyle": {
+                  "<980": {},
+                  "980-1023": {},
+                  "1024-1279": {},
+                  "1280-1679": {},
+                  "1680-1920": {},
+                  ">1920": {}
+                },
+                "isBlock": true,
+                "isContainer": true,
+                "children": [
+                  {
+                    "name": "Img",
+                    "label": "Img",
+                    "uuid": "081b22d6-7c26-420e-aa84-3eb412fdb72e",
+                    "style": {
+                      "1024-1279": { "height": "28px" },
+                      "<980": { "height": "24px" },
+                      "980-1023": { "height": "24px" }
+                    },
+                    "props": {
+                      ">1920": {
+                        "url": "//cdn.pacdora.com/ui/topic/516e127b-f81f-4704-9230-dc0d69bfa7f1.svg"
+                      }
+                    },
+                    "containerStyle": {
+                      "<980": {},
+                      "980-1023": {},
+                      "1024-1279": {},
+                      "1280-1679": {},
+                      "1680-1920": {},
+                      ">1920": {}
+                    },
+                    "isBlock": true,
+                    "isContainer": false,
+                    "children": [],
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "transition": [],
+                    "globalStyle": {
+                      "width": "auto",
+                      "borderRadius": "0px",
+                      "display": "inline-block",
+                      "position": "static",
+                      "top": "0",
+                      "left": "0",
+                      "right": "0",
+                      "bottom": "0",
+                      "zIndex": "auto",
+                      "height": "40px"
+                    },
+                    "globalProps": {
+                      "url": "//cdn.pacdora.com/ui/topic/d403d69d-3ca6-43ff-bf4e-48a54b591be5.svg",
+                      "title": "Apple logo",
+                      "alt": "Apple logo",
+                      "isOpenAnimation": false,
+                      "size1": 1200,
+                      "size2": 1200,
+                      "size3": 1600,
+                      "size4": 1600,
+                      "size5": 1800,
+                      "size6": 2000
+                    },
+                    "globalContainerStyle": {}
+                  }
+                ],
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "transition": [],
+                "globalStyle": {
+                  "marginLeft": 0,
+                  "marginTop": 0,
+                  "marginRight": "48px",
+                  "marginBottom": 0,
+                  "paddingLeft": 0,
+                  "paddingTop": 0,
+                  "paddingRight": 0,
+                  "paddingBottom": 0,
+                  "width": "162px",
+                  "display": "inline-block",
+                  "borderWidth": "0",
+                  "borderColor": "#000000",
+                  "borderStyle": "solid"
+                },
+                "globalProps": {
+                  "linkId": "",
+                  "isShowBoxShadow": false,
+                  "dx": "0px",
+                  "dy": "0px",
+                  "blur": "0px",
+                  "spread": "0px",
+                  "color": "#000000"
+                },
+                "globalContainerStyle": {}
+              },
+              {
+                "name": "Column",
+                "label": "内联容器",
+                "uuid": "58984b92-189c-4cdd-b3b3-95ea46c8a09d",
+                "style": {
+                  "1024-1279": {
+                    "width": "100px",
+                    "marginRight": "32px"
+                  },
+                  "<980": { "width": "90px", "marginRight": "24px" },
+                  "980-1023": { "width": "90px", "marginRight": "24px" },
+                  ">1920": { "width": "140px" },
+                  "1680-1920": { "width": "140px" },
+                  "1280-1679": { "width": "140px" }
+                },
+                "props": {},
+                "containerStyle": {
+                  "<980": {},
+                  "980-1023": {},
+                  "1024-1279": {},
+                  "1280-1679": {},
+                  "1680-1920": {},
+                  ">1920": {}
+                },
+                "isBlock": true,
+                "isContainer": true,
+                "children": [
+                  {
+                    "name": "Img",
+                    "label": "Img",
+                    "uuid": "f66d77f3-5968-41bb-b36e-a0ea85cb6cf3",
+                    "style": {
+                      "1024-1279": { "height": "28px" },
+                      "<980": { "height": "24px" },
+                      "980-1023": { "height": "24px" }
+                    },
+                    "props": {},
+                    "containerStyle": {
+                      "<980": {},
+                      "980-1023": {},
+                      "1024-1279": {},
+                      "1280-1679": {},
+                      "1680-1920": {},
+                      ">1920": {}
+                    },
+                    "isBlock": true,
+                    "isContainer": false,
+                    "children": [],
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "transition": [],
+                    "globalStyle": {
+                      "width": "auto",
+                      "borderRadius": "0px",
+                      "display": "inline-block",
+                      "position": "static",
+                      "top": "0",
+                      "left": "0",
+                      "right": "0",
+                      "bottom": "0",
+                      "zIndex": "auto",
+                      "height": "40px"
+                    },
+                    "globalProps": {
+                      "url": "//cdn.pacdora.com/ui/topic/990e01fa-20e1-43a0-a49d-bc8d7c1bd3a0.svg",
+                      "title": "Tesla logo",
+                      "alt": "Tesla logo",
+                      "isOpenAnimation": false,
+                      "size1": 1200,
+                      "size2": 1200,
+                      "size3": 1600,
+                      "size4": 1600,
+                      "size5": 1800,
+                      "size6": 2000
+                    },
+                    "globalContainerStyle": {}
+                  }
+                ],
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "transition": [],
+                "globalStyle": {
+                  "marginLeft": 0,
+                  "marginTop": 0,
+                  "marginRight": "48px",
+                  "marginBottom": 0,
+                  "paddingLeft": 0,
+                  "paddingTop": 0,
+                  "paddingRight": 0,
+                  "paddingBottom": 0,
+                  "width": "162px",
+                  "display": "inline-block",
+                  "borderWidth": "0",
+                  "borderColor": "#000000",
+                  "borderStyle": "solid"
+                },
+                "globalProps": {
+                  "linkId": "",
+                  "isShowBoxShadow": false,
+                  "dx": "0px",
+                  "dy": "0px",
+                  "blur": "0px",
+                  "spread": "0px",
+                  "color": "#000000"
+                },
+                "globalContainerStyle": {}
+              },
+              {
+                "name": "Column",
+                "label": "内联容器",
+                "uuid": "7452978d-4b06-4a9c-a605-e1dcbd6a907b",
+                "style": {
+                  "1024-1279": { "width": "115px" },
+                  "<980": { "width": "110px" },
+                  "980-1023": { "width": "110px" },
+                  ">1920": { "width": "170px" },
+                  "1680-1920": { "width": "170px" },
+                  "1280-1679": { "width": "170px" }
+                },
+                "props": {},
+                "containerStyle": {
+                  "<980": {},
+                  "980-1023": {},
+                  "1024-1279": {},
+                  "1280-1679": {},
+                  "1680-1920": {},
+                  ">1920": {}
+                },
+                "isBlock": true,
+                "isContainer": true,
+                "children": [
+                  {
+                    "name": "Img",
+                    "label": "Img",
+                    "uuid": "4da5a878-d319-4c25-8811-e964cb12748b",
+                    "style": {
+                      "1024-1279": { "height": "28px" },
+                      "<980": { "height": "24px" },
+                      "980-1023": { "height": "24px" }
+                    },
+                    "props": {},
+                    "containerStyle": {
+                      "<980": {},
+                      "980-1023": {},
+                      "1024-1279": {},
+                      "1280-1679": {},
+                      "1680-1920": {},
+                      ">1920": {}
+                    },
+                    "isBlock": true,
+                    "isContainer": false,
+                    "children": [],
+                    "statusArr": [],
+                    "curStatus": "default",
+                    "status": {},
+                    "transition": [],
+                    "globalStyle": {
+                      "width": "auto",
+                      "borderRadius": "0px",
+                      "display": "inline-block",
+                      "position": "static",
+                      "top": "0",
+                      "left": "0",
+                      "right": "0",
+                      "bottom": "0",
+                      "zIndex": "auto",
+                      "height": "40px"
+                    },
+                    "globalProps": {
+                      "url": "//cdn.pacdora.com/ui/topic/64bd761b-d38f-4835-93e9-1644e87e7b61.svg",
+                      "title": "Starbucks logo",
+                      "alt": "Starbucks logo",
+                      "isOpenAnimation": false,
+                      "size1": 1200,
+                      "size2": 1200,
+                      "size3": 1600,
+                      "size4": 1600,
+                      "size5": 1800,
+                      "size6": 2000
+                    },
+                    "globalContainerStyle": {}
+                  }
+                ],
+                "statusArr": [],
+                "curStatus": "default",
+                "status": {},
+                "transition": [],
+                "globalStyle": {
+                  "marginLeft": 0,
+                  "marginTop": 0,
+                  "marginRight": "16px",
+                  "marginBottom": 0,
+                  "paddingLeft": 0,
+                  "paddingTop": 0,
+                  "paddingRight": 0,
+                  "paddingBottom": 0,
+                  "width": "162px",
+                  "display": "inline-block",
+                  "borderWidth": "0",
+                  "borderColor": "#000000",
+                  "borderStyle": "solid"
+                },
+                "globalProps": {
+                  "linkId": "",
+                  "isShowBoxShadow": false,
+                  "dx": "0px",
+                  "dy": "0px",
+                  "blur": "0px",
+                  "spread": "0px",
+                  "color": "#000000"
+                },
+                "globalContainerStyle": {}
+              }
+            ],
+            "statusArr": [],
+            "curStatus": "default",
+            "status": {},
+            "transition": [],
+            "globalStyle": {
+              "marginTop": 0,
+              "marginBottom": 0,
+              "marginLeft": 0,
+              "marginRight": 0,
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0,
+              "borderRadius": 0,
+              "background": null,
+              "width": "fit-content",
+              "height": "auto",
+              "borderWidth": "0",
+              "borderColor": "#000000",
+              "borderStyle": "solid",
+              "opacity": 0.5
+            },
+            "globalProps": {
+              "isOpenAnimation": false,
+              "linkId": "",
+              "isShowBoxShadow": false,
+              "dx": "0px",
+              "dy": "0px",
+              "blur": "0px",
+              "spread": "0px",
+              "color": "#000000"
+            },
+            "globalContainerStyle": {
+              "alignItems": "initial",
+              "justifyContent": "initial",
+              "flexDirection": "row",
+              "flexWrap": "nowrap",
+              "textAlign": "center",
+              "display": "flex"
+            }
+          }
+        ],
+        "statusArr": [],
+        "curStatus": "default",
+        "status": {},
+        "transition": [],
+        "globalStyle": {
+          "display": "block",
+          "width": "100%",
+          "marginTop": "0px",
+          "marginBottom": "80px",
+          "marginLeft": "auto",
+          "marginRight": "auto"
+        },
+        "globalProps": {
+          "isShowMask": true,
+          "maskWidth": "150px",
+          "animateDuration": 60,
+          "itemGap": "48px",
+          "direction": "left",
+          "isPauseWhenHover": true,
+          "isOpenAnimation": true,
+          "maskColor": "rgba(246, 240, 255, 1)"
+        },
+        "globalContainerStyle": { "display": "block" }
+      }
+    ],
+    "globalStyle": {
+      "width": "100%",
+      "height": "auto",
+      "display": "block",
+      "borderWidth": "0",
+      "borderColor": "#000000",
+      "borderStyle": "solid",
+      "borderRadius": "0px 0px 0px 0px",
+      "background": "url('//cdn.pacdora.com/ui/topic/621a1a3c-fa3c-4ab5-852e-8a35ec579a0d.svg')",
+      "backgroundRepeat": "no-repeat",
+      "backgroundPosition": "top",
+      "backgroundSize": "cover"
+    },
+    "globalContainerStyle": {
+      "alignItems": "initial",
+      "justifyContent": "initial",
+      "flexDirection": "row",
+      "flexWrap": "nowrap"
+    },
+    "statusArr": [],
+    "curStatus": "default",
+    "status": {},
+    "globalProps": {
+      "isOpenAnimation": false,
+      "linkId": "",
+      "isShowBoxShadow": false,
+      "dx": "0px",
+      "dy": "0px",
+      "blur": "0px",
+      "spread": "0px",
+      "color": "#000000"
+    },
+    "transition": []
+  }
+}
