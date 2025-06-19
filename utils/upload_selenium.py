@@ -6,7 +6,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
-import time
 
 
 login_url = "https://op.pacdora.com/login"
@@ -16,7 +15,10 @@ target_url_contains = "dashboard"
 file_path = "/Volumes/shared/pacdora.com/330-ml-can-mockup/2.webp"
 
 chrome_options = Options()
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=chrome_options)
+driver = webdriver.Chrome(
+    service=Service(ChromeDriverManager().install()),
+    options=chrome_options
+    )
 
 # 打开登录页面进行手动登录
 print(f"正在打开登录页面: {login_url}")
@@ -42,8 +44,6 @@ except Exception as e:
 aws_option = driver.find_element(By.XPATH, """//*[@id="app"]/div/main/div/div/div/div/div[1]/div[1]/div/div/div[1]/div/div[3]""")
 aws_option.click()
 
-
-
 # 定位 <input type="file"> 元素
 file_input = driver.find_element(By.XPATH, '//input[starts-with(@accept, "*")]')
 
@@ -54,7 +54,6 @@ if not os.path.exists(abs_file_path):
 
 # 发送文件路径
 file_input.send_keys(abs_file_path)
-
 
 # 等待上传完成并获取 CDN 路径
 print("等待文件上传完成...")
@@ -100,6 +99,7 @@ try:
 except Exception as e:
     print(f"获取CDN链接失败: {e}")
     print("正在截图保存当前页面状态...")
+    
     # 保存截图以便调试
     screenshot_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "upload_error.png")
     driver.save_screenshot(screenshot_path)

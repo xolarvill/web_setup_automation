@@ -11,6 +11,8 @@ from datetime import datetime
 from PySide6.QtGui import QGuiApplication
 from utils.parse import extract_cutout_nextline, extract_cutout_currentline, segment
 from PySide6.QtCore import QTimer
+from utils.upload_selenium_class import ImageUploader
+
 
 class LabeledLineEditWithCopy(QWidget):
     def __init__(self, label_text="Label:", placeholder= "Click button on the right to copy", parent=None):
@@ -393,7 +395,7 @@ class WSA(QMainWindow):
         right_layout.setContentsMargins(20, 20, 20, 20)
         right_layout.setSpacing(8)
         
-        # 输出区域标题和清除按钮
+        # 3.1 输出区域标题和清除按钮
         output_header = QHBoxLayout()
         output_title = QLabel("Program Output")
         output_title.setStyleSheet("font-size: 16px; font-weight: bold; color: #2c3e50; background-color: transparent;")
@@ -401,7 +403,7 @@ class WSA(QMainWindow):
         
         output_header.addStretch()  # 添加弹性空间
         
-        # 清除按钮放在标题栏右侧
+        # 3.2 清除按钮放在标题栏右侧
         self.clear_button = QPushButton("Clear Output")
         self.clear_button.setFixedSize(150, 30)
         self.clear_button.setStyleSheet("""
@@ -421,7 +423,7 @@ class WSA(QMainWindow):
         
         right_layout.addLayout(output_header)
         
-        # 输出框
+        # 3.3 输出框
         self.output_box = QTextEdit()
         self.output_box.setReadOnly(True)
         self.output_box.setPlaceholderText(
@@ -447,7 +449,7 @@ class WSA(QMainWindow):
         
         right_layout.addWidget(self.output_box)
         
-        # 将面板添加到主布局
+        # 4. 将面板添加到主布局
         main_layout.addWidget(left_panel)
         main_layout.addWidget(vertical_separator1)
         main_layout.addWidget(mid_panel)
@@ -458,6 +460,9 @@ class WSA(QMainWindow):
         main_layout.setStretch(0, 0)  # 左侧面板固定宽度
         main_layout.setStretch(1, 0)  # 中间面板可拉伸
         main_layout.setStretch(2, 0)  # 右侧面板可拉伸
+        
+        # 5. 图片上传器
+        self.uploader = ImageUploader()
         
     def clear_output(self):
         """清除输出框内容"""
@@ -676,6 +681,19 @@ class WSA(QMainWindow):
 
     def current_time(self):
         return datetime.now().strftime("%H:%M:%S")
+    
+    def uploader_activate(self):
+        self.add_output_message("Activating the automator. This could take a while.","info")
+        self.add_output_message("If you are using the app for the first time, log in manually.","info")
+        self.uploader.activate()
+        if self.uploader.activated_status:
+            self.add_output_message("The upload automator is activated.","success")
+        else:
+            self.add_output_message("Something went wrong during activation","error")
+        
+    def uploader_upload_and_get(self, image):
+        result = self.uploader.upload_and_get(image)
+        return result
         
 if __name__ == "__main__":
     app = QApplication(sys.argv)
