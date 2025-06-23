@@ -9,12 +9,21 @@ from qt_material import apply_stylesheet  # 导入qt-material库
 import os
 from datetime import datetime
 from PySide6.QtGui import QGuiApplication
-from utils.parse import extract_cutout_nextline, extract_cutout_currentline, segment
+from utils.parse import extract_cutout_nextline, extract_cutout_currentline, segment, parse_faq_text
 from PySide6.QtCore import QTimer
 from utils.upload_selenium_class import ImageUploader
+import json
 
 
 class LabeledLineEditWithCopy(QWidget):
+    """
+    带复制按钮的输入框class
+    ---
+    text()获取内容
+    setText()传入内容
+    set_dimensions()
+    turn_off_text_input()
+    """
     def __init__(self, label_text="Label:", placeholder= "Click button on the right to copy", parent=None):
         super().__init__(parent)
         layout = QHBoxLayout(self)
@@ -95,6 +104,7 @@ class WSA(QMainWindow):
         self.setWindowTitle("Web Setup Automation")
         self.setMinimumSize(1330, 795)  # 增加最小窗口大小
         self.setWindowIcon(QIcon("resources/icon.png"))  # 可选：添加图标文件
+        self.segments = []
 
         # 0. 中心小部件和主布局
         central_widget = QWidget()
@@ -286,10 +296,10 @@ class WSA(QMainWindow):
         cover_group_layout.setSpacing(8)
         cover_group_layout.setContentsMargins(0, 0, 0, 0)
         
-        self.cover1_cdn_widget = LabeledLineEditWithCopy("Cover", placeholder="Cover封面")
-        cover_group_layout.addWidget(self.cover1_cdn_widget)
-        self.cover2_cdn_widget = LabeledLineEditWithCopy("Cover more", placeholder="More封面")
-        cover_group_layout.addWidget(self.cover2_cdn_widget)
+        self.cover_cdn_widget = LabeledLineEditWithCopy("Cover", placeholder="Cover封面")
+        cover_group_layout.addWidget(self.cover_cdn_widget)
+        self.cover_more_cdn_widget = LabeledLineEditWithCopy("Cover more", placeholder="More封面")
+        cover_group_layout.addWidget(self.cover_more_cdn_widget)
         mid_layout.addLayout(cover_group_layout)
 
         # 分隔线
@@ -368,11 +378,13 @@ class WSA(QMainWindow):
         mid_buttons_layout2 = QHBoxLayout()
         
         self.activate_button = QPushButton("Activate")
+        self.activate_button.clicked.connect(self.uploader_activate)
         self.activate_button.setMinimumHeight(35)
         mid_buttons_layout2.addWidget(self.activate_button)
 
         # 添加Upload按钮
         self.upload_button = QPushButton("Upload")
+        self.upload_button.clicked.connect(self.uploader_upload_folder)
         self.upload_button.setMinimumHeight(35)
         mid_buttons_layout2.addWidget(self.upload_button)
         
@@ -562,7 +574,7 @@ class WSA(QMainWindow):
         clipboard = QGuiApplication.clipboard()
         clipboard_text = clipboard.text()
         cutout_keywords_nextline = ["URL", "Title", "Meta Description", "Breadcrumb"]
-        cutout_keywords_currentline = ["View all", "Make a", "Design a", "Create a"]
+        cutout_keywords_currentline = ["View all", "Make a", "Design a", "Create a", "Custom a", "Customize a"]
         
         # 如果剪切板非空
         if clipboard_text:
@@ -618,25 +630,34 @@ class WSA(QMainWindow):
                                 value = merged["Design a"]
                             elif "Create a" in merged and merged["Create a"] and (not isinstance(merged["Create a"], str) or merged["Create a"].strip() != ""):
                                 value = merged["Create a"]
+                            elif "Custom a" in merged and merged["Custom a"] and (not isinstance(merged["Custom a"], str) or merged["Custom a"].strip() != ""):
+                                value = merged["Custom a"]
+                            elif "Customize a" in merged and merged["Customize a"] and (not isinstance(merged["Customize a"], str) or merged["Customize a"].strip() != ""):
+                                value = merged["Customize a"]
                         self.try_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
                 else:
                     self.add_output_message("Parsing failed: No keywords detected. Please ensure you've copied the correct article. This could happen when the article is not correctly formatted. Go check it.", "error")
+                
+                # 补齐文件夹
+                self.ensure_folder_exists(self.pics_path_widget.text())
+                
+                # 判断是否存在cdn
+                if self.detect_cdn_records():
+                    self.add_output_message(f"CDN records detected", "info")
+                    self.pass_cdn_records()
+                
             except Exception as e:
                 self.add_output_message(f"Error parsing content: {e}", "error")
             
             # 再解析本文，验证是否正确，最终返回json
             try:
-                segments = segment(clipboard_text)
-                self.add_output_message(f"Text segmented into {len(segments)} parts.", "info")
-                if len(segments) != 8:
+                self.segments = segment(clipboard_text)
+                self.add_output_message(f"Text segmented into {len(self.segments)} parts.", "info")
+                if len(self.segments) != 8:
                     self.add_output_message("Wrong number of segments: The number of segments is not 8. Please check the input text. Maybe you added the wrong number of #. There should be 7 of them.", "error")
                 else:
                     self.add_output_message("Text segmented successfully.", "success")
-                    json = 'json'
-                    self.add_output_message(f"Generating JSON", "info")
-                    json_string = json.dumps(json, indent=2, ensure_ascii=False)
-                    QGuiApplication.clipboard().setText(json_string)
-                    self.add_output_message("JSON copied to clipboard!", "success")
+                    
                     
             except Exception as e:
                 self.add_output_message(f"Error segmenting text: {e}", "error")
@@ -659,42 +680,257 @@ class WSA(QMainWindow):
             self.add_output_message(f"Missing required fields: {', '.join(missing_fields)}", "warning")
             return
         
-        # 生成JSON数据
-        json_data = {
-            "type": self.page_type.currentText(),
-            "pics_path": self.pics_path_widget.text().strip(),
-            "file_path": self.file_path_widget.text(),
-            "title": self.title_widget.text(),
-            "description": self.description_widget.text(),
-            "keywords": self.keywords_widget.text(),
-            "view": self.view_widget.text(),
-            "try": self.try_widget.text()
-        }
+        # 获取关键字段
+        view_text = self.view_widget.text().split(":")[0].strip()
+        view_link_raw = self.view_widget.text().split(":")[1].strip()
+        view_link_spicy = f":{view_link_raw}"
+        view_link = view_link_spicy
         
-        try:
-            import json
-            json_string = json.dumps(json_data, indent=2, ensure_ascii=False)
-            self.json_widget.setText(json_string)
-            self.add_output_message(f"Generated JSON", "info")
-        except Exception as e:
-            self.add_output_message(f"Generation failed: {e}", "error")
+        try_text = self.try_widget.text().split(":")[0].strip()
+        try_link_raw = self.try_widget.text().split(":")[1].strip() 
+        try_link_spicy = f":{try_link_raw}"
+        try_link = try_link_spicy
+        
+        breadcrumb = self.keywords_widget.text()
+        breadcrumb_lower = breadcrumb.title()
+        
+        part2 = self.segments[1]
+        part2_text = part2.splitlines()[1]
+        
+        mockup_list_1_name = ''
+        mockup_list_1_number = ''
+        mockup_list_1_cdn = ''
+        
+        mockup_list_2_number = ''
+        mockup_list_2_cdn = ''
+        
+        if self.single_image_checkbox.isChecked():
+            multiple_upload = 'true'
+        else:
+            multiple_upload = 'false'
 
+        if self.scroll_to_mockup_checkbox.isChecked():
+            more_link = '#mockup-display' 
+        else:
+            more_link = ''
+            
+        if self.color_diy_checkbox.isChecked():
+            cover_colors = 'true'
+        else:
+            cover_colors = 'false'
+        
+        part3 = self.segments[2].splitlines()
+        part3_title = part3[0]
+        part3_text = part3[1]
+        
+        part4 = self.segments[3].splitlines()
+        part4_title = part4[0]
+        
+        step1_cdn = self.step1_cdn_widget.text()
+        step2_cdn = self.step2_cdn_widget.text()
+        step3_cdn = self.step3_cdn_widget.text()
+        
+        part5 = [line for line in self.segments[4].splitlines() if line.strip()]
+        part5_title = part5[0]
+        part5_step1_a = part5[1]
+        part5_step1_b = part5[2]
+        
+        part5_step2_a = part5[3]
+        part5_step2_b = part5[4]
+        
+        part5_step3_a = part5[5]
+        part5_step3_b = part5[6]
+        
+        part6 = self.segments[5].splitlines()
+        part6_title = part6[0]
+        
+        part6_1_title = part6[1]
+        part6_1_a = part6[2]
+        part6_1_b = part6[3]
+        
+        part6_2_title = part6[5]
+        part6_2_a = part6[6]
+        part6_2_b = part6[7]
+        
+        part6_3_title = part6[9]
+        part6_3_a = part6[10]
+        part6_3_b = part6[11]
+        
+        part6_4_title = part6[13]
+        part6_4_a = part6[14]
+        part6_4_b = part6[15]
+        
+        # FAQ环节
+        part7 = self.segments[6]
+        part7_block = parse_faq_text(part7)
+        
+        part7_q1 = part7_block[0]['question']
+        part7_a1 = part7_block[0]['answer']
+        
+        part7_q2 = part7_block[1]['question']
+        part7_a2 = part7_block[1]['answer']
+        
+        part7_q3 = part7_block[2]['question']
+        part7_a3 = part7_block[2]['answer']
+        
+        part7_q4 = part7_block[3]['question']
+        part7_a4 = part7_block[3]['answer']
+        
+        part7_q5 = part7_block[4]['question']
+        part7_a5 = part7_block[4]['answer']
+        
+        part8_text = self.segments[7].splitlines()[0]
+        
+        folder_path = self.pics_path_widget.text()
+        self.ensure_folder_exists(folder_path = folder_path)
+        
+        # 读取模板内容
+        with open('temp.json', 'r', encoding='utf-8') as f:
+            template_str = f.read()
+
+        # 构建替换字典
+        replace_dict = {
+            "view_text": view_text,
+            "view_link": view_link,
+            "make_text": try_text,
+            "make_link": try_link,
+            "breadcrumb": breadcrumb,
+            "breadcrumb_lower": breadcrumb_lower,
+            "part2_text": part2_text,
+            "mockup_list_1_name": mockup_list_1_name,
+            "mockup_list_1_number": mockup_list_1_number,
+            "mockup_list_1_cdn": mockup_list_1_cdn,
+            "mockup_list_2_number": mockup_list_2_number,
+            "mockup_list_2_cdn": mockup_list_2_cdn, 
+            "multiple_upload": multiple_upload,
+            "cover_colors": cover_colors,
+            "more_link": more_link,
+            "part3_title": part3_title,
+            "part3_text": part3_text,
+            "part4_title": part4_title,
+            "step1_cdn": step1_cdn,
+            "step2_cdn": step2_cdn,
+            "step3_cdn": step3_cdn,
+            "part5_title": part5_title,
+            "part5_step1_a": part5_step1_a,
+            "part5_step1_b": part5_step1_b,
+            "part5_step2_a": part5_step2_a,
+            "part5_step2_b": part5_step2_b,
+            "part5_step3_a": part5_step3_a,
+            "part5_step3_b": part5_step3_b,
+            "part6_title": part6_title,
+            "part6_1_title": part6_1_title,
+            "part6_1_a": part6_1_a,
+            "part6_1_b": part6_1_b,
+            "part6_2_title": part6_2_title,
+            "part6_2_a": part6_2_a,
+            "part6_2_b": part6_2_b,
+            "part6_3_title": part6_3_title,
+            "part6_3_a": part6_3_a,
+            "part6_3_b": part6_3_b,
+            "part6_4_title": part6_4_title,
+            "part6_4_a": part6_4_a,
+            "part6_4_b": part6_4_b,
+            "part7_q1": part7_q1,
+            "part7_a1": part7_a1,
+            "part7_q2": part7_q2,
+            "part7_a2": part7_a2,
+            "part7_q3": part7_q3,
+            "part7_a3": part7_a3,
+            "part7_q4": part7_q4,
+            "part7_a4": part7_a4,
+            "part7_q5": part7_q5,
+            "part7_a5": part7_a5,
+            "part8_text": part8_text,
+        }
+
+        # 替换所有{{key}}为对应值
+        for key, value in replace_dict.items():
+            template_str = template_str.replace(f"{{{{{key}}}}}", str(value))
+
+        # 尝试解析为json
+        try:
+            json_obj = json.loads(template_str)
+            json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
+            self.json_widget.setText(json_string)
+            QGuiApplication.clipboard().setText(json_string)
+            self.add_output_message("JSON generated and copied to clipboard!", "success")
+        except Exception as e:
+            self.add_output_message(f"Error generating JSON: {e}", "error")
+            
+        folder_path = self.pics_path_widget.text()
+        self.ensure_folder_exists(folder_path=folder_path)
+        cdn_records_exist = self.detect_cdn_records(folder_path=folder_path)
+        if cdn_records_exist:
+            self.pass_cdn_records()
+            self.add_output_message("Detected cdn records, auto fill.","succcess")
+        
     def current_time(self):
         return datetime.now().strftime("%H:%M:%S")
     
     def uploader_activate(self):
         self.add_output_message("Activating the automator. This could take a while.","info")
         self.add_output_message("If you are using the app for the first time, log in manually.","info")
-        self.uploader.activate()
-        if self.uploader.activated_status:
+        _ = self.uploader.activate()
+        if _:
+            self.add_output_message(f"Something went wrong during activation: {_}","error")
+        elif self.uploader.activated_status:
             self.add_output_message("The upload automator is activated.","success")
-        else:
-            self.add_output_message("Something went wrong during activation","error")
+            
+    def ensure_folder_exists(self, folder_path):
+        """
+        Note for dev: os version was already ensured. 
+        """
+        folder_path = self.pics_path_widget.text()
+        # if no folder exist, add one
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+            self.add_output_message(f"No folder detected. Created folder automatically.","info")
+        # if yes, pass
         
-    def uploader_upload_and_get(self, image):
-        result = self.uploader.upload_and_get(image)
-        return result
+    def detect_cdn_records(self,folder_path) -> bool:
+        """
+        see if cdn adresses are already stored in nas pics folder
+        """
+        # detect if a cdn.json exists in the folder_path folder
+        if os.path.exists(f"{folder_path}//cdn.json"):
+            self.add_output_message(f"Found cdn.json file. Reading records.","info")
+            return True
+        # if no, pass
+        else: 
+            return False
         
+    def pass_cdn_records(self):
+        folder_path = self.pics_path_widget.text()
+        with open(f"{folder_path}//cdn.json","r") as f:
+            cdn_json = json.load(f)
+        # 提取json中的每一行内容并赋入widget
+        self.cover_cdn_widget.setText(cdn_json["cover_cdn"])
+        self.cover_more_cdn_widget.setText(cdn_json["cover_more_cdn"])
+        self.step1_cdn_widget.setText(cdn_json["step1_cdn"])
+        self.step2_cdn_widget.setText(cdn_json["step2_cdn"])
+        self.step3_cdn_widget.setText(cdn_json["step3_cdn"])
+        self.feature1_cdn_widget.setText(cdn_json["feature1_cdn"])
+        self.feature2_cdn_widget.setText(cdn_json["feature2_cdn"])
+        self.feature3_cdn_widget.setText(cdn_json["feature3_cdn"])
+        self.feature4_cdn_widget.setText(cdn_json["feature4_cdn"])
+        
+        self.add_output_message("Passing completed.","success")
+           
+    def uploader_upload_folder(self):
+        folder_path = self.pics_path_widget.text()
+        self.ensure_folder_exists(folder_path=folder_path)
+        if self.detect_cdn_records(folder_path=folder_path): # already uploaded and recorded
+            self.add_output_message("already uploaded","info")
+            self.pass_cdn_records()
+            self.add_output_message("Passing recorded cdn addresses.","success")
+        else: # no records
+            result: list = self.uploader.upload_folder(folder_path)
+            # 在指定nas文件夹下，将list格式的result添加到json文件夹
+            with open(f"{folder_path}//cdn.json","w") as f:
+                json.dump(result,f,ensure_ascii=False)
+            self.add_output_message("uploaded and records added","success")
+            
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 

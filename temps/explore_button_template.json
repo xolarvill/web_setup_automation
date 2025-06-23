@@ -1,0 +1,77 @@
+{
+    "name": "Button",
+    "label": "Button",
+    "uuid": "{{uuid}}",
+    "style": {
+        "1280-1679": {
+            "marginRight": "24px",
+            "marginTop": "24px"
+        },
+        "1024-1279": {
+            "marginTop": "24px",
+            "marginRight": "24px"
+        },
+        "980-1023": {
+            "marginTop": "24px",
+            "marginRight": "24px"
+        },
+        "<980": {
+            "marginTop": "12px",
+            "marginRight": "12px",
+            "paddingLeft": "16px",
+            "paddingRight": "16px",
+            "height": "auto",
+            "fontSize": "var(--fs-sm)",
+            "borderRadius": "6px",
+            "minHeight": "36px",
+            "lineHeight": "var(--lh-none)",
+            "paddingTop": "8px",
+            "paddingBottom": "8px"
+        }
+    },
+    "props": {},
+    "containerStyle": {},
+    "isBlock": true,
+    "isContainer": false,
+    "children": [],
+    "globalStyle": {
+        "fontSize": "var(--fs-base)",
+        "lineHeight": "40px",
+        "fontWeight": "var(--fw-normal)",
+        "width": "auto",
+        "height": "48px",
+        "display": "flex",
+        "borderRadius": "10px",
+        "minWidth": "",
+        "--font-color": "#191919",
+        "--hover-font-color": "#191919",
+        "--active-font-color": "#191919",
+        "--hover-border": "solid 1px #191919",
+        "--active-border": "solid 1px #191919",
+        "--hover-background": "#F7F7F7",
+        "--active-background": "#F7F7F7",
+        "paddingLeft": "24px",
+        "paddingRight": "24px",
+        "background": "#F7F7F7",
+        "marginRight": "32px",
+        "border": "solid 1px #D1D0D2",
+        "marginTop": "32px"
+    },
+    "globalContainerStyle": {},
+    "statusArr": [],
+    "curStatus": "default",
+    "status": {},
+    "globalProps": {
+        "text": "{{explore_title}}",
+        "link": "{{explore_inner_link}}",
+        "gtm": "ga-seo_explore_more_tools",
+        "target": "_self",
+        "colorType": "custom",
+        "iconUrl": "",
+        "direction": "right",
+        "distance": "10px",
+        "iconWidth": "20px",
+        "fontColor": "#191919"
+    },
+    "transition": []
+}

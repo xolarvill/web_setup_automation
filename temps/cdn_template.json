@@ -1,0 +1,11 @@
+{
+    "cover_cdn": "{{cover_cdn}}",
+    "cover_more_cdn": "{{cover_more_cdn}}",
+    "step1_cdn": "{{step1_cdn}}",
+    "step2_cdn": "{{step2_cdn}}",
+    "step3_cdn": "{{step3_cdn}}",
+    "feature1_cdn": "{{feature1_cdn}}",
+    "feature2_cdn": "{{feature2_cdn}}",
+    "feature3_cdn": "{{feature3_cdn}}",
+    "feature4_cdn": "{{feature4_cdn}}"
+}

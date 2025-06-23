@@ -10,6 +10,7 @@ import os
 import json
 import time
 from typing import Optional
+import glob
 
 class ImageUploader:
     """
@@ -33,26 +34,31 @@ class ImageUploader:
         self.cookie_path = cookie_path
         self.cookie_status = None
     
-    def active(self) -> None:
+    def activate(self):
         """
         激活浏览器，根据cookie状态决定是手动登录还是无头登录
+        
+        如果失败，返回Exception
         """
-        if not self.activated_status:
-            # 检查是否有cookies.json
-            self.cookie_status = os.path.exists(self.cookie_path)
-            
-            # 根据cookie判断激活方式
-            if self.cookie_status:
-                # 有cookie直接无头加载
-                self.activate_headless()
+        try:
+            if not self.activated_status:
+                # 检查是否有cookies.json
+                self.cookie_status = os.path.exists(self.cookie_path)
+                
+                # 根据cookie判断激活方式
+                if self.cookie_status:
+                    # 有cookie直接无头加载
+                    self.activate_headless()
+                else:
+                    # 无cookie首次登陆并保存cookie
+                    self.activate_manually()
+                
+                # 设置激活状态
+                self.activated_status = True
             else:
-                # 无cookie首次登陆并保存cookie
-                self.activate_manually()
-            
-            # 设置激活状态
-            self.activated_status = True
-        else:
-            print("浏览器已激活，无需重复操作")
+                print("浏览器已激活，无需重复操作")
+        except Exception as e:
+            return e
     
     def activate_manually(self) -> None:
         """
@@ -242,6 +248,37 @@ class ImageUploader:
             print(f"上传过程中出现错误: {e}")
             self._save_screenshot("upload_error")
             raise
+        
+    def upload_folder(self, folder_path: str) -> list:
+        """
+        给定一个文件夹，上传其中所有图片，将获取得到的cdn链接返回一个list。
+
+        上传完一个图片后，出现cdn链接，此时获取并保存，然后直接发送新的文件路径到file_input中，获得新的cdn链接
+        """
+
+        # 支持的图片扩展名
+        exts = ('*.jpg', '*.jpeg', '*.png', '*.gif', '*.bmp', '*.webp', '*.svg')
+        files = []
+        for ext in exts:
+            files.extend(glob.glob(os.path.join(folder_path, ext)))
+        files.sort()
+
+        if not files:
+            print(f"文件夹中没有图片: {folder_path}")
+            return
+
+        cdn_links = []
+        failed_files = []
+
+        for file_path in files:
+            try:
+                cdn_url = self.upload_and_get(file_path)
+                cdn_links.append(f"{cdn_url}")
+            except Exception as e:
+                print(f"上传失败: {file_path}，错误: {e}")
+                failed_files.append(file_path)
+        
+        return cdn_links
             
     def _save_screenshot(self, error_type: str) -> None:
         """
@@ -283,5 +320,6 @@ if __name__ == "__main__":
     uploader = ImageUploader()
 
     # 激活浏览器（首次使用需手动登录）
-    uploader.active()
+    uploader.activate()
     print(uploader.activated_status)
+    uploader.close()

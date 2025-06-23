@@ -1,4 +1,5 @@
 from typing import List
+import re
 
 def extract_cutout_nextline(text: str, keywords: List[str]) -> dict:
     """
@@ -69,6 +70,52 @@ def segment(text: str) -> List[str]:
     if current:
         segments.append('\n'.join(current).strip())
     return [seg for seg in segments if seg]
+
+def parse_faq_text(text) -> list:
+    """
+    解析FAQ文本，去除第一行，按空行分块处理问答对
+    
+    Args:
+        text (str): 原始FAQ文本
+        
+    Returns:
+        list: 包含字典的列表，每个字典有'question'和'answer'键
+    """
+    # 按行分割文本
+    lines = text.strip().split('\n')
+    
+    # 去除第一行
+    lines = lines[1:]
+    
+    # 按空行分块
+    blocks = []
+    current_block = []
+    
+    for line in lines:
+        if line.strip() == '':  # 遇到空行
+            if current_block:  # 如果当前块不为空
+                blocks.append(current_block)
+                current_block = []
+        else:
+            current_block.append(line.strip())
+    
+    # 添加最后一个块（如果存在）
+    if current_block:
+        blocks.append(current_block)
+    
+    # 解析每个块为问答对
+    faq_list = []
+    for block in blocks:
+        if len(block) >= 2:  # 至少要有问题和答案
+            question = block[0]
+            answer = ' '.join(block[1:])  # 将多行答案连接成一个字符串
+            
+            faq_list.append({
+                'question': question,
+                'answer': answer
+            })
+    
+    return faq_list
 
 # 示例用法
 if __name__ == "__main__":
