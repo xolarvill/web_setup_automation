@@ -117,12 +117,46 @@ def parse_faq_text(text) -> list:
     
     return faq_list
 
+
+
+def extract_url(text: str) -> list:
+    """
+    Extracts URLs from text that are in an ordered list format (e.g., "1. https://abc.com").
+
+    Args:
+        text (str): The input text containing the URLs.
+
+    Returns:
+        list: A list of extracted URLs. Returns an empty list if no URLs are found.
+    """
+    # If input is a list, join it into a single string
+    if isinstance(text, list):
+        text = "\n".join(text)
+        
+    # 修改正则表达式模式，直接匹配URL而不需要数字序号
+    pattern = re.compile(r'(https?://[^\s]+)')
+    
+    # Find all matches in the text
+    urls = pattern.findall(text)
+    
+    # 清理URL末尾可能的标点符号
+    urls = [url.rstrip(',.;') for url in urls]
+    
+    return urls
+
 # 示例用法
 if __name__ == "__main__":
-    with open("temp.txt", "r") as f:
-        sample_text = f.read()
-    #print(sample_text)
-    keywords = ["meta description:", "title:", "meta keywords:"]
-    result = extract_cutout_nextline(sample_text, keywords)
-    for k, v in result.items():
-        print(f"{k}:\n{v}\n")
+    str = '''
+        Browse more menu mockups now
+        https://www.pacdora.com/mockup-detail/clipboard-menu-mockup-911447
+        https://www.pacdora.com/mockup-detail/bifold-menu-card-mockup-911439
+        https://www.pacdora.com/mockup-detail/menu-mockup-911458
+        https://www.pacdora.com/mockup-detail/clipboard-mockup-911448
+        https://www.pacdora.com/mockup-detail/table-tent-mockup-911459
+        https://www.pacdora.com/mockup-detail/menu-mockup-911455
+        https://www.pacdora.com/mockup-detail/trifold-brochure-mockup-24200402
+        https://www.pacdora.com/mockup-detail/a4-flyer-mockup-608040
+        View all menu mockups
+        '''
+    result = extract_url(str)
+    print(result)

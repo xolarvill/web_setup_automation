@@ -103,9 +103,9 @@
                         }
                     },
                     "globalProps": {
-                        "url": "https://cdn.pacdora.com/render/1747883408342/12234304.png",
-                        "title": "750 ml pump hair oil bottle mockup",
-                        "alt": "750 ml pump hair oil bottle mockup",
+                        "url": "{{image_url}}",
+                        "title": "{{model_name}}",
+                        "alt": "{{model_name}}",
                         "isOpenAnimation": false,
                         "size1": 1200,
                         "size2": 1200,
@@ -192,7 +192,7 @@
             "curStatus": "default",
             "status": {},
             "globalProps": {
-                "text": "<p>750 ml pump hair oil bottle mockup</p>",
+                "text": "<p>{{model_name}}</p>",
                 "isOpenAnimation": false
             },
             "transition": []
@@ -206,7 +206,7 @@
     "curStatus": "default",
     "status": {},
     "globalProps": {
-        "href": "/mockup-detail/bottles-plastic-product-label-mockup-507600",
+        "href": "{{editor_inner_url}}",
         "target": "_blank",
         "isOpenAnimation": true,
         "linkId": "",

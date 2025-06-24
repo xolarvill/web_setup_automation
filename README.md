@@ -134,7 +134,8 @@ follow the instructions given inside the app. or go to this notion page for more
 ![sel](resources/upload_selenium.png)
 5. 自动开始上传并保存最后的链接
 
-第二种：直接沟通aws api，使用boto3库进行图片上传
+第二种：由于selenium的性能限制和网络问题，不是每次都可以使用自动化工具进行图片上传
+可以手动上传图片，然后保存到nas素材文件夹的cdn.json中。
 
 
 ### Important Notes

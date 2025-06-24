@@ -3934,9 +3934,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1747883408342/12234304.png",
-                                                                        "title": "750 ml pump hair oil bottle mockup",
-                                                                        "alt": "750 ml pump hair oil bottle mockup",
+                                                                        "url": "{{model_1_image_url}}",
+                                                                        "title": "{{model_1_name}}",
+                                                                        "alt": "{{model_1_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -4023,7 +4023,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>750 ml pump hair oil bottle mockup</p>",
+                                                                "text": "<p>{{model_1_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -4037,7 +4037,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/bottles-plastic-product-label-mockup-507600",
+                                                        "href": "{{model_1_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -4150,9 +4150,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1749025433492/12311547.png",
-                                                                        "title": "Squeeze bottle mockup",
-                                                                        "alt": "Squeeze bottle mockup",
+                                                                        "url": "{{model_2_image_url}}",
+                                                                        "title": "{{model_2_name}}",
+                                                                        "alt": "{{model_2_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -4239,7 +4239,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>Squeeze bottle mockup</p>",
+                                                                "text": "<p>{{model_2_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -4253,7 +4253,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/dropper-bottle-mockup-511650",
+                                                        "href": "{{model_2_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -4366,9 +4366,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/cover/11256724_8c0768bb-eed7-40d7-81cc-1ef1accc517c.jpg",
-                                                                        "title": "Hair oil bottle mockup",
-                                                                        "alt": "Hair oil bottle mockup",
+                                                                        "url": "{{model_3_image_url}}",
+                                                                        "title": "{{model_3_name}}",
+                                                                        "alt": "{{model_3_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -4455,7 +4455,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>Hair oil bottle mockup</p>",
+                                                                "text": "<p>{{model_3_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -4469,7 +4469,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/bottles-plastic-product-label-mockup-505390",
+                                                        "href": "{{model_3_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -4582,9 +4582,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1745488134961/12063207.jpg",
-                                                                        "title": "500 ml plastic hair oil bottle mockup",
-                                                                        "alt": "500 ml plastic hair oil bottle mockup",
+                                                                        "url": "{{model_4_image_url}}",
+                                                                        "title": "{{model_4_name}}",
+                                                                        "alt": "{{model_4_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -4671,7 +4671,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>500 ml plastic hair oil bottle mockup</p>",
+                                                                "text": "<p>{{model_4_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -4685,7 +4685,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/500-ml-plastic-bottle-mockup-590001",
+                                                        "href": "{{model_4_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -4798,9 +4798,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1749020018014/12310939.png",
-                                                                        "title": "30 ml serum bottle mockup",
-                                                                        "alt": "30 ml serum bottle mockup",
+                                                                        "url": "{{model_5_image_url}}",
+                                                                        "title": "{{model_5_name}}",
+                                                                        "alt": "{{model_5_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -4887,7 +4887,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>30 ml serum bottle mockup</p>",
+                                                                "text": "<p>{{model_5_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -4901,7 +4901,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/dropper-bottle-mockup-511720",
+                                                        "href": "{{model_5_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -5014,9 +5014,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1749033159272/12312623.png",
-                                                                        "title": "100 ml dropper bottle mockup",
-                                                                        "alt": "100 ml dropper bottle mockup",
+                                                                        "url": "{{model_6_image_url}}",
+                                                                        "title": "{{model_6_name}}",
+                                                                        "alt": "{{model_6_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -5103,7 +5103,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>100 ml dropper bottle mockup</p>",
+                                                                "text": "<p>{{model_6_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -5117,7 +5117,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/dropper-bottle-mockup-511752",
+                                                        "href": "{{model_6_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -5230,9 +5230,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1749103073101/12318341.png",
-                                                                        "title": "100 ml dropper bottle mockup",
-                                                                        "alt": "100 ml dropper bottle mockup",
+                                                                        "url": "{{model_7_image_url}}",
+                                                                        "title": "{{model_7_name}}",
+                                                                        "alt": "{{model_7_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -5319,7 +5319,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>100 ml dropper bottle mockup</p>",
+                                                                "text": "<p>{{model_7_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -5333,7 +5333,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/bottles-glass-product-label-mockup-506420",
+                                                        "href": "{{model_7_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -5446,9 +5446,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1746696947709/12147546.jpg",
-                                                                        "title": "260ml plastic shampoo bottle mockup",
-                                                                        "alt": "260ml plastic shampoo bottle mockup",
+                                                                        "url": "{{model_8_image_url}}",
+                                                                        "title": "{{model_8_name}}",
+                                                                        "alt": "{{model_8_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -5535,7 +5535,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>260ml plastic shampoo bottle mockup</p>",
+                                                                "text": "<p>{{model_8_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -5549,7 +5549,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/bottles-plastic-product-label-mockup-503320",
+                                                        "href": "{{model_8_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",

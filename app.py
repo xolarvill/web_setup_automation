@@ -9,10 +9,12 @@ from qt_material import apply_stylesheet  # 导入qt-material库
 import os
 from datetime import datetime
 from PySide6.QtGui import QGuiApplication
-from utils.parse import extract_cutout_nextline, extract_cutout_currentline, segment, parse_faq_text
+from utils.parse import extract_cutout_nextline, extract_cutout_currentline, segment, parse_faq_text, extract_url
+from utils.fetch_mockup_details import fetch_mockup_details
 from PySide6.QtCore import QTimer
 from utils.upload_selenium_class import ImageUploader
 import json
+from utils.upload_boto import S3Uploader
 
 
 class LabeledLineEditWithCopy(QWidget):
@@ -229,10 +231,6 @@ class WSA(QMainWindow):
         self.try_widget = LabeledLineEditWithCopy("Try")
         left_layout.addWidget(self.try_widget)
         
-        # JSON
-        self.json_widget = LabeledLineEditWithCopy("JSON", "Click button on the right to copy")
-        left_layout.addWidget(self.json_widget)
-        
         # 分隔线
         separator2 = QFrame()
         separator2.setFrameShape(QFrame.HLine)
@@ -348,14 +346,6 @@ class WSA(QMainWindow):
         separator_mid3.setFrameShadow(QFrame.Sunken)
         mid_layout.addWidget(separator_mid3)
         
-        # 添加Notion地址
-        self.notion_url_widget = LabeledLineEditWithCopy("Notion URL")
-        mid_layout.addWidget(self.notion_url_widget)
-        
-        # 添加Slack表格地址
-        self.slack_url_widget = LabeledLineEditWithCopy("Slack URL")
-        mid_layout.addWidget(self.slack_url_widget)
-        
         # 分隔线
         separator_mid4 = QFrame()
         separator_mid4.setFrameShape(QFrame.HLine)
@@ -374,15 +364,8 @@ class WSA(QMainWindow):
             btn.setMinimumHeight(35)
             mid_buttons_layout1.addWidget(btn)
         
-        # 添加Activate按钮
+        # 添加上传按钮
         mid_buttons_layout2 = QHBoxLayout()
-        
-        self.activate_button = QPushButton("Activate")
-        self.activate_button.clicked.connect(self.uploader_activate)
-        self.activate_button.setMinimumHeight(35)
-        mid_buttons_layout2.addWidget(self.activate_button)
-
-        # 添加Upload按钮
         self.upload_button = QPushButton("Upload")
         self.upload_button.clicked.connect(self.uploader_upload_folder)
         self.upload_button.setMinimumHeight(35)
@@ -390,12 +373,7 @@ class WSA(QMainWindow):
         
         mid_layout.addLayout(mid_buttons_layout1)
         mid_layout.addLayout(mid_buttons_layout2)
-        
-        # 添加退出按钮
-        self.quit_button = QPushButton("Quit")
-        self.quit_button.setMinimumHeight(35)
-        mid_layout.addWidget(self.quit_button)
-
+    
         # 添加弹性空间
         mid_layout.addStretch()
         
@@ -473,8 +451,10 @@ class WSA(QMainWindow):
         main_layout.setStretch(1, 0)  # 中间面板可拉伸
         main_layout.setStretch(2, 0)  # 右侧面板可拉伸
         
-        # 5. 图片上传器
+        # 5. 杂项
         self.uploader = ImageUploader()
+        self.aws_upload = S3Uploader()
+        self.output_json = ""
         
     def clear_output(self):
         """清除输出框内容"""
@@ -639,17 +619,19 @@ class WSA(QMainWindow):
                     self.add_output_message("Parsing failed: No keywords detected. Please ensure you've copied the correct article. This could happen when the article is not correctly formatted. Go check it.", "error")
                 
                 # 补齐文件夹
-                self.ensure_folder_exists(self.pics_path_widget.text())
+                folder_path = self.pics_path_widget.text()
+                self.ensure_folder_exists(folder_path=folder_path)
                 
                 # 判断是否存在cdn
-                if self.detect_cdn_records():
-                    self.add_output_message(f"CDN records detected", "info")
+                cdn_records_exist = self.detect_cdn_records(folder_path=folder_path)
+                if cdn_records_exist:
                     self.pass_cdn_records()
+                    self.add_output_message("Detected cdn records, auto fill.","succcess")
                 
             except Exception as e:
                 self.add_output_message(f"Error parsing content: {e}", "error")
             
-            # 再解析本文，验证是否正确，最终返回json
+            # 解析本文，验证是否正确
             try:
                 self.segments = segment(clipboard_text)
                 self.add_output_message(f"Text segmented into {len(self.segments)} parts.", "info")
@@ -723,8 +705,96 @@ class WSA(QMainWindow):
         part3_title = part3[0]
         part3_text = part3[1]
         
+        # 样机展示链接
         part4 = self.segments[3].splitlines()
         part4_title = part4[0]
+        
+        # 检查是否存在 var.json，如果有则读取，否则fetch并写入
+        var_json_path = os.path.join(self.pics_path_widget.text(), "var_v.json")
+        if os.path.exists(var_json_path):
+            self.add_output_message("Found var_v.json file. Reading mockup details.", "info")
+            with open(var_json_path, "r", encoding="utf-8") as f:
+                var_json_data = json.load(f)
+            model_1_name = var_json_data["model_1"]["name"]
+            model_1_image_url = var_json_data["model_1"]["image_url"]
+            model_1_editor_inner_link = var_json_data["model_1"]["editor_inner_link"]
+            model_2_name = var_json_data["model_2"]["name"]
+            model_2_image_url = var_json_data["model_2"]["image_url"]
+            model_2_editor_inner_link = var_json_data["model_2"]["editor_inner_link"]
+            model_3_name = var_json_data["model_3"]["name"]
+            model_3_image_url = var_json_data["model_3"]["image_url"]
+            model_3_editor_inner_link = var_json_data["model_3"]["editor_inner_link"]
+            model_4_name = var_json_data["model_4"]["name"]
+            model_4_image_url = var_json_data["model_4"]["image_url"]
+            model_4_editor_inner_link = var_json_data["model_4"]["editor_inner_link"]
+            model_5_name = var_json_data["model_5"]["name"]
+            model_5_image_url = var_json_data["model_5"]["image_url"]
+            model_5_editor_inner_link = var_json_data["model_5"]["editor_inner_link"]
+            model_6_name = var_json_data["model_6"]["name"]
+            model_6_image_url = var_json_data["model_6"]["image_url"]
+            model_6_editor_inner_link = var_json_data["model_6"]["editor_inner_link"]
+            model_7_name = var_json_data["model_7"]["name"]
+            model_7_image_url = var_json_data["model_7"]["image_url"]
+            model_7_editor_inner_link = var_json_data["model_7"]["editor_inner_link"]
+            model_8_name = var_json_data["model_8"]["name"]
+            model_8_image_url = var_json_data["model_8"]["image_url"]
+            model_8_editor_inner_link = var_json_data["model_8"]["editor_inner_link"]
+        else:
+            urls = extract_url(part4)
+            model_1_name, model_1_image_url, model_1_editor_inner_link = fetch_mockup_details(urls[0])
+            model_2_name, model_2_image_url, model_2_editor_inner_link = fetch_mockup_details(urls[1])
+            model_3_name, model_3_image_url, model_3_editor_inner_link = fetch_mockup_details(urls[2])
+            model_4_name, model_4_image_url, model_4_editor_inner_link = fetch_mockup_details(urls[3])
+            model_5_name, model_5_image_url, model_5_editor_inner_link = fetch_mockup_details(urls[4])
+            model_6_name, model_6_image_url, model_6_editor_inner_link = fetch_mockup_details(urls[5])
+            model_7_name, model_7_image_url, model_7_editor_inner_link = fetch_mockup_details(urls[6])
+            model_8_name, model_8_image_url, model_8_editor_inner_link = fetch_mockup_details(urls[7])
+            # 写入 var.json
+            var_json_data = {
+            "model_1": {
+                "name": model_1_name,
+                "image_url": model_1_image_url,
+                "editor_inner_link": model_1_editor_inner_link
+            },
+            "model_2": {
+                "name": model_2_name,
+                "image_url": model_2_image_url,
+                "editor_inner_link": model_2_editor_inner_link
+            },
+            "model_3": {
+                "name": model_3_name,
+                "image_url": model_3_image_url,
+                "editor_inner_link": model_3_editor_inner_link
+            },
+            "model_4": {
+                "name": model_4_name,
+                "image_url": model_4_image_url,
+                "editor_inner_link": model_4_editor_inner_link
+            },
+            "model_5": {
+                "name": model_5_name,
+                "image_url": model_5_image_url,
+                "editor_inner_link": model_5_editor_inner_link
+            },
+            "model_6": {
+                "name": model_6_name,
+                "image_url": model_6_image_url,
+                "editor_inner_link": model_6_editor_inner_link
+            },
+            "model_7": {
+                "name": model_7_name,
+                "image_url": model_7_image_url,
+                "editor_inner_link": model_7_editor_inner_link
+            },
+            "model_8": {
+                "name": model_8_name,
+                "image_url": model_8_image_url,
+                "editor_inner_link": model_8_editor_inner_link
+            }
+            }
+            with open(var_json_path, "w", encoding="utf-8") as f:
+                json.dump(var_json_data, f, ensure_ascii=False, indent=2)
+            self.add_output_message("Fetched mockup details and wrote var_v.json.", "success")
         
         step1_cdn = self.step1_cdn_widget.text()
         step2_cdn = self.step2_cdn_widget.text()
@@ -741,7 +811,13 @@ class WSA(QMainWindow):
         part5_step3_a = part5[5]
         part5_step3_b = part5[6]
         
+        
         part6 = self.segments[5].splitlines()
+        part6_1_feature_cdn = self.feature1_cdn_widget.text()
+        part6_2_feature_cdn = self.feature2_cdn_widget.text()
+        part6_3_feature_cdn = self.feature3_cdn_widget.text()
+        part6_4_feature_cdn = self.feature4_cdn_widget.text()
+        
         part6_title = part6[0]
         
         part6_1_title = part6[1]
@@ -808,6 +884,30 @@ class WSA(QMainWindow):
             "part3_title": part3_title,
             "part3_text": part3_text,
             "part4_title": part4_title,
+            "model_1_image_url": model_1_image_url,
+            "model_1_name": model_1_name,
+            "model_1_editor_inner_link": model_1_editor_inner_link,
+            "model_2_image_url": model_2_image_url,
+            "model_2_name": model_2_name,
+            "model_2_editor_inner_link": model_2_editor_inner_link,
+            "model_3_image_url": model_3_image_url,
+            "model_3_name": model_3_name,
+            "model_3_editor_inner_link": model_3_editor_inner_link,
+            "model_4_image_url": model_4_image_url,
+            "model_4_name": model_4_name,
+            "model_4_editor_inner_link": model_4_editor_inner_link,
+            "model_5_image_url": model_5_image_url,
+            "model_5_name": model_5_name,
+            "model_5_editor_inner_link": model_5_editor_inner_link,
+            "model_6_image_url": model_6_image_url,
+            "model_6_name": model_6_name,
+            "model_6_editor_inner_link": model_6_editor_inner_link,
+            "model_7_image_url": model_7_image_url,
+            "model_7_name": model_7_name,
+            "model_7_editor_inner_link": model_7_editor_inner_link,
+            "model_8_image_url": model_8_image_url,
+            "model_8_name": model_8_name,
+            "model_8_editor_inner_link": model_8_editor_inner_link,
             "step1_cdn": step1_cdn,
             "step2_cdn": step2_cdn,
             "step3_cdn": step3_cdn,
@@ -820,15 +920,19 @@ class WSA(QMainWindow):
             "part5_step3_b": part5_step3_b,
             "part6_title": part6_title,
             "part6_1_title": part6_1_title,
+            "part6_1_feature_cdn": part6_1_feature_cdn,
             "part6_1_a": part6_1_a,
             "part6_1_b": part6_1_b,
             "part6_2_title": part6_2_title,
+            "part6_2_feature_cdn": part6_2_feature_cdn,
             "part6_2_a": part6_2_a,
             "part6_2_b": part6_2_b,
             "part6_3_title": part6_3_title,
+            "part6_3_feature_cdn": part6_3_feature_cdn,
             "part6_3_a": part6_3_a,
             "part6_3_b": part6_3_b,
             "part6_4_title": part6_4_title,
+            "part6_4_feature_cdn": part6_4_feature_cdn,
             "part6_4_a": part6_4_a,
             "part6_4_b": part6_4_b,
             "part7_q1": part7_q1,
@@ -853,18 +957,15 @@ class WSA(QMainWindow):
             json_obj = json.loads(template_str)
             json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
             self.json_widget.setText(json_string)
+            self.output_json = json_string
             QGuiApplication.clipboard().setText(json_string)
             self.add_output_message("JSON generated and copied to clipboard!", "success")
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
             
-        folder_path = self.pics_path_widget.text()
-        self.ensure_folder_exists(folder_path=folder_path)
-        cdn_records_exist = self.detect_cdn_records(folder_path=folder_path)
-        if cdn_records_exist:
-            self.pass_cdn_records()
-            self.add_output_message("Detected cdn records, auto fill.","succcess")
         
+            
+
     def current_time(self):
         return datetime.now().strftime("%H:%M:%S")
     
@@ -887,6 +988,18 @@ class WSA(QMainWindow):
             os.makedirs(folder_path)
             self.add_output_message(f"No folder detected. Created folder automatically.","info")
         # if yes, pass
+        
+    def detect_var_records(self,folder_path) -> bool:
+        """
+        see if a var_v.json are stored in nas pics folder
+        """
+        # detect if a var_v.json exists in the folder_path folder
+        if os.path.exists(f"{folder_path}//var_v.json"):
+            self.add_output_message(f"Found cdn.json file. Reading records.","info")
+            return True
+        # if no, pass
+        else: 
+            return False
         
     def detect_cdn_records(self,folder_path) -> bool:
         """
@@ -925,11 +1038,79 @@ class WSA(QMainWindow):
             self.pass_cdn_records()
             self.add_output_message("Passing recorded cdn addresses.","success")
         else: # no records
-            result: list = self.uploader.upload_folder(folder_path)
-            # 在指定nas文件夹下，将list格式的result添加到json文件夹
-            with open(f"{folder_path}//cdn.json","w") as f:
-                json.dump(result,f,ensure_ascii=False)
-            self.add_output_message("uploaded and records added","success")
+            self.add_output_message("Uploading images for the first time, this could take a while.","info")
+            # 获取文件夹内所有图片
+            image_files = [f for f in os.listdir(folder_path) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))]
+            
+            # 用于存储CDN链接的字典
+            cdn_links = {}
+            
+            total_images = len(image_files)
+            current_image = 0
+            
+            for image in image_files:
+                # 上传图片并获取CDN链接
+                file_path = os.path.join(folder_path, image)
+                cdn_url = self.aws_upload.upload_file(file_path)
+                current_image += 1
+                self.add_output_message(f"Uploading image {current_image}/{total_images}: {image}", "info")
+                
+                # 获取文件名（不含扩展名）
+                filename = os.path.splitext(image)[0]
+                
+                # 根据文件名分配CDN链接
+                if filename in ['1', '2', '3']:
+                    step_num = int(filename)
+                    if step_num == 1:
+                        self.step1_cdn_widget.setText(cdn_url)
+                        cdn_links['step1_cdn'] = cdn_url
+                    elif step_num == 2:
+                        self.step2_cdn_widget.setText(cdn_url)
+                        cdn_links['step2_cdn'] = cdn_url
+                    elif step_num == 3:
+                        self.step3_cdn_widget.setText(cdn_url)
+                        cdn_links['step3_cdn'] = cdn_url
+                    
+                elif filename in ['a', 'b', 'c', 'd']:
+                    feature_num = {'a': 1, 'b': 2, 'c': 3, 'd': 4}[filename]
+                    if feature_num == 1:
+                        self.feature1_cdn_widget.setText(cdn_url)
+                        cdn_links['feature1_cdn'] = cdn_url
+                    elif feature_num == 2:
+                        self.feature2_cdn_widget.setText(cdn_url)
+                        cdn_links['feature2_cdn'] = cdn_url
+                    elif feature_num == 3:
+                        self.feature3_cdn_widget.setText(cdn_url)
+                        cdn_links['feature3_cdn'] = cdn_url
+                    elif feature_num == 4:
+                        self.feature4_cdn_widget.setText(cdn_url)
+                        cdn_links['feature4_cdn'] = cdn_url
+            
+            # 定义cdn模板
+            template = {
+                "cover_cdn": "",
+                "cover_more_cdn": "",
+                "step1_cdn": "",
+                "step2_cdn": "",
+                "step3_cdn": "",
+                "feature1_cdn": "",
+                "feature2_cdn": "",
+                "feature3_cdn": "",
+                "feature4_cdn": ""
+            }
+            
+            # 将上传的cdn链接更新到模板中
+            merged_data = template.copy()  # 创建template的副本
+            merged_data.update(cdn_links)  # 使用update方法合并两个字典
+            
+            # 保存更新后的JSON文件
+            json_path = os.path.join(folder_path, 'cdn.json')
+            with open(json_path, 'w') as f:
+                json.dump(merged_data, f, indent=4)
+                
+            self.add_output_message(f"All cdn addresses recorded at {json_path}", "success")
+            
+
             
 if __name__ == "__main__":
     app = QApplication(sys.argv)
