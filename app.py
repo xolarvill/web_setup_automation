@@ -1,20 +1,24 @@
+# 标准库导入
+import os
 import sys
+import json
+import time
+import platform
+from datetime import datetime
+
+# 第三方库导入
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                               QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QTextEdit, 
                               QFrame, QCheckBox,
                               QSizePolicy)
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QIcon
-from qt_material import apply_stylesheet  # 导入qt-material库
-import os
-from datetime import datetime
-from PySide6.QtGui import QGuiApplication
-from utils.parse import extract_cutout_nextline, extract_cutout_currentline, segment, parse_faq_text, extract_url
+from PySide6.QtCore import Qt, QTimer, QSize
+from PySide6.QtGui import QClipboard, QIcon
+
+# 本地模块导入
+from utils.parse import extract_url, segment, parse_faq_text
 from utils.fetch_mockup_details import fetch_mockup_details
-from PySide6.QtCore import QTimer
-from utils.upload_selenium_class import ImageUploader
-import json
 from utils.upload_boto import S3Uploader
+from utils.upload_selenium_class import ImageUploader
 
 
 class LabeledLineEditWithCopy(QWidget):
@@ -999,15 +1003,14 @@ class WSA(QMainWindow):
             self.add_output_message("The upload automator is activated.","success")
             
     def ensure_folder_exists(self, folder_path):
-        """
-        Note for dev: os version was already ensured. 
-        """
-        folder_path = self.pics_path_widget.text()
-        # if no folder exist, add one
-        if not os.path.exists(folder_path):
-            os.makedirs(folder_path)
-            self.add_output_message(f"No folder detected. Created folder automatically.","info")
-        # if yes, pass
+        try:
+            if not os.path.exists(folder_path):
+                os.makedirs(folder_path)
+                self.add_output_message("No folder detected. Created folder automatically.","info")
+        except OSError as e:
+            self.add_output_message(f"Error creating folder: {e}", "error")
+            return False
+        return True
         
     def detect_var_records(self,folder_path) -> bool:
         """

@@ -123,11 +123,11 @@ def extract_url(text: str) -> list:
     """
     Extracts URLs from text that are in an ordered list format (e.g., "1. https://abc.com").
 
-    Args:
-        text (str): The input text containing the URLs.
-
-    Returns:
-        list: A list of extracted URLs. Returns an empty list if no URLs are found.
+    参数:
+        text (str): 包含URL的文本，可以是字符串或字符串列表
+        
+    返回:
+        list: 提取的URL列表，已清理末尾标点符号
     """
     # If input is a list, join it into a single string
     if isinstance(text, list):

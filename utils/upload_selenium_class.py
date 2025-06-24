@@ -186,7 +186,7 @@ class ImageUploader:
         """
         # 确保已激活
         if not self.activated_status or not self.driver:
-            self.active()
+            self.activate()
             
         # 确保在上传页面
         if self.upload_url not in self.driver.current_url:
@@ -308,7 +308,14 @@ class ImageUploader:
             self.driver = None
             self.activated_status = False
             print("浏览器已关闭")
-            
+    
+    def __enter__(self):
+        self.activate()
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+    
     def __del__(self) -> None:
         """
         析构函数，确保浏览器被关闭
