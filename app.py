@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                               QSizePolicy)
 from PySide6.QtCore import Qt, QTimer, QSize
 from PySide6.QtGui import QClipboard, QIcon
-
+from qt_material import apply_stylesheet
 # 本地模块导入
 from utils.parse import extract_url, segment, parse_faq_text
 from utils.fetch_mockup_details import fetch_mockup_details
@@ -108,7 +108,7 @@ class WSA(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Web Setup Automation")
-        self.setMinimumSize(1330, 795)  # 增加最小窗口大小
+        self.setMinimumSize(1330, 890)  # 增加最小窗口大小
         self.setWindowIcon(QIcon("resources/icon.png"))  # 可选：添加图标文件
         self.segments = []
 
@@ -234,6 +234,20 @@ class WSA(QMainWindow):
         # Try
         self.try_widget = LabeledLineEditWithCopy("Try")
         left_layout.addWidget(self.try_widget)
+        
+        # H1标题
+        self.h1_title_widget = LabeledLineEditWithCopy("H1标题")
+        left_layout.addWidget(self.h1_title_widget)
+        
+        # H1文案
+        self.h1_text_widget = LabeledLineEditWithCopy("H1文案")
+        left_layout.addWidget(self.h1_text_widget)
+
+        # 控制Discover和Explore中的内容
+        self.explore_discover_panel_button = QPushButton("Discover and Explore")
+        self.explore_discover_panel_button.clicked.connect(self.open_explore_discover_panel)
+        self.explore_discover_panel_button.setMinimumHeight(35)
+        left_layout.addWidget(self.explore_discover_panel_button)
         
         # 分隔线
         separator2 = QFrame()
@@ -512,6 +526,33 @@ class WSA(QMainWindow):
         # 自动滚动到底部
         scrollbar = self.output_box.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
+        
+    def open_explore_discover_panel(self):
+        """
+        打开一个新的pop up面板用于精确控制discover和explore，以节省app空间
+        """
+        # 创建一个新窗口
+        self.explore_discover_window = QMainWindow()
+        self.explore_discover_window.setWindowTitle("Explore & Discover Panel")
+        self.explore_discover_window.setFixedSize(800, 600)
+        
+        # 创建中心部件和布局
+        central_widget = QWidget()
+        self.explore_discover_window.setCentralWidget(central_widget)
+        layout = QVBoxLayout(central_widget)
+        
+        # 添加标题标签
+        title_label = QLabel("Explore & Discover Settings")
+        title_label.setStyleSheet("font-size: 16px; font-weight: bold; margin: 10px;")
+        layout.addWidget(title_label)
+        
+        # 添加一个占位标签
+        placeholder = QLabel("面板功能开发中...")
+        placeholder.setAlignment(Qt.AlignCenter)
+        layout.addWidget(placeholder)
+        
+        # 显示窗口
+        self.explore_discover_window.show()
 
     def browse_folder(self):
         self.add_output_message("Browsing for folder...", "info")
