@@ -75,15 +75,10 @@ make sure S3 configuration is set up
 ```bash
 aws configure
 ```
-- 使用环境变量
-```bash
-export AWS_ACCESS_KEY_ID=your-access-key-id
-export AWS_SECRET_ACCESS_KEY=your-secret-access-key
-export AWS_DEFAULT_REGION=your-region
-```
+
 - 或者在本地保存所有key信息，命名为`aws_config.json`
 
-`upload_selenium.py`使用selenium模仿登陆操作，一键自动完成图片的批量上传
+`upload_selenium_class.py`使用selenium模仿登陆操作，一键自动完成图片的批量上传
 
 - 使用cookie存储登陆信息
 - 首次需要手动登陆一次，后续可以自动完成
@@ -124,7 +119,7 @@ follow the instructions given inside the app. or go to this notion page for more
 - 点击activate激活bot
 - 点击upload将图片上传，自动获取链接，存储到本地
 
-存在两种方法进行图片上传
+存在以下几种方法进行图片上传：
 
 第一种：使用selenium创建一个bot自动上传并获取cdn链接
 1. 确保你已经安装了chrome
@@ -135,7 +130,10 @@ follow the instructions given inside the app. or go to this notion page for more
 5. 自动开始上传并保存最后的链接
 
 第二种：由于selenium的性能限制和网络问题，不是每次都可以使用自动化工具进行图片上传
-可以手动上传图片，然后保存到nas素材文件夹的cdn.json中。
+使用基于boto3的aws自动上传，需要在文件夹中配置`aws_config.json`。
+
+第三种：
+可以手动上传图片，然后保存到nas素材文件夹的`cdn.json`中。
 
 
 ### Important Notes

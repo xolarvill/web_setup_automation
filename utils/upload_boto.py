@@ -3,6 +3,7 @@ import uuid
 import logging
 import boto3
 import time
+import json
 
 # 配置日志，便于调试
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -38,7 +39,33 @@ class S3Uploader:
         # 2. AWS 配置文件 (~/.aws/credentials, ~/.aws/config)
         # 3. ECS/EC2 实例配置文件
         logging.info(f"Initializing S3 client for region: {self.region_name}")
-        self.s3_client = boto3.client("s3", region_name=self.region_name)
+        
+        try:
+            # 尝试使用默认配置初始化客户端
+            self.s3_client = boto3.client("s3", region_name=self.region_name)
+        except:
+            # 如果默认配置失败，尝试从项目根目录读取aws_config.json
+            try:
+                # 获取项目根目录路径
+                root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                config_path = os.path.join(root_dir, 'aws_config.json')
+                
+                # 读取配置文件
+                with open(config_path, 'r') as f:
+                    aws_config = json.load(f)
+                
+                # 使用配置文件中的凭证初始化客户端
+                self.s3_client = boto3.client(
+                    "s3",
+                    region_name=self.region_name,
+                    aws_access_key_id=aws_config.get('aws_access_key_id'),
+                    aws_secret_access_key=aws_config.get('aws_secret_access_key')
+                )
+                logging.info("Successfully initialized S3 client using aws_config.json")
+            except Exception as e:
+                logging.error(f"Failed to initialize S3 client using aws_config.json: {e}")
+                raise Exception("无法初始化S3客户端，请检查AWS配置")
+        
 
     def upload_file(self, file_path: str, s3_prefix: str = "page-img/") -> str | None:
         """

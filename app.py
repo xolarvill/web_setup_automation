@@ -346,6 +346,19 @@ class WSA(QMainWindow):
         separator_mid3.setFrameShadow(QFrame.Sunken)
         mid_layout.addWidget(separator_mid3)
         
+        
+        
+        self.mockup_list_1_name_widget = LabeledLineEditWithCopy("Cover name")
+        mid_layout.addWidget(self.mockup_list_1_name_widget)
+        self.mockup_list_1_number_widget = LabeledLineEditWithCopy("Cover #")
+        mid_layout.addWidget(self.mockup_list_1_number_widget)
+        self.mockup_list_1_cdn_widget = LabeledLineEditWithCopy("Cover cdn")
+        mid_layout.addWidget(self.mockup_list_1_cdn_widget)
+        self.mockup_list_2_number_widget = LabeledLineEditWithCopy("Cover more #")
+        mid_layout.addWidget(self.mockup_list_2_number_widget)
+        self.mockup_list_2_cdn_widget = LabeledLineEditWithCopy("Cover more cdn")
+        mid_layout.addWidget(self.mockup_list_2_cdn_widget)
+        
         # 分隔线
         separator_mid4 = QFrame()
         separator_mid4.setFrameShape(QFrame.HLine)
@@ -665,12 +678,12 @@ class WSA(QMainWindow):
         # 获取关键字段
         view_text = self.view_widget.text().split(":")[0].strip()
         view_link_raw = self.view_widget.text().split(":")[1].strip()
-        view_link_spicy = f":{view_link_raw}"
+        view_link_spicy = f"{view_link_raw}"
         view_link = view_link_spicy
         
         try_text = self.try_widget.text().split(":")[0].strip()
         try_link_raw = self.try_widget.text().split(":")[1].strip() 
-        try_link_spicy = f":{try_link_raw}"
+        try_link_spicy = f"{try_link_raw}"
         try_link = try_link_spicy
         
         breadcrumb = self.keywords_widget.text()
@@ -801,59 +814,63 @@ class WSA(QMainWindow):
         step3_cdn = self.step3_cdn_widget.text()
         
         part5 = [line for line in self.segments[4].splitlines() if line.strip()]
-        part5_title = part5[0]
-        part5_step1_a = part5[1]
-        part5_step1_b = part5[2]
+        part5_title = part5[0].strip()
+        part5_step1_a = part5[1].strip()
+        part5_step1_b = part5[2].strip()
         
-        part5_step2_a = part5[3]
-        part5_step2_b = part5[4]
+        part5_step2_a = part5[3].strip()
+        part5_step2_b = part5[4].strip()
         
-        part5_step3_a = part5[5]
-        part5_step3_b = part5[6]
+        part5_step3_a = part5[5].strip()
+        part5_step3_b = part5[6].strip()
         
         
-        part6 = self.segments[5].splitlines()
+        part6 = [line for line in self.segments[5].splitlines() if line.strip()]
+        print(part6)
         part6_1_feature_cdn = self.feature1_cdn_widget.text()
         part6_2_feature_cdn = self.feature2_cdn_widget.text()
         part6_3_feature_cdn = self.feature3_cdn_widget.text()
         part6_4_feature_cdn = self.feature4_cdn_widget.text()
         
+        print(part6)
+        
         part6_title = part6[0]
         
-        part6_1_title = part6[1]
-        part6_1_a = part6[2]
-        part6_1_b = part6[3]
+        part6_1_title = part6[1].strip()
+        part6_1_a = part6[2].strip()
+        part6_1_b = part6[3].strip()
         
-        part6_2_title = part6[5]
-        part6_2_a = part6[6]
-        part6_2_b = part6[7]
+        part6_2_title = part6[5].strip()
+        part6_2_a = part6[6].strip()
+        part6_2_b = part6[7].strip()
         
-        part6_3_title = part6[9]
-        part6_3_a = part6[10]
-        part6_3_b = part6[11]
+        part6_3_title = part6[9].strip()
+        part6_3_a = part6[10].strip()
+        part6_3_b = part6[11].strip()
         
-        part6_4_title = part6[13]
-        part6_4_a = part6[14]
-        part6_4_b = part6[15]
+        part6_4_title = part6[13].strip()
+        part6_4_a = part6[14].strip()
+        print(part6_4_a)
+        part6_4_b = part6[15].strip()
         
         # FAQ环节
         part7 = self.segments[6]
         part7_block = parse_faq_text(part7)
         
-        part7_q1 = part7_block[0]['question']
-        part7_a1 = part7_block[0]['answer']
+        part7_q1 = part7_block[0]['question'].strip()
+        part7_a1 = part7_block[0]['answer'].strip()
         
-        part7_q2 = part7_block[1]['question']
-        part7_a2 = part7_block[1]['answer']
+        part7_q2 = part7_block[1]['question'].strip()
+        part7_a2 = part7_block[1]['answer'].strip()
         
-        part7_q3 = part7_block[2]['question']
-        part7_a3 = part7_block[2]['answer']
+        part7_q3 = part7_block[2]['question'].strip()
+        part7_a3 = part7_block[2]['answer'].strip()
         
-        part7_q4 = part7_block[3]['question']
-        part7_a4 = part7_block[3]['answer']
+        part7_q4 = part7_block[3]['question'].strip()
+        part7_a4 = part7_block[3]['answer'].strip()
         
-        part7_q5 = part7_block[4]['question']
-        part7_a5 = part7_block[4]['answer']
+        part7_q5 = part7_block[4]['question'].strip()
+        part7_a5 = part7_block[4]['answer'].strip()
         
         part8_text = self.segments[7].splitlines()[0]
         
@@ -950,13 +967,16 @@ class WSA(QMainWindow):
 
         # 替换所有{{key}}为对应值
         for key, value in replace_dict.items():
+            if isinstance(value, str):
+                # 使用json.dumps正确处理JSON字符串中的特殊字符
+                value = json.dumps(value)[1:-1]  # 去掉json.dumps添加的外层引号
             template_str = template_str.replace(f"{{{{{key}}}}}", str(value))
 
         # 尝试解析为json
         try:
             json_obj = json.loads(template_str)
             json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
-            self.json_widget.setText(json_string)
+            # self.json_widget.setText(json_string)
             self.output_json = json_string
             QGuiApplication.clipboard().setText(json_string)
             self.add_output_message("JSON generated and copied to clipboard!", "success")
