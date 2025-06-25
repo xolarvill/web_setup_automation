@@ -3,23 +3,26 @@ import os
 import sys
 import json
 import time
-import platform
 from datetime import datetime
 
 # 第三方库导入
-from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-                              QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QTextEdit, 
-                              QFrame, QCheckBox,
-                              QSizePolicy)
+from PySide6.QtWidgets import (
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+    QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QTextEdit,
+    QFrame, QCheckBox, QSizePolicy
+)
 from PySide6.QtCore import Qt, QTimer, QSize
-from PySide6.QtGui import QClipboard, QIcon
+from PySide6.QtGui import QClipboard, QIcon, QGuiApplication
 from qt_material import apply_stylesheet
+
 # 本地模块导入
-from utils.parse import extract_url, segment, parse_faq_text
+from utils.parse import (
+    extract_url, segment, parse_faq_text,
+    extract_cutout_nextline, extract_cutout_currentline
+)
 from utils.fetch_mockup_details import fetch_mockup_details
 from utils.upload_boto import S3Uploader
 from utils.upload_selenium_class import ImageUploader
-
 
 class LabeledLineEditWithCopy(QWidget):
     """
@@ -134,6 +137,12 @@ class WSA(QMainWindow):
         
         # 1.1 first group，因为没有命名的必要
         first_group_layout = QVBoxLayout()
+        
+        # 预处理按理，按照剪切板中的标题名，确保在NAS中对应的文件夹们存在
+        self.prepare_folder_button = QPushButton("Prepare Folders")
+        self.prepare_folder_button.clicked.connect(self.prepare_folder)
+        self.prepare_folder_button.setMinimumHeight(35)
+        first_group_layout.addWidget(self.prepare_folder_button)
         
         # Page Type下拉菜单
         # 单独定义Page Type选项，在一个Hbox里放label + Combobox
@@ -1047,11 +1056,82 @@ class WSA(QMainWindow):
         try:
             if not os.path.exists(folder_path):
                 os.makedirs(folder_path)
-                self.add_output_message("No folder detected. Created folder automatically.","info")
+                self.add_output_message(f"No {folder_path} folder detected. Created folder automatically.","info")
         except OSError as e:
-            self.add_output_message(f"Error creating folder: {e}", "error")
+            self.add_output_message(f"Error creating {folder_path} folder: {e}", "error")
             return False
         return True
+    
+    def check_nas_connection(self) -> bool | None:
+        """
+        检查是否能连接到NAS服务器
+        """
+        # 检查/Volumes/shared/pacdora.com路径是否存在且可访问
+        if sys.platform.startswith('darwin'):
+            # 对于MacOS，路径通常是/Volumes/shared/pacdora.com
+            nas_path = "/Volumes/shared/pacdora.com"
+            try:
+                if os.path.exists(nas_path) and os.access(nas_path, os.R_OK):
+                    self.add_output_message("成功连接到NAS服务器", "success")
+                    return True
+                else:
+                    self.add_output_message("无法访问NAS服务器路径", "error") 
+                    return False
+            except Exception as e:
+                self.add_output_message(f"检查NAS连接时发生错误: {str(e)}", "error")
+                return False  
+        elif os.name == "nt":
+            # 对于Windows，路径通常是//nas01.tools.baoxiaohe.com/shared/pacdora.com
+            try:
+                if os.path.exists(nas_path) and os.access(nas_path, os.R_OK):
+                    self.add_output_message("成功连接到NAS服务器", "success")
+                    return True
+                else:
+                    self.add_output_message("无法访问NAS服务器路径", "error") 
+                    return False
+            except Exception as e:
+                self.add_output_message(f"检查NAS连接时发生错误: {str(e)}", "error")
+                return False
+        else:
+            self.add_output_message("unsupported os detected","warning")
+    
+    def prepare_folder(self):
+        """
+        如果批量复制了notion中所有标题名表格，此时会有一个n行1列的表格被复制，
+        我们需要将这个表格中的所有标题名提取出来，作为文件夹名.
+        判断系统，然后在对应的nas路径中创建对应的文件夹
+        """
+        # 从剪贴板获取数据
+        clipboard_text = QGuiApplication.clipboard().text()
+        # 假设数据是一个简单的列表，每个项目占一行
+        titles = clipboard_text.strip().split('\n')
+        self.add_output_message(f"Detected {len(titles)} titles from clipboard.","info")
+        
+        try:
+            self.add_output_message("Checking NAS connection.","info")
+            self.check_nas_connection()
+        except:
+            self.add_output_message("NAS connection check failed.","error")
+            return
+        
+        # 判断系统是Windows还是Mac
+        if sys.platform.startswith('darwin'):
+            # 对于MacOS，路径通常是/Volumes/shared/pacdora.com
+            self.add_output_message("MacOS detected.","info")
+            for title in titles:
+                folder_path = os.path.join("/Volumes/shared/pacdora.com",title.strip())
+                self.ensure_folder_exists(folder_path)
+                self.add_output_message(f"Created folder: {folder_path}", "success")
+        elif os.name == 'nt':
+            # 对于Windows，路径通常是//nas01.tools.baoxiaohe.com/shared/pacdora.com
+            self.add_output_message("Windows detected.","info")
+            for title in titles:
+                folder_path = os.path.join("//nas01.tools.baoxiaohe.com/shared/pacdora.com",title.strip())
+                self.ensure_folder_exists(folder_path)
+                self.add_output_message(f"Created folder: {folder_path}", "success")
+        else:
+            self.add_output_message(f"Detected unsupported system: {sys.platform}", "info")
+            raise Exceptions("Unknown system. Please check your system.")
         
     def detect_var_records(self,folder_path) -> bool:
         """
