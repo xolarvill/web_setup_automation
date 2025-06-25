@@ -111,7 +111,7 @@ class WSA(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Web Setup Automation")
-        self.setMinimumSize(1330, 890)  # 增加最小窗口大小
+        self.setMinimumSize(1330, 925)  # 增加最小窗口大小
         self.setWindowIcon(QIcon("resources/icon.png"))  # 可选：添加图标文件
         self.segments = []
 
@@ -138,11 +138,18 @@ class WSA(QMainWindow):
         # 1.1 first group，因为没有命名的必要
         first_group_layout = QVBoxLayout()
         
+        first_group_button_layout = QHBoxLayout()
         # 预处理按理，按照剪切板中的标题名，确保在NAS中对应的文件夹们存在
         self.prepare_folder_button = QPushButton("Prepare Folders")
         self.prepare_folder_button.clicked.connect(self.prepare_folder)
         self.prepare_folder_button.setMinimumHeight(35)
-        first_group_layout.addWidget(self.prepare_folder_button)
+        first_group_button_layout.addWidget(self.prepare_folder_button)
+        
+        self.it_is_a_button_for_fun = QPushButton("有点意思")
+        self.it_is_a_button_for_fun.setMinimumHeight(35)
+        first_group_button_layout.addWidget(self.it_is_a_button_for_fun)
+        
+        first_group_layout.addLayout(first_group_button_layout)
         
         # Page Type下拉菜单
         # 单独定义Page Type选项，在一个Hbox里放label + Combobox
@@ -172,31 +179,29 @@ class WSA(QMainWindow):
         self.single_image_checkbox = QCheckBox("传图单张")
         self.single_image_checkbox.setChecked(True)
         checkbox_layout.addWidget(self.single_image_checkbox)
-
-        self.scroll_to_mockup_checkbox = QCheckBox("下滑到样机")
-        self.scroll_to_mockup_checkbox.setChecked(True)
-        checkbox_layout.addWidget(self.scroll_to_mockup_checkbox)
         
         self.color_diy_checkbox = QCheckBox("颜色自定义")
         self.color_diy_checkbox.setChecked(True)
         checkbox_layout.addWidget(self.color_diy_checkbox)
         
-        # 1.2.2
-        another_checkbox_layout = QHBoxLayout()
-        
         self.color_label_diy_checkbox = QCheckBox("颜色标签自定义")
         self.color_label_diy_checkbox.setChecked(False)
-        another_checkbox_layout.addWidget(self.color_label_diy_checkbox)
-        
-        self.cover_label_diy_checkbox = QCheckBox("cover标题自定义")
-        self.cover_label_diy_checkbox.setChecked(False)
-        another_checkbox_layout.addWidget(self.cover_label_diy_checkbox)
-        
-        self.another_checkbox = QCheckBox("待实现功能")
-        self.another_checkbox.setChecked(False)
-        another_checkbox_layout.addWidget(self.another_checkbox)
-        
+        checkbox_layout.addWidget(self.color_label_diy_checkbox)
+    
         # 1.2.3
+        
+        mockup_list_layout = QVBoxLayout()
+        self.mockup_list_1_name_widget = LabeledLineEditWithCopy("Cover name")
+        mockup_list_layout.addWidget(self.mockup_list_1_name_widget)
+        self.mockup_list_1_number_widget = LabeledLineEditWithCopy("Cover #")
+        mockup_list_layout.addWidget(self.mockup_list_1_number_widget)
+        self.mockup_list_2_number_widget = LabeledLineEditWithCopy("Cover more #")
+        mockup_list_layout.addWidget(self.mockup_list_2_number_widget)
+        
+        # More按钮跳转
+        self.more_button_action_widget = LabeledLineEditWithCopy("More跳转")
+        self.more_button_action_widget.setText("#mockup-display") # 默认跳转到样机展示区
+        
         # 自定义颜色输入选项
         self.color_diy_choice_widget = LabeledLineEditWithCopy("颜色自定义", "Enter color hex codes'")
         self.color_diy_choice_widget.setText("#FFFFFF")  # 默认颜色
@@ -204,14 +209,12 @@ class WSA(QMainWindow):
         # 自定义颜色标签
         self.color_label_diy_choice_widget = LabeledLineEditWithCopy("颜色标签自定义", "Enter color label text'")
         
-        # 自定义封面标题标签
-        self.cover_label_diy_widget = LabeledLineEditWithCopy("Cover标题标签", "有自定义需求可以加入")
-        
         left_layout.addLayout(checkbox_layout)
-        left_layout.addLayout(another_checkbox_layout)
+        left_layout.addLayout(mockup_list_layout)
+        left_layout.addWidget(self.more_button_action_widget)
         left_layout.addWidget(self.color_diy_choice_widget)
         left_layout.addWidget(self.color_label_diy_choice_widget)
-        left_layout.addWidget(self.cover_label_diy_widget)
+
 
         # 分隔线，section输出栏
         separator1 = QFrame()
@@ -258,27 +261,6 @@ class WSA(QMainWindow):
         self.explore_discover_panel_button.setMinimumHeight(35)
         left_layout.addWidget(self.explore_discover_panel_button)
         
-        # 分隔线
-        separator2 = QFrame()
-        separator2.setFrameShape(QFrame.HLine)
-        separator2.setFrameShadow(QFrame.Sunken)
-        left_layout.addWidget(separator2)
-        
-        # 1.4 按钮
-        button_layout = QVBoxLayout()
-        
-        buttons = [
-            ("Update", self.update_action),
-            ("Generate JSON", self.generate_json_action)
-        ]
-        for text, callback in buttons:
-            btn = QPushButton(text)
-            btn.clicked.connect(callback)
-            btn.setMinimumHeight(35)
-            button_layout.addWidget(btn)
-            
-        left_layout.addLayout(button_layout)
-        
         # 添加弹性空间
         left_layout.addStretch()
         
@@ -304,6 +286,26 @@ class WSA(QMainWindow):
         #spacer = QWidget()
         #spacer.setFixedHeight(6)
         #mid_layout.addWidget(spacer)
+        
+        # 第一行按钮
+        mid_buttons_layout1 = QVBoxLayout()
+        buttons_row1 = [
+            ("Browse Folder", self.browse_folder),
+            ("Open Folder", self.open_folder)
+        ]
+        for text, callback in buttons_row1:
+            btn = QPushButton(text)
+            btn.clicked.connect(callback)
+            btn.setMinimumHeight(35)
+            mid_buttons_layout1.addWidget(btn)
+        
+        mid_layout.addLayout(mid_buttons_layout1)
+        
+        # 分隔线
+        separator_mid5 = QFrame()
+        separator_mid5.setFrameShape(QFrame.HLine)
+        separator_mid5.setFrameShadow(QFrame.Sunken)
+        mid_layout.addWidget(separator_mid5)
         
         # 2.1 pic path folder in NAS
         self.pics_path_widget = LabeledLineEditWithCopy("NAS path","Enter the path of your pics folder here. OR use the Browse button.")
@@ -373,16 +375,8 @@ class WSA(QMainWindow):
         separator_mid3.setFrameShadow(QFrame.Sunken)
         mid_layout.addWidget(separator_mid3)
         
-        
-        
-        self.mockup_list_1_name_widget = LabeledLineEditWithCopy("Cover name")
-        mid_layout.addWidget(self.mockup_list_1_name_widget)
-        self.mockup_list_1_number_widget = LabeledLineEditWithCopy("Cover #")
-        mid_layout.addWidget(self.mockup_list_1_number_widget)
         self.mockup_list_1_cdn_widget = LabeledLineEditWithCopy("Cover cdn")
         mid_layout.addWidget(self.mockup_list_1_cdn_widget)
-        self.mockup_list_2_number_widget = LabeledLineEditWithCopy("Cover more #")
-        mid_layout.addWidget(self.mockup_list_2_number_widget)
         self.mockup_list_2_cdn_widget = LabeledLineEditWithCopy("Cover more cdn")
         mid_layout.addWidget(self.mockup_list_2_cdn_widget)
         
@@ -392,27 +386,35 @@ class WSA(QMainWindow):
         separator_mid4.setFrameShadow(QFrame.Sunken)
         mid_layout.addWidget(separator_mid4)
         
-        # 第一行按钮
-        mid_buttons_layout1 = QHBoxLayout()
-        buttons_row1 = [
-            ("Browse Folder", self.browse_folder),
-            ("Open Folder", self.open_folder)
-        ]
-        for text, callback in buttons_row1:
-            btn = QPushButton(text)
-            btn.clicked.connect(callback)
-            btn.setMinimumHeight(35)
-            mid_buttons_layout1.addWidget(btn)
+        
+        
+        # 第二行按钮
+        mid_buttons_layout2 = QVBoxLayout()
+        
+        # update按钮
+        self.update_button = QPushButton("Update")
+        self.update_button.setMinimumHeight(35)
+        self.update_button.clicked.connect(self.update_action)
+        mid_buttons_layout2.addWidget(self.update_button)
         
         # 添加上传按钮
-        mid_buttons_layout2 = QHBoxLayout()
         self.upload_button = QPushButton("Upload")
         self.upload_button.clicked.connect(self.uploader_upload_folder)
         self.upload_button.setMinimumHeight(35)
         mid_buttons_layout2.addWidget(self.upload_button)
         
-        mid_layout.addLayout(mid_buttons_layout1)
+        # 第三行按钮
+        mid_buttons_layout3 = QHBoxLayout()
+        
+        # Generate生成按钮
+        self.generate_button = QPushButton("Generate JSON")
+        self.generate_button.setMinimumHeight(35)
+        self.generate_button.clicked.connect(self.generate_json_action)
+        mid_buttons_layout3.addWidget(self.generate_button)
+        
+        # 添加所有按钮
         mid_layout.addLayout(mid_buttons_layout2)
+        mid_layout.addLayout(mid_buttons_layout3)
     
         # 添加弹性空间
         mid_layout.addStretch()
@@ -592,7 +594,7 @@ class WSA(QMainWindow):
         folder_path = self.pics_path_widget.text().strip()
         
         if not folder_path or not os.path.isdir(folder_path):
-            self.add_output_message("Please select a valid folder path before opening. Maybe the folder is not created yet. Check the process in notion.", "warning")
+            self.add_output_message("Cannot open a null path. Please select a valid folder path before opening. Maybe the folder is not created yet. Check the process in notion.", "error")
             return
         
         try:
@@ -648,6 +650,9 @@ class WSA(QMainWindow):
                     # 更新界面字段
                     if "URL" in merged:
                         value = merged["URL"]
+                        # 简化处理mockup名称,去除mockup字样和连字符,并去除首尾空格
+                        mockup_list_name = value.strip().replace("mockup","").replace("-"," ")
+                        self.mockup_list_1_name_widget.setText(mockup_list_name.capitalize())
                         # 判断系统是Windows还是Mac
                         if sys.platform.startswith('darwin'):
                             self.pics_path_widget.setText(f"/Volumes/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
@@ -741,28 +746,25 @@ class WSA(QMainWindow):
         try_link = try_link_spicy
         
         breadcrumb = self.keywords_widget.text()
-        breadcrumb_lower = breadcrumb.title()
+        breadcrumb_lower = breadcrumb.capitalize()
         
         part2 = self.segments[1]
         part2_text = part2.splitlines()[1]
         
-        mockup_list_1_name = ''
-        mockup_list_1_number = ''
-        mockup_list_1_cdn = ''
+        mockup_list_1_name = self.mockup_list_1_name_widget.text()
+        mockup_list_1_number = self.mockup_list_1_number_widget.text()
+        mockup_list_1_cdn = self.mockup_list_1_cdn_widget.text()
         
-        mockup_list_2_number = ''
-        mockup_list_2_cdn = ''
+        mockup_list_2_number = self.mockup_list_2_number_widget.text()
+        mockup_list_2_cdn = self.mockup_list_2_cdn_widget.text()
         
         if self.single_image_checkbox.isChecked():
             multiple_upload = 'true'
         else:
             multiple_upload = 'false'
 
-        if self.scroll_to_mockup_checkbox.isChecked():
-            more_link = '#mockup-display' 
-        else:
-            more_link = ''
-            
+        more_link = self.more_button_action_widget.text()
+        
         if self.color_diy_checkbox.isChecked():
             cover_colors = 'true'
         else:
@@ -1057,6 +1059,8 @@ class WSA(QMainWindow):
             if not os.path.exists(folder_path):
                 os.makedirs(folder_path)
                 self.add_output_message(f"No {folder_path} folder detected. Created folder automatically.","info")
+            else:
+                self.add_output_message(f"Folder {folder_path} already exists.","info")
         except OSError as e:
             self.add_output_message(f"Error creating {folder_path} folder: {e}", "error")
             return False
@@ -1119,14 +1123,14 @@ class WSA(QMainWindow):
             # 对于MacOS，路径通常是/Volumes/shared/pacdora.com
             self.add_output_message("MacOS detected.","info")
             for title in titles:
-                folder_path = os.path.join("/Volumes/shared/pacdora.com",title.strip())
+                folder_path = os.path.join("/Volumes/shared/pacdora.com",title.strip().replace(" ", "-"))
                 self.ensure_folder_exists(folder_path)
                 self.add_output_message(f"Created folder: {folder_path}", "success")
         elif os.name == 'nt':
             # 对于Windows，路径通常是//nas01.tools.baoxiaohe.com/shared/pacdora.com
             self.add_output_message("Windows detected.","info")
             for title in titles:
-                folder_path = os.path.join("//nas01.tools.baoxiaohe.com/shared/pacdora.com",title.strip())
+                folder_path = os.path.join("//nas01.tools.baoxiaohe.com/shared/pacdora.com",title.strip().replace(" ", "-"))
                 self.ensure_folder_exists(folder_path)
                 self.add_output_message(f"Created folder: {folder_path}", "success")
         else:
@@ -1214,7 +1218,11 @@ class WSA(QMainWindow):
                     elif step_num == 3:
                         self.step3_cdn_widget.setText(cdn_url)
                         cdn_links['step3_cdn'] = cdn_url
-                    
+                
+                elif filename in ['cover1','cover2']:
+                    feature_num = {'cover1': 'cover_cdn', 'cover2': 'cover_more_cdn'}[filename]
+                    cdn_links[feature_num] = cdn_url
+                
                 elif filename in ['a', 'b', 'c', 'd']:
                     feature_num = {'a': 1, 'b': 2, 'c': 3, 'd': 4}[filename]
                     if feature_num == 1:

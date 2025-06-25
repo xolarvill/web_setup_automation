@@ -20,6 +20,7 @@ Future todos:
 
 ## for developers
 
+### set up
 first make sure `uv` is installed, if not:
 
 on windows
@@ -37,51 +38,31 @@ clone this repo. then `cd` into it and run in cmd
 uv sync
 ```
 
+set up your AWS S3 configure by running
+```bash
+aws configure
+```
+or you can save your secret information in the `aws_config.json`, which is read by the program if you have not set up the aws configure.
+
 run the app by
 ```bash
 uv run app.py
 ```
 
-or to your liking, use
+or to your liking, use (adjust to your scenerio if neccessary)
 ```bash
 python app.py
 ```
 
-then use `PyInstaller` and MAKEFILE to pack the whole project into a distributable file.
-- for windows, it is a `--onefile` exe.
-- for macos, it is app.
-
-build for all platforms
-```bash
-make build-all
-```
-
-build for win only
-```bash
-make build-win
-```
-
-build for mac only
-```bash
-make build-mac
-```
-
 Automated packaging and releasing is now made possible by github action. Workflow file is stored at `.github/workflows/build.yaml`.
 
-`upload_boto.py` contains a class to upload images and return CDN adress.
+### notes
 
-make sure S3 configuration is set up
-- 使用`awscli`的命令来控制
-```bash
-aws configure
-```
-
-- 或者在本地保存所有key信息，命名为`aws_config.json`
-
-`upload_selenium_class.py`使用selenium模仿登陆操作，一键自动完成图片的批量上传
-
-- 使用cookie存储登陆信息
-- 首次需要手动登陆一次，后续可以自动完成
+- `upload_boto.py` contains a class to upload images and return CDN adress.
+  - 或者在本地保存所有key信息，命名为`aws_config.json`
+- `upload_selenium_class.py`使用selenium模仿登陆操作，一键自动完成图片的批量上传
+  - 使用cookie存储登陆信息
+  - 首次需要手动登陆一次，后续可以自动完成
 
 ## for users
 
@@ -100,24 +81,41 @@ aws configure
 4. 点击`Update`全部自动更新
 
 还可以进行cdn图片一键上传
-1. 确保已经连接上NAS云盘（可以点击Open folder打开，手动查看）
-2. 点击Activate，初始化bot
-3. 点击upload
+1. 确保已经连接上NAS云盘
+2. 点击upload
+3. 如果已经上传过了，所有cdn链接都存放在nas中的`cdn.json`中
+
 
 ![Main app](resources/main_app.png)
 follow the instructions given inside the app. or go to this notion page for more details.
 
 **Configuration panel字段面板**
-- 点击update，自动从剪切板中获取已复制的docs文本进行解析，同时更新至上方输入框
-- 点击Generate JSON生成JSON文件，所有信息以文本框展示的为基准
+- 选择`Type`
+- 调整`Title`，`Meta Description`，`Keywords`等其他配置参数
+- 点击`discover and explore`打开一个新面板，编辑更详细的dicover和explore细节
+- `More跳转`默认是#mockup-display
+
 
 **CDN panel图片链接面板**
 - 点击browse folder打开文件管理器定位图片（此时文件夹默认定位在NAS网盘pacdora.com文件中），也可以在上方输入框中手动输入
 ![Now works on mac](resources/browse_button_on_mac.png)
 （macos用户也可以直接打开了）
 - 点击open folder可以查看已定位的图片文件夹（需要连接到NAS网络）
-- 点击activate激活bot
-- 点击upload将图片上传，自动获取链接，存储到本地
+- 点击upload将文件夹内图片上传，自动获取链接，存储到本地
+
+图片文件夹中图片的命名存在着一定规律：
+- cover相关的图片命名为
+  - 第一个封面：cover1
+  - 第二个封面：cover2
+- 设计步骤
+  - step1: 1
+  - step2: 2
+  - step3: 3
+- feature图片（或者其他名字，我并不是很清楚
+  - feature1: a
+  - feature2: b
+  - feature3: c
+  - feature4: d
 
 存在以下几种方法进行图片上传：
 
@@ -125,8 +123,7 @@ follow the instructions given inside the app. or go to this notion page for more
 1. 确保你已经安装了chrome
 2. 更新相应链接
 3. 使用open folder功能打开文件进行核查（推荐在第一次使用时进行）
-4. 在使用activate后，进行登陆
-![sel](resources/upload_selenium.png)
+4. 在使用activate后，进行登陆![sel](resources/upload_selenium.png)
 5. 自动开始上传并保存最后的链接
 
 第二种：由于selenium的性能限制和网络问题，不是每次都可以使用自动化工具进行图片上传
@@ -134,6 +131,16 @@ follow the instructions given inside the app. or go to this notion page for more
 
 第三种：
 可以手动上传图片，然后保存到nas素材文件夹的`cdn.json`中。
+- 这种方法适合二次图片修改
+- 可以通过删除该文件，重新上传所有图片（适合全部图片都要修改）
+
+**Program Output结果信息面板**
+输出所有程序运行得到的信息，其中信息可以分类为
+- info
+- success
+- warning
+- error
+- 其他
 
 
 ### Important Notes
