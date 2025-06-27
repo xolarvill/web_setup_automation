@@ -1859,7 +1859,7 @@
                                                     },
                                                     {
                                                         "key": "has-cover-color",
-                                                        "value": "true"
+                                                        "value": "{{has_cover_color}}"
                                                     },
                                                     {
                                                         "key": "cover-colors",

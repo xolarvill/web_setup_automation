@@ -247,6 +247,11 @@ class WSA(QMainWindow):
         self.try_widget = LabeledLineEditWithCopy("Try")
         left_layout.addWidget(self.try_widget)
         
+        separatora = QFrame()
+        separatora.setFrameShape(QFrame.HLine)
+        separatora.setFrameShadow(QFrame.Sunken)
+        left_layout.addWidget(separatora)
+        
         # H1标题
         self.h1_title_widget = LabeledLineEditWithCopy("H1标题")
         left_layout.addWidget(self.h1_title_widget)
@@ -254,6 +259,9 @@ class WSA(QMainWindow):
         # H1文案
         self.h1_text_widget = LabeledLineEditWithCopy("H1文案")
         left_layout.addWidget(self.h1_text_widget)
+        
+        self.whole_page_background_color_widget = LabeledLineEditWithCopy("页面配色")
+        left_layout.addWidget(self.whole_page_background_color_widget)
 
         # 控制Discover和Explore中的内容
         self.explore_discover_panel_button = QPushButton("Discover and Explore")
@@ -375,10 +383,6 @@ class WSA(QMainWindow):
         separator_mid3.setFrameShadow(QFrame.Sunken)
         mid_layout.addWidget(separator_mid3)
         
-        self.mockup_list_1_cdn_widget = LabeledLineEditWithCopy("Cover cdn")
-        mid_layout.addWidget(self.mockup_list_1_cdn_widget)
-        self.mockup_list_2_cdn_widget = LabeledLineEditWithCopy("Cover more cdn")
-        mid_layout.addWidget(self.mockup_list_2_cdn_widget)
         
         # 分隔线
         separator_mid4 = QFrame()
@@ -721,18 +725,13 @@ class WSA(QMainWindow):
             self.add_output_message("Clipboard is empty or does not contain text.", "warning")
         
     def generate_json_action(self):
+        if self.page_type.currentText() == 'Mockup tool':
+            self.generate_json_action_mockup_tools()
+        elif self.page_type.currentText() == 'Landing page':
+            self.generate_json_action_landing_page()
+        
+    def generate_json_action_mockup_tools(self):
         self.add_output_message("Generating JSON output...", "info")
-        
-        # Check if all required fields are filled
-        required_fields = [
-            (self.pics_path_widget.text().strip(), "Pictures Path"),
-        ]
-        
-        missing_fields = [field_name for field_value, field_name in required_fields if not field_value]
-        
-        if missing_fields:
-            self.add_output_message(f"Missing required fields: {', '.join(missing_fields)}", "warning")
-            return
         
         # 获取关键字段
         view_text = self.view_widget.text().split(":")[0].strip()
@@ -753,10 +752,10 @@ class WSA(QMainWindow):
         
         mockup_list_1_name = self.mockup_list_1_name_widget.text()
         mockup_list_1_number = self.mockup_list_1_number_widget.text()
-        mockup_list_1_cdn = self.mockup_list_1_cdn_widget.text()
+        mockup_list_1_cdn = self.cover_cdn_widget.text()
         
         mockup_list_2_number = self.mockup_list_2_number_widget.text()
-        mockup_list_2_cdn = self.mockup_list_2_cdn_widget.text()
+        mockup_list_2_cdn = self.cover_more_cdn_widget.text()
         
         if self.single_image_checkbox.isChecked():
             multiple_upload = 'true'
@@ -766,9 +765,11 @@ class WSA(QMainWindow):
         more_link = self.more_button_action_widget.text()
         
         if self.color_diy_checkbox.isChecked():
-            cover_colors = 'true'
+            has_cover_color = 'true'
+            cover_colors = self.color_diy_choice_widget.text()
         else:
-            cover_colors = 'false'
+            has_cover_color = 'false'
+            cover_colors = ''
         
         part3 = self.segments[2].splitlines()
         part3_title = part3[0]
@@ -1039,9 +1040,146 @@ class WSA(QMainWindow):
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
             
+    def generate_json_action_landing_page(self):
+        self.add_output_message("Generating JSON output...", "info")
+        
+        try:
+            whole_back_ground_color = self.whole_page_background_color_widget.text()
+        except:
+            whole_back_ground_color = 'rgba(255, 255, 255, 1)'
+            self.add_output_message('Since no background color is provided, the default value is rgba(255, 255, 255, 1)','warning')
+        
+        hover_show_up_distance_range = '>5000,<10000'
+        
+        part1 = [line for line in self.segments[1].splitlines() if line.strip()]
+        part1_title = part1[0]
+        part1_text = part1[1]
+        
+        part2 = [line for line in self.segments[2].splitlines() if line.strip()]
+        part2_title = part2[0]
+        part2_step1_1 = part2[1]
+        part2_step1_2 = part2[3]
+        
+        part2_step2_1 = part2[4]
+        part2_step2_2 = part2[5]
+        
+        part2_step3_1 = part2[6]
+        part2_step3_2 = part2[7]
+        
+        part2_step1_cdn = self.step1_cdn_widget.text()
+        part2_step2_cdn = self.step2_cdn_widget.text()
+        part2_step3_cdn = self.step3_cdn_widget.text()
+        
+        
+        part3 = [line for line in self.segments[3].splitlines() if line.strip()]
+        part3_title = part3[0]
+        part3_1_1 = part3[1]
+        part3_1_2 = part3[2]
+        part3_1_3 = part3[3]
+        
+        part3_2_1 = part3[4]
+        part3_2_2 = part3[5]
+        part3_2_3 = part3[6]
+        
+        part3_3_1 = part3[7]
+        part3_3_2 = part3[8]
+        part3_3_3 = part3[9]
+        
+        part3_4_1 = part3[10]
+        part3_4_2 = part3[11]
+        part3_4_3 = part3[12]
+        
+        feature_1_cdn = self.feature1_cdn_widget.text()
+        feature_2_cdn = self.feature2_cdn_widget.text()
+        feature_3_cdn = self.feature3_cdn_widget.text()
+        feature_4_cdn = self.feature4_cdn_widget.text()
+        
+        part4 = self.segments[4]
+        
+        faq = parse_faq_text(part4)
+        
+        q1 = faq[0]['question'].strip()
+        a1 = faq[0]['answer'].strip()
+        q2 = faq[1]['question'].strip()
+        a2 = faq[1]['answer'].strip()
+        q3 = faq[2]['question'].strip()
+        a3 = faq[2]['answer'].strip()
+        q4 = faq[3]['question'].strip()
+        a4 = faq[3]['answer'].strip()
+        q5 = faq[4]['question'].strip()
+        a5 = faq[4]['answer'].strip()
+        
+        folder_path = self.pics_path_widget.text()
+        self.ensure_folder_exists(folder_path=folder_path)
+        
+        with open('landing.json','r') as f:
+            template_str = f.read()
+        
+        # 构建替换字典
+        
+        replace_dict = {
+            "whole_back_ground_color": whole_back_ground_color,
+            "hover_show_up_distance_range": hover_show_up_distance_range,
+            "part1_title": part1_title,
+            "part1_text": part1_text,
+            "part2_title": part2_title,
+            "part2_step1_1": part2_step1_1,
+            "part2_step1_2": part2_step1_2,
+            "part2_step2_1": part2_step2_1,
+            "part2_step2_2": part2_step2_2,
+            "part2_step3_1": part2_step3_1,
+            "part2_step3_2": part2_step3_2,
+            "part2_step1_cdn": part2_step1_cdn,
+            "part2_step2_cdn": part2_step2_cdn,
+            "part2_step3_cdn": part2_step3_cdn,
+            "part3_title": part3_title,
+            "part3_1_1": part3_1_1,
+            "part3_1_2": part3_1_2,
+            "part3_1_3": part3_1_3,
+            "part3_2_1": part3_2_1,
+            "part3_2_2": part3_2_2,
+            "part3_2_3": part3_2_3,
+            "part3_3_1": part3_3_1,
+            "part3_3_2": part3_3_2,
+            "part3_3_3": part3_3_3,
+            "part3_4_1": part3_4_1,
+            "part3_4_2": part3_4_2,
+            "part3_4_3": part3_4_3,
+            "feature_1_cdn": feature_1_cdn,
+            "feature_2_cdn": feature_2_cdn,
+            "feature_3_cdn": feature_3_cdn,
+            "feature_4_cdn": feature_4_cdn,
+            "q1": q1,
+            "a1": a1,
+            "q2": q2,
+            "a2": a2,
+            "q3": q3,
+            "a3": a3,
+            "q4": q4,
+            "a4": a4,
+            "q5": q5,
+            "a5": a5,
+        }
+        
+        # 替换所有{{key}}为对应值
+        for key, value in replace_dict.items():
+            if isinstance(value, str):
+                # 使用json.dumps正确处理JSON字符串中的特殊字符
+                value = json.dumps(value)[1:-1]  # 去掉json.dumps添加的外层引号
+            template_str = template_str.replace(f"{{{{{key}}}}}", str(value))
+
+        # 尝试解析为json
+        try:
+            json_obj = json.loads(template_str)
+            json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
+            # self.json_widget.setText(json_string)
+            self.output_json = json_string
+            QGuiApplication.clipboard().setText(json_string)
+            self.add_output_message("JSON generated and copied to clipboard!", "success")
+        except Exception as e:
+            self.add_output_message(f"Error generating JSON: {e}", "error")
         
             
-
     def current_time(self):
         return datetime.now().strftime("%H:%M:%S")
     
@@ -1135,7 +1273,7 @@ class WSA(QMainWindow):
                 self.add_output_message(f"Created folder: {folder_path}", "success")
         else:
             self.add_output_message(f"Detected unsupported system: {sys.platform}", "info")
-            raise Exceptions("Unknown system. Please check your system.")
+            raise Exception("Unknown system. Please check your system.")
         
     def detect_var_records(self,folder_path) -> bool:
         """
@@ -1166,17 +1304,21 @@ class WSA(QMainWindow):
         with open(f"{folder_path}//cdn.json","r") as f:
             cdn_json = json.load(f)
         # 提取json中的每一行内容并赋入widget
-        self.cover_cdn_widget.setText(cdn_json["cover_cdn"])
-        self.cover_more_cdn_widget.setText(cdn_json["cover_more_cdn"])
-        self.step1_cdn_widget.setText(cdn_json["step1_cdn"])
-        self.step2_cdn_widget.setText(cdn_json["step2_cdn"])
-        self.step3_cdn_widget.setText(cdn_json["step3_cdn"])
-        self.feature1_cdn_widget.setText(cdn_json["feature1_cdn"])
-        self.feature2_cdn_widget.setText(cdn_json["feature2_cdn"])
-        self.feature3_cdn_widget.setText(cdn_json["feature3_cdn"])
-        self.feature4_cdn_widget.setText(cdn_json["feature4_cdn"])
-        
-        self.add_output_message("Passing completed.","success")
+        try:
+            self.mockup_list_1_number_widget.setText(cdn_json["mockup_list_1_number"])
+            self.mockup_list_2_number_widget.setText(cdn_json["mockup_list_2_number"])
+            self.cover_cdn_widget.setText(cdn_json["cover_cdn"])
+            self.cover_more_cdn_widget.setText(cdn_json["cover_more_cdn"])
+            self.step1_cdn_widget.setText(cdn_json["step1_cdn"])
+            self.step2_cdn_widget.setText(cdn_json["step2_cdn"])
+            self.step3_cdn_widget.setText(cdn_json["step3_cdn"])
+            self.feature1_cdn_widget.setText(cdn_json["feature1_cdn"])
+            self.feature2_cdn_widget.setText(cdn_json["feature2_cdn"])
+            self.feature3_cdn_widget.setText(cdn_json["feature3_cdn"])
+            self.feature4_cdn_widget.setText(cdn_json["feature4_cdn"])
+            self.add_output_message("Passing completed.","success")
+        except Exception as e:
+            self.add_output_message(f"Passing cdn addresses failed: {str(e)}","error")
            
     def uploader_upload_folder(self):
         folder_path = self.pics_path_widget.text()
@@ -1218,7 +1360,32 @@ class WSA(QMainWindow):
                     elif step_num == 3:
                         self.step3_cdn_widget.setText(cdn_url)
                         cdn_links['step3_cdn'] = cdn_url
-                
+
+                # 新增处理 abc mockup 123456.png 命名格式
+                elif "mockup" in filename:
+                    # 解析文件名，假设格式为 "abc mockup 123456" 或 "abc mockup more 123456"
+                    parts = filename.replace("_"," ").split()
+                    # 查找"mockup"或"mockup more"的位置
+                    if "mockup" in parts:
+                        idx = parts.index("mockup")
+                        # 检查是否有"more"
+                        if idx + 1 < len(parts) and parts[idx + 1] == "more":
+                            # mockup more
+                            number = parts[-1] if parts[-1].isdigit() else ""
+                            cdn_links['cover_more_cdn'] = cdn_url
+                            self.cover_more_cdn_widget.setText(cdn_url)
+                            if number:
+                                self.mockup_list_2_number_widget.setText(number)
+                                cdn_links['mockup_list_2_number'] = number
+                        else:
+                            # mockup
+                            number = parts[-1] if parts[-1].isdigit() else ""
+                            cdn_links['cover_cdn'] = cdn_url
+                            self.cover_cdn_widget.setText(cdn_url)
+                            if number:
+                                self.mockup_list_1_number_widget.setText(number)
+                                cdn_links['mockup_list_1_number'] = number
+
                 elif filename in ['cover1','cover2']:
                     feature_num = {'cover1': 'cover_cdn', 'cover2': 'cover_more_cdn'}[filename]
                     cdn_links[feature_num] = cdn_url
@@ -1242,6 +1409,8 @@ class WSA(QMainWindow):
             template = {
                 "cover_cdn": "",
                 "cover_more_cdn": "",
+                "mockup_list_1_number": "",
+                "mockup_list_2_number": "",
                 "step1_cdn": "",
                 "step2_cdn": "",
                 "step3_cdn": "",

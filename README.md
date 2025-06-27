@@ -105,8 +105,8 @@ follow the instructions given inside the app. or go to this notion page for more
 
 图片文件夹中图片的命名存在着一定规律：
 - cover相关的图片命名为
-  - 第一个封面：cover1
-  - 第二个封面：cover2
+  - 第一个封面：green lantern mockup 515151
+  - 第二个封面：green lantern mockup more 191919
 - 设计步骤
   - step1: 1
   - step2: 2
