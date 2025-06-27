@@ -80,7 +80,7 @@
                                                 "href": "/tools"
                                             },
                                             {
-                                                "label": "{{breadcrumb}",
+                                                "label": "{{breadcrumb}}",
                                                 "href": ""
                                             }
                                         ],
@@ -1869,11 +1869,6 @@
                                                         "key": "more-link",
                                                         "value": "{{more_link}}",
                                                         "isNeedTranslate": false
-                                                    },
-                                                    {
-                                                        "key": "color-tite",
-                                                        "value": "Label Color",
-                                                        "isNeedTranslate": true
                                                     }
                                                 ]
                                             },
@@ -8881,7 +8876,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "url": "{part6_1_feature_cdn}}",
+                                                                "url": "{{part6_1_feature_cdn}}",
                                                                 "title": "{{part6_1_title}}",
                                                                 "alt": "{{part6_1_title}}",
                                                                 "isOpenAnimation": false,

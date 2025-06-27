@@ -260,7 +260,7 @@ class WSA(QMainWindow):
         self.h1_text_widget = LabeledLineEditWithCopy("H1文案")
         left_layout.addWidget(self.h1_text_widget)
         
-        self.whole_page_background_color_widget = LabeledLineEditWithCopy("页面配色")
+        self.whole_page_background_color_widget = LabeledLineEditWithCopy("页面配色",placeholder="形如rgba(123,345,789,1)")
         left_layout.addWidget(self.whole_page_background_color_widget)
 
         # 控制Discover和Explore中的内容
@@ -388,7 +388,7 @@ class WSA(QMainWindow):
         separator_mid4 = QFrame()
         separator_mid4.setFrameShape(QFrame.HLine)
         separator_mid4.setFrameShadow(QFrame.Sunken)
-        mid_layout.addWidget(separator_mid4)
+        # mid_layout.addWidget(separator_mid4)
         
         
         
@@ -503,7 +503,47 @@ class WSA(QMainWindow):
         self.output_json = ""
         
     def clear_output(self):
-        """清除输出框内容"""
+        """
+        1. 清除输出框内容
+        2. 将所有widget都设置为空白
+        """
+        # 需要清空的widget列表
+        to_clear = [
+            self.pics_path_widget,
+            self.title_widget, 
+            self.description_widget,
+            self.keywords_widget,
+            self.view_widget,
+            self.try_widget,
+            self.h1_title_widget,
+            self.h1_text_widget,
+            self.whole_page_background_color_widget,
+            self.mockup_list_1_name_widget,
+            self.mockup_list_1_number_widget,
+            self.mockup_list_2_number_widget,
+            self.more_button_action_widget,
+            self.color_diy_choice_widget,
+            self.color_label_diy_choice_widget,
+            self.file_path_widget,
+            self.cover_cdn_widget,
+            self.cover_more_cdn_widget,
+            self.step1_cdn_widget,
+            self.step2_cdn_widget,
+            self.step3_cdn_widget,
+            self.feature1_cdn_widget,
+            self.feature2_cdn_widget,
+            self.feature3_cdn_widget,
+            self.feature4_cdn_widget
+        ]
+        
+        # 清空所有widget内容
+        for item in to_clear:
+            item.setText("")
+            
+        self.more_button_action_widget.setText("#mockup-list")
+        self.color_diy_choice_widget.setText("#FFFFFF")
+        
+        # 清空输出框
         self.output_box.clear()
 
     def add_output_message(self, message, msg_type="info"):
@@ -622,6 +662,117 @@ class WSA(QMainWindow):
             self.add_output_message(f"Error opening folder: {e}", "error")
 
     def update_action(self):
+        type = self.page_type.currentText()
+        if type == "Mockup tool":
+            self.update_action_mockup_tool()
+        elif type == "Landing page":
+            self.update_action_landing_page()
+
+    def update_action_landing_page(self):
+        self.add_output_message("Processing clipboard content...", "info")
+        clipboard = QGuiApplication.clipboard()
+        clipboard_text = clipboard.text()
+        cutout_keywords_nextline = ["URL", "Title", "Meta Description", "Breadcrumb"]
+        cutout_keywords_currentline = ["View all", "Make a", "Design a", "Create a", "Custom a", "Customize a"]
+        
+        # 如果剪切板非空
+        if clipboard_text:
+            preview_start = clipboard_text[:50]
+            self.add_output_message(f"Clipboard content captured: {preview_start}...", "info")
+            
+            # 先解析关键词字段返回到field中
+            try:
+                dict_parsed1 = extract_cutout_nextline(text=clipboard_text, keywords=cutout_keywords_nextline)
+                dict_parse2 = extract_cutout_currentline(text=clipboard_text, keywords=cutout_keywords_currentline)
+                
+                if dict_parsed1 and dict_parse2:
+                    merged = dict_parsed1.copy()
+                    merged.update(dict_parse2)
+                    # 检查所有关键字段是否为空
+                    required_fields = ["URL", "Title", "Meta Description", "Breadcrumb", "View all", "Make a"]
+                    empty_fields = [field for field in required_fields if not merged.get(field) or (isinstance(merged.get(field), str) and merged.get(field).strip() == "")]
+                    
+                    if len(empty_fields) == len(required_fields):
+                        self.add_output_message("Parsing failed: All required fields are empty. Please check your input format.", "error")
+                    else:
+                        self.add_output_message("Article parsed successfully! Keywords detected and extracted.", "success")
+                    
+                    # 更新界面字段
+                    if "URL" in merged:
+                        value = merged["URL"]
+                        # 简化处理mockup名称,去除mockup字样和连字符,并去除首尾空格
+                        mockup_list_name = value.strip().replace("mockup","").replace("-"," ")
+                        self.mockup_list_1_name_widget.setText(mockup_list_name.capitalize())
+                        # 判断系统是Windows还是Mac
+                        if sys.platform.startswith('darwin'):
+                            self.pics_path_widget.setText(f"/Volumes/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
+                        elif os.name == 'nt':
+                            self.pics_path_widget.setText(f"//nas01.tools.baoxiaohe.com/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
+                        else:
+                            self.add_output_message(f"Detected system: {sys.platform}", "info")
+                        self.file_path_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
+
+                    if "Title" in merged:
+                        value = merged["Title"]
+                        self.title_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
+                    if "Meta Description" in merged:
+                        value = merged["Meta Description"]
+                        self.description_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
+                    if "Breadcrumb" in merged:
+                        value = merged["Breadcrumb"]
+                        self.keywords_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
+                    if "View all" in merged:
+                        value = merged["View all"]
+                        self.view_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
+                    if "Make a" in merged:
+                        value = merged["Make a"]
+                        # 如果"Make a"为空白，尝试用"Design a"或"Create a"中的非空值替代
+                        if (not value or (isinstance(value, str) and value.strip() == "")):
+                            if "Design a" in merged and merged["Design a"] and (not isinstance(merged["Design a"], str) or merged["Design a"].strip() != ""):
+                                value = merged["Design a"]
+                            elif "Create a" in merged and merged["Create a"] and (not isinstance(merged["Create a"], str) or merged["Create a"].strip() != ""):
+                                value = merged["Create a"]
+                            elif "Custom a" in merged and merged["Custom a"] and (not isinstance(merged["Custom a"], str) or merged["Custom a"].strip() != ""):
+                                value = merged["Custom a"]
+                            elif "Customize a" in merged and merged["Customize a"] and (not isinstance(merged["Customize a"], str) or merged["Customize a"].strip() != ""):
+                                value = merged["Customize a"]
+                        self.try_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
+                else:
+                    self.add_output_message("Parsing failed: No keywords detected. Please ensure you've copied the correct article. This could happen when the article is not correctly formatted. Go check it.", "error")
+                
+                # 补齐文件夹
+                folder_path = self.pics_path_widget.text()
+                self.ensure_folder_exists(folder_path=folder_path)
+                
+                # 判断是否存在cdn
+                cdn_records_exist = self.detect_cdn_records(folder_path=folder_path)
+                if cdn_records_exist:
+                    self.pass_cdn_records()
+                    self.add_output_message("Detected cdn records, auto fill.","succcess")
+                
+            except Exception as e:
+                self.add_output_message(f"Error parsing content: {e}", "error")
+            
+            # 解析本文，验证是否正确
+            try:
+                self.segments = segment(clipboard_text)
+                self.add_output_message(f"Text segmented into {len(self.segments)} parts.", "info")
+                if len(self.segments) != 5:
+                    self.add_output_message(f"Wrong number of segments: The number of segments is not 5 for {type}. Please check the input text. Maybe you added the wrong number of #. There should be 4 of them.", "error")
+                    html = [line for line in self.segments[0].splitlines() if line.strip()]
+                    self.h1_title_widget.setText(html[-2])
+                    self.h1_text_widget.setText(html[-1])
+                else:
+                    self.add_output_message("Text segmented successfully.", "success")
+                    
+            except Exception as e:
+                self.add_output_message(f"Error segmenting text: {e}", "error")
+        
+        # 如果剪切板为空      
+        else:
+            self.add_output_message("Clipboard is empty or does not contain text.", "warning")
+            
+    def update_action_mockup_tool(self):
         self.add_output_message("Processing clipboard content...", "info")
         
         clipboard = QGuiApplication.clipboard()
@@ -927,7 +1078,7 @@ class WSA(QMainWindow):
         part7_a4 = part7_block[3]['answer'].strip()
         
         part7_q5 = part7_block[4]['question'].strip()
-        part7_a5 = part7_block[4]['answer'].strip()
+        part7_a5 = part7_block[4]['answer'].replace("pricing page","<a class=\"pac-ui-editor-a\" href=\"/pricing\" rel=\"noopener noreferrer\" target=\"_self\">pricing</a>").strip()
         
         part8_text = self.segments[7].splitlines()[0]
         
@@ -954,6 +1105,7 @@ class WSA(QMainWindow):
             "mockup_list_2_cdn": mockup_list_2_cdn, 
             "multiple_upload": multiple_upload,
             "cover_colors": cover_colors,
+            "has_cover_color": has_cover_color,
             "more_link": more_link,
             "part3_title": part3_title,
             "part3_text": part3_text,
@@ -1044,9 +1196,10 @@ class WSA(QMainWindow):
         self.add_output_message("Generating JSON output...", "info")
         
         try:
-            whole_back_ground_color = self.whole_page_background_color_widget.text()
+            if self.whole_page_background_color_widget.text() is not None:
+                whole_page_background_color = self.whole_page_background_color_widget.text() 
         except:
-            whole_back_ground_color = 'rgba(255, 255, 255, 1)'
+            whole_page_background_color = 'rgba(255, 255, 255, 1)'
             self.add_output_message('Since no background color is provided, the default value is rgba(255, 255, 255, 1)','warning')
         
         hover_show_up_distance_range = '>5000,<10000'
@@ -1058,13 +1211,13 @@ class WSA(QMainWindow):
         part2 = [line for line in self.segments[2].splitlines() if line.strip()]
         part2_title = part2[0]
         part2_step1_1 = part2[1]
-        part2_step1_2 = part2[3]
+        part2_step1_2 = part2[2]
         
-        part2_step2_1 = part2[4]
-        part2_step2_2 = part2[5]
+        part2_step2_1 = part2[3]
+        part2_step2_2 = part2[4]
         
-        part2_step3_1 = part2[6]
-        part2_step3_2 = part2[7]
+        part2_step3_1 = part2[5]
+        part2_step3_2 = part2[6]
         
         part2_step1_cdn = self.step1_cdn_widget.text()
         part2_step2_cdn = self.step2_cdn_widget.text()
@@ -1107,7 +1260,8 @@ class WSA(QMainWindow):
         q4 = faq[3]['question'].strip()
         a4 = faq[3]['answer'].strip()
         q5 = faq[4]['question'].strip()
-        a5 = faq[4]['answer'].strip()
+        a5 = faq[4]['answer'].replace("pricing page","<a class=\"pac-ui-editor-a\" href=\"/pricing\" rel=\"noopener noreferrer\" target=\"_self\">pricing</a>").strip()
+        
         
         folder_path = self.pics_path_widget.text()
         self.ensure_folder_exists(folder_path=folder_path)
@@ -1118,7 +1272,7 @@ class WSA(QMainWindow):
         # 构建替换字典
         
         replace_dict = {
-            "whole_back_ground_color": whole_back_ground_color,
+            "whole_page_background_color": whole_page_background_color,
             "hover_show_up_distance_range": hover_show_up_distance_range,
             "part1_title": part1_title,
             "part1_text": part1_text,
@@ -1322,6 +1476,10 @@ class WSA(QMainWindow):
            
     def uploader_upload_folder(self):
         folder_path = self.pics_path_widget.text()
+        if folder_path == "/Volumes/shared/pacdora.com/" or "//nas01.tools.baoxiaohe.com/shared/pacdora.com":
+            self.add_output_message("You cannot upload this folder.","error")
+            raise ValueError("You cannot upload this folder.")
+
         self.ensure_folder_exists(folder_path=folder_path)
         if self.detect_cdn_records(folder_path=folder_path): # already uploaded and recorded
             self.add_output_message("already uploaded","info")
