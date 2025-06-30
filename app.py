@@ -2,7 +2,7 @@
 import os
 import sys
 import json
-import time
+import re
 from datetime import datetime
 
 # 第三方库导入
@@ -1034,13 +1034,11 @@ class WSA(QMainWindow):
         
         
         part6 = [line for line in self.segments[5].splitlines() if line.strip()]
-        print(part6)
+        
         part6_1_feature_cdn = self.feature1_cdn_widget.text()
         part6_2_feature_cdn = self.feature2_cdn_widget.text()
         part6_3_feature_cdn = self.feature3_cdn_widget.text()
         part6_4_feature_cdn = self.feature4_cdn_widget.text()
-        
-        print(part6)
         
         part6_title = part6[0]
         
@@ -1067,18 +1065,23 @@ class WSA(QMainWindow):
         
         part7_q1 = part7_block[0]['question'].strip()
         part7_a1 = part7_block[0]['answer'].strip()
+        part7_a1 = self.convert_numbered_list_to_html(part7_a1)
         
         part7_q2 = part7_block[1]['question'].strip()
         part7_a2 = part7_block[1]['answer'].strip()
+        part7_a2 = self.convert_numbered_list_to_html(part7_a2)
         
         part7_q3 = part7_block[2]['question'].strip()
         part7_a3 = part7_block[2]['answer'].strip()
+        part7_a3 = self.convert_numbered_list_to_html(part7_a3)
         
         part7_q4 = part7_block[3]['question'].strip()
         part7_a4 = part7_block[3]['answer'].strip()
+        part7_a4 = self.convert_numbered_list_to_html(part7_a4)
         
         part7_q5 = part7_block[4]['question'].strip()
-        part7_a5 = part7_block[4]['answer'].replace("pricing page","<a class=\"pac-ui-editor-a\" href=\"/pricing\" rel=\"noopener noreferrer\" target=\"_self\">pricing</a>").strip()
+        part7_a5 = re.sub(r'\b(pricing page|pricing)\b', r'<a class=\"pac-ui-editor-a\" href=\"/pricing\" rel=\"noopener noreferrer\" target=\"_self\">\1</a>', part7_block[4]['answer']).strip()
+        part7_a5 = self.convert_numbered_list_to_html(part7_a5)
         
         part8_text = self.segments[7].splitlines()[0]
         
@@ -1086,7 +1089,7 @@ class WSA(QMainWindow):
         self.ensure_folder_exists(folder_path = folder_path)
         
         # 读取模板内容
-        with open('temps/temp.json', 'r', encoding='utf-8') as f:
+        with open('temps/mockup_tool.json', 'r', encoding='utf-8') as f:
             template_str = f.read()
 
         # 构建替换字典
@@ -1253,15 +1256,23 @@ class WSA(QMainWindow):
         
         q1 = faq[0]['question'].strip()
         a1 = faq[0]['answer'].strip()
+        a1 = self.convert_numbered_list_to_html(a1)
+        
         q2 = faq[1]['question'].strip()
         a2 = faq[1]['answer'].strip()
+        a2 = self.convert_numbered_list_to_html(a2)
+        
         q3 = faq[2]['question'].strip()
         a3 = faq[2]['answer'].strip()
+        a3 = self.convert_numbered_list_to_html(a3)
+        
         q4 = faq[3]['question'].strip()
         a4 = faq[3]['answer'].strip()
-        q5 = faq[4]['question'].strip()
-        a5 = faq[4]['answer'].replace("pricing page","<a class=\"pac-ui-editor-a\" href=\"/pricing\" rel=\"noopener noreferrer\" target=\"_self\">pricing</a>").strip()
+        a4 = self.convert_numbered_list_to_html(a4)
         
+        q5 = faq[4]['question'].strip()
+        a5 = re.sub(r'\b(pricing page|pricing)\b', r'<a class=\"pac-ui-editor-a\" href=\"/pricing\" rel=\"noopener noreferrer\" target=\"_self\">\1</a>', faq[4]['answer']).strip()
+        a5 = self.convert_numbered_list_to_html(a5)
         
         folder_path = self.pics_path_widget.text()
         self.ensure_folder_exists(folder_path=folder_path)
@@ -1332,7 +1343,36 @@ class WSA(QMainWindow):
             self.add_output_message("JSON generated and copied to clipboard!", "success")
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
+    
+    def convert_numbered_list_to_html(self, text):
+        '''
+        识别是否存在潜在html有序列表，并将其转化为有序列表
+        '''
+        # 匹配以数字加点开头的行，例如 "1. 下载..."
+        pattern = r'(\d+\..+?)(?=\n\d+\.|\Z)'
         
+        # 查找所有匹配项
+        matches = re.findall(pattern, text, re.DOTALL)
+        
+        if not matches:
+            return text
+        
+        # 构建 ol 列表
+        ol_list_start = '<ol>'
+        ol_list_end = '</ol>'
+        list_items = ''
+        
+        for match in matches:
+            stripped = match.strip()
+            list_items += f'<li>{stripped}</li>\n'
+        
+        full_ol_list = ol_list_start + list_items + ol_list_end
+        
+        # 替换原文本中的原始列表部分
+        new_text = re.sub(r'\d+\..+?(\n|$)', '', text, flags=re.DOTALL)  # 删除原列表
+        new_text = new_text.rstrip('\n') + '\n' + full_ol_list
+        
+        return new_text
             
     def current_time(self):
         return datetime.now().strftime("%H:%M:%S")
@@ -1476,9 +1516,9 @@ class WSA(QMainWindow):
            
     def uploader_upload_folder(self):
         folder_path = self.pics_path_widget.text()
-        if folder_path == "/Volumes/shared/pacdora.com/" or "//nas01.tools.baoxiaohe.com/shared/pacdora.com":
-            self.add_output_message("You cannot upload this folder.","error")
-            raise ValueError("You cannot upload this folder.")
+        #if folder_path == "/Volumes/shared/pacdora.com/" or "//nas01.tools.baoxiaohe.com/shared/pacdora.com":
+            #self.add_output_message("You cannot upload this folder.","error")
+            #raise ValueError("You cannot upload this folder.")
 
         self.ensure_folder_exists(folder_path=folder_path)
         if self.detect_cdn_records(folder_path=folder_path): # already uploaded and recorded
