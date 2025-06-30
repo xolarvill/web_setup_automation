@@ -9080,9 +9080,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "{{view_text}}",
-                                                                "link": "{{view_link}}",
-                                                                "gtm": "ga-seo_tools_view_all",
+                                                                "text": "{{part6_1_button_text}}",
+                                                                "link": "{{part6_1_button_link}}",
+                                                                "gtm": "{{part6_1_button_gtm}}",
                                                                 "target": "_self",
                                                                 "colorType": "minor-2",
                                                                 "iconUrl": "",
@@ -9364,9 +9364,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "{{make_text}}",
-                                                                "link": "{{make_link}}",
-                                                                "gtm": "ga-seo_tools_try",
+                                                                "text": "{{part6_2_button_text}}",
+                                                                "link": "{{part6_2_button_link}}",
+                                                                "gtm": "{{part6_2_button_gtm}}",
                                                                 "target": "_blank",
                                                                 "colorType": "minor-2",
                                                                 "iconUrl": "",
@@ -9649,9 +9649,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "{{make_text}}",
-                                                                "link": "{{make_link}}",
-                                                                "gtm": "ga-seo_tools_try",
+                                                                "text": "{{part6_3_button_text}}",
+                                                                "link": "{{part6_3_button_link}}",
+                                                                "gtm": "{{part6_3_button_gtm}}",
                                                                 "target": "_blank",
                                                                 "colorType": "minor-2",
                                                                 "iconUrl": "",
@@ -9934,9 +9934,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "{{make_text}}",
-                                                                "link": "{{make_link}}",
-                                                                "gtm": "ga-seo_tools_try",
+                                                                "text": "{{part6_4_button_text}}",
+                                                                "link": "{{part6_4_button_link}}",
+                                                                "gtm": "{{part6_4_button_gtm}}",
                                                                 "target": "_blank",
                                                                 "colorType": "minor-2",
                                                                 "iconUrl": "",
@@ -10362,9 +10362,9 @@
                                                                         "width": "fit-content"
                                                                     },
                                                                     "globalProps": {
-                                                                        "text": "{{view_text}}",
-                                                                        "link": "{{view_link}}",
-                                                                        "gtm": "ga-seo_tools_view_all",
+                                                                        "text": "{{part6_1_button_text}}",
+                                                                        "link": "{{part6_1_button_link}}",
+                                                                        "gtm": "{{part6_1_button_gtm}}",
                                                                         "target": "_self",
                                                                         "colorType": "minor-2",
                                                                         "iconUrl": "",
@@ -10741,9 +10741,9 @@
                                                                         "width": "fit-content"
                                                                     },
                                                                     "globalProps": {
-                                                                        "text": "{{make_text}}",
-                                                                        "link": "{{make_link}}",
-                                                                        "gtm": "ga-seo_tools_try",
+                                                                        "text": "{{part6_2_button_text}}",
+                                                                        "link": "{{part6_2_button_link}}",
+                                                                        "gtm": "{{part6_2_button_gtm}}",
                                                                         "target": "_blank",
                                                                         "colorType": "minor-2",
                                                                         "iconUrl": "",
@@ -11219,9 +11219,9 @@
                                                                         "width": "fit-content"
                                                                     },
                                                                     "globalProps": {
-                                                                        "text": "{{make_text}}",
-                                                                        "link": "{{make_link}}",
-                                                                        "gtm": "ga-seo_tools_try",
+                                                                        "text": "{{part6_3_button_text}}",
+                                                                        "link": "{{part6_3_button_link}}",
+                                                                        "gtm": "{{part6_3_button_gtm}}",
                                                                         "target": "_blank",
                                                                         "colorType": "minor-2",
                                                                         "iconUrl": "",
@@ -11601,9 +11601,9 @@
                                                                         "width": "fit-content"
                                                                     },
                                                                     "globalProps": {
-                                                                        "text": "{{make_text}}",
-                                                                        "link": "{{make_link}}",
-                                                                        "gtm": "ga-seo_tools_try",
+                                                                        "text": "{{part6_4_button_text}}",
+                                                                        "link": "{{part6_4_button_link}}",
+                                                                        "gtm": "{{part6_4_button_gtm}}",
                                                                         "target": "_blank",
                                                                         "colorType": "minor-2",
                                                                         "iconUrl": "",

@@ -1045,19 +1045,55 @@ class WSA(QMainWindow):
         part6_1_title = part6[1].strip()
         part6_1_a = part6[2].strip()
         part6_1_b = part6[3].strip()
-        
+        part6_1_button = part6[4].strip()
+        # 根据给定的文案判断是try还是view，由于try的变种文案太多，所以用view来判断
+        if part6_1_button.startswith("View"):
+            part6_1_button_text = view_text
+            part6_1_button_link = view_link_spicy
+            part6_1_button_gtm = 'ga-seo_tools_view_all'
+        else:
+            part6_1_button_text = try_text
+            part6_1_button_link = try_link_spicy
+            part6_1_button_gtm = 'ga-seo_tools_try'
+
         part6_2_title = part6[5].strip()
         part6_2_a = part6[6].strip()
         part6_2_b = part6[7].strip()
+        part6_2_button = part6[8].strip()
+        if part6_2_button.startswith("View"):
+            part6_2_button_text = view_text
+            part6_2_button_link = view_link_spicy
+            part6_2_button_gtm = 'ga-seo_tools_view_all'
+        else:
+            part6_2_button_text = try_text
+            part6_2_button_link = try_link_spicy
+            part6_2_button_gtm = 'ga-seo_tools_try'
         
         part6_3_title = part6[9].strip()
         part6_3_a = part6[10].strip()
         part6_3_b = part6[11].strip()
+        part6_3_button = part6[12].strip()
+        if part6_3_button.startswith("View"):
+            part6_3_button_text = view_text
+            part6_3_button_link = view_link_spicy
+            part6_3_button_gtm = 'ga-seo_tools_view_all'
+        else:
+            part6_3_button_text = try_text
+            part6_3_button_link = try_link_spicy
+            part6_3_button_gtm = 'ga-seo_tools_try'
         
         part6_4_title = part6[13].strip()
         part6_4_a = part6[14].strip()
-        print(part6_4_a)
         part6_4_b = part6[15].strip()
+        part6_4_button = part6[16].strip()
+        if part6_4_button.startswith("View"):
+            part6_4_button_text = view_text
+            part6_4_button_link = view_link_spicy
+            part6_4_button_gtm = 'ga-seo_tools_view_all'
+        else:
+            part6_4_button_text = try_text
+            part6_4_button_link = try_link_spicy
+            part6_4_button_gtm = 'ga-seo_tools_try'
         
         # FAQ环节
         part7 = self.segments[6]
@@ -1152,18 +1188,30 @@ class WSA(QMainWindow):
             "part6_1_feature_cdn": part6_1_feature_cdn,
             "part6_1_a": part6_1_a,
             "part6_1_b": part6_1_b,
+            "part6_1_button_text" : part6_1_button_text,
+            "part6_1_button_link" : part6_1_button_link,
+            "part6_1_button_gtm" : part6_1_button_gtm,
             "part6_2_title": part6_2_title,
             "part6_2_feature_cdn": part6_2_feature_cdn,
             "part6_2_a": part6_2_a,
             "part6_2_b": part6_2_b,
+            "part6_2_button_text" : part6_2_button_text,
+            "part6_2_button_link" : part6_2_button_link,
+            "part6_2_button_gtm" : part6_2_button_gtm,
             "part6_3_title": part6_3_title,
             "part6_3_feature_cdn": part6_3_feature_cdn,
             "part6_3_a": part6_3_a,
             "part6_3_b": part6_3_b,
+            "part6_3_button_text" : part6_3_button_text,
+            "part6_3_button_link" : part6_3_button_link,
+            "part6_3_button_gtm" : part6_3_button_gtm,
             "part6_4_title": part6_4_title,
             "part6_4_feature_cdn": part6_4_feature_cdn,
             "part6_4_a": part6_4_a,
             "part6_4_b": part6_4_b,
+            "part6_4_button_text" : part6_4_button_text,
+            "part6_4_button_link" : part6_4_button_link,
+            "part6_4_button_gtm" : part6_4_button_gtm,
             "part7_q1": part7_q1,
             "part7_a1": part7_a1,
             "part7_q2": part7_q2,
