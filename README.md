@@ -64,6 +64,25 @@ Automated packaging and releasing is now made possible by github action. Workflo
   - 使用cookie存储登陆信息
   - 首次需要手动登陆一次，后续可以自动完成
 
+The `CollapsibleBox` is a reusable widget that can be used to create collapsible sections in the UI.
+
+```python
+# Create a collapsible box with a title
+collapsible_box = CollapsibleBox("My Collapsible Box")
+
+# Create a layout for the content of the box
+content_layout = QVBoxLayout()
+content_layout.addWidget(QLabel("This is the content of the box."))
+content_layout.addWidget(QPushButton("A button"))
+
+# Set the content layout for the box
+collapsible_box.setContentLayout(content_layout)
+
+# Add the collapsible box to your main layout
+main_layout.addWidget(collapsible_box)
+```
+
+
 ## for users
 
 ### 部署

@@ -9,9 +9,9 @@ from datetime import datetime
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QTextEdit,
-    QFrame, QCheckBox, QSizePolicy
+    QFrame, QCheckBox, QSizePolicy, QToolButton, QScrollArea
 )
-from PySide6.QtCore import Qt, QTimer, QSize
+from PySide6.QtCore import Qt, QTimer, QSize, QParallelAnimationGroup, QPropertyAnimation, QAbstractAnimation
 from PySide6.QtGui import QClipboard, QIcon, QGuiApplication
 from qt_material import apply_stylesheet
 
@@ -23,6 +23,114 @@ from utils.parse import (
 from utils.fetch_mockup_details import fetch_mockup_details
 from utils.upload_boto import S3Uploader
 from utils.upload_selenium_class import ImageUploader
+
+
+class CollapsibleBox(QWidget):
+    def __init__(self, title="", parent=None, parent_window=None):
+        super(CollapsibleBox, self).__init__(parent)
+        self.parent_window = parent_window
+        self.content_height = 0
+
+        self.toggle_button = QToolButton(
+            text=title, checkable=True, checked=False
+        )
+        self.toggle_button.setStyleSheet("QToolButton { border: none; }")
+        self.toggle_button.setToolButtonStyle(
+            Qt.ToolButtonTextBesideIcon
+        )
+        self.toggle_button.setArrowType(Qt.RightArrow)
+        self.toggle_button.pressed.connect(self.on_pressed)
+
+        self.toggle_animation = QParallelAnimationGroup(self)
+
+        self.content_area = QScrollArea(
+            maximumHeight=0, minimumHeight=0
+        )
+        self.content_area.setSizePolicy(
+            QSizePolicy.Expanding, QSizePolicy.Fixed
+        )
+        self.content_area.setFrameShape(QFrame.NoFrame)
+
+        lay = QVBoxLayout(self)
+        lay.setSpacing(0)
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(self.toggle_button)
+        lay.addWidget(self.content_area)
+
+        # Add animations for the box itself
+        self.toggle_animation.addAnimation(
+            QPropertyAnimation(self, b"minimumHeight")
+        )
+        self.toggle_animation.addAnimation(
+            QPropertyAnimation(self, b"maximumHeight")
+        )
+        self.toggle_animation.addAnimation(
+            QPropertyAnimation(self.content_area, b"maximumHeight")
+        )
+        # Add animation for the parent window if it exists
+        if self.parent_window:
+            self.window_animation = QPropertyAnimation(self.parent_window, b"size")
+            self.toggle_animation.addAnimation(self.window_animation)
+
+
+    def on_pressed(self):
+        checked = self.toggle_button.isChecked()
+        self.toggle_button.setArrowType(
+            Qt.DownArrow if not checked else Qt.RightArrow
+        )
+
+        # Set start/end values for window animation right before starting
+        if self.parent_window:
+            self.window_animation.setDuration(500)
+            current_size = self.parent_window.size()
+            if not checked:  # Expanding
+                self.window_animation.setStartValue(current_size)
+                self.window_animation.setEndValue(
+                    QSize(current_size.width(), current_size.height() + self.content_height)
+                )
+            else:  # Collapsing
+                # When running BACKWARD, it animates from END to START.
+                # We want to go from current_size to current_size - content_height.
+                # So, END should be current_size, and START should be current_size - content_height.
+                self.window_animation.setStartValue(
+                    QSize(current_size.width(), current_size.height() - self.content_height)
+                )
+                self.window_animation.setEndValue(current_size)
+
+        self.toggle_animation.setDirection(
+            QAbstractAnimation.Forward
+            if not checked
+            else QAbstractAnimation.Backward
+        )
+        self.toggle_animation.start()
+
+    def setContentLayout(self, layout):
+        # Clean up old layout
+        if self.content_area.layout() is not None:
+            QWidget().setLayout(self.content_area.layout())
+        
+        self.content_area.setLayout(layout)
+        self.content_height = layout.sizeHint().height()
+        
+        collapsed_height = (
+            self.sizeHint().height() - self.content_area.maximumHeight()
+        )
+        
+        # Stop any running animation before reconfiguring
+        self.toggle_animation.stop()
+
+        # Configure animations for the box itself
+        for i in range(3):
+            animation = self.toggle_animation.animationAt(i)
+            animation.setDuration(500)
+            animation.setStartValue(collapsed_height)
+            animation.setEndValue(collapsed_height + self.content_height)
+
+        # Configure the animation for the content area specifically
+        content_animation = self.toggle_animation.animationAt(2)
+        content_animation.setStartValue(0)
+        content_animation.setEndValue(self.content_height)
+
 
 class LabeledLineEditWithCopy(QWidget):
     """
@@ -111,7 +219,7 @@ class WSA(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Web Setup Automation")
-        self.setMinimumSize(1330, 925)  # 增加最小窗口大小
+        self.setMinimumSize(1330, 900)  # 增加最小窗口大小
         self.setWindowIcon(QIcon("resources/icon.png"))  # 可选：添加图标文件
         self.segments = []
 
@@ -133,8 +241,8 @@ class WSA(QMainWindow):
         # 添加标题
         left_title_label = QLabel("Configuration Panel")
         left_title_label.setStyleSheet("font-size: 16px; font-weight: bold; color: #2c3e50; background-color: transparent;")
-        left_layout.addWidget(left_title_label)
-        
+        # left_layout.addWidget(left_title_label)
+
         # 1.1 first group，因为没有命名的必要
         first_group_layout = QVBoxLayout()
         
@@ -216,7 +324,7 @@ class WSA(QMainWindow):
         left_layout.addWidget(self.color_label_diy_choice_widget)
 
 
-        # 分隔线，section输出栏
+        # 分隔���，section输出栏
         separator1 = QFrame()
         separator1.setFrameShape(QFrame.HLine)
         separator1.setFrameShadow(QFrame.Sunken)
@@ -252,16 +360,17 @@ class WSA(QMainWindow):
         separatora.setFrameShadow(QFrame.Sunken)
         left_layout.addWidget(separatora)
         
-        # H1标题
+        # Collapsible H1 and Style section
+        header_style_box = CollapsibleBox("Header & Style", parent_window=self)
+        header_style_layout = QVBoxLayout()
         self.h1_title_widget = LabeledLineEditWithCopy("H1标题")
-        left_layout.addWidget(self.h1_title_widget)
-        
-        # H1文案
+        header_style_layout.addWidget(self.h1_title_widget)
         self.h1_text_widget = LabeledLineEditWithCopy("H1文案")
-        left_layout.addWidget(self.h1_text_widget)
-        
+        header_style_layout.addWidget(self.h1_text_widget)
         self.whole_page_background_color_widget = LabeledLineEditWithCopy("页面配色",placeholder="形如rgba(123,345,789,1)")
-        left_layout.addWidget(self.whole_page_background_color_widget)
+        header_style_layout.addWidget(self.whole_page_background_color_widget)
+        header_style_box.setContentLayout(header_style_layout)
+        left_layout.addWidget(header_style_box)
 
         # 控制Discover和Explore中的内容
         self.explore_discover_panel_button = QPushButton("Discover and Explore")
@@ -276,9 +385,32 @@ class WSA(QMainWindow):
         vertical_separator1 = QFrame()
         vertical_separator1.setFrameShape(QFrame.VLine)
         vertical_separator1.setFrameShadow(QFrame.Sunken)
+
+        vertical_separator2 = QFrame()
+        vertical_separator2.setFrameShape(QFrame.VLine)
+        vertical_separator2.setFrameShadow(QFrame.Sunken)
         
         # 2. 中间面板 - 图片cdn地址
         mid_panel = QWidget()
+        mid_panel.setFixedWidth(490)
+
+        mid_layout = QVBoxLayout(mid_panel)
+        mid_layout.setSpacing(12)
+        mid_layout.setContentsMargins(20, 20, 20, 20)
+
+        # 标题
+        mid_title_label = QLabel("CDN Panel")
+        mid_title_label.setStyleSheet("font-size: 16px; font-weight: bold; color: #2c3e50; background-color: transparent;")
+        mid_layout.addWidget(mid_title_label)
+        
+        # 添加空白spacing 解决左右不平齐问题
+        #spacer = QWidget()
+        #spacer.setFixedHeight(6)
+        #mid_layout.addWidget(spacer)
+        
+        # 2. 中间面板 - 图片cdn地址
+        mid_panel = QFrame()
+        mid_panel.setFrameShape(QFrame.StyledPanel)
         mid_panel.setFixedWidth(490)
 
         mid_layout = QVBoxLayout(mid_panel)
@@ -424,7 +556,8 @@ class WSA(QMainWindow):
         mid_layout.addStretch()
         
         # 3. 右侧面板 - 输出区域
-        right_panel = QWidget()
+        right_panel = QFrame()
+        right_panel.setFrameShape(QFrame.StyledPanel)
         right_panel.setMinimumWidth(100)
         
         right_layout = QVBoxLayout(right_panel)
@@ -489,13 +622,13 @@ class WSA(QMainWindow):
         main_layout.addWidget(left_panel)
         main_layout.addWidget(vertical_separator1)
         main_layout.addWidget(mid_panel)
-        main_layout.addWidget(vertical_separator1)
+        main_layout.addWidget(vertical_separator2)
         main_layout.addWidget(right_panel)
         
         # 设置布局比例
         main_layout.setStretch(0, 0)  # 左侧面板固定宽度
-        main_layout.setStretch(1, 0)  # 中间面板可拉伸
-        main_layout.setStretch(2, 0)  # 右侧面板可拉伸
+        main_layout.setStretch(2, 0)  # 中间面板固定宽度
+        main_layout.setStretch(4, 1)  # 右侧面板可拉伸
         
         # 5. 杂项
         self.uploader = ImageUploader()
