@@ -23,11 +23,15 @@ class HorizontalCollapsibleTabs(QWidget):
     - 点击一个触发器时，在下方内容区域展开其对应内容。
     - 自动收起其他已展开的面板，保证只有一个面板处于展开状态。
     
+    参数:
+    - parent: QWidget, 父组件
+    - parent_window: QWidget, 主窗口引用(用于调整窗口大小)
+    - tab_height: int, 预设的标签页按钮高度，如果为0则自动计算
     ---
     使用示例：
     ```python
     # ... (in your main window setup)
-    tabs = HorizontalCollapsibleTabs()
+    tabs = HorizontalCollapsibleTabs(tab_height=35)
 
     # Tab 1
     content1 = QWidget()
@@ -35,17 +39,13 @@ class HorizontalCollapsibleTabs(QWidget):
     layout1.addWidget(QLabel("This is the content for Tab 1"))
     tabs.add_tab("Tab 1", content1)
 
-    # Tab 2
-    content2 = QWidget()
-    layout2 = QVBoxLayout(content2)
-    layout2.addWidget(QLabel("This is the content for Tab 2"))
-    tabs.add_tab("Tab 2", content2)
-
     # Add the tabs widget to your main layout
     main_layout.addWidget(tabs)
     """
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, parent_window=None, tab_height=0):
         super().__init__(parent)
+        self.parent_window = parent_window
+        self.tab_height = tab_height
         self.tabs = []
         self.current_index = -1
 
@@ -65,11 +65,14 @@ class HorizontalCollapsibleTabs(QWidget):
 
     def add_tab(self, title: str, widget: QWidget):
         """
-        添加一个新的标签页和其对应的内容小部件。
+        添加一个新��标签页和其对应的内容小部件。
         """
-        box = CollapsibleBox(title=title)
+        box = CollapsibleBox(title=title, parent_window=self.parent_window)
         box.setContentLayout(widget.layout())
         
+        if self.tab_height > 0:
+            box.toggle_button.setFixedHeight(self.tab_height)
+            
         self.tabs_layout.addWidget(box.toggle_button)
         self.content_layout.addWidget(box.content_area)
         
@@ -107,27 +110,17 @@ class CollapsibleBox(QWidget):
     - title: str, 折叠框标题
     - parent: QWidget, 父组件
     - parent_window: QWidget, 主窗口引用(用于调整窗口大小)
+    - button_height: int, 预设的按钮高度
     
     ```python
-    # Create a collapsible box with a title
-    collapsible_box = CollapsibleBox("My Collapsible Box")
-
-    # Create a layout for the content of the box
-    content_layout = QVBoxLayout()
-    content_layout.addWidget(QLabel("This is the content of the box."))
-    content_layout.addWidget(QPushButton("A button"))
-
-    # Set the content layout for the box
-    collapsible_box.setContentLayout(content_layout)
-
-    # Add the collapsible box to your main layout
-    main_layout.addWidget(collapsible_box)
+    # Create a collapsible box with a specific button height
+    collapsible_box = CollapsibleBox("My Box", button_height=40)
     ```
     
     """
     expanded = Signal()
 
-    def __init__(self, title="", parent=None, parent_window=None):
+    def __init__(self, title="", parent=None, parent_window=None, button_height=0):
         super(CollapsibleBox, self).__init__(parent)
         self.parent_window = parent_window
         self.content_height = 0
@@ -135,11 +128,15 @@ class CollapsibleBox(QWidget):
         self.toggle_button = QToolButton(
             text=title, checkable=True, checked=False
         )
+        if button_height > 0:
+            self.toggle_button.setFixedHeight(button_height)
+            
         self.toggle_button.setStyleSheet("QToolButton { border: none; }")
         self.toggle_button.setToolButtonStyle(
             Qt.ToolButtonTextBesideIcon
         )
         self.toggle_button.setArrowType(Qt.RightArrow)
+        self.toggle_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.toggle_button.pressed.connect(self.on_pressed)
 
         self.toggle_animation = QParallelAnimationGroup(self)
@@ -192,9 +189,6 @@ class CollapsibleBox(QWidget):
                     QSize(current_size.width(), current_size.height() + self.content_height)
                 )
             else:  # Collapsing
-                # When running BACKWARD, it animates from END to START.
-                # We want to go from current_size to current_size - content_height.
-                # So, END should be current_size, and START should be current_size - content_height.
                 self.window_animation.setStartValue(
                     QSize(current_size.width(), current_size.height() - self.content_height)
                 )

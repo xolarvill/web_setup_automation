@@ -4,6 +4,7 @@ import sys
 import json
 import re
 from datetime import datetime
+import random
 
 # 第三方库导入
 from PySide6.QtWidgets import (
@@ -11,7 +12,7 @@ from PySide6.QtWidgets import (
     QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QTextEdit,
     QFrame, QCheckBox, QSizePolicy, QToolButton, QScrollArea
 )
-from PySide6.QtCore import Qt, QTimer, QSize, QParallelAnimationGroup, QPropertyAnimation, QAbstractAnimation
+from PySide6.QtCore import Qt, QTimer, QSize, QParallelAnimationGroup, QPropertyAnimation, QAbstractAnimation, QPoint, QSequentialAnimationGroup
 from PySide6.QtGui import QClipboard, QIcon, QGuiApplication
 from qt_material import apply_stylesheet
 
@@ -23,13 +24,13 @@ from utils.parse import (
 from utils.fetch_mockup_details import fetch_mockup_details
 from utils.upload_boto import S3Uploader
 from utils.upload_selenium_class import ImageUploader
-from ui.elements import CollapsibleBox, LabeledLineEditWithCopy
+from ui.elements import CollapsibleBox, LabeledLineEditWithCopy, HorizontalCollapsibleTabs
 
 class WSA(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Web Setup Automation")
-        self.setMinimumSize(1330, 900)  # 增加最小窗口大小
+        self.setMinimumSize(1330, 820)  # 增加最小窗口大小
         self.setWindowIcon(QIcon("resources/icon.png"))  # 可选：添加图标文件
         self.segments = []
 
@@ -65,6 +66,7 @@ class WSA(QMainWindow):
         
         self.it_is_a_button_for_fun = QPushButton("有点意思")
         self.it_is_a_button_for_fun.setMinimumHeight(35)
+        self.it_is_a_button_for_fun.clicked.connect(self.on_fun_button_clicked)
         first_group_button_layout.addWidget(self.it_is_a_button_for_fun)
         
         first_group_layout.addLayout(first_group_button_layout)
@@ -120,17 +122,17 @@ class WSA(QMainWindow):
         self.more_button_action_widget.setText("#mockup-display") # 默认跳转到样机展示区
         
         # 自定义颜色输入选项
-        self.color_diy_choice_widget = LabeledLineEditWithCopy("颜色自定义", "Enter color hex codes'")
+        self.color_diy_choice_widget = LabeledLineEditWithCopy("颜色自定义", "输入HEX颜色代码，例如#FFFFFF")
         self.color_diy_choice_widget.setText("#FFFFFF")  # 默认颜色
         
         # DOM中一些用不太到的就用collapisble box包裹起来
         # 自定义颜色标签
-        other_dom_options = CollapsibleBox("其他DOM选项", parent_window=self)
+        other_dom_options = CollapsibleBox("其他DOM选项", parent_window=self, button_height=35)
         other_dom_options_layout = QVBoxLayout()
         
-        self.color_label_diy_choice_widget = LabeledLineEditWithCopy("颜色标签", "Enter color label text'")
+        self.color_label_diy_choice_widget = LabeledLineEditWithCopy("颜色标签", "输入颜色标签，例如Label color，注意首字母大写")
         
-        self.mockup_type_widget = LabeledLineEditWithCopy("Mockup类型","Mockup, Box, Customize...")
+        self.mockup_type_widget = LabeledLineEditWithCopy("Mockup类型","例如Mockup, Box, Customize...")
         self.mockup_type_widget.setText("Mockup")
         
         self.mockup_size_widget = LabeledLineEditWithCopy("DOM尺寸","输入DOM尺寸，如[[1,1,1],[2,2,2],[3,3,3]]")
@@ -188,23 +190,30 @@ class WSA(QMainWindow):
         separatora.setFrameShadow(QFrame.Sunken)
         left_layout.addWidget(separatora)
         
-        # Collapsible H1 and Style section
-        landing_page_options = CollapsibleBox("落地页管理", parent_window=self)
-        landing_page_options_layout = QVBoxLayout()
-        self.h1_title_widget = LabeledLineEditWithCopy("H1标题")
-        landing_page_options_layout.addWidget(self.h1_title_widget)
-        self.h1_text_widget = LabeledLineEditWithCopy("H1文案")
-        landing_page_options_layout.addWidget(self.h1_text_widget)
-        self.whole_page_background_color_widget = LabeledLineEditWithCopy("页面配色",placeholder="形如rgba(123,345,789,1)")
-        landing_page_options_layout.addWidget(self.whole_page_background_color_widget)
-        landing_page_options.setContentLayout(landing_page_options_layout)
-        left_layout.addWidget(landing_page_options)
+        # Create the new HorizontalCollapsibleTabs widget
+        advanced_options_tabs = HorizontalCollapsibleTabs(parent=self, parent_window=self, tab_height=35)
 
-        # 控制Discover和Explore中的内容
+        # Create and populate the "Landing Page" tab
+        landing_page_content = QWidget()
+        landing_page_layout = QVBoxLayout(landing_page_content)
+        self.h1_title_widget = LabeledLineEditWithCopy("H1标题")
+        landing_page_layout.addWidget(self.h1_title_widget)
+        self.h1_text_widget = LabeledLineEditWithCopy("H1文案")
+        landing_page_layout.addWidget(self.h1_text_widget)
+        self.whole_page_background_color_widget = LabeledLineEditWithCopy("页面配色", placeholder="形如rgba(123,345,789,1)")
+        landing_page_layout.addWidget(self.whole_page_background_color_widget)
+        advanced_options_tabs.add_tab("落地页管理", landing_page_content)
+
+        # Create and populate the "Discover/Explore" tab
+        discover_explore_content = QWidget()
+        discover_explore_layout = QVBoxLayout(discover_explore_content)
         self.explore_discover_panel_button = QPushButton("Discover and Explore")
         self.explore_discover_panel_button.clicked.connect(self.open_explore_discover_panel)
         self.explore_discover_panel_button.setMinimumHeight(35)
-        left_layout.addWidget(self.explore_discover_panel_button)
+        discover_explore_layout.addWidget(self.explore_discover_panel_button)
+        advanced_options_tabs.add_tab("Discover/Explore", discover_explore_content)
+
+        left_layout.addWidget(advanced_options_tabs)
         
         # 添加弹性空间
         left_layout.addStretch()
@@ -442,6 +451,49 @@ class WSA(QMainWindow):
         self.uploader = ImageUploader()
         self.aws_upload = S3Uploader()
         self.output_json = ""
+        
+    def on_fun_button_clicked(self):
+        """
+        一个有趣的按钮，用于与用户互动。
+        """
+        # 定义一些俏皮话
+        fun_phrases = [
+            "正在召唤神龙...许个愿吧！",
+            "别点了，再点我就要报警了！",
+            "恭喜你！你刚刚浪费了宝贵的0.5秒。",
+            "这个按钮感觉被冒犯了。",
+            "你知道吗？每一次点击，都有一只看不见的猫咪在空中翻滚。",
+            "按钮被点击了，但它决定今天罢工。",
+            "404: Fun Not Found.",
+            "正在下载更多乐趣...请稍候...下载失败。",
+            "你按得太用力了，我的虚拟肩膀好痛！",
+            "Biu~ 快乐光波发射！"
+        ]
+        
+        # 随机选择一条俏皮话并显示
+        phrase = random.choice(fun_phrases)
+        self.add_output_message(phrase, "info")
+        
+        # 创建一个抖动动画
+        animation = QSequentialAnimationGroup(self)
+        
+        start_pos = self.it_is_a_button_for_fun.pos()
+        
+        # 抖动动画序列
+        for i in range(4):
+            anim_right = QPropertyAnimation(self.it_is_a_button_for_fun, b"pos")
+            anim_right.setDuration(50)
+            anim_right.setStartValue(start_pos)
+            anim_right.setEndValue(start_pos + QPoint(5, 0))
+            animation.addAnimation(anim_right)
+            
+            anim_left = QPropertyAnimation(self.it_is_a_button_for_fun, b"pos")
+            anim_left.setDuration(50)
+            anim_left.setStartValue(start_pos + QPoint(5, 0))
+            anim_left.setEndValue(start_pos)
+            animation.addAnimation(anim_left)
+            
+        animation.start()
         
     def clear_output(self):
         """
@@ -1093,6 +1145,8 @@ class WSA(QMainWindow):
             "multiple_upload": multiple_upload,
             "cover_colors": cover_colors,
             "has_cover_color": has_cover_color,
+            "mockup_type" : mockup_type,
+            "has_size" : has_size,
             "more_link": more_link,
             "part3_title": part3_title,
             "part3_text": part3_text,

@@ -183,6 +183,8 @@ follow the instructions given inside the app. or go to this notion page for more
 - error
 - 其他
 
+### OP后台相关事项
+- `has-size`的选择直接影响了DOM右侧的界面会出现什么选项，例如Box会出现尺寸的选择，否则即使
 
 ### Important Notes
 
