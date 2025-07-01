@@ -23,197 +23,7 @@ from utils.parse import (
 from utils.fetch_mockup_details import fetch_mockup_details
 from utils.upload_boto import S3Uploader
 from utils.upload_selenium_class import ImageUploader
-
-
-class CollapsibleBox(QWidget):
-    def __init__(self, title="", parent=None, parent_window=None):
-        super(CollapsibleBox, self).__init__(parent)
-        self.parent_window = parent_window
-        self.content_height = 0
-
-        self.toggle_button = QToolButton(
-            text=title, checkable=True, checked=False
-        )
-        self.toggle_button.setStyleSheet("QToolButton { border: none; }")
-        self.toggle_button.setToolButtonStyle(
-            Qt.ToolButtonTextBesideIcon
-        )
-        self.toggle_button.setArrowType(Qt.RightArrow)
-        self.toggle_button.pressed.connect(self.on_pressed)
-
-        self.toggle_animation = QParallelAnimationGroup(self)
-
-        self.content_area = QScrollArea(
-            maximumHeight=0, minimumHeight=0
-        )
-        self.content_area.setSizePolicy(
-            QSizePolicy.Expanding, QSizePolicy.Fixed
-        )
-        self.content_area.setFrameShape(QFrame.NoFrame)
-
-        lay = QVBoxLayout(self)
-        lay.setSpacing(0)
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(self.toggle_button)
-        lay.addWidget(self.content_area)
-
-        # Add animations for the box itself
-        self.toggle_animation.addAnimation(
-            QPropertyAnimation(self, b"minimumHeight")
-        )
-        self.toggle_animation.addAnimation(
-            QPropertyAnimation(self, b"maximumHeight")
-        )
-        self.toggle_animation.addAnimation(
-            QPropertyAnimation(self.content_area, b"maximumHeight")
-        )
-        # Add animation for the parent window if it exists
-        if self.parent_window:
-            self.window_animation = QPropertyAnimation(self.parent_window, b"size")
-            self.toggle_animation.addAnimation(self.window_animation)
-
-
-    def on_pressed(self):
-        checked = self.toggle_button.isChecked()
-        self.toggle_button.setArrowType(
-            Qt.DownArrow if not checked else Qt.RightArrow
-        )
-
-        # Set start/end values for window animation right before starting
-        if self.parent_window:
-            self.window_animation.setDuration(500)
-            current_size = self.parent_window.size()
-            if not checked:  # Expanding
-                self.window_animation.setStartValue(current_size)
-                self.window_animation.setEndValue(
-                    QSize(current_size.width(), current_size.height() + self.content_height)
-                )
-            else:  # Collapsing
-                # When running BACKWARD, it animates from END to START.
-                # We want to go from current_size to current_size - content_height.
-                # So, END should be current_size, and START should be current_size - content_height.
-                self.window_animation.setStartValue(
-                    QSize(current_size.width(), current_size.height() - self.content_height)
-                )
-                self.window_animation.setEndValue(current_size)
-
-        self.toggle_animation.setDirection(
-            QAbstractAnimation.Forward
-            if not checked
-            else QAbstractAnimation.Backward
-        )
-        self.toggle_animation.start()
-
-    def setContentLayout(self, layout):
-        # Clean up old layout
-        if self.content_area.layout() is not None:
-            QWidget().setLayout(self.content_area.layout())
-        
-        self.content_area.setLayout(layout)
-        self.content_height = layout.sizeHint().height()
-        
-        collapsed_height = (
-            self.sizeHint().height() - self.content_area.maximumHeight()
-        )
-        
-        # Stop any running animation before reconfiguring
-        self.toggle_animation.stop()
-
-        # Configure animations for the box itself
-        for i in range(3):
-            animation = self.toggle_animation.animationAt(i)
-            animation.setDuration(500)
-            animation.setStartValue(collapsed_height)
-            animation.setEndValue(collapsed_height + self.content_height)
-
-        # Configure the animation for the content area specifically
-        content_animation = self.toggle_animation.animationAt(2)
-        content_animation.setStartValue(0)
-        content_animation.setEndValue(self.content_height)
-
-
-class LabeledLineEditWithCopy(QWidget):
-    """
-    带复制按钮的输入框class
-    ---
-    text()获取内容
-    setText()传入内容
-    set_dimensions()
-    turn_off_text_input()
-    """
-    def __init__(self, label_text="Label:", placeholder= "Click button on the right to copy", parent=None):
-        super().__init__(parent)
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0) # 保证无多余外边距
-        layout.setSpacing(8) # 控制label和输入框之间的间距
-
-        self.label = QLabel(label_text)
-        layout.addWidget(self.label)
-
-        # 输入框和按钮容器
-        input_container = QWidget()
-        input_container.setFixedWidth(350)
-        input_container.setFixedHeight(32)
-
-        self.line_edit = QLineEdit(input_container)
-        self.line_edit.setGeometry(0, 0, 290, 32)
-        if placeholder is not None:
-            self.line_edit.setPlaceholderText(placeholder)
-
-        self.copy_btn = QPushButton("📋", input_container)
-        self.copy_btn.setGeometry(295, 2, 50, 28)
-        self.copy_btn.setFocusPolicy(Qt.NoFocus)
-        self.copy_btn.setStyleSheet("""
-            QPushButton {
-            background-color: #E8B15C;
-            color: white;
-            border-radius: 6px;
-            font-weight: bold;
-            }
-            QPushButton:hover {
-            background-color: #D5AB56;
-            }
-        """)
-        def on_copy_clicked():
-            QGuiApplication.clipboard().setText(self.line_edit.text())
-            original_text = self.copy_btn.text()
-            original_style = self.copy_btn.styleSheet()
-            self.copy_btn.setText("☑️")
-            self.copy_btn.setStyleSheet("""
-            QPushButton {
-            background-color: #8FB236;
-            color: #666666;
-            border-radius: 6px;
-            font-weight: bold;
-            }
-            """)
-            self.copy_btn.setEnabled(False)
-            # 恢复按钮状态
-            QTimer.singleShot(800, lambda: (
-            self.copy_btn.setText(original_text),
-            self.copy_btn.setStyleSheet(original_style),
-            self.copy_btn.setEnabled(True)
-            ))
-        self.copy_btn.clicked.connect(on_copy_clicked)
-
-        layout.addWidget(input_container)
-
-    def text(self):
-        return self.line_edit.text()
-
-    def setText(self, text):
-        self.line_edit.setText(text)
-        
-    def set_dimensions(self,height: int, width: int):
-        self.line_edit.setFixedHeight(height)
-        self.line_edit.setFixedWidth(width)
-        # 不改变 self.copy_btn 尺寸
-        
-    def turn_off_text_input(self):
-        """禁用文本输入"""
-        self.line_edit.setReadOnly(True)
-        self.copy_btn.setEnabled(False)
-
+from ui.elements import CollapsibleBox, LabeledLineEditWithCopy
 
 class WSA(QMainWindow):
     def __init__(self):
@@ -296,8 +106,7 @@ class WSA(QMainWindow):
         self.color_label_diy_checkbox.setChecked(False)
         checkbox_layout.addWidget(self.color_label_diy_checkbox)
     
-        # 1.2.3
-        
+        # 1.3 DOM相关选项
         mockup_list_layout = QVBoxLayout()
         self.mockup_list_1_name_widget = LabeledLineEditWithCopy("Cover name")
         mockup_list_layout.addWidget(self.mockup_list_1_name_widget)
@@ -314,23 +123,42 @@ class WSA(QMainWindow):
         self.color_diy_choice_widget = LabeledLineEditWithCopy("颜色自定义", "Enter color hex codes'")
         self.color_diy_choice_widget.setText("#FFFFFF")  # 默认颜色
         
+        # DOM中一些用不太到的就用collapisble box包裹起来
         # 自定义颜色标签
-        self.color_label_diy_choice_widget = LabeledLineEditWithCopy("颜色标签自定义", "Enter color label text'")
+        other_dom_options = CollapsibleBox("其他DOM选项", parent_window=self)
+        other_dom_options_layout = QVBoxLayout()
+        
+        self.color_label_diy_choice_widget = LabeledLineEditWithCopy("颜色标签", "Enter color label text'")
+        
+        self.mockup_type_widget = LabeledLineEditWithCopy("Mockup类型","Mockup, Box, Customize...")
+        self.mockup_type_widget.setText("Mockup")
+        
+        self.mockup_size_widget = LabeledLineEditWithCopy("DOM尺寸","输入DOM尺寸，如[[1,1,1],[2,2,2],[3,3,3]]")
+        
+        self.mockup_default_size_widget = LabeledLineEditWithCopy("默认尺寸","选择第几个尺寸作为默认选项，如2")
+        
+        other_dom_options_layout.addWidget(self.color_label_diy_choice_widget)
+        other_dom_options_layout.addWidget(self.mockup_type_widget)
+        other_dom_options_layout.addWidget(self.mockup_size_widget)
+        other_dom_options_layout.addWidget(self.mockup_default_size_widget)
+        other_dom_options.setContentLayout(other_dom_options_layout)
         
         left_layout.addLayout(checkbox_layout)
         left_layout.addLayout(mockup_list_layout)
         left_layout.addWidget(self.more_button_action_widget)
         left_layout.addWidget(self.color_diy_choice_widget)
-        left_layout.addWidget(self.color_label_diy_choice_widget)
+        left_layout.addWidget(other_dom_options)
+
+        
 
 
-        # 分隔���，section输出栏
+        # 分隔section输出栏
         separator1 = QFrame()
         separator1.setFrameShape(QFrame.HLine)
         separator1.setFrameShadow(QFrame.Sunken)
         left_layout.addWidget(separator1)
         
-        # 1.3 输出字段
+        # 1.4 浏览器页面设置相关字段
         # 文件路径
         self.file_path_widget = LabeledLineEditWithCopy("文件路径")
         left_layout.addWidget(self.file_path_widget)
@@ -361,16 +189,16 @@ class WSA(QMainWindow):
         left_layout.addWidget(separatora)
         
         # Collapsible H1 and Style section
-        header_style_box = CollapsibleBox("Header & Style", parent_window=self)
-        header_style_layout = QVBoxLayout()
+        landing_page_options = CollapsibleBox("落地页管理", parent_window=self)
+        landing_page_options_layout = QVBoxLayout()
         self.h1_title_widget = LabeledLineEditWithCopy("H1标题")
-        header_style_layout.addWidget(self.h1_title_widget)
+        landing_page_options_layout.addWidget(self.h1_title_widget)
         self.h1_text_widget = LabeledLineEditWithCopy("H1文案")
-        header_style_layout.addWidget(self.h1_text_widget)
+        landing_page_options_layout.addWidget(self.h1_text_widget)
         self.whole_page_background_color_widget = LabeledLineEditWithCopy("页面配色",placeholder="形如rgba(123,345,789,1)")
-        header_style_layout.addWidget(self.whole_page_background_color_widget)
-        header_style_box.setContentLayout(header_style_layout)
-        left_layout.addWidget(header_style_box)
+        landing_page_options_layout.addWidget(self.whole_page_background_color_widget)
+        landing_page_options.setContentLayout(landing_page_options_layout)
+        left_layout.addWidget(landing_page_options)
 
         # 控制Discover和Explore中的内容
         self.explore_discover_panel_button = QPushButton("Discover and Explore")
@@ -392,25 +220,6 @@ class WSA(QMainWindow):
         
         # 2. 中间面板 - 图片cdn地址
         mid_panel = QWidget()
-        mid_panel.setFixedWidth(490)
-
-        mid_layout = QVBoxLayout(mid_panel)
-        mid_layout.setSpacing(12)
-        mid_layout.setContentsMargins(20, 20, 20, 20)
-
-        # 标题
-        mid_title_label = QLabel("CDN Panel")
-        mid_title_label.setStyleSheet("font-size: 16px; font-weight: bold; color: #2c3e50; background-color: transparent;")
-        mid_layout.addWidget(mid_title_label)
-        
-        # 添加空白spacing 解决左右不平齐问题
-        #spacer = QWidget()
-        #spacer.setFixedHeight(6)
-        #mid_layout.addWidget(spacer)
-        
-        # 2. 中间面板 - 图片cdn地址
-        mid_panel = QFrame()
-        mid_panel.setFrameShape(QFrame.StyledPanel)
         mid_panel.setFixedWidth(490)
 
         mid_layout = QVBoxLayout(mid_panel)
@@ -556,8 +365,7 @@ class WSA(QMainWindow):
         mid_layout.addStretch()
         
         # 3. 右侧面板 - 输出区域
-        right_panel = QFrame()
-        right_panel.setFrameShape(QFrame.StyledPanel)
+        right_panel = QWidget()
         right_panel.setMinimumWidth(100)
         
         right_layout = QVBoxLayout(right_panel)
@@ -1054,6 +862,13 @@ class WSA(QMainWindow):
         else:
             has_cover_color = 'false'
             cover_colors = ''
+           
+        mockup_type = self.mockup_type_widget.text()
+         
+        if mockup_type == 'Box':
+            has_size = 'true'
+        else:
+            has_size = 'false'
         
         part3 = self.segments[2].splitlines()
         part3_title = part3[0]

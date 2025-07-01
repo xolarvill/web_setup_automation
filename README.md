@@ -82,6 +82,28 @@ collapsible_box.setContentLayout(content_layout)
 main_layout.addWidget(collapsible_box)
 ```
 
+`HorizontalCollapsibleTab`是基于`CollapsibleBox`设计的水平排列的折叠面板切换器 + 垂直内容区域展示。
+
+```python
+# ... (in your main window setup)
+tabs = HorizontalCollapsibleTabs()
+
+# Tab 1
+content1 = QWidget()
+layout1 = QVBoxLayout(content1)
+layout1.addWidget(QLabel("This is the content for Tab 1"))
+tabs.add_tab("Tab 1", content1)
+
+# Tab 2
+content2 = QWidget()
+layout2 = QVBoxLayout(content2)
+layout2.addWidget(QLabel("This is the content for Tab 2"))
+tabs.add_tab("Tab 2", content2)
+
+# Add the tabs widget to your main layout
+main_layout.addWidget(tabs)
+```
+
 
 ## for users
 

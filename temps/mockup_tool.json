@@ -1831,11 +1831,11 @@
                                                     },
                                                     {
                                                         "key": "mockup-type",
-                                                        "value": "Mockup"
+                                                        "value": "{{mockup_type}}"
                                                     },
                                                     {
                                                         "key": "has-size",
-                                                        "value": "false"
+                                                        "value": "{{has_size}}"
                                                     },
                                                     {
                                                         "key": "has-mockup-material",
