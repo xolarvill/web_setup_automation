@@ -144,19 +144,83 @@ def extract_url(text: str) -> list:
     
     return urls
 
+import csv
+from typing import Dict, List, Any
+
+def parse_size_csv(file_path: str) -> Dict[str, List[Dict[str, Any]]]:
+    """
+    Parses a CSV file with mockup sizes, handling irregular format.
+
+    Args:
+        file_path (str): The path to the CSV file.
+
+    Returns:
+        Dict[str, List[Dict[str, Any]]]: A dictionary where keys are mockup names
+                                         and values are lists of size data.
+    """
+    sizes = {}
+    with open(file_path, mode='r', encoding='utf-8') as infile:
+        reader = csv.reader(infile)
+        header = next(reader)  # Skip header
+        
+        current_mockup_name = ""
+        for row in reader:
+            if not any(row) or len(row) < 5:  # Skip empty or malformed rows
+                continue
+
+            mockup_name = row[0].strip()
+            # Check for new mockup group, ignore comment-like entries
+            if mockup_name and not mockup_name.startswith('（'):
+                current_mockup_name = mockup_name
+                if current_mockup_name not in sizes:
+                    sizes[current_mockup_name] = []
+
+            # Process size string, removing quotes first
+            size_str = row[3].strip().strip('"')
+            if not size_str:
+                continue
+
+            try:
+                size_parts = [int(s.strip()) for s in size_str.split(',')]
+                
+                width = size_parts[0] if len(size_parts) > 0 else 0
+                height = size_parts[1] if len(size_parts) > 1 else 0
+                depth = size_parts[2] if len(size_parts) > 2 else 0
+
+                is_default = row[4].strip() == '默认值'
+
+                if current_mockup_name:
+                    sizes[current_mockup_name].append({
+                        'width': width,
+                        'height': height,
+                        'depth': depth,
+                        'is_default': is_default
+                    })
+            except ValueError:
+                # Ignore rows where size is not a valid number list
+                continue
+
+    return {k: v for k, v in sizes.items() if v} # Filter out empty entries
+
+
 # 示例用法
 if __name__ == "__main__":
-    str = '''
-        Browse more menu mockups now
-        https://www.pacdora.com/mockup-detail/clipboard-menu-mockup-911447
-        https://www.pacdora.com/mockup-detail/bifold-menu-card-mockup-911439
-        https://www.pacdora.com/mockup-detail/menu-mockup-911458
-        https://www.pacdora.com/mockup-detail/clipboard-mockup-911448
-        https://www.pacdora.com/mockup-detail/table-tent-mockup-911459
-        https://www.pacdora.com/mockup-detail/menu-mockup-911455
-        https://www.pacdora.com/mockup-detail/trifold-brochure-mockup-24200402
-        https://www.pacdora.com/mockup-detail/a4-flyer-mockup-608040
-        View all menu mockups
-        '''
-    result = extract_url(str)
-    print(result)
+    # str = '''
+    #     Browse more menu mockups now
+    #     https://www.pacdora.com/mockup-detail/clipboard-menu-mockup-911447
+    #     https://www.pacdora.com/mockup-detail/bifold-menu-card-mockup-911439
+    #     https://www.pacdora.com/mockup-detail/menu-mockup-911458
+    #     https://www.pacdora.com/mockup-detail/clipboard-mockup-911448
+    #     https://www.pacdora.com/mockup-detail/table-tent-mockup-911459
+    #     https://www.pacdora.com/mockup-detail/menu-mockup-911455
+    #     https://www.pacdora.com/mockup-detail/trifold-brochure-mockup-24200402
+    #     https://www.pacdora.com/mockup-detail/a4-flyer-mockup-608040
+    #     View all menu mockups
+    #     '''
+    # result = extract_url(str)
+    # print(result)
+    
+    # Test parse_size_csv
+    sizes = parse_size_csv('../size.csv')
+    import json
+    print(json.dumps(sizes, indent=2))

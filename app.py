@@ -19,7 +19,8 @@ from qt_material import apply_stylesheet
 # 本地模块导入
 from utils.parse import (
     extract_url, segment, parse_faq_text,
-    extract_cutout_nextline, extract_cutout_currentline
+    extract_cutout_nextline, extract_cutout_currentline,
+    parse_size_csv
 )
 from utils.fetch_mockup_details import fetch_mockup_details
 from utils.upload_boto import S3Uploader
@@ -136,6 +137,15 @@ class WSA(QMainWindow):
         self.mockup_type_widget = LabeledLineEditWithCopy("Mockup类型","例如Mockup, Box, Customize...")
         self.mockup_type_widget.setText("Mockup")
         
+        # Mockup Size Type ComboBox
+        mockup_size_type_layout = QHBoxLayout()
+        mockup_size_type_label = QLabel("Size类型:")
+        mockup_size_type_label.setMinimumWidth(100)
+        self.mockup_type_combo = QComboBox()
+        self.mockup_type_combo.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        mockup_size_type_layout.addWidget(mockup_size_type_label)
+        mockup_size_type_layout.addWidget(self.mockup_type_combo)
+        
         self.mockup_size_widget = LabeledLineEditWithCopy("DOM尺寸","输入DOM尺寸，如[[1,1,1],[2,2,2],[3,3,3]]")
         
         self.mockup_default_size_widget = LabeledLineEditWithCopy("默认尺寸","选择第几个尺寸作为默认选项，如2")
@@ -144,6 +154,7 @@ class WSA(QMainWindow):
         other_dom_options_layout.addWidget(self.mockup_type_widget)
         other_dom_options_layout.addWidget(self.mockup_size_widget)
         other_dom_options_layout.addWidget(self.mockup_default_size_widget)
+        other_dom_options_layout.addLayout(mockup_size_type_layout)
         other_dom_options.setContentLayout(other_dom_options_layout)
         
         left_layout.addLayout(checkbox_layout)
@@ -452,6 +463,15 @@ class WSA(QMainWindow):
         self.uploader = ImageUploader()
         self.aws_upload = S3Uploader()
         self.output_json = ""
+
+        # Load mockup sizes and populate the combo box
+        self.mockup_sizes_data = self.load_mockup_sizes()
+        self.mockup_type_combo.addItem("-- Select a Type --")  # Add placeholder
+        if self.mockup_sizes_data:
+            self.mockup_type_combo.addItems(sorted(self.mockup_sizes_data.keys(), key=str.lower))
+        self.mockup_type_combo.currentIndexChanged.connect(self.update_mockup_size_info)
+        # Initial update to clear fields
+        self.update_mockup_size_info()
         
     def on_fun_button_clicked(self):
         """
@@ -459,7 +479,7 @@ class WSA(QMainWindow):
         """
         # 定义一些俏皮话
         fun_phrases = [
-            "正在召唤神龙...许个愿吧！",
+            "今天Pacdora上市了吗？",
             "别点了，再点我就要报警了！",
             "恭喜你！你刚刚浪费了宝贵的0.5秒。",
             "这个按钮感觉被冒犯了。",
@@ -536,9 +556,12 @@ class WSA(QMainWindow):
         # 清空所有widget内容
         for item in to_clear:
             item.setText("")
+        
+        self.mockup_type_combo.setCurrentIndex(0) # Reset to placeholder
             
         self.more_button_action_widget.setText("#mockup-list")
         self.color_diy_choice_widget.setText("#FFFFFF")
+        self.mockup_type_widget.setText("Mockup")
         
         # 清空输出框
         self.output_box.clear()
@@ -873,10 +896,13 @@ class WSA(QMainWindow):
             self.add_output_message("Clipboard is empty or does not contain text.", "warning")
         
     def generate_json_action(self):
-        if self.page_type.currentText() == 'Mockup tool':
+        chosen_type = self.page_type.currentText()
+        if chosen_type == 'Mockup tool':
             self.generate_json_action_mockup_tools()
-        elif self.page_type.currentText() == 'Landing page':
+        elif chosen_type == 'Landing page':
             self.generate_json_action_landing_page()
+        elif chosen_type == '通用专题页':
+            self.generate_json_universal_topic()
         
     def generate_json_action_mockup_tools(self):
         self.add_output_message("Generating JSON output...", "info")
@@ -1403,6 +1429,11 @@ class WSA(QMainWindow):
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
     
+    def generate_json_action_universal_topic(self):
+        self.add_output_message("Generating JSON output...", "info")
+        
+        # 获取关键字段
+
     def convert_numbered_list_to_html(self, text):
         '''
         识别是否存在潜在html有序列表，并将其转化为有序列表
@@ -1777,6 +1808,49 @@ class WSA(QMainWindow):
                 
             self.add_output_message(f"All cdn addresses recorded at {json_path}", "success")
             
+    def load_mockup_sizes(self):
+        """
+        Loads mockup sizes from size.csv.
+        """
+        try:
+            sizes = parse_size_csv('size.csv')
+            self.add_output_message("Successfully loaded mockup sizes from size.csv.", "success")
+            return sizes
+        except Exception as e:
+            self.add_output_message(f"Error loading mockup sizes: {e}", "error")
+            return None
+
+    def update_mockup_size_info(self):
+        """
+        Updates the mockup size and default size widgets based on the selected mockup type.
+        """
+        selected_mockup = self.mockup_type_combo.currentText()
+        
+        if selected_mockup == "-- Select a Type --":
+            self.mockup_size_widget.setText("")
+            self.mockup_default_size_widget.setText("")
+            return
+
+        if self.mockup_sizes_data and selected_mockup in self.mockup_sizes_data:
+            sizes = self.mockup_sizes_data[selected_mockup]
+            
+            # Format sizes as [[w, h, d], ...]
+            formatted_sizes = [[s['width'], s['height'], s['depth']] for s in sizes]
+            self.mockup_size_widget.setText(json.dumps(formatted_sizes))
+            
+            # Find the index of the default size
+            default_index = -1
+            for i, size in enumerate(sizes):
+                if size['is_default']:
+                    default_index = i
+                    break
+            
+            if default_index != -1:
+                self.mockup_default_size_widget.setText(str(default_index + 1)) # Use 1-based index
+            else:
+                self.mockup_default_size_widget.setText("") # Clear if no default
+            
+            self.add_output_message(f"Updated size info for {selected_mockup}", "info")
 
             
 if __name__ == "__main__":
