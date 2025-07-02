@@ -24,6 +24,7 @@ from utils.parse import (
 from utils.fetch_mockup_details import fetch_mockup_details
 from utils.upload_boto import S3Uploader
 from utils.upload_selenium_class import ImageUploader
+from utils.cdn_placeholder_image import cdn_placeholder_image
 from ui.elements import CollapsibleBox, LabeledLineEditWithCopy, HorizontalCollapsibleTabs
 
 class WSA(QMainWindow):
@@ -514,6 +515,9 @@ class WSA(QMainWindow):
             self.mockup_list_1_name_widget,
             self.mockup_list_1_number_widget,
             self.mockup_list_2_number_widget,
+            self.mockup_type_widget,
+            self.mockup_size_widget,
+            self.mockup_default_size_widget,
             self.more_button_action_widget,
             self.color_diy_choice_widget,
             self.color_label_diy_choice_widget,
@@ -695,7 +699,7 @@ class WSA(QMainWindow):
                         value = merged["URL"]
                         # 简化处理mockup名称,去除mockup字样和连字符,并去除首尾空格
                         mockup_list_name = value.strip().replace("mockup","").replace("-"," ")
-                        self.mockup_list_1_name_widget.setText(mockup_list_name.capitalize())
+                        self.mockup_list_1_name_widget.setText(mockup_list_name.strip().capitalize())
                         # 判断系统是Windows还是Mac
                         if sys.platform.startswith('darwin'):
                             self.pics_path_widget.setText(f"/Volumes/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
@@ -902,9 +906,9 @@ class WSA(QMainWindow):
         mockup_list_2_cdn = self.cover_more_cdn_widget.text()
         
         if self.single_image_checkbox.isChecked():
-            multiple_upload = 'true'
-        else:
             multiple_upload = 'false'
+        else:
+            multiple_upload = 'true'
 
         more_link = self.more_button_action_widget.text()
         
@@ -921,6 +925,9 @@ class WSA(QMainWindow):
             has_size = 'true'
         else:
             has_size = 'false'
+            
+        mockup_size = self.mockup_size_widget.text()
+        mockup_default_size = self.mockup_default_size_widget.text()
         
         part3 = self.segments[2].splitlines()
         part3_title = part3[0]
@@ -1017,9 +1024,9 @@ class WSA(QMainWindow):
                 json.dump(var_json_data, f, ensure_ascii=False, indent=2)
             self.add_output_message("Fetched mockup details and wrote var_v.json.", "success")
         
-        step1_cdn = self.step1_cdn_widget.text()
-        step2_cdn = self.step2_cdn_widget.text()
-        step3_cdn = self.step3_cdn_widget.text()
+        step1_cdn = cdn_placeholder_image(self.step1_cdn_widget.text())
+        step2_cdn = cdn_placeholder_image(self.step2_cdn_widget.text())
+        step3_cdn = cdn_placeholder_image(self.step3_cdn_widget.text())
         
         part5 = [line for line in self.segments[4].splitlines() if line.strip()]
         part5_title = part5[0].strip()
@@ -1035,10 +1042,10 @@ class WSA(QMainWindow):
         
         part6 = [line for line in self.segments[5].splitlines() if line.strip()]
         
-        part6_1_feature_cdn = self.feature1_cdn_widget.text()
-        part6_2_feature_cdn = self.feature2_cdn_widget.text()
-        part6_3_feature_cdn = self.feature3_cdn_widget.text()
-        part6_4_feature_cdn = self.feature4_cdn_widget.text()
+        part6_1_feature_cdn = cdn_placeholder_image(self.feature1_cdn_widget.text())
+        part6_2_feature_cdn = cdn_placeholder_image(self.feature2_cdn_widget.text())
+        part6_3_feature_cdn = cdn_placeholder_image(self.feature3_cdn_widget.text())
+        part6_4_feature_cdn = cdn_placeholder_image(self.feature4_cdn_widget.text())
         
         part6_title = part6[0]
         
@@ -1147,6 +1154,8 @@ class WSA(QMainWindow):
             "has_cover_color": has_cover_color,
             "mockup_type" : mockup_type,
             "has_size" : has_size,
+            "mockup_size" : mockup_size,
+            "mockup_default_size" : mockup_default_size,
             "more_link": more_link,
             "part3_title": part3_title,
             "part3_text": part3_text,
@@ -1272,9 +1281,9 @@ class WSA(QMainWindow):
         part2_step3_1 = part2[5]
         part2_step3_2 = part2[6]
         
-        part2_step1_cdn = self.step1_cdn_widget.text()
-        part2_step2_cdn = self.step2_cdn_widget.text()
-        part2_step3_cdn = self.step3_cdn_widget.text()
+        part2_step1_cdn = cdn_placeholder_image(self.step1_cdn_widget.text())
+        part2_step2_cdn = cdn_placeholder_image(self.step2_cdn_widget.text())
+        part2_step3_cdn = cdn_placeholder_image(self.step3_cdn_widget.text())
         
         
         part3 = [line for line in self.segments[3].splitlines() if line.strip()]
@@ -1295,10 +1304,10 @@ class WSA(QMainWindow):
         part3_4_2 = part3[11]
         part3_4_3 = part3[12]
         
-        feature_1_cdn = self.feature1_cdn_widget.text()
-        feature_2_cdn = self.feature2_cdn_widget.text()
-        feature_3_cdn = self.feature3_cdn_widget.text()
-        feature_4_cdn = self.feature4_cdn_widget.text()
+        feature_1_cdn = cdn_placeholder_image(self.feature1_cdn_widget.text())
+        feature_2_cdn = cdn_placeholder_image(self.feature2_cdn_widget.text())
+        feature_3_cdn = cdn_placeholder_image(self.feature3_cdn_widget.text())
+        feature_4_cdn = cdn_placeholder_image(self.feature4_cdn_widget.text())
         
         part4 = self.segments[4]
         
@@ -1519,6 +1528,90 @@ class WSA(QMainWindow):
             self.add_output_message(f"Detected unsupported system: {sys.platform}", "info")
             raise Exception("Unknown system. Please check your system.")
         
+    def uploader_upload_folder(self):
+        """
+        增量上传文件夹中的图片。
+        - 读取现有的cdn.json（如果存在）。
+        - 只上传本地存在但json中缺少链接的图片。
+        - 更新并保存cdn.json。
+        """
+        folder_path = self.pics_path_widget.text()
+        if not os.path.isdir(folder_path):
+            self.add_output_message("Invalid folder path. Please select a valid folder.", "error")
+            return
+
+        self.add_output_message("Starting incremental image upload...", "info")
+        
+        json_path = os.path.join(folder_path, 'cdn.json')
+        
+        # 1. 读取现有CDN记录或创建新模板
+        cdn_data = {
+            "cover_cdn": "", "cover_more_cdn": "",
+            "mockup_list_1_number": "", "mockup_list_2_number": "",
+            "step1_cdn": "", "step2_cdn": "", "step3_cdn": "",
+            "feature1_cdn": "", "feature2_cdn": "", "feature3_cdn": "", "feature4_cdn": ""
+        }
+        if os.path.exists(json_path):
+            try:
+                with open(json_path, 'r') as f:
+                    cdn_data.update(json.load(f)) # 用文件中的数据更新模板
+                self.add_output_message("Loaded existing cdn.json.", "info")
+            except json.JSONDecodeError:
+                self.add_output_message("Warning: cdn.json is corrupted. Starting with a fresh record.", "warning")
+
+        # 2. 扫描本地图片并仅上传缺失的图片
+        try:
+            image_files = [f for f in os.listdir(folder_path) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))]
+            total_images = len(image_files)
+            self.add_output_message(f"Found {total_images} images in the folder.", "info")
+
+            for i, image_name in enumerate(image_files):
+                filename, _ = os.path.splitext(image_name)
+                key_to_update = None
+                
+                # 建立文件名到JSON键的映射
+                if filename in ['1', '2', '3']:
+                    key_to_update = f"step{filename}_cdn"
+                elif filename in ['a', 'b', 'c', 'd']:
+                    key_to_update = f"feature{ord(filename) - ord('a') + 1}_cdn"
+                elif "mockup" in filename:
+                    parts = filename.replace("_", " ").split()
+                    number = parts[-1] if parts[-1].isdigit() else ""
+                    if "more" in parts:
+                        key_to_update = "cover_more_cdn"
+                        if number and not cdn_data.get("mockup_list_2_number"):
+                            cdn_data["mockup_list_2_number"] = number
+                    else:
+                        key_to_update = "cover_cdn"
+                        if number and not cdn_data.get("mockup_list_1_number"):
+                            cdn_data["mockup_list_1_number"] = number
+                
+                # 检查是否需要上传
+                if key_to_update and not cdn_data.get(key_to_update):
+                    self.add_output_message(f"Uploading ({i+1}/{total_images}): {image_name}...", "info")
+                    file_path = os.path.join(folder_path, image_name)
+                    cdn_url = self.aws_upload.upload_file(file_path)
+                    
+                    if cdn_url:
+                        cdn_data[key_to_update] = cdn_url
+                        self.add_output_message(f"Upload successful: {cdn_url}", "success")
+                    else:
+                        self.add_output_message(f"Upload failed for {image_name}.", "error")
+                else:
+                    self.add_output_message(f"Skipping ({i+1}/{total_images}): {image_name} (already uploaded).", "info")
+
+            # 3. 回写JSON文件
+            with open(json_path, 'w') as f:
+                json.dump(cdn_data, f, indent=4)
+            
+            self.add_output_message(f"CDN records updated successfully at {json_path}", "success")
+            
+            # 4. 更新UI界面
+            self.pass_cdn_records()
+
+        except Exception as e:
+            self.add_output_message(f"An error occurred during upload: {e}", "error")
+            
     def detect_var_records(self,folder_path) -> bool:
         """
         see if a var_v.json are stored in nas pics folder
@@ -1545,26 +1638,31 @@ class WSA(QMainWindow):
         
     def pass_cdn_records(self):
         folder_path = self.pics_path_widget.text()
-        with open(f"{folder_path}//cdn.json","r") as f:
+        json_path = os.path.join(folder_path, 'cdn.json')
+        if not os.path.exists(json_path):
+            self.add_output_message("cdn.json not found. Cannot populate fields.", "warning")
+            return
+            
+        with open(json_path,"r") as f:
             cdn_json = json.load(f)
         # 提取json中的每一行内容并赋入widget
         try:
-            self.mockup_list_1_number_widget.setText(cdn_json["mockup_list_1_number"])
-            self.mockup_list_2_number_widget.setText(cdn_json["mockup_list_2_number"])
-            self.cover_cdn_widget.setText(cdn_json["cover_cdn"])
-            self.cover_more_cdn_widget.setText(cdn_json["cover_more_cdn"])
-            self.step1_cdn_widget.setText(cdn_json["step1_cdn"])
-            self.step2_cdn_widget.setText(cdn_json["step2_cdn"])
-            self.step3_cdn_widget.setText(cdn_json["step3_cdn"])
-            self.feature1_cdn_widget.setText(cdn_json["feature1_cdn"])
-            self.feature2_cdn_widget.setText(cdn_json["feature2_cdn"])
-            self.feature3_cdn_widget.setText(cdn_json["feature3_cdn"])
-            self.feature4_cdn_widget.setText(cdn_json["feature4_cdn"])
-            self.add_output_message("Passing completed.","success")
+            self.mockup_list_1_number_widget.setText(cdn_json.get("mockup_list_1_number", ""))
+            self.mockup_list_2_number_widget.setText(cdn_json.get("mockup_list_2_number", ""))
+            self.cover_cdn_widget.setText(cdn_json.get("cover_cdn", ""))
+            self.cover_more_cdn_widget.setText(cdn_json.get("cover_more_cdn", ""))
+            self.step1_cdn_widget.setText(cdn_json.get("step1_cdn", ""))
+            self.step2_cdn_widget.setText(cdn_json.get("step2_cdn", ""))
+            self.step3_cdn_widget.setText(cdn_json.get("step3_cdn", ""))
+            self.feature1_cdn_widget.setText(cdn_json.get("feature1_cdn", ""))
+            self.feature2_cdn_widget.setText(cdn_json.get("feature2_cdn", ""))
+            self.feature3_cdn_widget.setText(cdn_json.get("feature3_cdn", ""))
+            self.feature4_cdn_widget.setText(cdn_json.get("feature4_cdn", ""))
+            self.add_output_message("UI fields populated from cdn.json.", "success")
         except Exception as e:
             self.add_output_message(f"Passing cdn addresses failed: {str(e)}","error")
            
-    def uploader_upload_folder(self):
+    def uploader_upload_folder_legacy(self):
         folder_path = self.pics_path_widget.text()
         #if folder_path == "/Volumes/shared/pacdora.com/" or "//nas01.tools.baoxiaohe.com/shared/pacdora.com":
             #self.add_output_message("You cannot upload this folder.","error")
