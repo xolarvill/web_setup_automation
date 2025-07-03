@@ -1584,6 +1584,7 @@ class WSA(QMainWindow):
         增量上传文件夹中的图片。
         - 读取现有的cdn.json（如果存在）。
         - 只上传本地存在但json中缺少链接的图片。
+        - 如果遇到意料之外的图片（命名不符合所有预设的字段），则在cdn.json中另外保存，按照其文件名+cdn链接的格式。
         - 更新并保存cdn.json。
         """
         folder_path = self.pics_path_widget.text()
@@ -1637,8 +1638,12 @@ class WSA(QMainWindow):
                         if number and not cdn_data.get("mockup_list_1_number"):
                             cdn_data["mockup_list_1_number"] = number
                 
+                # 如果是未知图片，使用文件名作为key
+                if key_to_update is None:
+                    key_to_update = filename
+
                 # 检查是否需要上传
-                if key_to_update and not cdn_data.get(key_to_update):
+                if not cdn_data.get(key_to_update):
                     self.add_output_message(f"Uploading ({i+1}/{total_images}): {image_name}...", "info")
                     file_path = os.path.join(folder_path, image_name)
                     cdn_url = self.aws_upload.upload_file(file_path)
