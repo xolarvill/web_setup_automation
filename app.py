@@ -5,12 +5,13 @@ import json
 import re
 from datetime import datetime
 import random
+import webbrowser
 
 # 第三方库导入
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QTextEdit,
-    QFrame, QCheckBox, QSizePolicy, QToolButton, QScrollArea
+    QFrame, QCheckBox, QSizePolicy, QToolButton, QScrollArea, QStyle
 )
 from PySide6.QtCore import Qt, QTimer, QSize, QParallelAnimationGroup, QPropertyAnimation, QAbstractAnimation, QPoint, QSequentialAnimationGroup
 from PySide6.QtGui import QClipboard, QIcon, QGuiApplication
@@ -32,7 +33,7 @@ class WSA(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Web Setup Automation")
-        self.setMinimumSize(1330, 820)  # 增加最小窗口大小
+        self.setMinimumSize(1350, 820)  # 增加最小窗口大小
         self.setWindowIcon(QIcon("resources/icon.png"))  # 可选：添加图标文件
         self.segments = []
 
@@ -403,7 +404,7 @@ class WSA(QMainWindow):
         
         # 3.2 清除按钮放在标题栏右侧
         self.clear_button = QPushButton("Clear Output")
-        self.clear_button.setFixedSize(150, 30)
+        self.clear_button.setFixedSize(130, 30)
         self.clear_button.setStyleSheet("""
             QPushButton {
                 background-color: #e74c3c;
@@ -418,6 +419,16 @@ class WSA(QMainWindow):
         """)
         self.clear_button.clicked.connect(self.clear_output)
         output_header.addWidget(self.clear_button)
+
+        # Help button
+        self.help_button = QPushButton()
+        self.help_button.setFixedSize(30, 30)
+        help_icon = self.style().standardIcon(QStyle.SP_MessageBoxQuestion)
+        self.help_button.setIcon(help_icon)
+        self.help_button.setFlat(True)
+        self.help_button.setToolTip("如有问题请点击此处查看readme使用手册")
+        self.help_button.clicked.connect(self.open_help_url)
+        output_header.addWidget(self.help_button)
         
         right_layout.addLayout(output_header)
         
@@ -482,13 +493,13 @@ class WSA(QMainWindow):
             "今天Pacdora上市了吗？",
             "别点了，再点我就要报警了！",
             "恭喜你！你刚刚浪费了宝贵的0.5秒。",
-            "这个按钮感觉被冒犯了。",
+            "我们都在用力地活着，和我的一键配置说去吧。",
             "你知道吗？每一次点击，都有一只看不见的猫咪在空中翻滚。",
             "按钮被点击了，但它决定今天罢工。",
             "404: Fun Not Found.",
-            "正在下载更多乐趣...请稍候...下载失败。",
-            "你按得太用力了，我的虚拟肩膀好痛！",
-            "Biu~ 快乐光波发射！"
+            "今天几号了？离发工资还有多久？",
+            "你！退出这个程序！立刻！马上！",
+            "1453年5月29日：QAQ"
         ]
         
         # 随机选择一条俏皮话并显示
@@ -559,7 +570,7 @@ class WSA(QMainWindow):
         
         self.mockup_type_combo.setCurrentIndex(0) # Reset to placeholder
             
-        self.more_button_action_widget.setText("#mockup-list")
+        self.more_button_action_widget.setText("#mockup-display")
         self.color_diy_choice_widget.setText("#FFFFFF")
         self.mockup_type_widget.setText("Mockup")
         
@@ -598,6 +609,9 @@ class WSA(QMainWindow):
         """
         self.output_box.append(formatted_message)
         
+        # 强制处理事件，确保GUI实时更新
+        QApplication.processEvents()
+        
         # 自动滚动到底部
         scrollbar = self.output_box.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
@@ -628,6 +642,12 @@ class WSA(QMainWindow):
         
         # 显示窗口
         self.explore_discover_window.show()
+
+    def open_help_url(self):
+        """
+        Opens the help URL in a web browser.
+        """
+        webbrowser.open("https://github.com/xolarvill/web_setup_automation")
 
     def browse_folder(self):
         self.add_output_message("Browsing for folder...", "info")
@@ -924,7 +944,7 @@ class WSA(QMainWindow):
         part2 = self.segments[1]
         part2_text = part2.splitlines()[1]
         
-        mockup_list_1_name = self.mockup_list_1_name_widget.text()
+        mockup_list_1_name = self.mockup_list_1_name_widget.text().strip()
         mockup_list_1_number = self.mockup_list_1_number_widget.text()
         mockup_list_1_cdn = self.cover_cdn_widget.text()
         
@@ -995,14 +1015,14 @@ class WSA(QMainWindow):
             model_8_editor_inner_link = var_json_data["model_8"]["editor_inner_link"]
         else:
             urls = extract_url(part4)
-            model_1_name, model_1_image_url, model_1_editor_inner_link = fetch_mockup_details(urls[0])
-            model_2_name, model_2_image_url, model_2_editor_inner_link = fetch_mockup_details(urls[1])
-            model_3_name, model_3_image_url, model_3_editor_inner_link = fetch_mockup_details(urls[2])
-            model_4_name, model_4_image_url, model_4_editor_inner_link = fetch_mockup_details(urls[3])
-            model_5_name, model_5_image_url, model_5_editor_inner_link = fetch_mockup_details(urls[4])
-            model_6_name, model_6_image_url, model_6_editor_inner_link = fetch_mockup_details(urls[5])
-            model_7_name, model_7_image_url, model_7_editor_inner_link = fetch_mockup_details(urls[6])
-            model_8_name, model_8_image_url, model_8_editor_inner_link = fetch_mockup_details(urls[7])
+            model_1_name, model_1_image_url, model_1_editor_inner_link = fetch_mockup_details(urls[0], self.add_output_message)
+            model_2_name, model_2_image_url, model_2_editor_inner_link = fetch_mockup_details(urls[1], self.add_output_message)
+            model_3_name, model_3_image_url, model_3_editor_inner_link = fetch_mockup_details(urls[2], self.add_output_message)
+            model_4_name, model_4_image_url, model_4_editor_inner_link = fetch_mockup_details(urls[3], self.add_output_message)
+            model_5_name, model_5_image_url, model_5_editor_inner_link = fetch_mockup_details(urls[4], self.add_output_message)
+            model_6_name, model_6_image_url, model_6_editor_inner_link = fetch_mockup_details(urls[5], self.add_output_message)
+            model_7_name, model_7_image_url, model_7_editor_inner_link = fetch_mockup_details(urls[6], self.add_output_message)
+            model_8_name, model_8_image_url, model_8_editor_inner_link = fetch_mockup_details(urls[7], self.add_output_message)
             # 写入 var.json
             var_json_data = {
             "model_1": {
@@ -1149,7 +1169,7 @@ class WSA(QMainWindow):
         part7_a4 = self.convert_numbered_list_to_html(part7_a4)
         
         part7_q5 = part7_block[4]['question'].strip()
-        part7_a5 = re.sub(r'\b(pricing page|pricing)\b', r'<a class=\"pac-ui-editor-a\" href=\"/pricing\" rel=\"noopener noreferrer\" target=\"_self\">\1</a>', part7_block[4]['answer']).strip()
+        part7_a5 = re.sub(r'\b(pricing page|pricing)\b', r'''<a class=\"pac-ui-editor-a\" href=/pricing target=_self gtm=\"\" rel=\"noopener noreferrer\">pricing page</a>''', part7_block[4]['answer']).strip()
         part7_a5 = self.convert_numbered_list_to_html(part7_a5)
         
         part8_text = self.segments[7].splitlines()[0]
@@ -1356,7 +1376,7 @@ class WSA(QMainWindow):
         a4 = self.convert_numbered_list_to_html(a4)
         
         q5 = faq[4]['question'].strip()
-        a5 = re.sub(r'\b(pricing page|pricing)\b', r'<a class=\"pac-ui-editor-a\" href=\"/pricing\" rel=\"noopener noreferrer\" target=\"_self\">\1</a>', faq[4]['answer']).strip()
+        a5 = re.sub(r'\b(pricing page|pricing)\b', r'<a class=\"pac-ui-editor-a\" href=/pricing rel=\"noopener noreferrer\" target=_self>\1</a>', faq[4]['answer']).strip()
         a5 = self.convert_numbered_list_to_html(a5)
         
         folder_path = self.pics_path_widget.text()
