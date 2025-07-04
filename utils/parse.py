@@ -4,34 +4,39 @@ import re
 def extract_cutout_nextline(text: str, keywords: List[str]) -> dict:
     """
     从文本中提取以指定关键词开头的行的下一行内容（比较时大小写不敏感，提取原文时保留原始大小写）。
+    此函数会跳过关键词后的空行，直到找到第一个非空行。
 
     :param text: 输入的多行字符串
     :param keywords: 关键词列表
-    :return: dict，key为关键词，value为对应cutout内容（只取下一行）
+    :return: dict，key为关键词，value为对应cutout内容
     """
     lines = text.splitlines()
     cutouts = {}
-    # 构建小写关键词集合用于比较
     keyword_map = {k.lower(): k for k in keywords}
-    found = set()
-    i = 0
-    while i < len(lines):
-        line = lines[i]
-        stripped = line.strip()
+    found_keywords = set()
+
+    for i, line in enumerate(lines):
+        stripped_line = line.strip()
         for kw_lower, kw_orig in keyword_map.items():
-            if kw_orig not in found and stripped.lower().startswith(kw_lower):
-                # 只提取第一次出现的下一行内容，保留原文
-                if i + 1 < len(lines):
-                    cutouts[kw_orig] = lines[i + 1].rstrip()
+            if kw_orig not in found_keywords and stripped_line.lower().startswith(kw_lower):
+                # 找到关键词，现在开始查找下一个非空行
+                next_line_index = i + 1
+                while next_line_index < len(lines) and not lines[next_line_index].strip():
+                    next_line_index += 1  # 跳过空行
+
+                if next_line_index < len(lines):
+                    cutouts[kw_orig] = lines[next_line_index].rstrip()
                 else:
-                    cutouts[kw_orig] = ""
-                found.add(kw_orig)
-                break
-        i += 1
-    # 保证所有关键词都有返回值
+                    cutouts[kw_orig] = ""  # 如果关键词后没有非空行
+                
+                found_keywords.add(kw_orig)
+                break  # 处理完一个关键词后，跳出内层循环
+
+    # 确保所有关键词都有返回值
     for keyword in keywords:
         if keyword not in cutouts:
             cutouts[keyword] = ""
+            
     return cutouts
 
 def extract_cutout_currentline(text: str, keywords: List[str]) -> dict:

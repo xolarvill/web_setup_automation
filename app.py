@@ -273,10 +273,10 @@ class WSA(QMainWindow):
         mid_layout.addLayout(mid_buttons_layout1)
         
         # 分隔线
-        separator_mid5 = QFrame()
-        separator_mid5.setFrameShape(QFrame.HLine)
-        separator_mid5.setFrameShadow(QFrame.Sunken)
-        mid_layout.addWidget(separator_mid5)
+        # separator_mid5 = QFrame()
+        # separator_mid5.setFrameShape(QFrame.HLine)
+        # separator_mid5.setFrameShadow(QFrame.Sunken)
+        # mid_layout.addWidget(separator_mid5)
         
         # 2.1 pic path folder in NAS
         self.pics_path_widget = LabeledLineEditWithCopy("NAS path","Enter the path of your pics folder here. OR use the Browse button.")
@@ -353,10 +353,17 @@ class WSA(QMainWindow):
         separator_mid4.setFrameShadow(QFrame.Sunken)
         # mid_layout.addWidget(separator_mid4)
         
+        # 添加其他CDN选项
         
+        other_cdn = CollapsibleBox("其他图片CDN链接",parent_window=self,button_height=35)
+        other_cdn_layout = QHBoxLayout()
+        self.banner_cdn_widget = LabeledLineEditWithCopy("Banner")
+        other_cdn_layout.addWidget(self.banner_cdn_widget)
+        other_cdn.setContentLayout(other_cdn_layout)
+        mid_layout.addWidget(other_cdn)
         
         # 第二行按钮
-        mid_buttons_layout2 = QVBoxLayout()
+        mid_buttons_layout2 = QHBoxLayout()
         
         # update按钮
         self.update_button = QPushButton("Update")
@@ -378,6 +385,12 @@ class WSA(QMainWindow):
         self.generate_button.setMinimumHeight(35)
         self.generate_button.clicked.connect(self.generate_json_action)
         mid_buttons_layout3.addWidget(self.generate_button)
+        
+        
+        self.open_canary_url_button = QPushButton("Canary Inspection")
+        self.open_canary_url_button.setMinimumHeight(35)
+        self.open_canary_url_button.clicked.connect(self.open_canary_url)
+        mid_buttons_layout3.addWidget(self.open_canary_url_button)
         
         # 添加所有按钮
         mid_layout.addLayout(mid_buttons_layout2)
@@ -1169,7 +1182,11 @@ class WSA(QMainWindow):
         part7_a4 = self.convert_numbered_list_to_html(part7_a4)
         
         part7_q5 = part7_block[4]['question'].strip()
-        part7_a5 = re.sub(r'\b(pricing page|pricing)\b', r'''<a class=\"pac-ui-editor-a\" href=/pricing target=_self gtm=\"\" rel=\"noopener noreferrer\">pricing page</a>''', part7_block[4]['answer']).strip()
+        part7_a5_raw = part7_block[4]['answer'].strip()
+        part7_a5 = part7_a5_raw.replace(
+            "pricing page", 
+            '<a class="pac-ui-editor-a" href=/pricing target=_self gtm="" rel="noopener noreferrer">pricing page</a>'
+        )
         part7_a5 = self.convert_numbered_list_to_html(part7_a5)
         
         part8_text = self.segments[7].splitlines()[0]
@@ -1376,7 +1393,11 @@ class WSA(QMainWindow):
         a4 = self.convert_numbered_list_to_html(a4)
         
         q5 = faq[4]['question'].strip()
-        a5 = re.sub(r'\b(pricing page|pricing)\b', r'<a class=\"pac-ui-editor-a\" href=/pricing rel=\"noopener noreferrer\" target=_self>\1</a>', faq[4]['answer']).strip()
+        a5_raw = faq[4]['answer'].strip()
+        a5 = a5_raw.replace(
+            "pricing page", 
+            '<a class="pac-ui-editor-a" href=/pricing rel="noopener noreferrer" target=_self>pricing page</a>'
+        )
         a5 = self.convert_numbered_list_to_html(a5)
         
         folder_path = self.pics_path_widget.text()
@@ -1454,35 +1475,41 @@ class WSA(QMainWindow):
         
         # 获取关键字段
 
-    def convert_numbered_list_to_html(self, text):
-        '''
-        识别是否存在潜在html有序列表，并将其转化为有序列表
-        '''
-        # 匹配以数字加点开头的行，例如 "1. 下载..."
-        pattern = r'(\d+\..+?)(?=\n\d+\.|\Z)'
-        
-        # 查找所有匹配项
-        matches = re.findall(pattern, text, re.DOTALL)
-        
-        if not matches:
-            return text
-        
-        # 构建 ol 列表
-        ol_list_start = '<ol>'
-        ol_list_end = '</ol>'
-        list_items = ''
-        
-        for match in matches:
-            stripped = match.strip()
-            list_items += f'<li>{stripped}</li>\n'
-        
-        full_ol_list = ol_list_start + list_items + ol_list_end
-        
-        # 替换原文本中的原始列表部分
-        new_text = re.sub(r'\d+\..+?(\n|$)', '', text, flags=re.DOTALL)  # 删除原列表
-        new_text = new_text.rstrip('\n') + '\n' + full_ol_list
-        
-        return new_text
+    def convert_numbered_list_to_html(self, text: str) -> str:
+        """
+        识别并转换文本中的有序列表为HTML的<ol>格式。
+        此实现通过逐行扫描来处理列表，以提高稳健性。
+        """
+        lines = text.split('\n')
+        new_lines = []
+        in_list = False
+        list_items = []
+
+        for line in lines:
+            stripped_line = line.strip()
+            is_list_item = re.match(r'^\d+\.\s+', stripped_line)
+
+            if is_list_item:
+                if not in_list:
+                    # 列表开始
+                    in_list = True
+                # 移除 "1. " 等标记并添加到列表项中
+                content = re.sub(r'^\d+\.\s+', '', stripped_line)
+                list_items.append(f'<li>{content}</li>')
+            else:
+                if in_list:
+                    # 列表结束，将其打包
+                    new_lines.append(f"<ol>{''.join(list_items)}</ol>")
+                    list_items = []
+                    in_list = False
+                # 添加非列表行
+                new_lines.append(line)
+
+        # 如果文本以列表结束，处理剩余的列表项
+        if in_list:
+            new_lines.append(f"<ol>{''.join(list_items)}</ol>")
+
+        return '\n'.join(new_lines)
             
     def current_time(self):
         return datetime.now().strftime("%H:%M:%S")
@@ -1601,7 +1628,8 @@ class WSA(QMainWindow):
             "cover_cdn": "", "cover_more_cdn": "",
             "mockup_list_1_number": "", "mockup_list_2_number": "",
             "step1_cdn": "", "step2_cdn": "", "step3_cdn": "",
-            "feature1_cdn": "", "feature2_cdn": "", "feature3_cdn": "", "feature4_cdn": ""
+            "feature1_cdn": "", "feature2_cdn": "", "feature3_cdn": "", "feature4_cdn": "",
+            "banner_cdn": ""
         }
         if os.path.exists(json_path):
             try:
@@ -1622,7 +1650,9 @@ class WSA(QMainWindow):
                 key_to_update = None
                 
                 # 建立文件名到JSON键的映射
-                if filename in ['1', '2', '3']:
+                if filename == 'banner':
+                    key_to_update = 'banner_cdn'
+                elif filename in ['1', '2', '3']:
                     key_to_update = f"step{filename}_cdn"
                 elif filename in ['a', 'b', 'c', 'd']:
                     key_to_update = f"feature{ord(filename) - ord('a') + 1}_cdn"
@@ -1642,7 +1672,7 @@ class WSA(QMainWindow):
                 if key_to_update is None:
                     key_to_update = filename
 
-                # 检查是否需要上传
+                # 检��是否需要上传
                 if not cdn_data.get(key_to_update):
                     self.add_output_message(f"Uploading ({i+1}/{total_images}): {image_name}...", "info")
                     file_path = os.path.join(folder_path, image_name)
@@ -1714,6 +1744,7 @@ class WSA(QMainWindow):
             self.feature2_cdn_widget.setText(cdn_json.get("feature2_cdn", ""))
             self.feature3_cdn_widget.setText(cdn_json.get("feature3_cdn", ""))
             self.feature4_cdn_widget.setText(cdn_json.get("feature4_cdn", ""))
+            self.banner_cdn_widget.setText(cdn_json.get("banner_cdn", ""))
             self.add_output_message("UI fields populated from cdn.json.", "success")
         except Exception as e:
             self.add_output_message(f"Passing cdn addresses failed: {str(e)}","error")
@@ -1876,6 +1907,16 @@ class WSA(QMainWindow):
                 self.mockup_default_size_widget.setText("") # Clear if no default
             
             self.add_output_message(f"Updated size info for {selected_mockup}", "info")
+            
+    def open_canary_url(self):
+        try:
+            target = self.file_path_widget.text()
+            url_type = 'tools' if self.page_type.currentText() == 'Mockup tool' else ''
+            url = f'https://canary.pacdora.com/{url_type}/{target}'
+            webbrowser.open(url)
+            self.add_output_message('Successfully opened the canary website.','success')
+        except Exception as e:
+            self.add_output_message('Error during opening canary website.','error')
 
             
 if __name__ == "__main__":
