@@ -11,13 +11,15 @@ import webbrowser
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QLineEdit, QComboBox, QPushButton, QFileDialog, QTextEdit,
-    QFrame, QCheckBox, QSizePolicy, QToolButton, QScrollArea, QStyle
+    QFrame, QCheckBox, QSizePolicy, QToolButton, QScrollArea, QStyle,
+    QDialog, QDialogButtonBox, QFormLayout, QMessageBox
 )
 from PySide6.QtCore import Qt, QTimer, QSize, QParallelAnimationGroup, QPropertyAnimation, QAbstractAnimation, QPoint, QSequentialAnimationGroup
 from PySide6.QtGui import QClipboard, QIcon, QGuiApplication
 from qt_material import apply_stylesheet
 
 # 本地模块导入
+from utils.credentials import save_credentials, load_credentials
 from utils.parse import (
     extract_url, segment, parse_faq_text,
     extract_cutout_nextline, extract_cutout_currentline,
@@ -28,6 +30,81 @@ from utils.upload_boto import S3Uploader
 from utils.upload_selenium_class import ImageUploader
 from utils.cdn_placeholder_image import cdn_placeholder_image
 from ui.elements import CollapsibleBox, LabeledLineEditWithCopy, HorizontalCollapsibleTabs
+
+
+class AwsConfigDialog(QDialog):
+    """
+    一个用于配置AWS凭证的对话框。
+    """
+    def __init__(self, parent=None):
+        """
+        初始化对话框，设置UI元素并加载现有凭证。
+        """
+        super().__init__(parent)
+        self.setWindowTitle("AWS Credentials Configuration")
+        self.setFixedSize(450, 200)  # 设置固定大小
+
+        # Main layout
+        main_layout = QVBoxLayout(self)
+        
+        # Form layout for inputs
+        form_layout = QFormLayout()
+        form_layout.setContentsMargins(10, 10, 10, 10)
+        form_layout.setSpacing(15)
+
+        # Widgets
+        self.access_key_id_input = QLineEdit(self)
+        self.secret_access_key_input = QLineEdit(self)
+        self.secret_access_key_input.setEchoMode(QLineEdit.Password)
+        self.region_input = QLineEdit(self)
+        self.region_input.setPlaceholderText("e.g., us-west-2")
+
+        form_layout.addRow("Access Key ID:", self.access_key_id_input)
+        form_layout.addRow("Secret Access Key:", self.secret_access_key_input)
+        form_layout.addRow("Default Region:", self.region_input)
+        
+        main_layout.addLayout(form_layout)
+        main_layout.addStretch()
+
+        # Buttons layout - centered
+        button_layout = QHBoxLayout()
+        
+        self.cancel_button = QPushButton("Cancel")
+        self.cancel_button.clicked.connect(self.reject)
+        
+        self.save_button = QPushButton("Save")
+        self.save_button.setDefault(True)
+        self.save_button.clicked.connect(self.accept)
+        
+        button_layout.addStretch() # Left spacer
+        button_layout.addWidget(self.cancel_button)
+        button_layout.addWidget(self.save_button)
+        button_layout.addStretch() # Right spacer
+        
+        main_layout.addLayout(button_layout)
+
+        self.load_existing_credentials()
+
+    def load_existing_credentials(self):
+        """
+        尝试从keyring加载并填充现有凭证。
+        """
+        creds = load_credentials()
+        if creds:
+            self.access_key_id_input.setText(creds.get("aws_access_key_id", ""))
+            self.secret_access_key_input.setText(creds.get("aws_secret_access_key", ""))
+            self.region_input.setText(creds.get("region_name", ""))
+
+    def get_credentials(self) -> dict:
+        """
+        获取用户在输入框中输入的凭证。
+        """
+        return {
+            "access_key": self.access_key_id_input.text().strip(),
+            "secret_key": self.secret_access_key_input.text().strip(),
+            "region": self.region_input.text().strip()
+        }
+
 
 class WSA(QMainWindow):
     def __init__(self):
@@ -258,8 +335,13 @@ class WSA(QMainWindow):
         #spacer.setFixedHeight(6)
         #mid_layout.addWidget(spacer)
         
+        self.manual_aws_configure_widget = QPushButton('AWS Configure')
+        self.manual_aws_configure_widget.setMinimumHeight(35)
+        self.manual_aws_configure_widget.clicked.connect(self.manual_aws_configure)
+        mid_layout.addWidget(self.manual_aws_configure_widget)
+        
         # 第一行按钮
-        mid_buttons_layout1 = QVBoxLayout()
+        mid_buttons_layout1 = QHBoxLayout()
         buttons_row1 = [
             ("Browse Folder", self.browse_folder),
             ("Open Folder", self.open_folder)
@@ -1513,6 +1595,27 @@ class WSA(QMainWindow):
             
     def current_time(self):
         return datetime.now().strftime("%H:%M:%S")
+    
+    def manual_aws_configure(self):
+        """
+        打开一个对话框，允许用户输入并使用keyring保存AWS凭证。
+        """
+        dialog = AwsConfigDialog(self)
+        if dialog.exec():  # Show the dialog and wait for user action
+            creds = dialog.get_credentials()
+            if creds["access_key"] and creds["secret_key"] and creds["region"]:
+                try:
+                    save_credentials(creds["access_key"], creds["secret_key"], creds["region"])
+                    self.add_output_message("AWS credentials saved successfully via Keyring.", "success")
+                    QMessageBox.information(self, "Success", "AWS credentials have been securely saved.")
+                except Exception as e:
+                    self.add_output_message(f"Failed to save credentials: {e}", "error")
+                    QMessageBox.critical(self, "Error", f"Failed to save credentials: {e}")
+            else:
+                self.add_output_message("AWS configuration cancelled. One or more fields were empty.", "warning")
+                QMessageBox.warning(self, "Cancelled", "Configuration cancelled. All fields are required.")
+        else:
+            self.add_output_message("AWS configuration cancelled by user.", "info")
     
     def uploader_activate(self):
         self.add_output_message("Activating the automator. This could take a while.","info")
