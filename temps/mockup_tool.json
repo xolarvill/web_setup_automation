@@ -914,9 +914,11 @@
                                                 "-webkit-line-clamp": "initial",
                                                 "overflow": "initial",
                                                 "textOverflow": "initial",
-                                                "width": "100%",
+                                                "width": "60%",
                                                 "textAlign": "center",
-                                                "marginTop": "0px"
+                                                "marginTop": "0px",
+                                                "marginLeft": "auto",
+                                                "marginRight": "auto"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],

@@ -14,8 +14,15 @@ WSA is a cross-platform desktop application built with PySide6 designed to strea
 * **Clipboard Integration:** Seamlessly copies extracted data and generated JSON to the clipboard for quick pasting.
 * **Real-time Feedback:** Provides informative messages and status updates in the output console.
 
-Future todos:
+Todos:
+- [x] better ui scaling for much information
+- [x] cross-platform AWS secret management
 - [ ] support all formats of json file
+  - [x] mockup tool
+  - [x] landing page
+  - [ ] topic
+  - [ ] universal topic
+  - [ ] tools
 - [ ] clean and neat distribution
 
 ## for developers
