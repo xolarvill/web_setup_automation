@@ -1068,7 +1068,12 @@ class WSA(QMainWindow):
             has_size = 'false'
             
         mockup_size = self.mockup_size_widget.text()
+        if not mockup_size:
+            mockup_size = "1"
+
         mockup_default_size = self.mockup_default_size_widget.text()
+        if not mockup_default_size:
+            mockup_default_size = "1"
         
         part3 = self.segments[2].splitlines()
         part3_title = part3[0]
