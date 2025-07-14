@@ -48,53 +48,139 @@ class HorizontalCollapsibleTabs(QWidget):
         self.tab_height = tab_height
         self.tabs = []
         self.current_index = -1
+        self.content_height = 0
+        self.is_expanded = False
 
         main_layout = QVBoxLayout(self)
         main_layout.setSpacing(0)
         main_layout.setContentsMargins(0, 0, 0, 0)
 
+        # 标签按钮容器
         self.tabs_layout = QHBoxLayout()
         self.tabs_layout.setSpacing(5)
         
+        # 内容区域容器 - 使用固定高度控制
         self.content_container = QWidget()
+        self.content_container.setFixedHeight(0)  # 初始高度为0
         self.content_layout = QVBoxLayout(self.content_container)
         self.content_layout.setContentsMargins(0, 0, 0, 0)
 
         main_layout.addLayout(self.tabs_layout)
         main_layout.addWidget(self.content_container)
 
+        # 动画控制
+        self.animation_group = QParallelAnimationGroup(self)
+        self.content_animation = QPropertyAnimation(self.content_container, b"maximumHeight")
+        self.content_animation.setDuration(500)
+        self.animation_group.addAnimation(self.content_animation)
+        
+        # 窗口大小动画
+        if self.parent_window:
+            self.window_animation = QPropertyAnimation(self.parent_window, b"size")
+            self.window_animation.setDuration(500)
+            self.animation_group.addAnimation(self.window_animation)
+
     def add_tab(self, title: str, widget: QWidget):
         """
-        添加一个新��标签页和其对应的内容小部件。
+        添加一个新的标签页和其对应的内容小部件。
         """
-        box = CollapsibleBox(title=title, parent_window=self.parent_window)
-        box.setContentLayout(widget.layout())
-        
+        # 创建标签按钮
+        button = QToolButton(text=title, checkable=True, checked=False)
         if self.tab_height > 0:
-            box.toggle_button.setFixedHeight(self.tab_height)
-            
-        self.tabs_layout.addWidget(box.toggle_button)
-        self.content_layout.addWidget(box.content_area)
+            button.setFixedHeight(self.tab_height)
         
-        box.content_area.hide()
+        button.setStyleSheet("QToolButton { border: none; }")
+        button.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+        button.setArrowType(Qt.RightArrow)
+        button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        
+        # 连接按钮点击事件
+        tab_index = len(self.tabs)
+        button.pressed.connect(lambda: self._on_tab_clicked(tab_index))
+        
+        # 添加到布局
+        self.tabs_layout.addWidget(button)
+        self.content_layout.addWidget(widget)
+        
+        # 初始隐藏内容
+        widget.hide()
+        
+        # 存储标签信息
+        tab_info = {
+            'button': button,
+            'widget': widget,
+            'content_height': widget.sizeHint().height()
+        }
+        self.tabs.append(tab_info)
 
-        box.expanded.connect(lambda b=box: self._on_box_expanded(b))
-        self.tabs.append(box)
+    def _on_tab_clicked(self, tab_index):
+        """
+        处理标签点击事件
+        """
+        clicked_tab = self.tabs[tab_index]
+        
+        if self.current_index == tab_index and self.is_expanded:
+            # 点击当前已展开的标签，收起
+            self._collapse_all()
+        else:
+            # 展开新标签
+            self._expand_tab(tab_index)
 
-    def _on_box_expanded(self, expanded_box):
+    def _expand_tab(self, tab_index):
         """
-        当一个面板展开时，收起所有其他面板。
+        展开指定标签
         """
-        for i, box in enumerate(self.tabs):
-            if box is expanded_box:
-                self.current_index = i
-                box.content_area.show()
+        # 更新按钮状态
+        for i, tab in enumerate(self.tabs):
+            if i == tab_index:
+                tab['button'].setChecked(True)
+                tab['button'].setArrowType(Qt.DownArrow)
+                tab['widget'].show()
             else:
-                box.collapse()
-                box.content_area.hide()
+                tab['button'].setChecked(False)
+                tab['button'].setArrowType(Qt.RightArrow)
+                tab['widget'].hide()
         
-        # 调整布局
-        self.content_layout.activate()
+        self.current_index = tab_index
+        self.content_height = self.tabs[tab_index]['content_height']
+        
+        # 设置动画
+        self.content_animation.setStartValue(0 if not self.is_expanded else self.content_container.height())
+        self.content_animation.setEndValue(self.content_height)
+        
+        if self.parent_window:
+            current_size = self.parent_window.size()
+            height_diff = self.content_height - (self.content_container.height() if self.is_expanded else 0)
+            new_height = current_size.height() + height_diff
+            self.window_animation.setStartValue(current_size)
+            self.window_animation.setEndValue(QSize(current_size.width(), new_height))
+        
+        self.is_expanded = True
+        self.animation_group.start()
+
+    def _collapse_all(self):
+        """
+        收起所有标签
+        """
+        # 更新按钮状态
+        for tab in self.tabs:
+            tab['button'].setChecked(False)
+            tab['button'].setArrowType(Qt.RightArrow)
+            tab['widget'].hide()
+        
+        # 设置动画
+        self.content_animation.setStartValue(self.content_container.height())
+        self.content_animation.setEndValue(0)
+        
+        if self.parent_window:
+            current_size = self.parent_window.size()
+            new_height = current_size.height() - self.content_height
+            self.window_animation.setStartValue(current_size)
+            self.window_animation.setEndValue(QSize(current_size.width(), new_height))
+        
+        self.current_index = -1
+        self.is_expanded = False
+        self.animation_group.start()
 
 
 class CollapsibleBox(QWidget):
@@ -109,7 +195,7 @@ class CollapsibleBox(QWidget):
     参数:
     - title: str, 折叠框标题
     - parent: QWidget, 父组件
-    - parent_window: QWidget, 主窗口引用(用于调整窗口大小)
+    - parent_window: QWidget, 主窗口引用(保留兼容性，但不再用于窗口大小调整)
     - button_height: int, 预设的按钮高度
     
     ```python
@@ -155,7 +241,7 @@ class CollapsibleBox(QWidget):
         lay.addWidget(self.toggle_button)
         lay.addWidget(self.content_area)
 
-        # Add animations for the box itself
+        # Add animations for the box itself only (removed window animation)
         self.toggle_animation.addAnimation(
             QPropertyAnimation(self, b"minimumHeight")
         )
@@ -165,10 +251,6 @@ class CollapsibleBox(QWidget):
         self.toggle_animation.addAnimation(
             QPropertyAnimation(self.content_area, b"maximumHeight")
         )
-        # Add animation for the parent window if it exists
-        if self.parent_window:
-            self.window_animation = QPropertyAnimation(self.parent_window, b"size")
-            self.toggle_animation.addAnimation(self.window_animation)
         
         self.toggle_animation.finished.connect(self._on_animation_finished)
 
@@ -179,21 +261,7 @@ class CollapsibleBox(QWidget):
             Qt.DownArrow if not checked else Qt.RightArrow
         )
 
-        # Set start/end values for window animation right before starting
-        if self.parent_window:
-            self.window_animation.setDuration(500)
-            current_size = self.parent_window.size()
-            if not checked:  # Expanding
-                self.window_animation.setStartValue(current_size)
-                self.window_animation.setEndValue(
-                    QSize(current_size.width(), current_size.height() + self.content_height)
-                )
-            else:  # Collapsing
-                self.window_animation.setStartValue(
-                    QSize(current_size.width(), current_size.height() - self.content_height)
-                )
-                self.window_animation.setEndValue(current_size)
-
+        # Removed window animation logic - content will expand within its container
         self.toggle_animation.setDirection(
             QAbstractAnimation.Forward
             if not checked
@@ -225,7 +293,7 @@ class CollapsibleBox(QWidget):
         # Stop any running animation before reconfiguring
         self.toggle_animation.stop()
 
-        # Configure animations for the box itself
+        # Configure animations for the box itself (now only 3 animations)
         for i in range(3):
             animation = self.toggle_animation.animationAt(i)
             animation.setDuration(500)
@@ -320,4 +388,3 @@ class LabeledLineEditWithCopy(QWidget):
         """禁用文本输入"""
         self.line_edit.setReadOnly(True)
         self.copy_btn.setEnabled(False)
-
