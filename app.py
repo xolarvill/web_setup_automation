@@ -1254,19 +1254,15 @@ class WSA(QMainWindow):
         
         part7_q1 = part7_block[0]['question'].strip()
         part7_a1 = part7_block[0]['answer'].strip()
-        part7_a1 = self.convert_numbered_list_to_html(part7_a1)
         
         part7_q2 = part7_block[1]['question'].strip()
         part7_a2 = part7_block[1]['answer'].strip()
-        part7_a2 = self.convert_numbered_list_to_html(part7_a2)
         
         part7_q3 = part7_block[2]['question'].strip()
         part7_a3 = part7_block[2]['answer'].strip()
-        part7_a3 = self.convert_numbered_list_to_html(part7_a3)
         
         part7_q4 = part7_block[3]['question'].strip()
         part7_a4 = part7_block[3]['answer'].strip()
-        part7_a4 = self.convert_numbered_list_to_html(part7_a4)
         
         part7_q5 = part7_block[4]['question'].strip()
         part7_a5_raw = part7_block[4]['answer'].strip()
@@ -1274,7 +1270,6 @@ class WSA(QMainWindow):
             "pricing page", 
             '<a class="pac-ui-editor-a" href=/pricing target=_self gtm="" rel="noopener noreferrer">pricing page</a>'
         )
-        part7_a5 = self.convert_numbered_list_to_html(part7_a5)
         
         part8_text = self.segments[7].splitlines()[0]
         
@@ -1465,19 +1460,15 @@ class WSA(QMainWindow):
         
         q1 = faq[0]['question'].strip()
         a1 = faq[0]['answer'].strip()
-        a1 = self.convert_numbered_list_to_html(a1)
         
         q2 = faq[1]['question'].strip()
         a2 = faq[1]['answer'].strip()
-        a2 = self.convert_numbered_list_to_html(a2)
         
         q3 = faq[2]['question'].strip()
         a3 = faq[2]['answer'].strip()
-        a3 = self.convert_numbered_list_to_html(a3)
         
         q4 = faq[3]['question'].strip()
         a4 = faq[3]['answer'].strip()
-        a4 = self.convert_numbered_list_to_html(a4)
         
         q5 = faq[4]['question'].strip()
         a5_raw = faq[4]['answer'].strip()
@@ -1485,7 +1476,6 @@ class WSA(QMainWindow):
             "pricing page", 
             '<a class="pac-ui-editor-a" href=/pricing rel="noopener noreferrer" target=_self>pricing page</a>'
         )
-        a5 = self.convert_numbered_list_to_html(a5)
         
         folder_path = self.pics_path_widget.text()
         self.ensure_folder_exists(folder_path=folder_path)
@@ -1562,41 +1552,6 @@ class WSA(QMainWindow):
         
         # 获取关键字段
 
-    def convert_numbered_list_to_html(self, text: str) -> str:
-        """
-        识别并转换文本中的有序列表为HTML的<ol>格式。
-        此实现通过逐行扫描来处理列表，以提高稳健性。
-        """
-        lines = text.split('\n')
-        new_lines = []
-        in_list = False
-        list_items = []
-
-        for line in lines:
-            stripped_line = line.strip()
-            is_list_item = re.match(r'^\d+\.\s+', stripped_line)
-
-            if is_list_item:
-                if not in_list:
-                    # 列表开始
-                    in_list = True
-                # 移除 "1. " 等标记并添加到列表项中
-                content = re.sub(r'^\d+\.\s+', '', stripped_line)
-                list_items.append(f'<li>{content}</li>')
-            else:
-                if in_list:
-                    # 列表结束，将其打包
-                    new_lines.append(f"<ol>{''.join(list_items)}</ol>")
-                    list_items = []
-                    in_list = False
-                # 添加非列表行
-                new_lines.append(line)
-
-        # 如果文本以列表结束，处理剩余的列表项
-        if in_list:
-            new_lines.append(f"<ol>{''.join(list_items)}</ol>")
-
-        return '\n'.join(new_lines)
             
     def current_time(self):
         return datetime.now().strftime("%H:%M:%S")

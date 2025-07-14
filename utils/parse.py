@@ -76,26 +76,29 @@ def segment(text: str) -> List[str]:
         segments.append('\n'.join(current).strip())
     return [seg for seg in segments if seg]
 
-def parse_faq_text(text) -> list:
+def parse_faq_text(text: str) -> list:
     """
-    解析FAQ文本，去除第一行，按空行分块处理问答对
-    
+    解析FAQ文本，去除第一行，按空行分块处理问答对。
+    答案中的段落将用<p>标签包裹，有序列表将用<ol>和<li>标签包裹。
+    如果答案仅包含段落，则在段落之间添加<p><br></p>。
+
     Args:
         text (str): 原始FAQ文本
-        
+
     Returns:
         list: 包含字典的列表，每个字典有'question'和'answer'键
     """
     # 按行分割文本
     lines = text.strip().split('\n')
-    
+
     # 去除第一行
-    lines = lines[1:]
-    
+    if lines:
+        lines = lines[1:]
+
     # 按空行分块
     blocks = []
     current_block = []
-    
+
     for line in lines:
         if line.strip() == '':  # 遇到空行
             if current_block:  # 如果当前块不为空
@@ -103,24 +106,57 @@ def parse_faq_text(text) -> list:
                 current_block = []
         else:
             current_block.append(line.strip())
-    
+
     # 添加最后一个块（如果存在）
     if current_block:
         blocks.append(current_block)
-    
+
     # 解析每个块为问答对
     faq_list = []
     for block in blocks:
         if len(block) >= 2:  # 至少要有问题和答案
             question = block[0]
-            answer = ' '.join(block[1:])  # 将多行答案连接成一个字符串
+            answer_lines = block[1:]
             
+            # 检查回答中是否包含列表项
+            has_list_item = any(re.match(r'^\d+\.\s', line) for line in answer_lines)
+            
+            answer_html_parts = []
+
+            if has_list_item:
+                # 包含列表项的逻辑
+                in_ol = False
+                for line in answer_lines:
+                    is_list_item = re.match(r'^\d+\.\s', line)
+                    if is_list_item:
+                        if not in_ol:
+                            in_ol = True
+                            answer_html_parts.append('<ol>')
+                        content = re.sub(r'^\d+\.\s', '', line)
+                        answer_html_parts.append(f'<li>{content}</li>')
+                    else:
+                        if in_ol:
+                            answer_html_parts.append('</ol>')
+                            in_ol = False
+                        if line.strip():
+                            answer_html_parts.append(f'<p>{line}</p>')
+                if in_ol:
+                    answer_html_parts.append('</ol>')
+            else:
+                # 纯段落的逻辑
+                p_tags = [f'<p>{line}</p>' for line in answer_lines if line.strip()]
+                answer_html_parts.append('<p><br></p>'.join(p_tags))
+
+            answer = ''.join(answer_html_parts)
+
             faq_list.append({
                 'question': question,
                 'answer': answer
             })
-    
+
     return faq_list
+
+
 
 
 
