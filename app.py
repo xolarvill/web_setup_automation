@@ -227,17 +227,31 @@ class WSA(QMainWindow):
         self.color_diy_choice_widget = LabeledLineEditWithCopy("颜色自定义", "输入HEX颜色代码，例如#FFFFFF")
         self.color_diy_choice_widget.setText("#FFFFFF")  # 默认颜色
         
-        # DOM中一些用不太到的就用collapisble box包裹起来
-        # 自定义颜色标签
-        other_dom_options = CollapsibleBox("其他DOM选项", parent_window=self, button_height=35)
-        other_dom_options_layout = QVBoxLayout()
+        # Create a new HorizontalCollapsibleTabs for the DOM options
+        dom_options_tabs = HorizontalCollapsibleTabs(parent=self, parent_window=self, tab_height=35)
+
+        # Create the first collapsible box for "其他DOM选项"
+        other_dom_options_box = QWidget()
+        other_dom_options_layout = QVBoxLayout(other_dom_options_box)
         
         self.color_label_diy_choice_widget = LabeledLineEditWithCopy("颜色标签", "输入颜色标签，例如Label color，注意首字母大写")
-        
         self.mockup_type_widget = LabeledLineEditWithCopy("Mockup类型","例如Mockup, Box, Customize...")
         self.mockup_type_widget.setText("Mockup")
+        self.dieline_choose_widget = LabeledLineEditWithCopy("Dieline", """例如["F1","F2"]""") # New widget
         
-        # Mockup Size Type ComboBox
+        other_dom_options_layout.addWidget(self.color_label_diy_choice_widget)
+        other_dom_options_layout.addWidget(self.mockup_type_widget)
+        other_dom_options_layout.addWidget(self.dieline_choose_widget)
+        
+        dom_options_tabs.add_tab("其他DOM选项", other_dom_options_box)
+
+        # Create the second collapsible box for "尺寸相关选项"
+        size_options_box = QWidget()
+        size_options_layout = QVBoxLayout(size_options_box)
+
+        self.mockup_size_widget = LabeledLineEditWithCopy("DOM尺寸","输入DOM尺寸，如[[1,1,1],[2,2,2],[3,3,3]]")
+        self.mockup_default_size_widget = LabeledLineEditWithCopy("默认尺寸","选择第几个尺寸作为默认选项，如2")
+
         mockup_size_type_layout = QHBoxLayout()
         mockup_size_type_label = QLabel("Size类型:")
         mockup_size_type_label.setMinimumWidth(100)
@@ -245,23 +259,18 @@ class WSA(QMainWindow):
         self.mockup_type_combo.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         mockup_size_type_layout.addWidget(mockup_size_type_label)
         mockup_size_type_layout.addWidget(self.mockup_type_combo)
+
+        size_options_layout.addWidget(self.mockup_size_widget)
+        size_options_layout.addWidget(self.mockup_default_size_widget)
+        size_options_layout.addLayout(mockup_size_type_layout)
         
-        self.mockup_size_widget = LabeledLineEditWithCopy("DOM尺寸","输入DOM尺寸，如[[1,1,1],[2,2,2],[3,3,3]]")
-        
-        self.mockup_default_size_widget = LabeledLineEditWithCopy("默认尺寸","选择第几个尺寸作为默认选项，如2")
-        
-        other_dom_options_layout.addWidget(self.color_label_diy_choice_widget)
-        other_dom_options_layout.addWidget(self.mockup_type_widget)
-        other_dom_options_layout.addWidget(self.mockup_size_widget)
-        other_dom_options_layout.addWidget(self.mockup_default_size_widget)
-        other_dom_options_layout.addLayout(mockup_size_type_layout)
-        other_dom_options.setContentLayout(other_dom_options_layout)
-        
+        dom_options_tabs.add_tab("尺寸相关选项", size_options_box)
+
         left_layout.addLayout(checkbox_layout)
         left_layout.addLayout(mockup_list_layout)
         left_layout.addWidget(self.more_button_action_widget)
         left_layout.addWidget(self.color_diy_choice_widget)
-        left_layout.addWidget(other_dom_options)
+        left_layout.addWidget(dom_options_tabs) # Add the new tabs widget
 
         
 
