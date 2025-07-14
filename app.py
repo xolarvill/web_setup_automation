@@ -29,6 +29,7 @@ from utils.fetch_mockup_details import fetch_mockup_details
 from utils.upload_boto import S3Uploader
 from utils.upload_selenium_class import ImageUploader
 from utils.cdn_placeholder_image import cdn_placeholder_image
+from utils.tools_generator import generate_tools_json
 from ui.elements import CollapsibleBox, LabeledLineEditWithCopy, HorizontalCollapsibleTabs
 
 
@@ -163,6 +164,27 @@ class WSA(QMainWindow):
         page_type_layout.addWidget(page_label)
         page_type_layout.addWidget(self.page_type)
         first_group_layout.addLayout(page_type_layout)
+
+        # Add a container for the TOOLS-specific widgets
+        self.tools_options_widget = QWidget()
+        tools_options_layout = QVBoxLayout(self.tools_options_widget)
+        tools_options_layout.setContentsMargins(0, 0, 0, 0)
+        
+        self.tools_csv_path_widget = LabeledLineEditWithCopy("Tools CSV Path")
+        browse_csv_button = QPushButton("Browse")
+        browse_csv_button.clicked.connect(self.browse_tools_csv)
+        
+        tools_csv_layout = QHBoxLayout()
+        tools_csv_layout.addWidget(self.tools_csv_path_widget)
+        tools_csv_layout.addWidget(browse_csv_button)
+        tools_options_layout.addLayout(tools_csv_layout)
+        
+        first_group_layout.addWidget(self.tools_options_widget)
+
+        # Connect the page_type signal to a handler
+        self.page_type.currentIndexChanged.connect(self.on_page_type_changed)
+        # Initial check
+        self.on_page_type_changed()
 
         # 将first_group添加到left_layout
         left_layout.addLayout(first_group_layout)
@@ -1016,6 +1038,8 @@ class WSA(QMainWindow):
             self.generate_json_action_mockup_tools()
         elif chosen_type == 'Landing page':
             self.generate_json_action_landing_page()
+        elif chosen_type == 'TOOLS':
+            self.generate_json_action_tools()
         elif chosen_type == '通用专题页':
             self.generate_json_universal_topic()
         
@@ -1552,6 +1576,34 @@ class WSA(QMainWindow):
         
         # 获取关键字段
 
+    def generate_json_action_tools(self):
+        """
+        Handles the generation of JSON for the 'TOOLS' page type.
+        """
+        self.add_output_message("Generating JSON for 'TOOLS' page type...", "info")
+        
+        csv_path = self.tools_csv_path_widget.text().strip()
+        if not csv_path:
+            self.add_output_message("Please select a TOOLS.csv file first.", "error")
+            return
+
+        # Define paths for the generator
+        templates_path = os.path.join(os.getcwd(), 'temps')
+
+        # Generate the JSON string
+        json_string = generate_tools_json(
+            csv_path=csv_path,
+            templates_path=templates_path,
+            logger=self.add_output_message
+        )
+
+        if json_string:
+            self.output_json = json_string
+            QGuiApplication.clipboard().setText(json_string)
+            self.add_output_message("JSON for 'TOOLS' generated and copied to clipboard!", "success")
+        else:
+            self.add_output_message("Failed to generate JSON for 'TOOLS'. Check logs for details.", "error")
+
             
     def current_time(self):
         return datetime.now().strftime("%H:%M:%S")
@@ -1980,6 +2032,25 @@ class WSA(QMainWindow):
             self.add_output_message('Successfully opened the canary website.','success')
         except Exception as e:
             self.add_output_message('Error during opening canary website.','error')
+
+    def on_page_type_changed(self):
+        """
+        Shows or hides the TOOLS-specific widgets based on the selected page type.
+        """
+        is_tools_selected = self.page_type.currentText() == "TOOLS"
+        self.tools_options_widget.setVisible(is_tools_selected)
+
+    def browse_tools_csv(self):
+        """
+        Opens a file dialog to select the TOOLS.csv file.
+        """
+        self.add_output_message("Browsing for TOOLS CSV file...", "info")
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select TOOLS CSV", "", "CSV Files (*.csv)")
+        if file_path:
+            self.tools_csv_path_widget.setText(file_path)
+            self.add_output_message(f"Selected TOOLS CSV: {file_path}", "success")
+        else:
+            self.add_output_message("No file selected.", "warning")
 
             
 if __name__ == "__main__":
