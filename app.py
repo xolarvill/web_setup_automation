@@ -1108,6 +1108,10 @@ class WSA(QMainWindow):
         if not mockup_default_size:
             mockup_default_size = "1"
         
+        dieline_choose = self.dieline_choose_widget.text()
+        if not dieline_choose:
+            dieline_choose = "1"
+        
         part3 = self.segments[2].splitlines()
         part3_title = part3[0]
         part3_text = part3[1]
@@ -1334,6 +1338,7 @@ class WSA(QMainWindow):
             "has_size" : has_size,
             "mockup_size" : mockup_size,
             "mockup_default_size" : mockup_default_size,
+            "dieline_choose" : dieline_choose,
             "more_link": more_link,
             "part3_title": part3_title,
             "part3_text": part3_text,
