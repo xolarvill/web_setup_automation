@@ -1,3 +1,4 @@
+# this was originally written by Mirtle. I took the core part of it out of the old cask.
 import json
 
 def process_json_template(web_json_path: str, children_data_list: list) -> json:

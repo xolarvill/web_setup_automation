@@ -1828,7 +1828,7 @@
                                                     },
                                                     {
                                                         "key": "mockup-list",
-                                                        "value": "[\n  {\n    \"title\": \"{{mockup_list_1_name}}\",\n    \"model_no\": {{mockup_list_1_number}},\n    \"image\": \"{{mockup_list_1_cdn}}\",\n    \"size\":{{mockup_size}},\n    \"defaultSize\":{{mockup_default_size}},\n\"dieline_choose\":{{dieline_choose}} },\n    {\n    \"title\": \" \",\n    \"model_no\": {{mockup_list_2_number}},\n    \"image\": \"{{mockup_list_2_cdn}}\"\n  }\n]",
+                                                        "value": "[\n  {\n    \"title\": \"{{mockup_list_1_name}}\",\n    \"model_no\": {{mockup_list_1_number}},\n    \"image\": \"{{mockup_list_1_cdn}}\",\n    \"size\":{{mockup_size}},\n    \"defaultSize\":{{mockup_default_size}},\n\"dieline_choose\":{{dieline_choose}},\n\"colorLimitList\":{{color_limit_list}} },\n    {\n    \"title\": \" \",\n    \"model_no\": {{mockup_list_2_number}},\n    \"image\": \"{{mockup_list_2_cdn}}\"\n  }\n]",
                                                         "isNeedTranslate": true
                                                     },
                                                     {
@@ -1849,7 +1849,7 @@
                                                     },
                                                     {
                                                         "key": "has-color",
-                                                        "value": "false"
+                                                        "value": "{{has_color}}"
                                                     },
                                                     {
                                                         "key": "multiple-upload",

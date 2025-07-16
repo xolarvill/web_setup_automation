@@ -244,6 +244,87 @@ def parse_size_csv(file_path: str) -> Dict[str, List[Dict[str, Any]]]:
     return {k: v for k, v in sizes.items() if v} # Filter out empty entries
 
 
+def process_text_with_links(lines_list):
+    """
+    将包含链接信息的文本行列表转换为带HTML链接的整理文本
+    
+    没有潜在链接时代码能正常运行，会返回原始文本内容。
+    
+    Args:
+        lines_list: 使用 text.splitlines() 并过滤空行后的列表
+    
+    Returns:
+        str: 处理后的HTML文本
+    """
+    # 存储链接信息的字典
+    links_dict = {}
+    
+    # 存储正文行
+    content_lines = []
+    
+    # 遍历所有行，分离正文和链接
+    for line in lines_list:
+        line = line.strip()
+        if ':' in line:
+            # 检查是否是链接行（包含 tools/ 或 mockups/ 或 https://）
+            parts = line.split(':', 1)
+            if len(parts) == 2:
+                link_text = parts[0].strip()
+                url = parts[1].strip()
+                
+                # 判断是否是链接（包含常见的URL特征）
+                if ('tools/' in url or 'mockups/' in url or 
+                    url.startswith('http') or url.startswith('/')):
+                    # 规范化URL
+                    if url.startswith('http'):
+                        # 完整URL保持不变
+                        clean_url = url
+                    elif url.startswith('/'):
+                        # 已经是相对路径，保持不变
+                        clean_url = url
+                    else:
+                        # 添加前缀斜杠
+                        clean_url = '/' + url if not url.startswith('/') else url
+                    
+                    # 存储链接信息
+                    links_dict[link_text] = clean_url
+                    continue
+        
+        # 不是链接行，添加到正文
+        content_lines.append(line)
+    
+    # 合并正文
+    content = ' '.join(content_lines)
+    
+    # 处理文本中的链接替换
+    for link_text, url in links_dict.items():
+        # 创建HTML链接
+        html_link = f'<a class="pac-ui-editor-a" href={url} target=_self gtm="" rel="noopener noreferrer">{link_text}</a>'
+        
+        # 在文本中查找并替换链接文本
+        # 处理可能的复数形式和上下文
+        if link_text in content:
+            content = content.replace(link_text, html_link)
+        else:
+            # 尝试查找相似的文本（比如复数形式）
+            # 检查是否有复数形式
+            plural_form = link_text + 's'
+            if plural_form in content:
+                content = content.replace(plural_form, html_link)
+            
+            # 检查是否在句子中有稍微不同的形式
+            words = content.split()
+            for i, word in enumerate(words):
+                # 移除标点符号进行比较
+                clean_word = word.rstrip('.,!?;:')
+                if clean_word == link_text or clean_word == plural_form:
+                    words[i] = word.replace(clean_word, html_link)
+                    break
+            
+            content = ' '.join(words)
+    
+    return content
+
 # 示例用法
 if __name__ == "__main__":
     # str = '''

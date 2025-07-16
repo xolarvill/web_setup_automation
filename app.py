@@ -23,7 +23,7 @@ from utils.credentials import save_credentials, load_credentials
 from utils.parse import (
     extract_url, segment, parse_faq_text,
     extract_cutout_nextline, extract_cutout_currentline,
-    parse_size_csv
+    parse_size_csv, process_text_with_links
 )
 from utils.fetch_mockup_details import fetch_mockup_details
 from utils.upload_boto import S3Uploader
@@ -1088,10 +1088,12 @@ class WSA(QMainWindow):
         
         if self.color_diy_checkbox.isChecked():
             has_cover_color = 'true'
+            has_color = 'false'
             cover_colors = self.color_diy_choice_widget.text()
         else:
             has_cover_color = 'false'
-            cover_colors = ''
+            has_color = 'true'
+            cover_colors = "1"
            
         mockup_type = self.mockup_type_widget.text()
          
@@ -1112,9 +1114,10 @@ class WSA(QMainWindow):
         if not dieline_choose:
             dieline_choose = "1"
         
-        part3 = self.segments[2].splitlines()
+        part3 = [line for line in self.segments[2].splitlines() if line.strip()]
         part3_title = part3[0]
-        part3_text = part3[1]
+        part3_text = process_text_with_links(part3[1:])
+        
         
         # 样机展示链接
         part4 = self.segments[3].splitlines()
@@ -1339,6 +1342,7 @@ class WSA(QMainWindow):
             "mockup_size" : mockup_size,
             "mockup_default_size" : mockup_default_size,
             "dieline_choose" : dieline_choose,
+            "has_color": has_color,
             "more_link": more_link,
             "part3_title": part3_title,
             "part3_text": part3_text,
