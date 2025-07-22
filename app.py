@@ -1361,9 +1361,9 @@ class WSA(QMainWindow):
                 json.dump(var_json_data, f, ensure_ascii=False, indent=2)
             self.add_output_message("Fetched mockup details and wrote var_v.json.", "success")
         
-        step1_cdn = cdn_placeholder_image(self.step1_cdn_widget.text())
-        step2_cdn = cdn_placeholder_image(self.step2_cdn_widget.text())
-        step3_cdn = cdn_placeholder_image(self.step3_cdn_widget.text())
+        step1_cdn = cdn_placeholder_image(self.step1_cdn_widget.text(),type='1')
+        step2_cdn = cdn_placeholder_image(self.step2_cdn_widget.text(),type='2')
+        step3_cdn = cdn_placeholder_image(self.step3_cdn_widget.text(),type='3')
         
         part5 = [line for line in self.segments[4].splitlines() if line.strip()]
         part5_title = part5[0].strip()
@@ -1379,10 +1379,10 @@ class WSA(QMainWindow):
         
         part6 = [line for line in self.segments[5].splitlines() if line.strip()]
         
-        part6_1_feature_cdn = cdn_placeholder_image(self.feature1_cdn_widget.text())
-        part6_2_feature_cdn = cdn_placeholder_image(self.feature2_cdn_widget.text())
-        part6_3_feature_cdn = cdn_placeholder_image(self.feature3_cdn_widget.text())
-        part6_4_feature_cdn = cdn_placeholder_image(self.feature4_cdn_widget.text())
+        part6_1_feature_cdn = cdn_placeholder_image(self.feature1_cdn_widget.text(),type='a')
+        part6_2_feature_cdn = cdn_placeholder_image(self.feature2_cdn_widget.text(),type='b')
+        part6_3_feature_cdn = cdn_placeholder_image(self.feature3_cdn_widget.text(),type='c')
+        part6_4_feature_cdn = cdn_placeholder_image(self.feature4_cdn_widget.text(),type='d')
         
         part6_title = part6[0]
         
@@ -1783,9 +1783,9 @@ class WSA(QMainWindow):
                 json.dump(var_json_data, f, ensure_ascii=False, indent=2)
             self.add_output_message("Fetched mockup details and wrote var_v.json.", "success")
         
-        step1_cdn = cdn_placeholder_image(self.step1_cdn_widget.text())
-        step2_cdn = cdn_placeholder_image(self.step2_cdn_widget.text())
-        step3_cdn = cdn_placeholder_image(self.step3_cdn_widget.text())
+        step1_cdn = cdn_placeholder_image(self.step1_cdn_widget.text(),type='1')
+        step2_cdn = cdn_placeholder_image(self.step2_cdn_widget.text(),type='2')
+        step3_cdn = cdn_placeholder_image(self.step3_cdn_widget.text(),type='3')
         
         part5 = [line for line in self.segments[4].splitlines() if line.strip()]
         part5_title = part5[0].strip()
@@ -1801,10 +1801,10 @@ class WSA(QMainWindow):
         
         part6 = [line for line in self.segments[5].splitlines() if line.strip()]
         
-        part6_1_feature_cdn = cdn_placeholder_image(self.feature1_cdn_widget.text())
-        part6_2_feature_cdn = cdn_placeholder_image(self.feature2_cdn_widget.text())
-        part6_3_feature_cdn = cdn_placeholder_image(self.feature3_cdn_widget.text())
-        part6_4_feature_cdn = cdn_placeholder_image(self.feature4_cdn_widget.text())
+        part6_1_feature_cdn = cdn_placeholder_image(self.feature1_cdn_widget.text(),type='a')
+        part6_2_feature_cdn = cdn_placeholder_image(self.feature2_cdn_widget.text(),type='b')
+        part6_3_feature_cdn = cdn_placeholder_image(self.feature3_cdn_widget.text(),type='c')
+        part6_4_feature_cdn = cdn_placeholder_image(self.feature4_cdn_widget.text(),type='d')
         
         part6_title = part6[0]
         
@@ -2041,9 +2041,9 @@ class WSA(QMainWindow):
         part2_step3_1 = part2[5]
         part2_step3_2 = part2[6]
         
-        part2_step1_cdn = cdn_placeholder_image(self.step1_cdn_widget.text())
-        part2_step2_cdn = cdn_placeholder_image(self.step2_cdn_widget.text())
-        part2_step3_cdn = cdn_placeholder_image(self.step3_cdn_widget.text())
+        part2_step1_cdn = cdn_placeholder_image(self.step1_cdn_widget.text(),type='1')
+        part2_step2_cdn = cdn_placeholder_image(self.step2_cdn_widget.text(),type='2')
+        part2_step3_cdn = cdn_placeholder_image(self.step3_cdn_widget.text(),type='3')
         
         
         part3 = [line for line in self.segments[3].splitlines() if line.strip()]
@@ -2064,10 +2064,10 @@ class WSA(QMainWindow):
         part3_4_2 = part3[11]
         part3_4_3 = part3[12]
         
-        feature_1_cdn = cdn_placeholder_image(self.feature1_cdn_widget.text())
-        feature_2_cdn = cdn_placeholder_image(self.feature2_cdn_widget.text())
-        feature_3_cdn = cdn_placeholder_image(self.feature3_cdn_widget.text())
-        feature_4_cdn = cdn_placeholder_image(self.feature4_cdn_widget.text())
+        feature_1_cdn = cdn_placeholder_image(self.feature1_cdn_widget.text(),type='a')
+        feature_2_cdn = cdn_placeholder_image(self.feature2_cdn_widget.text(),type='b')
+        feature_3_cdn = cdn_placeholder_image(self.feature3_cdn_widget.text(),type='c')
+        feature_4_cdn = cdn_placeholder_image(self.feature4_cdn_widget.text(),type='d')
         
         part4 = self.segments[4]
         
