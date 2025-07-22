@@ -833,7 +833,12 @@ class WSA(QMainWindow):
             self.update_action_mockup_tool()
         elif type == "Landing page":
             self.update_action_landing_page()
+        elif type == "Mockup resource":
+            self.update_action_mockup_tool()
+        else:
+            self.add_output_message("Unavailable page type...","warning")
 
+    
     def update_action_landing_page(self):
         self.add_output_message("Processing clipboard content...", "info")
         clipboard = QGuiApplication.clipboard()
@@ -1049,9 +1054,577 @@ class WSA(QMainWindow):
             self.generate_json_action_landing_page()
         elif chosen_type == 'TOOLS':
             self.generate_json_action_tools()
-        elif chosen_type == '通用专题页':
+        elif chosen_type == 'Mockup resource':
+            self.generate_json_action_mockup_resource
+        elif chosen_type == 'Universal topic':
             self.generate_json_universal_topic()
         
+    def generate_json_action_mockup_resource(self):
+        self.add_output_message("Generating JSON output...", "info")
+        
+        # 获取关键字段
+        view_text = self.view_widget.text().split(":")[0].strip()
+        view_link_raw = self.view_widget.text().split(":")[1].strip()
+        view_link_spicy = f"{view_link_raw}"
+        view_link = view_link_spicy
+        
+        try_text = self.try_widget.text().split(":")[0].strip()
+        try_link_raw = self.try_widget.text().split(":")[1].strip() 
+        try_link_spicy = f"{try_link_raw}"
+        try_link = try_link_spicy
+        
+        breadcrumb = self.keywords_widget.text()
+        breadcrumb_lower = breadcrumb.capitalize()
+        
+        part2 = self.segments[1]
+        part2_text = part2.splitlines()[1]
+        
+        mockup_list_1_name = self.mockup_list_1_name_widget.text().strip()
+        mockup_list_1_number = self.mockup_list_1_number_widget.text()
+        mockup_list_1_cdn = self.cover_cdn_widget.text()
+        
+        mockup_list_2_number = self.mockup_list_2_number_widget.text()
+        mockup_list_2_cdn = self.cover_more_cdn_widget.text()
+        
+        if self.single_image_checkbox.isChecked():
+            multiple_upload = 'false'
+        else:
+            multiple_upload = 'true'
+
+        more_link = self.more_button_action_widget.text()
+        
+        if self.color_diy_checkbox.isChecked():
+            has_cover_color = 'true'
+            has_color = 'false'
+            cover_colors = self.color_diy_choice_widget.text()
+        else:
+            has_cover_color = 'false'
+            has_color = 'true'
+            cover_colors = "1"
+           
+        mockup_type = self.mockup_type_widget.text()
+         
+        if mockup_type == 'Box':
+            has_size = 'true'
+        else:
+            has_size = 'false'
+            
+        mockup_size = self.mockup_size_widget.text()
+        if not mockup_size:
+            mockup_size = "1"
+
+        mockup_default_size = self.mockup_default_size_widget.text()
+        if not mockup_default_size:
+            mockup_default_size = "1"
+        
+        dieline_choose = self.dieline_choose_widget.text()
+        if not dieline_choose:
+            dieline_choose = "1"
+        
+        part3 = [line for line in self.segments[2].splitlines() if line.strip()]
+        part3_title = part3[0]
+        part3_text = process_text_with_links(part3[1:])
+        
+        
+        # 样机展示链接
+        part4 = self.segments[3].splitlines()
+        part4_title = part4[0]
+        
+        # 检查是否存在 var.json，如果有则读取，否则fetch并写入
+        var_json_path = os.path.join(self.pics_path_widget.text(), "var_v.json")
+        if os.path.exists(var_json_path):
+            self.add_output_message("Found var_v.json file. Reading mockup details.", "info")
+            with open(var_json_path, "r", encoding="utf-8") as f:
+                var_json_data = json.load(f)
+            model_1_name = var_json_data["model_1"]["name"]
+            model_1_image_url = var_json_data["model_1"]["image_url"]
+            model_1_editor_inner_link = var_json_data["model_1"]["editor_inner_link"]
+            model_2_name = var_json_data["model_2"]["name"]
+            model_2_image_url = var_json_data["model_2"]["image_url"]
+            model_2_editor_inner_link = var_json_data["model_2"]["editor_inner_link"]
+            model_3_name = var_json_data["model_3"]["name"]
+            model_3_image_url = var_json_data["model_3"]["image_url"]
+            model_3_editor_inner_link = var_json_data["model_3"]["editor_inner_link"]
+            model_4_name = var_json_data["model_4"]["name"]
+            model_4_image_url = var_json_data["model_4"]["image_url"]
+            model_4_editor_inner_link = var_json_data["model_4"]["editor_inner_link"]
+            model_5_name = var_json_data["model_5"]["name"]
+            model_5_image_url = var_json_data["model_5"]["image_url"]
+            model_5_editor_inner_link = var_json_data["model_5"]["editor_inner_link"]
+            model_6_name = var_json_data["model_6"]["name"]
+            model_6_image_url = var_json_data["model_6"]["image_url"]
+            model_6_editor_inner_link = var_json_data["model_6"]["editor_inner_link"]
+            model_7_name = var_json_data["model_7"]["name"]
+            model_7_image_url = var_json_data["model_7"]["image_url"]
+            model_7_editor_inner_link = var_json_data["model_7"]["editor_inner_link"]
+            model_8_name = var_json_data["model_8"]["name"]
+            model_8_image_url = var_json_data["model_8"]["image_url"]
+            model_8_editor_inner_link = var_json_data["model_8"]["editor_inner_link"]
+            model_9_name = var_json_data["model_9"]["name"]
+            model_9_image_url = var_json_data["model_9"]["image_url"]
+            model_9_editor_inner_link = var_json_data["model_9"]["editor_inner_link"]
+            model_10_name = var_json_data["model_10"]["name"]
+            model_10_image_url = var_json_data["model_10"]["image_url"]
+            model_10_editor_inner_link = var_json_data["model_10"]["editor_inner_link"]
+            model_11_name = var_json_data["model_11"]["name"]
+            model_11_image_url = var_json_data["model_11"]["image_url"]
+            model_11_editor_inner_link = var_json_data["model_11"]["editor_inner_link"]
+            model_12_name = var_json_data["model_12"]["name"]
+            model_12_image_url = var_json_data["model_12"]["image_url"]
+            model_12_editor_inner_link = var_json_data["model_12"]["editor_inner_link"]
+            model_13_name = var_json_data["model_13"]["name"]
+            model_13_image_url = var_json_data["model_13"]["image_url"]
+            model_13_editor_inner_link = var_json_data["model_13"]["editor_inner_link"]
+            model_14_name = var_json_data["model_14"]["name"]
+            model_14_image_url = var_json_data["model_14"]["image_url"]
+            model_14_editor_inner_link = var_json_data["model_14"]["editor_inner_link"]
+            model_15_name = var_json_data["model_15"]["name"]
+            model_15_image_url = var_json_data["model_15"]["image_url"]
+            model_15_editor_inner_link = var_json_data["model_15"]["editor_inner_link"]
+            model_16_name = var_json_data["model_16"]["name"]
+            model_16_image_url = var_json_data["model_16"]["image_url"]
+            model_16_editor_inner_link = var_json_data["model_16"]["editor_inner_link"]
+            model_17_name = var_json_data["model_17"]["name"]
+            model_17_image_url = var_json_data["model_17"]["image_url"]
+            model_17_editor_inner_link = var_json_data["model_17"]["editor_inner_link"]
+            model_18_name = var_json_data["model_18"]["name"]
+            model_18_image_url = var_json_data["model_18"]["image_url"]
+            model_18_editor_inner_link = var_json_data["model_18"]["editor_inner_link"]
+            model_19_name = var_json_data["model_19"]["name"]
+            model_19_image_url = var_json_data["model_19"]["image_url"]
+            model_19_editor_inner_link = var_json_data["model_19"]["editor_inner_link"]
+            model_20_name = var_json_data["model_20"]["name"]
+            model_20_image_url = var_json_data["model_20"]["image_url"]
+            model_20_editor_inner_link = var_json_data["model_20"]["editor_inner_link"]
+            model_21_name = var_json_data["model_21"]["name"]
+            model_21_image_url = var_json_data["model_21"]["image_url"]
+            model_21_editor_inner_link = var_json_data["model_21"]["editor_inner_link"]
+            model_22_name = var_json_data["model_22"]["name"]
+            model_22_image_url = var_json_data["model_22"]["image_url"]
+            model_22_editor_inner_link = var_json_data["model_22"]["editor_inner_link"]
+            model_23_name = var_json_data["model_23"]["name"]
+            model_23_image_url = var_json_data["model_23"]["image_url"]
+            model_23_editor_inner_link = var_json_data["model_23"]["editor_inner_link"]
+            model_24_name = var_json_data["model_24"]["name"]
+            model_24_image_url = var_json_data["model_24"]["image_url"]
+            model_24_editor_inner_link = var_json_data["model_24"]["editor_inner_link"]
+        else:
+            urls = extract_url(part4)
+            model_1_name, model_1_image_url, model_1_editor_inner_link = fetch_mockup_details(urls[0], self.add_output_message)
+            model_2_name, model_2_image_url, model_2_editor_inner_link = fetch_mockup_details(urls[1], self.add_output_message)
+            model_3_name, model_3_image_url, model_3_editor_inner_link = fetch_mockup_details(urls[2], self.add_output_message)
+            model_4_name, model_4_image_url, model_4_editor_inner_link = fetch_mockup_details(urls[3], self.add_output_message)
+            model_5_name, model_5_image_url, model_5_editor_inner_link = fetch_mockup_details(urls[4], self.add_output_message)
+            model_6_name, model_6_image_url, model_6_editor_inner_link = fetch_mockup_details(urls[5], self.add_output_message)
+            model_7_name, model_7_image_url, model_7_editor_inner_link = fetch_mockup_details(urls[6], self.add_output_message)
+            model_8_name, model_8_image_url, model_8_editor_inner_link = fetch_mockup_details(urls[7], self.add_output_message)
+            model_9_name, model_9_image_url, model_9_editor_inner_link = fetch_mockup_details(urls[8], self.add_output_message)
+            model_10_name, model_10_image_url, model_10_editor_inner_link = fetch_mockup_details(urls[9], self.add_output_message)
+            model_11_name, model_11_image_url, model_11_editor_inner_link = fetch_mockup_details(urls[10], self.add_output_message)
+            model_12_name, model_12_image_url, model_12_editor_inner_link = fetch_mockup_details(urls[11], self.add_output_message)
+            model_13_name, model_13_image_url, model_13_editor_inner_link = fetch_mockup_details(urls[12], self.add_output_message)
+            model_14_name, model_14_image_url, model_14_editor_inner_link = fetch_mockup_details(urls[13], self.add_output_message)
+            model_15_name, model_15_image_url, model_15_editor_inner_link = fetch_mockup_details(urls[14], self.add_output_message)
+            model_16_name, model_16_image_url, model_16_editor_inner_link = fetch_mockup_details(urls[15], self.add_output_message)
+            model_17_name, model_17_image_url, model_17_editor_inner_link = fetch_mockup_details(urls[16], self.add_output_message)
+            model_18_name, model_18_image_url, model_18_editor_inner_link = fetch_mockup_details(urls[17], self.add_output_message)
+            model_19_name, model_19_image_url, model_19_editor_inner_link = fetch_mockup_details(urls[18], self.add_output_message)
+            model_20_name, model_20_image_url, model_20_editor_inner_link = fetch_mockup_details(urls[19], self.add_output_message)
+            model_21_name, model_21_image_url, model_21_editor_inner_link = fetch_mockup_details(urls[20], self.add_output_message)
+            model_22_name, model_22_image_url, model_22_editor_inner_link = fetch_mockup_details(urls[21], self.add_output_message)
+            model_23_name, model_23_image_url, model_23_editor_inner_link = fetch_mockup_details(urls[22], self.add_output_message)
+            model_24_name, model_24_image_url, model_24_editor_inner_link = fetch_mockup_details(urls[23], self.add_output_message)
+            # 写入 var.json
+            var_json_data = {
+            "model_1": {
+                "name": model_1_name,
+                "image_url": model_1_image_url,
+                "editor_inner_link": model_1_editor_inner_link
+            },
+            "model_2": {
+                "name": model_2_name,
+                "image_url": model_2_image_url,
+                "editor_inner_link": model_2_editor_inner_link
+            },
+            "model_3": {
+                "name": model_3_name,
+                "image_url": model_3_image_url,
+                "editor_inner_link": model_3_editor_inner_link
+            },
+            "model_4": {
+                "name": model_4_name,
+                "image_url": model_4_image_url,
+                "editor_inner_link": model_4_editor_inner_link
+            },
+            "model_5": {
+                "name": model_5_name,
+                "image_url": model_5_image_url,
+                "editor_inner_link": model_5_editor_inner_link
+            },
+            "model_6": {
+                "name": model_6_name,
+                "image_url": model_6_image_url,
+                "editor_inner_link": model_6_editor_inner_link
+            },
+            "model_7": {
+                "name": model_7_name,
+                "image_url": model_7_image_url,
+                "editor_inner_link": model_7_editor_inner_link
+            },
+            "model_8": {
+                "name": model_8_name,
+                "image_url": model_8_image_url,
+                "editor_inner_link": model_8_editor_inner_link
+            },
+            "model_9": {
+                "name": model_9_name,
+                "image_url": model_9_image_url,
+                "editor_inner_link": model_9_editor_inner_link
+            },
+            "model_10": {
+                "name": model_10_name,
+                "image_url": model_10_image_url,
+                "editor_inner_link": model_10_editor_inner_link
+            },
+            "model_11": {
+                "name": model_11_name,
+                "image_url": model_11_image_url,
+                "editor_inner_link": model_11_editor_inner_link
+            },
+            "model_12": {
+                "name": model_12_name,
+                "image_url": model_12_image_url,
+                "editor_inner_link": model_12_editor_inner_link
+            },
+            "model_13": {
+                "name": model_13_name,
+                "image_url": model_13_image_url,
+                "editor_inner_link": model_13_editor_inner_link
+            },
+            "model_14": {
+                "name": model_14_name,
+                "image_url": model_14_image_url,
+                "editor_inner_link": model_14_editor_inner_link
+            },
+            "model_15": {
+                "name": model_15_name,
+                "image_url": model_15_image_url,
+                "editor_inner_link": model_15_editor_inner_link
+            },
+            "model_16": {
+                "name": model_16_name,
+                "image_url": model_16_image_url,
+                "editor_inner_link": model_16_editor_inner_link
+            },
+            "model_17": {
+                "name": model_17_name,
+                "image_url": model_17_image_url,
+                "editor_inner_link": model_17_editor_inner_link
+            },
+            "model_18": {
+                "name": model_18_name,
+                "image_url": model_18_image_url,
+                "editor_inner_link": model_18_editor_inner_link
+            },
+            "model_19": {
+                "name": model_19_name,
+                "image_url": model_19_image_url,
+                "editor_inner_link": model_19_editor_inner_link
+            },
+            "model_20": {
+                "name": model_20_name,
+                "image_url": model_20_image_url,
+                "editor_inner_link": model_20_editor_inner_link
+            },
+            "model_21": {
+                "name": model_21_name,
+                "image_url": model_21_image_url,
+                "editor_inner_link": model_21_editor_inner_link
+            },
+            "model_22": {
+                "name": model_22_name,
+                "image_url": model_22_image_url,
+                "editor_inner_link": model_22_editor_inner_link
+            },
+            "model_23": {
+                "name": model_23_name,
+                "image_url": model_23_image_url,
+                "editor_inner_link": model_23_editor_inner_link
+            },
+            "model_24": {
+                "name": model_24_name,
+                "image_url": model_24_image_url,
+                "editor_inner_link": model_24_editor_inner_link
+            }
+            }
+            with open(var_json_path, "w", encoding="utf-8") as f:
+                json.dump(var_json_data, f, ensure_ascii=False, indent=2)
+            self.add_output_message("Fetched mockup details and wrote var_v.json.", "success")
+        
+        step1_cdn = cdn_placeholder_image(self.step1_cdn_widget.text())
+        step2_cdn = cdn_placeholder_image(self.step2_cdn_widget.text())
+        step3_cdn = cdn_placeholder_image(self.step3_cdn_widget.text())
+        
+        part5 = [line for line in self.segments[4].splitlines() if line.strip()]
+        part5_title = part5[0].strip()
+        part5_step1_a = part5[1].strip()
+        part5_step1_b = part5[2].strip()
+        
+        part5_step2_a = part5[3].strip()
+        part5_step2_b = part5[4].strip()
+        
+        part5_step3_a = part5[5].strip()
+        part5_step3_b = part5[6].strip()
+        
+        
+        part6 = [line for line in self.segments[5].splitlines() if line.strip()]
+        
+        part6_1_feature_cdn = cdn_placeholder_image(self.feature1_cdn_widget.text())
+        part6_2_feature_cdn = cdn_placeholder_image(self.feature2_cdn_widget.text())
+        part6_3_feature_cdn = cdn_placeholder_image(self.feature3_cdn_widget.text())
+        part6_4_feature_cdn = cdn_placeholder_image(self.feature4_cdn_widget.text())
+        
+        part6_title = part6[0]
+        
+        part6_1_title = part6[1].strip()
+        part6_1_a = part6[2].strip()
+        part6_1_b = part6[3].strip()
+        part6_1_button = part6[4].strip()
+        # 根据给定的文案判断是try还是view，由于try的变种文案太多，所以用view来判断
+        if part6_1_button.startswith("View"):
+            part6_1_button_text = view_text
+            part6_1_button_link = view_link_spicy
+            part6_1_button_gtm = 'ga-seo_tools_view_all'
+        else:
+            part6_1_button_text = try_text
+            part6_1_button_link = try_link_spicy
+            part6_1_button_gtm = 'ga-seo_tools_try'
+
+        part6_2_title = part6[5].strip()
+        part6_2_a = part6[6].strip()
+        part6_2_b = part6[7].strip()
+        part6_2_button = part6[8].strip()
+        if part6_2_button.startswith("View"):
+            part6_2_button_text = view_text
+            part6_2_button_link = view_link_spicy
+            part6_2_button_gtm = 'ga-seo_tools_view_all'
+        else:
+            part6_2_button_text = try_text
+            part6_2_button_link = try_link_spicy
+            part6_2_button_gtm = 'ga-seo_tools_try'
+        
+        part6_3_title = part6[9].strip()
+        part6_3_a = part6[10].strip()
+        part6_3_b = part6[11].strip()
+        part6_3_button = part6[12].strip()
+        if part6_3_button.startswith("View"):
+            part6_3_button_text = view_text
+            part6_3_button_link = view_link_spicy
+            part6_3_button_gtm = 'ga-seo_tools_view_all'
+        else:
+            part6_3_button_text = try_text
+            part6_3_button_link = try_link_spicy
+            part6_3_button_gtm = 'ga-seo_tools_try'
+        
+        part6_4_title = part6[13].strip()
+        part6_4_a = part6[14].strip()
+        part6_4_b = part6[15].strip()
+        part6_4_button = part6[16].strip()
+        if part6_4_button.startswith("View"):
+            part6_4_button_text = view_text
+            part6_4_button_link = view_link_spicy
+            part6_4_button_gtm = 'ga-seo_tools_view_all'
+        else:
+            part6_4_button_text = try_text
+            part6_4_button_link = try_link_spicy
+            part6_4_button_gtm = 'ga-seo_tools_try'
+        
+        # FAQ环节
+        part7 = self.segments[6]
+        part7_block = parse_faq_text(part7)
+        
+        part7_q1 = part7_block[0]['question'].strip()
+        part7_a1 = part7_block[0]['answer'].strip()
+        
+        part7_q2 = part7_block[1]['question'].strip()
+        part7_a2 = part7_block[1]['answer'].strip()
+        
+        part7_q3 = part7_block[2]['question'].strip()
+        part7_a3 = part7_block[2]['answer'].strip()
+        
+        part7_q4 = part7_block[3]['question'].strip()
+        part7_a4 = part7_block[3]['answer'].strip()
+        
+        part7_q5 = part7_block[4]['question'].strip()
+        part7_a5_raw = part7_block[4]['answer'].strip()
+        part7_a5 = part7_a5_raw.replace(
+            "pricing page", 
+            '<a class="pac-ui-editor-a" href=/pricing target=_self gtm="" rel="noopener noreferrer">pricing page</a>'
+        )
+        
+        part8_text = self.segments[7].splitlines()[0]
+        
+        folder_path = self.pics_path_widget.text()
+        self.ensure_folder_exists(folder_path = folder_path)
+        
+        # 读取模板内容
+        with open('temps/mockup_resource.json', 'r', encoding='utf-8') as f:
+            template_str = f.read()
+
+        # 构建替换字典
+        replace_dict = {
+            "view_text": view_text,
+            "view_link": view_link,
+            "make_text": try_text,
+            "make_link": try_link,
+            "breadcrumb": breadcrumb,
+            "breadcrumb_lower": breadcrumb_lower,
+            "part2_text": part2_text,
+            "part3_title": part3_title,
+            "part3_text": part3_text,
+            "part4_title": part4_title,
+            "model1_cdn": model_1_image_url,
+            "model1_text": model_1_name,
+            "model1_link": model_1_editor_inner_link,
+            "model2_cdn": model_2_image_url,
+            "model2_text": model_2_name,
+            "model2_link": model_2_editor_inner_link,
+            "model3_cdn": model_3_image_url,
+            "model3_text": model_3_name,
+            "model3_link": model_3_editor_inner_link,
+            "model4_cdn": model_4_image_url,
+            "model4_text": model_4_name,
+            "model4_link": model_4_editor_inner_link,
+            "model5_cdn": model_5_image_url,
+            "model5_text": model_5_name,
+            "model5_link": model_5_editor_inner_link,
+            "model6_cdn": model_6_image_url,
+            "model6_text": model_6_name,
+            "model6_link": model_6_editor_inner_link,
+            "model7_cdn": model_7_image_url,
+            "model7_text": model_7_name,
+            "model7_link": model_7_editor_inner_link,
+            "model8_cdn": model_8_image_url,
+            "model8_text": model_8_name,
+            "model8_link": model_8_editor_inner_link,
+            "model9_cdn": model_9_image_url,
+            "model9_text": model_9_name,
+            "model9_link": model_9_editor_inner_link,
+            "model10_cdn": model_10_image_url,
+            "model10_text": model_10_name,
+            "model10_link": model_10_editor_inner_link,
+            "model11_cdn": model_11_image_url,
+            "model11_text": model_11_name,
+            "model11_link": model_11_editor_inner_link,
+            "model12_cdn": model_12_image_url,
+            "model12_text": model_12_name,
+            "model12_link": model_12_editor_inner_link,
+            "model13_cdn": model_13_image_url,
+            "model13_text": model_13_name,
+            "model13_link": model_13_editor_inner_link,
+            "model14_cdn": model_14_image_url,
+            "model14_text": model_14_name,
+            "model14_link": model_14_editor_inner_link,
+            "model15_cdn": model_15_image_url,
+            "model15_text": model_15_name,
+            "model15_link": model_15_editor_inner_link,
+            "model16_cdn": model_16_image_url,
+            "model16_text": model_16_name,
+            "model16_link": model_16_editor_inner_link,
+            "model17_cdn": model_17_image_url,
+            "model17_text": model_17_name,
+            "model17_link": model_17_editor_inner_link,
+            "model18_cdn": model_18_image_url,
+            "model18_text": model_18_name,
+            "model18_link": model_18_editor_inner_link,
+            "model19_cdn": model_19_image_url,
+            "model19_text": model_19_name,
+            "model19_link": model_19_editor_inner_link,
+            "model20_cdn": model_20_image_url,
+            "model20_text": model_20_name,
+            "model20_link": model_20_editor_inner_link,
+            "model21_cdn": model_21_image_url,
+            "model21_text": model_21_name,
+            "model21_link": model_21_editor_inner_link,
+            "model22_cdn": model_22_image_url,
+            "model22_text": model_22_name,
+            "model22_link": model_22_editor_inner_link,
+            "model23_cdn": model_23_image_url,
+            "model23_text": model_23_name,
+            "model23_link": model_23_editor_inner_link,
+            "model24_cdn": model_24_image_url,
+            "model24_text": model_24_name,
+            "model24_link": model_24_editor_inner_link,
+            "step1_cdn": step1_cdn,
+            "step2_cdn": step2_cdn,
+            "step3_cdn": step3_cdn,
+            "part5_title": part5_title,
+            "part5_step1_a": part5_step1_a,
+            "part5_step1_b": part5_step1_b,
+            "part5_step2_a": part5_step2_a,
+            "part5_step2_b": part5_step2_b,
+            "part5_step3_a": part5_step3_a,
+            "part5_step3_b": part5_step3_b,
+            "part6_title": part6_title,
+            "part6_1_title": part6_1_title,
+            "part6_1_feature_cdn": part6_1_feature_cdn,
+            "part6_1_a": part6_1_a,
+            "part6_1_b": part6_1_b,
+            "part6_1_button_text" : part6_1_button_text,
+            "part6_1_button_link" : part6_1_button_link,
+            "part6_1_button_gtm" : part6_1_button_gtm,
+            "part6_2_title": part6_2_title,
+            "part6_2_feature_cdn": part6_2_feature_cdn,
+            "part6_2_a": part6_2_a,
+            "part6_2_b": part6_2_b,
+            "part6_2_button_text" : part6_2_button_text,
+            "part6_2_button_link" : part6_2_button_link,
+            "part6_2_button_gtm" : part6_2_button_gtm,
+            "part6_3_title": part6_3_title,
+            "part6_3_feature_cdn": part6_3_feature_cdn,
+            "part6_3_a": part6_3_a,
+            "part6_3_b": part6_3_b,
+            "part6_3_button_text" : part6_3_button_text,
+            "part6_3_button_link" : part6_3_button_link,
+            "part6_3_button_gtm" : part6_3_button_gtm,
+            "part6_4_title": part6_4_title,
+            "part6_4_feature_cdn": part6_4_feature_cdn,
+            "part6_4_a": part6_4_a,
+            "part6_4_b": part6_4_b,
+            "part6_4_button_text" : part6_4_button_text,
+            "part6_4_button_link" : part6_4_button_link,
+            "part6_4_button_gtm" : part6_4_button_gtm,
+            "q1": part7_q1,
+            "a1": part7_a1,
+            "q2": part7_q2,
+            "a2": part7_a2,
+            "q3": part7_q3,
+            "a3": part7_a3,
+            "q4": part7_q4,
+            "a4": part7_a4,
+            "q5": part7_q5,
+            "a5": part7_a5,
+            "part8_text": part8_text,
+        }
+
+        # 替换所有{{key}}为对应值
+        for key, value in replace_dict.items():
+            if isinstance(value, str):
+                # 使用json.dumps正确处理JSON字符串中的特殊字符
+                value = json.dumps(value)[1:-1]  # 去掉json.dumps添加的外层引号
+            template_str = template_str.replace(f"{{{{{key}}}}}", str(value))
+
+        # 尝试解析为json
+        try:
+            json_obj = json.loads(template_str)
+            json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
+            # self.json_widget.setText(json_string)
+            self.output_json = json_string
+            QGuiApplication.clipboard().setText(json_string)
+            self.add_output_message("JSON generated and copied to clipboard!", "success")
+        except Exception as e:
+            self.add_output_message(f"Error generating JSON: {e}", "error")
+    
     def generate_json_action_mockup_tools(self):
         self.add_output_message("Generating JSON output...", "info")
         
