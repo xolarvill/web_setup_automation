@@ -505,6 +505,11 @@ class WSA(QMainWindow):
         self.open_canary_url_button.clicked.connect(self.open_canary_url)
         mid_buttons_layout3.addWidget(self.open_canary_url_button)
         
+        self.open_canary_url_button = QPushButton("Iterate")
+        self.open_canary_url_button.setMinimumHeight(35)
+        self.open_canary_url_button.clicked.connect(self.iterate_json_action)
+        mid_buttons_layout3.addWidget(self.open_canary_url_button)
+        
         # 添加所有按钮
         mid_layout.addLayout(mid_buttons_layout2)
         mid_layout.addLayout(mid_buttons_layout3)
@@ -1079,52 +1084,9 @@ class WSA(QMainWindow):
         part2 = self.segments[1]
         part2_text = part2.splitlines()[1]
         
-        mockup_list_1_name = self.mockup_list_1_name_widget.text().strip()
-        mockup_list_1_number = self.mockup_list_1_number_widget.text()
-        mockup_list_1_cdn = self.cover_cdn_widget.text()
-        
-        mockup_list_2_number = self.mockup_list_2_number_widget.text()
-        mockup_list_2_cdn = self.cover_more_cdn_widget.text()
-        
-        if self.single_image_checkbox.isChecked():
-            multiple_upload = 'false'
-        else:
-            multiple_upload = 'true'
-
-        more_link = self.more_button_action_widget.text()
-        
-        if self.color_diy_checkbox.isChecked():
-            has_cover_color = 'true'
-            has_color = 'false'
-            cover_colors = self.color_diy_choice_widget.text()
-        else:
-            has_cover_color = 'false'
-            has_color = 'true'
-            cover_colors = "1"
-           
-        mockup_type = self.mockup_type_widget.text()
-         
-        if mockup_type == 'Box':
-            has_size = 'true'
-        else:
-            has_size = 'false'
-            
-        mockup_size = self.mockup_size_widget.text()
-        if not mockup_size:
-            mockup_size = "1"
-
-        mockup_default_size = self.mockup_default_size_widget.text()
-        if not mockup_default_size:
-            mockup_default_size = "1"
-        
-        dieline_choose = self.dieline_choose_widget.text()
-        if not dieline_choose:
-            dieline_choose = "1"
-        
         part3 = [line for line in self.segments[2].splitlines() if line.strip()]
         part3_title = part3[0]
         part3_text = process_text_with_links(part3[1:])
-        
         
         # 样机展示链接
         part4 = self.segments[3].splitlines()
@@ -2195,7 +2157,49 @@ class WSA(QMainWindow):
         else:
             self.add_output_message("Failed to generate JSON for 'TOOLS'. Check logs for details.", "error")
 
+    def iterate_json_action(self):
+        self.add_output_message("Starting to replace the cdn placeholders.",'info')
+        # 确保cdn组件中都包含了有效链接
+        cdn_fields = [
+            self.step1_cdn_widget,
+            self.step2_cdn_widget,
+            self.step3_cdn_widget,
+            self.feature1_cdn_widget,
+            self.feature2_cdn_widget,
+            self.feature3_cdn_widget,
+            self.feature4_cdn_widget
+        ]
+        empty_fields = []
+        for widget in cdn_fields:
+            if not widget.text():
+                empty_fields.append(widget)
+        
+        if empty_fields:
+            self.add_output_message(f'{len(empty_fields)} cdn addresses are not valid.','error')
+        else:
+            self.add_output_message('All cdn fields are filled. Proceeding...','success')
+            # 读取剪切板
+            json_str = QGuiApplication.clipboard().text()
             
+            # 替换
+            try:
+                json_str = json_str.replace('https://cdn.pacdora.com/page-img/d49f2f9a-e538-43c0-90cb-7c3ea47c3e56.png',self.step1_cdn_widget.text())
+                json_str = json_str.replace('https://cdn.pacdora.com/page-img/1254454b-396c-4b92-8e4d-77a7ecbf3752.png',self.step2_cdn_widget.text())
+                json_str = json_str.replace('https://cdn.pacdora.com/page-img/8166ae2d-77e4-4189-a128-ca98b768d846.png',self.step3_cdn_widget.text())
+                json_str = json_str.replace('https://cdn.pacdora.com/page-img/46816878-bc73-443c-b7b3-328202fd844a.png',self.feature1_cdn_widget.text())
+                json_str = json_str.replace('https://cdn.pacdora.com/page-img/0229c1bc-09ab-431c-aebc-22b9b34da372.png',self.feature2_cdn_widget.text())
+                json_str = json_str.replace('https://cdn.pacdora.com/page-img/91d172ef-0de5-4bd2-a088-c3156b758113.png',self.feature3_cdn_widget.text())
+                json_str = json_str.replace('https://cdn.pacdora.com/page-img/45d178a0-f6ce-4027-a2a7-e0b82808af5a.png',self.feature4_cdn_widget.text())
+                self.add_output_message('Replace done.','success')
+                
+                # 将替换过的json传入剪切板
+                QGuiApplication.clipboard().setText(json_str)
+                self.add_output_message('Replace json copied to clipboard.','success')  
+            
+            # 稳健抛出可能的错误
+            except Exception as e:
+                self.add_output_message(f'Error: {e}','error')
+
     def current_time(self):
         return datetime.now().strftime("%H:%M:%S")
     
