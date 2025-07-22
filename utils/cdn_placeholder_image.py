@@ -1,7 +1,14 @@
 
 def cdn_placeholder_image(cdn_address: str, type: str) -> str:
     '''
-    检查cdn链接是否为空，如果空则返回一个1400x1000的纯黑图片作为占位
+    检查cdn链接是否为空，如果空，则按照对应的type返回一个1400x1000的带标识符的纯黑图片作为占位
+    
+    args:
+        cdn_address: 原始的cdn链接
+        type: 类型，例如a、b、c、d、1、2、3、banner
+    
+    return: 
+        处理后的cdn链接
     '''
     if type == 'a': 
         if cdn_address:
