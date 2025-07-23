@@ -1440,11 +1440,11 @@ class WSA(QMainWindow):
             "make_text": try_text,
             "make_link": try_link,
             "breadcrumb": breadcrumb,
-            "breadcrumb_lower": breadcrumb_lower,
+            "breadcrumb_titlecase": breadcrumb_lower,
             "part2_text": part2_text,
-            "part3_title": part3_title,
-            "part3_text": part3_text,
-            "part4_title": part4_title,
+            "part4_title": part3_title,
+            "part4_text": part3_text,
+            "part5_title": part4_title,
             "model1_cdn": model_1_image_url,
             "model1_text": model_1_name,
             "model1_link": model_1_editor_inner_link,
@@ -1521,41 +1521,41 @@ class WSA(QMainWindow):
             "step2_cdn": step2_cdn,
             "step3_cdn": step3_cdn,
             "part5_title": part5_title,
-            "part5_step1_a": part5_step1_a,
-            "part5_step1_b": part5_step1_b,
-            "part5_step2_a": part5_step2_a,
-            "part5_step2_b": part5_step2_b,
-            "part5_step3_a": part5_step3_a,
-            "part5_step3_b": part5_step3_b,
+            "step1_1": part5_step1_a,
+            "step1_2": part5_step1_b,
+            "step2_1": part5_step2_a,
+            "step2_2": part5_step2_b,
+            "step3_1": part5_step3_a,
+            "step3_2": part5_step3_b,
             "part6_title": part6_title,
             "part6_1_title": part6_1_title,
             "part6_1_feature_cdn": part6_1_feature_cdn,
             "part6_1_a": part6_1_a,
             "part6_1_b": part6_1_b,
-            "part6_1_button_text" : part6_1_button_text,
-            "part6_1_button_link" : part6_1_button_link,
-            "part6_1_button_gtm" : part6_1_button_gtm,
-            "part6_2_title": part6_2_title,
+            "feature1_button_text" : part6_1_button_text,
+            "feature1_button_link" : part6_1_button_link,
+            "feature1_button_gtm" : part6_1_button_gtm,
+            "feature2_title": part6_2_title,
             "part6_2_feature_cdn": part6_2_feature_cdn,
             "part6_2_a": part6_2_a,
             "part6_2_b": part6_2_b,
-            "part6_2_button_text" : part6_2_button_text,
-            "part6_2_button_link" : part6_2_button_link,
-            "part6_2_button_gtm" : part6_2_button_gtm,
+            "feature2_button_text" : part6_2_button_text,
+            "feature2_button_link" : part6_2_button_link,
+            "feature2_button_gtm" : part6_2_button_gtm,
             "part6_3_title": part6_3_title,
             "part6_3_feature_cdn": part6_3_feature_cdn,
             "part6_3_a": part6_3_a,
             "part6_3_b": part6_3_b,
-            "part6_3_button_text" : part6_3_button_text,
-            "part6_3_button_link" : part6_3_button_link,
-            "part6_3_button_gtm" : part6_3_button_gtm,
+            "feature3_button_text" : part6_3_button_text,
+            "feature3_button_link" : part6_3_button_link,
+            "feature3_button_gtm" : part6_3_button_gtm,
             "part6_4_title": part6_4_title,
             "part6_4_feature_cdn": part6_4_feature_cdn,
             "part6_4_a": part6_4_a,
             "part6_4_b": part6_4_b,
-            "part6_4_button_text" : part6_4_button_text,
-            "part6_4_button_link" : part6_4_button_link,
-            "part6_4_button_gtm" : part6_4_button_gtm,
+            "feature4_button_text" : part6_4_button_text,
+            "feature4_button_link" : part6_4_button_link,
+            "feature4_button_gtm" : part6_4_button_gtm,
             "q1": part7_q1,
             "a1": part7_a1,
             "q2": part7_q2,
@@ -1566,7 +1566,7 @@ class WSA(QMainWindow):
             "a4": part7_a4,
             "q5": part7_q5,
             "a5": part7_a5,
-            "part8_text": part8_text,
+            "part8": part8_text
         }
 
         # 替换所有{{key}}为对应值
@@ -2183,13 +2183,21 @@ class WSA(QMainWindow):
             
             # 替换
             try:
-                json_str = json_str.replace('https://cdn.pacdora.com/page-img/d49f2f9a-e538-43c0-90cb-7c3ea47c3e56.png',self.step1_cdn_widget.text())
-                json_str = json_str.replace('https://cdn.pacdora.com/page-img/1254454b-396c-4b92-8e4d-77a7ecbf3752.png',self.step2_cdn_widget.text())
-                json_str = json_str.replace('https://cdn.pacdora.com/page-img/8166ae2d-77e4-4189-a128-ca98b768d846.png',self.step3_cdn_widget.text())
-                json_str = json_str.replace('https://cdn.pacdora.com/page-img/46816878-bc73-443c-b7b3-328202fd844a.png',self.feature1_cdn_widget.text())
-                json_str = json_str.replace('https://cdn.pacdora.com/page-img/0229c1bc-09ab-431c-aebc-22b9b34da372.png',self.feature2_cdn_widget.text())
-                json_str = json_str.replace('https://cdn.pacdora.com/page-img/91d172ef-0de5-4bd2-a088-c3156b758113.png',self.feature3_cdn_widget.text())
-                json_str = json_str.replace('https://cdn.pacdora.com/page-img/45d178a0-f6ce-4027-a2a7-e0b82808af5a.png',self.feature4_cdn_widget.text())
+                # 定义需要替换的占位图片和对应的新CDN链接
+                replacements = {
+                    'https://cdn.pacdora.com/page-img/d49f2f9a-e538-43c0-90cb-7c3ea47c3e56.png': self.step1_cdn_widget.text(),
+                    'https://cdn.pacdora.com/page-img/1254454b-396c-4b92-8e4d-77a7ecbf3752.png': self.step2_cdn_widget.text(),
+                    'https://cdn.pacdora.com/page-img/8166ae2d-77e4-4189-a128-ca98b768d846.png': self.step3_cdn_widget.text(),
+                    'https://cdn.pacdora.com/page-img/46816878-bc73-443c-b7b3-328202fd844a.png': self.feature1_cdn_widget.text(),
+                    'https://cdn.pacdora.com/page-img/0229c1bc-09ab-431c-aebc-22b9b34da372.png': self.feature2_cdn_widget.text(),
+                    'https://cdn.pacdora.com/page-img/91d172ef-0de5-4bd2-a088-c3156b758113.png': self.feature3_cdn_widget.text(),
+                    'https://cdn.pacdora.com/page-img/45d178a0-f6ce-4027-a2a7-e0b82808af5a.png': self.feature4_cdn_widget.text()
+                }
+                
+                # 使用字典推导式一次性完成所有替换
+                for old_url, new_url in replacements.items():
+                    json_str = json_str.replace(old_url, new_url)
+                    
                 self.add_output_message('Replace done.','success')
                 
                 # 将替换过的json传入剪切板
