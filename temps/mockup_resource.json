@@ -8092,7 +8092,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "text": "<p>{{part5_title}}</p>",
+                                                        "text": "<p>{{part6_title}}</p>",
                                                         "tag": "h2",
                                                         "isOpenAnimation": true
                                                     },
@@ -11226,7 +11226,7 @@
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "<p>{{feature5_title}}</p>",
+                                                "text": "<p>{{step_title}}</p>",
                                                 "tag": "h2",
                                                 "isOpenAnimation": true,
                                                 "isShow": true
