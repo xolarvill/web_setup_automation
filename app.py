@@ -840,6 +840,8 @@ class WSA(QMainWindow):
             self.update_action_landing_page()
         elif type == "Mockup resource":
             self.update_action_mockup_tool()
+        elif type == "Uinversal topic":
+            self.update_action_universal_topic()
         else:
             self.add_output_message("Unavailable page type...","warning")
 
