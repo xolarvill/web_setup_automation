@@ -1675,9 +1675,11 @@ dependencies = [
     { name = "pillow" },
     { name = "pyinstaller" },
     { name = "pyside6" },
+    { name = "python-multipart" },
     { name = "qt-material" },
     { name = "requests" },
     { name = "selenium" },
+    { name = "uvicorn" },
     { name = "webdriver-manager" },
 ]
 
@@ -1691,9 +1693,11 @@ requires-dist = [
     { name = "pillow", specifier = ">=11.3.0" },
     { name = "pyinstaller", specifier = ">=6.14.0" },
     { name = "pyside6", specifier = ">=6.9.1" },
+    { name = "python-multipart", specifier = ">=0.0.20" },
     { name = "qt-material", specifier = ">=2.17" },
     { name = "requests", specifier = ">=2.32.4" },
     { name = "selenium", specifier = ">=4.33.0" },
+    { name = "uvicorn", specifier = ">=0.35.0" },
     { name = "webdriver-manager", specifier = ">=4.0.2" },
 ]
 
