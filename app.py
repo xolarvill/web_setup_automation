@@ -30,6 +30,7 @@ from utils.upload_boto import S3Uploader
 from utils.upload_selenium_class import ImageUploader
 from utils.cdn_placeholder_image import cdn_placeholder_image
 from utils.tools_generator import generate_tools_json
+from utils.update_old_resource_page import update_old_resource_page
 from ui.elements import CollapsibleBox, LabeledLineEditWithCopy, HorizontalCollapsibleTabs
 
 
@@ -326,13 +327,13 @@ class WSA(QMainWindow):
         advanced_options_tabs.add_tab("落地页管理", landing_page_content)
 
         # Create and populate the "Discover/Explore" tab
-        discover_explore_content = QWidget()
-        discover_explore_layout = QVBoxLayout(discover_explore_content)
-        self.explore_discover_panel_button = QPushButton("Discover and Explore")
-        self.explore_discover_panel_button.clicked.connect(self.open_explore_discover_panel)
-        self.explore_discover_panel_button.setMinimumHeight(35)
-        discover_explore_layout.addWidget(self.explore_discover_panel_button)
-        advanced_options_tabs.add_tab("Discover/Explore", discover_explore_content)
+        more_miscelleaneous_content = QWidget()
+        more_miscelleaneous_layout = QVBoxLayout(more_miscelleaneous_content)
+        self.more_miscelleaneous_panel_button = QPushButton("Miscelleaneous")
+        self.more_miscelleaneous_panel_button.clicked.connect(self.open_more_miscelleaneous_panel)
+        self.more_miscelleaneous_panel_button.setMinimumHeight(35)
+        more_miscelleaneous_layout.addWidget(self.more_miscelleaneous_panel_button)
+        advanced_options_tabs.add_tab("Miscelleaneous", more_miscelleaneous_content)
 
         left_layout.addWidget(advanced_options_tabs)
         
@@ -747,13 +748,13 @@ class WSA(QMainWindow):
         scrollbar = self.output_box.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
         
-    def open_explore_discover_panel(self):
+    def open_more_miscelleaneous_panel(self):
         """
         打开一个新的pop up面板用于精确控制discover和explore，以节省app空间
         """
         # 创建一个新窗口
         self.explore_discover_window = QMainWindow()
-        self.explore_discover_window.setWindowTitle("Explore & Discover Panel")
+        self.explore_discover_window.setWindowTitle("Miscelleaneous functions")
         self.explore_discover_window.setFixedSize(800, 600)
         
         # 创建中心部件和布局
@@ -762,18 +763,30 @@ class WSA(QMainWindow):
         layout = QVBoxLayout(central_widget)
         
         # 添加标题标签
-        title_label = QLabel("Explore & Discover Settings")
+        title_label = QLabel("Miscelleaneous functions")
         title_label.setStyleSheet("font-size: 16px; font-weight: bold; margin: 10px;")
         layout.addWidget(title_label)
         
-        # 添加一个占位标签
-        placeholder = QLabel("面板功能开发中...")
-        placeholder.setAlignment(Qt.AlignCenter)
-        layout.addWidget(placeholder)
+        # 添加一个按钮用于批量替换旧resource页面
+        self.batch_replace_button = QPushButton("Batch replace old resource pages")
+        self.batch_replace_button.clicked.connect(self.batch_replace_to_clipboard)
+        layout.addWidget(self.batch_replace_button)
         
         # 显示窗口
         self.explore_discover_window.show()
-
+    
+    def batch_replace_to_clipboard(self):
+        try:
+            t = QClipboard.text()
+            if t:
+                t = update_old_resource_page(t)
+                QClipboard.setText(t)
+                self.add_output_message("Replace success", "success")
+            else:
+                self.add_output_message("Clipboard is empty", "warning")
+        except Exception as e:
+            self.add_output_message(f"Error: {e}", "error")
+            
     def open_help_url(self):
         """
         Opens the help URL in a web browser.
