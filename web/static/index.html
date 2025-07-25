@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Setup Automation</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Web Setup Automation</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary">AWS Configure</button>
+                <button class="btn btn-secondary">Prepare Folders</button>
+            </div>
+        </header>
+
+        <main class="main-layout">
+            <!-- Left Panel: Configuration -->
+            <section class="panel config-panel">
+                <div class="panel-header">
+                    <h2>Configuration</h2>
+                    <select id="config-type">
+                        <option value="mockup-tool">Mockup tool</option>
+                        <option value="other-type">Other Type</option>
+                    </select>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="cover-name">Cover name</label>
+                        <input type="text" id="cover-name" placeholder="Click button on the right to copy">
+                    </div>
+                    <div class="form-group">
+                        <label for="cover-hash">Cover #</label>
+                        <input type="text" id="cover-hash" placeholder="Click button on the right to copy">
+                    </div>
+                    <div class="form-group">
+                        <label for="cover-more-hash">Cover more #</label>
+                        <input type="text" id="cover-more-hash" placeholder="Click button on the right to copy">
+                    </div>
+                    <div class="form-group">
+                        <label for="more-jump">More跳转</label>
+                        <input type="text" id="more-jump" value="#mockup-display">
+                    </div>
+                    <div class="form-group">
+                        <label for="custom-color">颜色自定义</label>
+                        <div class="color-input-wrapper">
+                            <input type="color" id="custom-color-picker" value="#FFFFFF">
+                            <input type="text" id="custom-color-text" value="#FFFFFF">
+                        </div>
+                    </div>
+                    <details class="form-accordion">
+                        <summary>其他DOM选项</summary>
+                        <div class="form-group">
+                            <label for="file-path">文件路径</label>
+                            <input type="text" id="file-path" placeholder="Click button on the right to copy">
+                        </div>
+                        <div class="form-group">
+                            <label for="browser-title">浏览器title</label>
+                            <input type="text" id="browser-title" placeholder="Click button on the right to copy">
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Middle Panel: CDN -->
+            <section class="panel cdn-panel">
+                <div class="panel-header">
+                    <h2>CDN Panel</h2>
+                </div>
+                <div class="panel-body">
+                    <div id="drop-area">
+                        <p>Drag & drop your pics folder here, or</p>
+                        <input type="file" id="file-elem" webkitdirectory directory multiple style="display: none;">
+                        <label for="file-elem" class="btn btn-primary">Browse Folder</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="nas-path">NAS path</label>
+                        <input type="text" id="nas-path" placeholder="Path of your pics folder will appear here...">
+                    </div>
+                    <div class="form-group">
+                        <label for="cdn-cover">Cover封面</label>
+                        <input type="text" id="cdn-cover" placeholder="Click button on the right to copy">
+                    </div>
+                    <details class="form-accordion">
+                        <summary>其他图片CDN链接</summary>
+                        <div class="form-group">
+                            <label for="cdn-step1">Step 1</label>
+                            <input type="text" id="cdn-step1" placeholder="Click button on the right to copy">
+                        </div>
+                         <div class="form-group">
+                            <label for="cdn-feature1">Feature 1</label>
+                            <input type="text" id="cdn-feature1" placeholder="Click button on the right to copy">
+                        </div>
+                    </details>
+                </div>
+                <div class="panel-footer">
+                    <button class="btn btn-secondary">Update</button>
+                    <button class="btn btn-primary">Upload</button>
+                    <button class="btn btn-success">Generate JSON</button>
+                    <button class="btn btn-danger">Canary Inspection</button>
+                </div>
+            </section>
+
+            <!-- Right Panel: Output -->
+            <section class="panel output-panel">
+                <div class="panel-header">
+                    <h2>Program Output</h2>
+                    <button id="clear-output" class="btn btn-secondary btn-sm">Clear Output</button>
+                </div>
+                <div class="panel-body">
+                    <div id="log-output" class="log-box">
+                        <div class="log-entry success">
+                            <span class="log-time">[09:45:07]</span>
+                            <span class="log-message">Successfully loaded mockup sizes from size.csv.</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-time">[09:45:08]</span>
+                            <span class="log-message">Waiting for next action...</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
