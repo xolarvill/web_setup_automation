@@ -2060,7 +2060,7 @@ class WSA(QMainWindow):
         folder_path = self.pics_path_widget.text()
         self.ensure_folder_exists(folder_path=folder_path)
         
-        with open('temps/landing.json','r') as f:
+        with open('temps/mockup_landing.json','r') as f:
             template_str = f.read()
         
         # 构建替换字典
