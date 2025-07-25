@@ -147,6 +147,7 @@ class WSA(QMainWindow):
         first_group_button_layout.addWidget(self.prepare_folder_button)
         
         self.it_is_a_button_for_fun = QPushButton("有点意思")
+        self.it_is_a_button_for_fun.setToolTip("彩蛋")
         self.it_is_a_button_for_fun.setMinimumHeight(35)
         self.it_is_a_button_for_fun.clicked.connect(self.on_fun_button_clicked)
         first_group_button_layout.addWidget(self.it_is_a_button_for_fun)
@@ -481,12 +482,14 @@ class WSA(QMainWindow):
         
         # update按钮
         self.update_button = QPushButton("Update")
+        self.update_button.setToolTip("从Google Docs文档中提取信息")
         self.update_button.setMinimumHeight(35)
         self.update_button.clicked.connect(self.update_action)
         mid_buttons_layout2.addWidget(self.update_button)
         
         # 添加上传按钮
         self.upload_button = QPushButton("Upload")
+        self.upload_button.setToolTip("将NAS文件夹中的图片上传到AWS Bucket获取CDN链接")
         self.upload_button.clicked.connect(self.uploader_upload_folder)
         self.upload_button.setMinimumHeight(35)
         mid_buttons_layout2.addWidget(self.upload_button)
@@ -496,17 +499,20 @@ class WSA(QMainWindow):
         
         # Generate生成按钮
         self.generate_button = QPushButton("Generate JSON")
+        self.generate_button.setToolTip("根据已有信息生成JSON字符串")
         self.generate_button.setMinimumHeight(35)
         self.generate_button.clicked.connect(self.generate_json_action)
         mid_buttons_layout3.addWidget(self.generate_button)
         
         
         self.open_canary_url_button = QPushButton("Canary Inspection")
+        self.open_canary_url_button.setToolTip("根据文件路径打开Canary页面测试")
         self.open_canary_url_button.setMinimumHeight(35)
         self.open_canary_url_button.clicked.connect(self.open_canary_url)
         mid_buttons_layout3.addWidget(self.open_canary_url_button)
         
         self.open_canary_url_button = QPushButton("Iterate")
+        self.open_canary_url_button.setToolTip("获取未完成图片的配置页面json，批量替换CDN链接")
         self.open_canary_url_button.setMinimumHeight(35)
         self.open_canary_url_button.clicked.connect(self.iterate_json_action)
         mid_buttons_layout3.addWidget(self.open_canary_url_button)
@@ -536,6 +542,7 @@ class WSA(QMainWindow):
         
         # 3.2 清除按钮放在标题栏右侧
         self.clear_button = QPushButton("Clear Output")
+        self.clear_button.setToolTip("清除输出框中的内容，将所有组件复原到初始状态")
         self.clear_button.setFixedSize(130, 30)
         self.clear_button.setStyleSheet("""
             QPushButton {
@@ -762,13 +769,9 @@ class WSA(QMainWindow):
         self.explore_discover_window.setCentralWidget(central_widget)
         layout = QVBoxLayout(central_widget)
         
-        # 添加标题标签
-        title_label = QLabel("Miscelleaneous functions")
-        title_label.setStyleSheet("font-size: 16px; font-weight: bold; margin: 10px;")
-        layout.addWidget(title_label)
-        
         # 添加一个按钮用于批量替换旧resource页面
         self.batch_replace_button = QPushButton("Batch replace old resource pages")
+        self.batch_replace_button.setToolTip("确保点击前已经复制了旧resource页面的json字符串")
         self.batch_replace_button.clicked.connect(self.batch_replace_to_clipboard)
         layout.addWidget(self.batch_replace_button)
         
