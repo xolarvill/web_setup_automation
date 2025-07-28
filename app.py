@@ -32,6 +32,7 @@ from utils.cdn_placeholder_image import cdn_placeholder_image
 from utils.tools_generator import generate_tools_json
 from utils.update_old_resource_page import update_old_resource_page
 from ui.elements import CollapsibleBox, LabeledLineEditWithCopy, HorizontalCollapsibleTabs
+from utils.resource_manager import get_writable_path
 
 # PyInstaller兼容性修复
 if hasattr(sys, '_MEIPASS'):
@@ -2611,7 +2612,8 @@ class WSA(QMainWindow):
         Loads mockup sizes from size.csv.
         """
         try:
-            sizes = parse_size_csv('size.csv')
+            csv_path = get_writable_path('size.csv')
+            sizes = parse_size_csv(csv_path)
             self.add_output_message("Successfully loaded mockup sizes from size.csv.", "success")
             return sizes
         except Exception as e:
