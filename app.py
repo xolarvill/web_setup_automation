@@ -33,6 +33,11 @@ from utils.tools_generator import generate_tools_json
 from utils.update_old_resource_page import update_old_resource_page
 from ui.elements import CollapsibleBox, LabeledLineEditWithCopy, HorizontalCollapsibleTabs
 
+# PyInstaller兼容性修复
+if hasattr(sys, '_MEIPASS'):
+    import multiprocessing
+    multiprocessing.freeze_support()
+    os.environ['NUMPY_MADVISE_HUGEPAGE'] = '0'
 
 class AwsConfigDialog(QDialog):
     """
