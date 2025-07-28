@@ -1,10 +1,29 @@
 import json
 import pandas as pd
 import uuid
+import sys
 import os
 import re
 from urllib.parse import urlparse
 from typing import Callable
+
+
+# PyInstaller numpy修复
+if getattr(sys, 'frozen', False):
+    import multiprocessing
+    multiprocessing.freeze_support()
+    os.environ['OPENBLAS_NUM_THREADS'] = '1'
+
+# 安全导入
+try:
+    import numpy.core._multiarray_umath
+    import numpy as np
+    import pandas as pd
+    print("NumPy and Pandas imported successfully")
+except ImportError as e:
+    print(f"Import failed: {e}")
+    sys.exit(1)
+
 
 def _is_valid_json(json_data: str, logger: Callable) -> bool:
     """
