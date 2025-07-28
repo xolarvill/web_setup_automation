@@ -32,7 +32,7 @@ from utils.cdn_placeholder_image import cdn_placeholder_image
 from utils.tools_generator import generate_tools_json
 from utils.update_old_resource_page import update_old_resource_page
 from ui.elements import CollapsibleBox, LabeledLineEditWithCopy, HorizontalCollapsibleTabs
-from utils.resource_manager import get_writable_path
+from utils.resource_manager import get_writable_path, get_resource_path
 
 # PyInstaller兼容性修复
 if hasattr(sys, '_MEIPASS'):
@@ -1454,7 +1454,8 @@ class WSA(QMainWindow):
         self.ensure_folder_exists(folder_path = folder_path)
         
         # 读取模板内容
-        with open('temps/mockup_resource.json', 'r', encoding='utf-8') as f:
+        temp_path = get_resource_path('temps/mockup_resource.json')
+        with open(temp_path, 'r', encoding='utf-8') as f:
             template_str = f.read()
 
         # 构建替换字典
@@ -1877,7 +1878,8 @@ class WSA(QMainWindow):
         self.ensure_folder_exists(folder_path = folder_path)
         
         # 读取模板内容
-        with open('temps/mockup_tool.json', 'r', encoding='utf-8') as f:
+        temp_path = get_resource_path('temps/mockup_tool.json')
+        with open(temp_path, 'r', encoding='utf-8') as f:
             template_str = f.read()
 
         # 构建替换字典
@@ -2082,7 +2084,9 @@ class WSA(QMainWindow):
         folder_path = self.pics_path_widget.text()
         self.ensure_folder_exists(folder_path=folder_path)
         
-        with open('temps/mockup_landing.json','r') as f:
+        # 读取模板内容
+        temp_path = get_resource_path('temps/mockup_landing.json')
+        with open(temp_path,'r') as f:
             template_str = f.read()
         
         # 构建替换字典
@@ -2166,7 +2170,7 @@ class WSA(QMainWindow):
             return
 
         # Define paths for the generator
-        templates_path = os.path.join(os.getcwd(), 'temps')
+        templates_path = get_resource_path('temps')
 
         # Generate the JSON string
         json_string = generate_tools_json(

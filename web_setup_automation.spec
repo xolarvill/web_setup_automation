@@ -171,8 +171,8 @@ if sys.platform.startswith('darwin'):
             'NSAppleScriptEnabled': False,
             'CFBundleDisplayName': 'Web Setup Automation',
             'CFBundleName': 'Web Setup Automation',
-            'CFBundleShortVersionString': '0.1.60',
-            'CFBundleVersion': '0.1.60',
+            'CFBundleShortVersionString': '0.1.63',
+            'CFBundleVersion': '0.1.63',
             'LSMinimumSystemVersion': '10.13.0',
             'NSRequiresAquaSystemAppearance': False,
         }
