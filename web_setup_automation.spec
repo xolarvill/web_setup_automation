@@ -43,31 +43,6 @@ a = Analysis(
         'keyring.backends.SecretService', 
         'keyring.backends.Windows',
         
-        # --- NumPy 和 Pandas 相关（关键修复）---
-        'numpy',
-        'numpy.core',
-        'numpy.core._multiarray_umath',
-        'numpy.core._multiarray_tests',
-        'numpy.linalg._umath_linalg',
-        'numpy.random._common',
-        'numpy.random.bit_generator',
-        'numpy.random._generator',
-        'numpy.random._mt19937',
-        'numpy.random.mtrand',
-        'numpy.random._philox',
-        'numpy.random._pcg64',
-        'numpy.random._sfc64',
-        'pandas',
-        'pandas._libs.tslibs.timedeltas',
-        'pandas._libs.tslibs.np_datetime',
-        'pandas._libs.tslibs.nattype',
-        'pandas._libs.skiplist',
-        'pandas.io.formats.format',
-        'pandas.io.common',
-        'pandas.io.parsers.readers',
-        'pandas._libs.parsers',
-        'pandas._libs.tslibs.strptime',
-        
         # --- Selenium 和 WebDriver 相关 ---
         'selenium',
         'selenium.webdriver',
@@ -107,25 +82,15 @@ a = Analysis(
         'idna',
     ],
     hookspath=[],
-    hooksconfig={
-        # 特别配置pandas和numpy的hook
-        'pandas': {
-            'include_pandas_datareader': False,
-        }
-    },
+    hooksconfig={},
     runtime_hooks=[],
     excludes=[
         'tkinter',
         'matplotlib.tests',
-        'numpy.tests',
-        'pandas.tests',
         'scipy.tests',
         'IPython',
         'jupyter',
         'notebook',
-        # 排除一些可能冲突的测试模块
-        'pandas.util.testing',
-        'numpy.testing',
     ],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
@@ -172,8 +137,8 @@ if sys.platform.startswith('darwin'):
             'NSAppleScriptEnabled': False,
             'CFBundleDisplayName': 'Web Setup Automation',
             'CFBundleName': 'Web Setup Automation',
-            'CFBundleShortVersionString': '0.2.2',
-            'CFBundleVersion': '0.2.2',
+            'CFBundleShortVersionString': '0.3.1',
+            'CFBundleVersion': '0.3.1',
             'LSMinimumSystemVersion': '10.13.0',
             'NSRequiresAquaSystemAppearance': False,
         }

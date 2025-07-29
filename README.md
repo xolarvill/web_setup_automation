@@ -2,6 +2,8 @@
 
 > 人中会犯错，特别是在重复性高、容错度低的网页配置环境下，好消息是机器不会。
 
+[使用手册Notion](https://www.notion.so/pacdora/Web-Setup-Automation-229c0ce4640c80e69bd2fd3ffc42c3c9?v=1a6c0ce4640c80708250000cde9dce24&source=copy_link)
+
 WSA is a cross-platform desktop application built with PySide6 designed to streamline the process of generating web setup configurations. It automates the extraction of key information from text and facilitates the creation of JSON output for various web page types, helping users efficiently prepare content for web deployment.
 
 ## Features
