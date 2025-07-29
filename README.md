@@ -15,6 +15,7 @@ WSA is a cross-platform desktop application built with PySide6 designed to strea
 * **Real-time Feedback:** Provides informative messages and status updates in the output console.
 
 Todos:
+- [x] splash screen
 - [x] better ui scaling for much information
 - [x] cross-platform AWS secret management
 - [ ] support all formats of json file

@@ -2694,12 +2694,27 @@ class WSA(QMainWindow):
             self.add_output_message("No file selected.", "warning")
 
             
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-
-    # 应用Material主题
-    apply_stylesheet(app, theme='light_orange.xml')  # 使用Material主题
-
+def create_main_window() -> QMainWindow:
+    """
+    创建并返回主应用窗口。
+    """
     window = WSA()
-    window.show()
+    return window
+
+def main():
+    """
+    主入口函数，用于独立运行app.py进行测试。
+    """
+    app = QApplication(sys.argv)
+    # 应用Material主题
+    apply_stylesheet(app, theme='light_orange.xml')
+    
+    main_window = create_main_window()
+    main_window.show()
     sys.exit(app.exec())
+
+if __name__ == "__main__":
+    # PyInstaller兼容性修复
+    if hasattr(sys, '_MEIPASS'):
+        multiprocessing.freeze_support()
+    main()

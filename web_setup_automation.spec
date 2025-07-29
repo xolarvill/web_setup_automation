@@ -17,7 +17,7 @@ if not os.path.exists(icon_file):
 
 # --- Analysis Block ---
 a = Analysis(
-    ['app.py'],
+    ['main_launcher.py'],
     pathex=[],
     binaries=[],
     datas=[
@@ -27,7 +27,8 @@ a = Analysis(
         ('utils', 'utils'),
         ('miscellaneous', 'miscellaneous'),
         ('size.csv', '.'),
-        ('aws_config.json', '.')
+        ('aws_config.json', '.'),
+        ('app.py', '.')
     ],
     hiddenimports=[
         # --- PySide6 相关 ---
@@ -171,8 +172,8 @@ if sys.platform.startswith('darwin'):
             'NSAppleScriptEnabled': False,
             'CFBundleDisplayName': 'Web Setup Automation',
             'CFBundleName': 'Web Setup Automation',
-            'CFBundleShortVersionString': '0.1.64',
-            'CFBundleVersion': '0.1.64',
+            'CFBundleShortVersionString': '0.2.2',
+            'CFBundleVersion': '0.2.2',
             'LSMinimumSystemVersion': '10.13.0',
             'NSRequiresAquaSystemAppearance': False,
         }

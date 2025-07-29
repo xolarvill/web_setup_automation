@@ -1052,7 +1052,7 @@ wheels = [
 
 [[package]]
 name = "wsa"
-version = "0.1.64"
+version = "0.2.2"
 source = { virtual = "." }
 dependencies = [
     { name = "awscli" },

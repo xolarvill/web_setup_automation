@@ -19,7 +19,7 @@ try:
     import numpy.core._multiarray_umath
     import numpy as np
     import pandas as pd
-    print("NumPy and Pandas imported successfully")
+    print("Safe Import: NumPy and Pandas imported successfully")
 except ImportError as e:
     print(f"Import failed: {e}")
     sys.exit(1)
