@@ -109,7 +109,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='web_setup_automation',
+    name='Web Setup Automation',
     debug=False,  # 可以临时设为True进行调试
     bootloader_ignore_signals=False,
     strip=False,
@@ -128,7 +128,7 @@ exe = EXE(
 if sys.platform.startswith('darwin'):
     app_bundle = BUNDLE(
         exe,
-        name='web_setup_automation.app',
+        name='Web Setup Automation.app',
         icon=icon_file if icon_file else None,
         bundle_identifier='com.victorli.websetupautomation',
         info_plist={
@@ -137,8 +137,8 @@ if sys.platform.startswith('darwin'):
             'NSAppleScriptEnabled': False,
             'CFBundleDisplayName': 'Web Setup Automation',
             'CFBundleName': 'Web Setup Automation',
-            'CFBundleShortVersionString': '0.3.1',
-            'CFBundleVersion': '0.3.1',
+            'CFBundleShortVersionString': '0.3.3',
+            'CFBundleVersion': '0.3.3',
             'LSMinimumSystemVersion': '10.13.0',
             'NSRequiresAquaSystemAppearance': False,
         }
@@ -154,5 +154,5 @@ if not sys.platform.startswith('darwin'):
         strip=False,
         upx=False,  # 同样禁用UPX
         upx_exclude=[],
-        name='web_setup_automation'
+        name='Web Setup Automation'
     )
