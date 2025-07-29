@@ -1,44 +1,26 @@
 import json
-import pandas as pd
+import csv
 import uuid
 import sys
 import os
 import re
 from urllib.parse import urlparse
-from typing import Callable
-
-
-# PyInstaller numpy修复
-if getattr(sys, 'frozen', False):
-    import multiprocessing
-    multiprocessing.freeze_support()
-    os.environ['OPENBLAS_NUM_THREADS'] = '1'
-
-# 安全导入
-try:
-    import numpy.core._multiarray_umath
-    import numpy as np
-    import pandas as pd
-    print("Safe Import: NumPy and Pandas imported successfully")
-except ImportError as e:
-    print(f"Import failed: {e}")
-    sys.exit(1)
-
+from typing import Callable, List, Dict, Any
 
 def _is_valid_json(json_data: str, logger: Callable) -> bool:
     """
-    Checks if a string is valid JSON.
+    检查字符串是否为有效的JSON。
     """
     try:
         json.loads(json_data)
         return True
     except ValueError as e:
-        logger(f"Invalid JSON format: {e}", "error")
+        logger(f"无效的JSON格式: {e}", "error")
         return False
 
 def _process_text(input_text: str) -> str:
     """
-    Cleans and processes text fields.
+    清理和处理文本字段。
     """
     cleaned_text = input_text.strip()
     cleaned_text = re.sub(r"\n\s*\n", "\n", cleaned_text)
@@ -52,36 +34,38 @@ def _process_text(input_text: str) -> str:
 
 def _get_template_content(templates_path: str, template_name: str, logger: Callable) -> str:
     """
-    Reads content from a template file.
+    从模板文件读取内容。
     """
     template_file_path = os.path.join(templates_path, f"{template_name}.json")
     if not os.path.exists(template_file_path):
-        logger(f"Template file not found: {template_file_path}", "error")
-        raise FileNotFoundError(f"Template file not found: {template_file_path}")
+        logger(f"未找到模板文件: {template_file_path}", "error")
+        raise FileNotFoundError(f"未找到模板文件: {template_file_path}")
     
     with open(template_file_path, "r", encoding="utf-8") as f:
         return f.read()
 
 def generate_tools_json(csv_path: str, templates_path: str, logger: Callable = print) -> str | None:
     """
-    Generates a combined JSON string from a CSV input and several JSON templates.
+    从CSV输入和多个JSON模板生成一个组合的JSON字符串。
 
     Args:
-        csv_path (str): The path to the input CSV file.
-        templates_path (str): The path to the directory containing JSON templates.
-        logger (Callable): A logger function (like `add_output_message`) to send feedback.
+        csv_path (str): 输入CSV文件的路径。
+        templates_path (str): 包含JSON模板的目录路径。
+        logger (Callable): 用于发送反馈的日志记录函数。
 
     Returns:
-        str | None: The generated JSON string, or None if an error occurred.
+        str | None: 生成的JSON字符串，如果发生错误则返回None。
     """
     try:
-        df = pd.read_csv(csv_path)
-        logger(f"Successfully loaded {len(df)} rows from {os.path.basename(csv_path)}.", "info")
+        with open(csv_path, mode='r', encoding='utf-8') as infile:
+            reader = csv.DictReader(infile)
+            data = [row for row in reader]
+        logger(f"成功从 {os.path.basename(csv_path)} 加载 {len(data)} 行。", "info")
     except FileNotFoundError:
-        logger(f"CSV file not found at: {csv_path}", "error")
+        logger(f"未找到CSV文件: {csv_path}", "error")
         return None
     except Exception as e:
-        logger(f"Error reading CSV file: {e}", "error")
+        logger(f"读取CSV文件时出错: {e}", "error")
         return None
 
     tool_2_count = 0
@@ -94,15 +78,17 @@ def generate_tools_json(csv_path: str, templates_path: str, logger: Callable = p
         tools_2_template = _get_template_content(templates_path, 'tools_2', logger)
         tools_main_template = _get_template_content(templates_path, 'tools', logger)
     except FileNotFoundError:
-        return None # Error already logged by _get_template_content
+        return None
 
     tools_2_json = json.loads(tools_2_template)
     tools_3_json = json.loads(tools_3_template)
     
-    df_sorted = df.sort_values(by='title', key=lambda x: x.str.lower())
+    # 按标题不区分大小写排序
+    data_sorted = sorted(data, key=lambda row: str(row.get('title', '')).lower())
 
-    for index, row in df_sorted.iterrows():
-        if pd.notna(row['type']) and pd.notna(row['title']) and pd.notna(row['link']):
+    for row in data_sorted:
+        # 检查'type', 'title', 'link'是否存在且不为空
+        if row.get('type') and row.get('title') and row.get('link'):
             page_type = str(row['type']).strip()
             title = _process_text(str(row['title']).strip())
             
@@ -139,16 +125,16 @@ def generate_tools_json(csv_path: str, templates_path: str, logger: Callable = p
             }
 
             if category == '2.0':
-                tools_part = tools_2_part
+                part_str = tools_2_part
                 for key, value in replacements.items():
-                    tools_part = tools_part.replace(key, value)
-                tools_2_json['children'].append(json.loads(tools_part))
+                    part_str = part_str.replace(key, value)
+                tools_2_json['children'].append(json.loads(part_str))
                 tool_2_count += 1
             elif category == '3.0':
-                tools_part = tools_3_part
+                part_str = tools_3_part
                 for key, value in replacements.items():
-                    tools_part = tools_part.replace(key, value)
-                tools_3_json['children'].append(json.loads(tools_part))
+                    part_str = part_str.replace(key, value)
+                tools_3_json['children'].append(json.loads(part_str))
                 tool_3_count += 1
         else:
             continue
@@ -159,8 +145,8 @@ def generate_tools_json(csv_path: str, templates_path: str, logger: Callable = p
     final_json_str = tools_main_template.replace("<tools_2_placeholder>", tools_2_json_result).replace("<tools_3_placeholder>", tools_3_json_result)
     
     if _is_valid_json(final_json_str, logger):
-        logger(f"Successfully generated JSON. Found {tool_2_count} tools in category 2.0 and {tool_3_count} in 3.0.", "success")
+        logger(f"成功生成JSON。在2.0类别中找到 {tool_2_count} 个工具，在3.0类别中找到 {tool_3_count} 个工具。", "success")
         return final_json_str
     else:
-        logger("Failed to generate valid JSON.", "error")
+        logger("生成有效的JSON失败。", "error")
         return None
