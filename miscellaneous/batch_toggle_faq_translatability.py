@@ -13,6 +13,8 @@ from selenium.webdriver.support import expected_conditions as EC
 import os
 import pyperclip
 import csv
+import pickle
+from pathlib import Path
 
 
 """
@@ -44,8 +46,49 @@ def read_csv_to_list(csv_path: str):
         for row in reader:
             list.append(row[0])
         return list
+
+
+def save_progress(completed_targets: list, checkpoint_file: str = 'faq_progress.pkl'):
+    """
+    保存已完成的目标列表到断点文件
     
-list = read_csv_to_list('mockup_faq_content.csv')
+    Args:
+        completed_targets: 已完成处理的目标列表
+        checkpoint_file: 断点文件路径
+    """
+    with open(checkpoint_file, 'wb') as f:
+        pickle.dump(completed_targets, f)
+    print(f"✅进度已保存到 {checkpoint_file}")
+
+
+def load_progress(checkpoint_file: str = 'faq_progress.pkl'):
+    """
+    从断点文件加载已完成的目标列表
+    
+    Args:
+        checkpoint_file: 断点文件路径
+    
+    Returns:
+        已完成的目标列表，如果文件不存在则返回空列表
+    """
+    if Path(checkpoint_file).exists():
+        with open(checkpoint_file, 'rb') as f:
+            completed_targets = pickle.load(f)
+        print(f"✅已从 {checkpoint_file} 加载进度，已完成 {len(completed_targets)} 个目标")
+        return completed_targets
+    else:
+        print("⚠️未找到断点文件，将从头开始处理")
+        return []
+
+
+# 读取所有目标列表
+all_targets = read_csv_to_list('mockup_faq_content.csv')
+
+# 加载已完成的目标列表
+completed_targets = load_progress()
+
+# 过滤出未完成的目标
+remaining_targets = [target for target in all_targets if target not in completed_targets]
 
 chrome_options = Options()
 driver = webdriver.Chrome(
@@ -78,10 +121,13 @@ except Exception as e:
     driver.quit()
     exit(1)
 
-# 循环处理
-for target in list:
+# 显示处理进度信息
+print(f"🔄总目标数: {len(all_targets)}, 已完成: {len(completed_targets)}, 剩余: {len(remaining_targets)}")
+
+# 循环处理剩余目标
+for target in remaining_targets:
     try:
-        print(f"🚩正在处理: {target}")
+        print(f"🚩正在处理: {target} (进度: {len(completed_targets)+1}/{len(all_targets)})")
         # locate search input and click search button
         search_input = driver.find_element(By.XPATH, xpath["search_input"])
         search_input.send_keys(target)
@@ -147,10 +193,26 @@ for target in list:
         print("✅成功保存编辑页")
         WebDriverWait(driver, timeout).until(lambda d: "List" in d.current_url)
         print(f"😍{target}已成功更新")
+        
+        # 更新已完成目标列表并保存进度
+        completed_targets.append(target)
+        save_progress(completed_targets)
     except Exception as e:
         print(f"    ❌更新失败：{e}")
+        print(f"    ⚠️程序中断，已保存当前进度，下次运行将从断点继续")
+        save_progress(completed_targets)  # 保存当前进度
         driver.quit()
         exit(1)
+
+# 所有目标处理完成
+if not remaining_targets:  # 如果没有剩余目标（程序启动时就已全部完成）
+    print("✅没有需要处理的目标，所有任务已完成")
+else:  # 如果有剩余目标并且已全部处理完成
+    print("✅所有剩余目标已成功处理完成！")
+    print(f"📊总共处理了 {len(completed_targets)}/{len(all_targets)} 个目标")
+
+# 关闭浏览器
+driver.quit()
         
 
     
