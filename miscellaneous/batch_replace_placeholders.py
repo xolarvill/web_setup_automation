@@ -1,6 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+"""
+使用selenium创建bot批量替换图片占位符
+自动化程度：全自动 + 人工监督
+"""
+
 driver = webdriver.Chrome()
 
 search_input = driver.find_element(By.Xpath, """//input[@id='input-138']""")
@@ -16,6 +21,8 @@ open_pop_up_editor = driver.find_element(By.XPATH,"""//div[@id='app']/div[@class
 json_tool = driver.find_element(By.XPATH,"""//div[@id='app']/div[@class='app-root']/div[@class='app-header']/div[@class='header-root']/div[@class='tools']/button[@class='el-button el-button--primary is-round'][1]/span""")
 
 get_json = driver.find_element(By.XPATH,"""//div[@id='el-id-6100-1']/div[1]/button[@class='el-button is-round']/span""")
+
+# 替换图片相关CDN
 
 json_input = driver.find_element(By.XPATH,"""//textarea[@id='el-id-6100-86']""")
 

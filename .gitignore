@@ -8,6 +8,7 @@ June10.md
 client_secrets.json
 cookies.json
 gemini.md
+mockup_faq_content.csv
 .vercel/
 dist/
 build/

@@ -168,6 +168,366 @@ class ImageUploader:
                 self.driver.quit()
             self.driver = None
             raise
+            print(f"浏览器启动失败: {e}")
+            raise
+        finally:
+            # 无论成功与否，都关闭浏览器
+            if self.driver:
+                self.driver.quit()
+    
+    def activate_headless(self) -> None:
+        """
+        读取cookie进行无头登陆
+        """
+        options = Options()
+        options.add_argument("--headless=new")
+        
+        try:
+            self.driver = webdriver.Chrome(
+                service=Service(ChromeDriverManager().install()),
+                options=options
+                )
+            
+            # 先访问登录页面
+            self.driver.get(self.login_url)
+            
+            # 读取并添加cookie
+            try:
+                with open(self.cookie_path, "r") as f:
+                    cookies = json.load(f)
+                    
+                # 添加cookie前确保在正确的域名下
+                for cookie in cookies:
+                    # 移除不兼容的属性
+                    if 'sameSite' in cookie:
+                        cookie.pop('sameSite', None)
+                    self.driver.add_cookie(cookie)
+                
+                # 刷新页面，应用cookie
+                self.driver.refresh()
+                
+                # 等待页面加载完成
+                WebDriverWait(self.driver, 10).until(
+                    lambda d: self.target_url_contains in d.current_url
+                )
+                print("无头模式登录成功")
+                
+                # 验证是否成功登录
+                try:
+                    # 尝试查找上传页面的AWS选项元素，验证登录状态
+                    self.driver.get(self.upload_url)
+                    WebDriverWait(self.driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, 
+                            "//*[@id='app']/div/main/div/div/div/div/div[1]/div[1]/div/div/div[1]/div/div[3]"))
+                    )
+                    print("成功加载上传页面")
+                except (NoSuchElementException, TimeoutException) as e:
+                    print(f"无法找到上传页面元素，可能登录失败: {e}")
+                    raise Exception("无头模式登录失败，请尝试手动登录")
+                    
+            except FileNotFoundError:
+                print(f"Cookie文件不存在: {self.cookie_path}")
+                raise
+            except json.JSONDecodeError:
+                print(f"Cookie文件格式错误: {self.cookie_path}")
+                raise
+            except Exception as e:
+                print(f"加载Cookie过程中出错: {e}")
+                raise
+        except Exception as e:
+            print(f"无头浏览器启动失败: {e}")
+            if self.driver:
+                self.driver.quit()
+            self.driver = None
+            raise
+            print(f"浏览器启动失败: {e}")
+            raise
+        finally:
+            # 无论成功与否，都关闭浏览器
+            if self.driver:
+                self.driver.quit()
+    
+    def activate_headless(self) -> None:
+        """
+        读取cookie进行无头登陆
+        """
+        options = Options()
+        options.add_argument("--headless=new")
+        
+        try:
+            self.driver = webdriver.Chrome(
+                service=Service(ChromeDriverManager().install()),
+                options=options
+                )
+            
+            # 先访问登录页面
+            self.driver.get(self.login_url)
+            
+            # 读取并添加cookie
+            try:
+                with open(self.cookie_path, "r") as f:
+                    cookies = json.load(f)
+                    
+                # 添加cookie前确保在正确的域名下
+                for cookie in cookies:
+                    # 移除不兼容的属性
+                    if 'sameSite' in cookie:
+                        cookie.pop('sameSite', None)
+                    self.driver.add_cookie(cookie)
+                
+                # 刷新页面，应用cookie
+                self.driver.refresh()
+                
+                # 等待页面加载完成
+                WebDriverWait(self.driver, 10).until(
+                    lambda d: self.target_url_contains in d.current_url
+                )
+                print("无头模式登录成功")
+                
+                # 验证是否成功登录
+                try:
+                    # 尝试查找上传页面的AWS选项元素，验证登录状态
+                    self.driver.get(self.upload_url)
+                    WebDriverWait(self.driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, 
+                            "//*[@id='app']/div/main/div/div/div/div/div[1]/div[1]/div/div/div[1]/div/div[3]"))
+                    )
+                    print("成功加载上传页面")
+                except (NoSuchElementException, TimeoutException) as e:
+                    print(f"无法找到上传页面元素，可能登录失败: {e}")
+                    raise Exception("无头模式登录失败，请尝试手动登录")
+                    
+            except FileNotFoundError:
+                print(f"Cookie文件不存在: {self.cookie_path}")
+                raise
+            except json.JSONDecodeError:
+                print(f"Cookie文件格式错误: {self.cookie_path}")
+                raise
+            except Exception as e:
+                print(f"加载Cookie过程中出错: {e}")
+                raise
+        except Exception as e:
+            print(f"无头浏览器启动失败: {e}")
+            if self.driver:
+                self.driver.quit()
+            self.driver = None
+            raise
+            print(f"浏览器启动失败: {e}")
+            raise
+        finally:
+            # 无论成功与否，都关闭浏览器
+            if self.driver:
+                self.driver.quit()
+    
+    def activate_headless(self) -> None:
+        """
+        读取cookie进行无头登陆
+        """
+        options = Options()
+        options.add_argument("--headless=new")
+        
+        try:
+            self.driver = webdriver.Chrome(
+                service=Service(ChromeDriverManager().install()),
+                options=options
+                )
+            
+            # 先访问登录页面
+            self.driver.get(self.login_url)
+            
+            # 读取并添加cookie
+            try:
+                with open(self.cookie_path, "r") as f:
+                    cookies = json.load(f)
+                    
+                # 添加cookie前确保在正确的域名下
+                for cookie in cookies:
+                    # 移除不兼容的属性
+                    if 'sameSite' in cookie:
+                        cookie.pop('sameSite', None)
+                    self.driver.add_cookie(cookie)
+                
+                # 刷新页面，应用cookie
+                self.driver.refresh()
+                
+                # 等待页面加载完成
+                WebDriverWait(self.driver, 10).until(
+                    lambda d: self.target_url_contains in d.current_url
+                )
+                print("无头模式登录成功")
+                
+                # 验证是否成功登录
+                try:
+                    # 尝试查找上传页面的AWS选项元素，验证登录状态
+                    self.driver.get(self.upload_url)
+                    WebDriverWait(self.driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, 
+                            "//*[@id='app']/div/main/div/div/div/div/div[1]/div[1]/div/div/div[1]/div/div[3]"))
+                    )
+                    print("成功加载上传页面")
+                except (NoSuchElementException, TimeoutException) as e:
+                    print(f"无法找到上传页面元素，可能登录失败: {e}")
+                    raise Exception("无头模式登录失败，请尝试手动登录")
+                    
+            except FileNotFoundError:
+                print(f"Cookie文件不存在: {self.cookie_path}")
+                raise
+            except json.JSONDecodeError:
+                print(f"Cookie文件格式错误: {self.cookie_path}")
+                raise
+            except Exception as e:
+                print(f"加载Cookie过程中出错: {e}")
+                raise
+        except Exception as e:
+            print(f"无头浏览器启动失败: {e}")
+            if self.driver:
+                self.driver.quit()
+            self.driver = None
+            raise
+            print(f"浏览器启动失败: {e}")
+            raise
+        finally:
+            # 无论成功与否，都关闭浏览器
+            if self.driver:
+                self.driver.quit()
+    
+    def activate_headless(self) -> None:
+        """
+        读取cookie进行无头登陆
+        """
+        options = Options()
+        options.add_argument("--headless=new")
+        
+        try:
+            self.driver = webdriver.Chrome(
+                service=Service(ChromeDriverManager().install()),
+                options=options
+                )
+            
+            # 先访问登录页面
+            self.driver.get(self.login_url)
+            
+            # 读取并添加cookie
+            try:
+                with open(self.cookie_path, "r") as f:
+                    cookies = json.load(f)
+                    
+                # 添加cookie前确保在正确的域名下
+                for cookie in cookies:
+                    # 移除不兼容的属性
+                    if 'sameSite' in cookie:
+                        cookie.pop('sameSite', None)
+                    self.driver.add_cookie(cookie)
+                
+                # 刷新页面，应用cookie
+                self.driver.refresh()
+                
+                # 等待页面加载完成
+                WebDriverWait(self.driver, 10).until(
+                    lambda d: self.target_url_contains in d.current_url
+                )
+                print("无头模式登录成功")
+                
+                # 验证是否成功登录
+                try:
+                    # 尝试查找上传页面的AWS选项元素，验证登录状态
+                    self.driver.get(self.upload_url)
+                    WebDriverWait(self.driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, 
+                            "//*[@id='app']/div/main/div/div/div/div/div[1]/div[1]/div/div/div[1]/div/div[3]"))
+                    )
+                    print("成功加载上传页面")
+                except (NoSuchElementException, TimeoutException) as e:
+                    print(f"无法找到上传页面元素，可能登录失败: {e}")
+                    raise Exception("无头模式登录失败，请尝试手动登录")
+                    
+            except FileNotFoundError:
+                print(f"Cookie文件不存在: {self.cookie_path}")
+                raise
+            except json.JSONDecodeError:
+                print(f"Cookie文件格式错误: {self.cookie_path}")
+                raise
+            except Exception as e:
+                print(f"加载Cookie过程中出错: {e}")
+                raise
+        except Exception as e:
+            print(f"无头浏览器启动失败: {e}")
+            if self.driver:
+                self.driver.quit()
+            self.driver = None
+            raise
+            print(f"浏览器启动失败: {e}")
+            raise
+        finally:
+            # 无论成功与否，都关闭浏览器
+            if self.driver:
+                self.driver.quit()
+    
+    def activate_headless(self) -> None:
+        """
+        读取cookie进行无头登陆
+        """
+        options = Options()
+        options.add_argument("--headless=new")
+        
+        try:
+            self.driver = webdriver.Chrome(
+                service=Service(ChromeDriverManager().install()),
+                options=options
+                )
+            
+            # 先访问登录页面
+            self.driver.get(self.login_url)
+            
+            # 读取并添加cookie
+            try:
+                with open(self.cookie_path, "r") as f:
+                    cookies = json.load(f)
+                    
+                # 添加cookie前确保在正确的域名下
+                for cookie in cookies:
+                    # 移除不兼容的属性
+                    if 'sameSite' in cookie:
+                        cookie.pop('sameSite', None)
+                    self.driver.add_cookie(cookie)
+                
+                # 刷新页面，应用cookie
+                self.driver.refresh()
+                
+                # 等待页面加载完成
+                WebDriverWait(self.driver, 10).until(
+                    lambda d: self.target_url_contains in d.current_url
+                )
+                print("无头模式登录成功")
+                
+                # 验证是否成功登录
+                try:
+                    # 尝试查找上传页面的AWS选项元素，验证登录状态
+                    self.driver.get(self.upload_url)
+                    WebDriverWait(self.driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, 
+                            "//*[@id='app']/div/main/div/div/div/div/div[1]/div[1]/div/div/div[1]/div/div[3]"))
+                    )
+                    print("成功加载上传页面")
+                except (NoSuchElementException, TimeoutException) as e:
+                    print(f"无法找到上传页面元素，可能登录失败: {e}")
+                    raise Exception("无头模式登录失败，请尝试手动登录")
+                    
+            except FileNotFoundError:
+                print(f"Cookie文件不存在: {self.cookie_path}")
+                raise
+            except json.JSONDecodeError:
+                print(f"Cookie文件格式错误: {self.cookie_path}")
+                raise
+            except Exception as e:
+                print(f"加载Cookie过程中出错: {e}")
+                raise
+        except Exception as e:
+            print(f"无头浏览器启动失败: {e}")
+            if self.driver:
+                self.driver.quit()
+            self.driver = None
+            raise
         
     
     def upload_and_get(self, file_path: str) -> str:

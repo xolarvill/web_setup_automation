@@ -2,6 +2,9 @@
 # read clipboard
 # 从剪切板读取内容
 def update_old_resource_page(t: str) -> str:
+    """
+    自动化程度：半自动，需要对每个页面都进行手动操作
+    """
     place1 = '''"aspectRatio":"1","object-fit":"cover","border":"solid 1px rgba(25, 25, 25, 1)","borderRadius":"16px 16px 16px 16px"'''
     place1_to_be = '''"aspectRatio": "1","object-fit": "cover","border": "solid 1px rgba(25, 25, 25, 1)","borderRadius": "16px 16px 16px 16px","background": "#ffffff"'''
                                                                     
