@@ -12,6 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
 import pyperclip
+import csv
 
 
 """
@@ -28,7 +29,23 @@ edit_url_contains = "edit"
 timeout = 500
 with open('miscellaneous/web_ui_xpath.json', 'r') as f:
     xpath = json.load(f)
-list = ["white-t-shirt-mockup"]
+
+def update(json_str):
+    target = '"text":"FAQ","tag":"h2","isNeedTranslate":false,'
+    to_target = '"text":"FAQ","tag":"h2","isNeedTranslate":true,'
+    json_str = json_str.replace(target, to_target)
+    return json_str
+
+def read_csv_to_list(csv_path: str):
+    # csv文件是一个没有表头的2列n行的结构，读取每行的第一个列中的文本当作表格的内容
+    with open(csv_path, 'r') as f:
+        reader = csv.reader(f)
+        list = []
+        for row in reader:
+            list.append(row[0])
+        return list
+    
+list = read_csv_to_list('mockup_faq_content.csv')
 
 chrome_options = Options()
 driver = webdriver.Chrome(
@@ -103,7 +120,7 @@ for target in list:
         # get json and do replacing
         json_tool_button = driver.find_element(By.XPATH, xpath["json_tool_button"])
         json_tool_button.click()
-        get_json_button = json_tool.find_element(By.XPATH, xpath["get_json_button"])
+        get_json_button = driver.find_element(By.XPATH, xpath["get_json_button"])
         get_json_button.click()
         print("✅成功获取json")
         
@@ -135,17 +152,5 @@ for target in list:
         driver.quit()
         exit(1)
         
-def update(json_str):
-    target = '"text":"FAQ","tag":"h2","isNeedTranslate":false,'
-    to_target = '"text":"FAQ","tag":"h2","isNeedTranslate":true,'
-    json_str = json_str.replace(target, to_target)
-    return json_str
+
     
-def read_csv_to_list(csv_path: str) -> list:
-    # csv文件是一个没有表头的2列n行的结构，读取每行的第一个列中的文本当作表格的内容
-    with open(csv_path, 'r') as f:
-        reader = csv.reader(f)
-        list = []
-        for row in reader:
-            list.append(row[0])
-        return list
