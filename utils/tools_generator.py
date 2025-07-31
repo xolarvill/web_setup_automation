@@ -21,6 +21,16 @@ def _is_valid_json(json_data: str, logger: Callable) -> bool:
 def _process_text(input_text: str) -> str:
     """
     清理和处理文本字段。
+
+    1. 去除前导和尾随空格。
+    2. 将多个连续的空行合并为一个换行符。
+    3. 如果文本不是以“http”或“//”开头，则将“1920 x 1080”之类的模式替换为“1920 × 1080”（使用乘号）。
+    4. 将多个空格合并为一个空格。
+    5. 对双引号进行转义。
+    6. 如果文本不是以“/”或“http”开头，则将右单引号 (’) 替换为标准撇号 (')。
+    7. 将所有“3D”和“AI”单词全部大写。
+    
+    返回清理和处理后的文本。
     """
     cleaned_text = input_text.strip()
     cleaned_text = re.sub(r"\n\s*\n", "\n", cleaned_text)
@@ -30,6 +40,9 @@ def _process_text(input_text: str) -> str:
     cleaned_text = cleaned_text.replace('"', '\"')
     if not cleaned_text.startswith("/") and not cleaned_text.startswith("http"):
         cleaned_text = cleaned_text.replace('’', "'")
+    # 将3D和AI单词全部大写
+    cleaned_text = re.sub(r'\b3d\b', '3D', cleaned_text, flags=re.IGNORECASE)
+    cleaned_text = re.sub(r'\bai\b', 'AI', cleaned_text, flags=re.IGNORECASE)
     return cleaned_text
 
 def _get_template_content(templates_path: str, template_name: str, logger: Callable) -> str:
