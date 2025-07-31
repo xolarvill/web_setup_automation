@@ -32,7 +32,7 @@ def main():
     elif sys.platform == "win32":
         platform_name = "Windows"
         # 在Windows上，PyInstaller的输出是一个与spec文件名同名的目录
-        app_bundle_name = PYINSTALLER_OUTPUT_NAME
+        app_bundle_name = f"{APP_DISPLAY_NAME}.exe"
     else:
         platform_name = "Linux"
         app_bundle_name = PYINSTALLER_OUTPUT_NAME
