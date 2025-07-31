@@ -25,7 +25,6 @@ a = Analysis(
         ('temps', 'temps'),
         ('ui', 'ui'),
         ('utils', 'utils'),
-        ('miscellaneous', 'miscellaneous'),
         ('size.csv', '.'),
         ('aws_config.json', '.'),
         ('app.py', '.')
@@ -137,8 +136,8 @@ if sys.platform.startswith('darwin'):
             'NSAppleScriptEnabled': False,
             'CFBundleDisplayName': 'Web Setup Automation',
             'CFBundleName': 'Web Setup Automation',
-            'CFBundleShortVersionString': '0.4.1',
-            'CFBundleVersion': '0.4.1',
+            'CFBundleShortVersionString': '0.6.2',
+            'CFBundleVersion': '0.6.2',
             'LSMinimumSystemVersion': '10.13.0',
             'NSRequiresAquaSystemAppearance': False,
         }
