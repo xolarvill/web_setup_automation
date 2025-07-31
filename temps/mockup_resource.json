@@ -910,51 +910,61 @@
                                                             "style": {
                                                                 "<980": {
                                                                     "fontSize": "var(--fs-sm)",
-                                                                    "paddingTop": "11px",
-                                                                    "paddingBottom": "11px",
+                                                                    "paddingTop": "6px",
+                                                                    "paddingBottom": "6px",
                                                                     "paddingLeft": "24px",
                                                                     "paddingRight": "24px",
                                                                     "marginTop": "16px",
                                                                     "marginBottom": "28px",
-                                                                    "borderRadius": "8px"
+                                                                    "borderRadius": "8px",
+                                                                    "minHeight": "40px"
                                                                 },
                                                                 "980-1023": {
                                                                     "marginTop": "32px",
                                                                     "marginBottom": "48px",
                                                                     "fontSize": "var(--fs-base)",
                                                                     "fontWeight": "var(--fw-medium)",
-                                                                    "height": "48px",
-                                                                    "paddingTop": "14px",
-                                                                    "paddingBottom": "14px",
+                                                                    "height": "auto",
+                                                                    "paddingTop": "6px",
+                                                                    "paddingBottom": "6px",
                                                                     "paddingLeft": "24px",
                                                                     "paddingRight": "24px",
-                                                                    "borderRadius": "8px"
+                                                                    "borderRadius": "8px",
+                                                                    "minHeight": "48px"
                                                                 },
                                                                 "1024-1279": {
                                                                     "marginTop": "32px",
                                                                     "marginBottom": "48px",
                                                                     "fontSize": "var(--fs-base)",
                                                                     "fontWeight": "var(--fw-medium)",
-                                                                    "height": "48px",
-                                                                    "paddingTop": "14px",
-                                                                    "paddingBottom": "14px",
+                                                                    "height": "auto",
+                                                                    "paddingTop": "6px",
+                                                                    "paddingBottom": "6px",
                                                                     "paddingLeft": "24px",
                                                                     "paddingRight": "24px",
-                                                                    "borderRadius": "8px"
+                                                                    "borderRadius": "8px",
+                                                                    "minHeight": "48px"
                                                                 },
                                                                 "1280-1679": {
                                                                     "marginBottom": "56px",
-                                                                    "paddingTop": "16px",
-                                                                    "paddingBottom": "16px",
-                                                                    "paddingLeft": "32px",
-                                                                    "paddingRight": "32px",
-                                                                    "height": "56px"
+                                                                    "paddingTop": "6px",
+                                                                    "paddingBottom": "6px",
+                                                                    "paddingLeft": "36px",
+                                                                    "paddingRight": "36px",
+                                                                    "height": "auto",
+                                                                    "minHeight": "56px"
                                                                 },
                                                                 ">1920": {
-                                                                    "height": "60px"
+                                                                    "height": "auto",
+                                                                    "minHeight": "60px",
+                                                                    "paddingTop": "10px",
+                                                                    "paddingBottom": "10px"
                                                                 },
                                                                 "1680-1920": {
-                                                                    "height": "60px"
+                                                                    "height": "auto",
+                                                                    "minHeight": "60px",
+                                                                    "paddingTop": "10px",
+                                                                    "paddingBottom": "10px"
                                                                 }
                                                             },
                                                             "props": {
@@ -985,7 +995,7 @@
                                                             "children": [],
                                                             "globalStyle": {
                                                                 "fontSize": "var(--fs-lg)",
-                                                                "lineHeight": "var(--lh-normal)",
+                                                                "lineHeight": "var(--lh-tight)",
                                                                 "fontWeight": "var(--fw-normal)",
                                                                 "width": "fit-content",
                                                                 "display": "flex",
@@ -5949,46 +5959,65 @@
                                 {
                                     "name": "Button",
                                     "label": "Button",
-                                    "uuid": "d0ef1d7f-901a-4cab-9351-0d3a8dd30e67",
+                                    "uuid": "2cf48946-d2a3-4923-a914-f621a8d8efff",
                                     "style": {
                                         "<980": {
                                             "fontSize": "var(--fs-sm)",
-                                            "paddingTop": "11px",
-                                            "paddingBottom": "11px",
+                                            "paddingTop": "6px",
+                                            "paddingBottom": "6px",
                                             "paddingLeft": "24px",
                                             "paddingRight": "24px",
-                                            "marginTop": "24px",
-                                            "borderRadius": "8px"
+                                            "marginTop": "16px",
+                                            "marginBottom": "28px",
+                                            "borderRadius": "8px",
+                                            "minHeight": "40px"
                                         },
                                         "980-1023": {
+                                            "marginTop": "32px",
+                                            "marginBottom": "48px",
                                             "fontSize": "var(--fs-base)",
                                             "fontWeight": "var(--fw-medium)",
-                                            "marginTop": "48px",
-                                            "borderRadius": "8px",
-                                            "height": "48px",
-                                            "paddingLeft": "24px",
-                                            "paddingRight": "24px"
-                                        },
-                                        "1024-1279": {
-                                            "fontSize": "var(--fs-base)",
-                                            "fontWeight": "var(--fw-medium)",
-                                            "marginTop": "48px",
-                                            "height": "48px",
+                                            "height": "auto",
+                                            "paddingTop": "6px",
+                                            "paddingBottom": "6px",
                                             "paddingLeft": "24px",
                                             "paddingRight": "24px",
-                                            "borderRadius": "8px"
+                                            "borderRadius": "8px",
+                                            "minHeight": "48px"
+                                        },
+                                        "1024-1279": {
+                                            "marginTop": "32px",
+                                            "marginBottom": "48px",
+                                            "fontSize": "var(--fs-base)",
+                                            "fontWeight": "var(--fw-medium)",
+                                            "height": "auto",
+                                            "paddingTop": "6px",
+                                            "paddingBottom": "6px",
+                                            "paddingLeft": "24px",
+                                            "paddingRight": "24px",
+                                            "borderRadius": "8px",
+                                            "minHeight": "48px"
                                         },
                                         "1280-1679": {
-                                            "marginTop": "56px",
-                                            "height": "56px"
-                                        },
-                                        "1680-1920": {
-                                            "marginTop": "72px",
-                                            "height": "60px"
+                                            "marginBottom": "56px",
+                                            "paddingTop": "6px",
+                                            "paddingBottom": "6px",
+                                            "paddingLeft": "36px",
+                                            "paddingRight": "36px",
+                                            "height": "auto",
+                                            "minHeight": "56px"
                                         },
                                         ">1920": {
-                                            "height": "60px",
-                                            "marginTop": "72px"
+                                            "height": "auto",
+                                            "minHeight": "60px",
+                                            "paddingTop": "10px",
+                                            "paddingBottom": "10px"
+                                        },
+                                        "1680-1920": {
+                                            "height": "auto",
+                                            "minHeight": "60px",
+                                            "paddingTop": "10px",
+                                            "paddingBottom": "10px"
                                         }
                                     },
                                     "props": {
@@ -6003,13 +6032,13 @@
                                             "iconWidth": "16px",
                                             "distance": "6px"
                                         },
+                                        "1280-1679": {
+                                            "iconWidth": "20px"
+                                        },
                                         ">1920": {
                                             "iconWidth": "20px"
                                         },
                                         "1680-1920": {
-                                            "iconWidth": "20px"
-                                        },
-                                        "1280-1679": {
                                             "iconWidth": "20px"
                                         }
                                     },
@@ -6019,7 +6048,7 @@
                                     "children": [],
                                     "globalStyle": {
                                         "fontSize": "var(--fs-lg)",
-                                        "lineHeight": "var(--lh-normal)",
+                                        "lineHeight": "var(--lh-tight)",
                                         "fontWeight": "var(--fw-normal)",
                                         "width": "fit-content",
                                         "display": "flex",
@@ -6028,6 +6057,7 @@
                                         "marginLeft": "auto",
                                         "marginRight": "auto",
                                         "marginTop": "40px",
+                                        "marginBottom": "72px",
                                         "paddingTop": "18px",
                                         "paddingBottom": "18px",
                                         "paddingLeft": "48px",
@@ -6039,7 +6069,7 @@
                                     "status": {},
                                     "globalProps": {
                                         "text": "{{view_text}}",
-                                        "link": "{{view_link}}",
+                                        "link": "{{view_url}}",
                                         "gtm": "ga-seo_tools_view_all",
                                         "target": "_self",
                                         "colorType": "minor-2",
@@ -6054,7 +6084,7 @@
                                         "activeBorder": "",
                                         "hoverBackground": "",
                                         "activeBackground": "",
-                                        "isOpenAnimation": true
+                                        "isOpenAnimation": false
                                     },
                                     "transition": []
                                 },
@@ -8331,7 +8361,7 @@
                                                                 {
                                                                     "name": "Button",
                                                                     "label": "Button",
-                                                                    "uuid": "8b0ad1fb-e24e-481c-a78f-fe78d604ad82",
+                                                                    "uuid": "840424b1-ff76-4bce-8e30-4b5af9400c53",
                                                                     "style": {
                                                                         "<980": {
                                                                             "borderRadius": "8px"
@@ -8347,7 +8377,7 @@
                                                                         "lineHeight": "var(--lh-s)",
                                                                         "fontWeight": "var(--fw-normal)",
                                                                         "width": "calc(100% - 32px)",
-                                                                        "height": "40px",
+                                                                        "height": "auto",
                                                                         "display": "flex",
                                                                         "borderRadius": "6px",
                                                                         "minWidth": "",
@@ -8359,7 +8389,12 @@
                                                                         "--hover-background": "",
                                                                         "--active-background": "",
                                                                         "marginTop": "16px",
-                                                                        "marginBottom": "16px"
+                                                                        "marginBottom": "16px",
+                                                                        "minHeight": "40px",
+                                                                        "paddingTop": "4px",
+                                                                        "paddingBottom": "4px",
+                                                                        "paddingLeft": "12px",
+                                                                        "paddingRight": "12px"
                                                                     },
                                                                     "globalContainerStyle": {},
                                                                     "statusArr": [],
@@ -8615,7 +8650,7 @@
                                                                 {
                                                                     "name": "Button",
                                                                     "label": "Button",
-                                                                    "uuid": "ff3126c0-fbae-41a5-b5ed-46b8dd54eac7",
+                                                                    "uuid": "0a1015e9-cc74-45fb-96e5-da06da58b276",
                                                                     "style": {
                                                                         "<980": {
                                                                             "borderRadius": "8px"
@@ -8631,7 +8666,7 @@
                                                                         "lineHeight": "var(--lh-s)",
                                                                         "fontWeight": "var(--fw-normal)",
                                                                         "width": "calc(100% - 32px)",
-                                                                        "height": "40px",
+                                                                        "height": "auto",
                                                                         "display": "flex",
                                                                         "borderRadius": "6px",
                                                                         "minWidth": "",
@@ -8643,7 +8678,12 @@
                                                                         "--hover-background": "",
                                                                         "--active-background": "",
                                                                         "marginTop": "16px",
-                                                                        "marginBottom": "16px"
+                                                                        "marginBottom": "16px",
+                                                                        "minHeight": "40px",
+                                                                        "paddingTop": "4px",
+                                                                        "paddingBottom": "4px",
+                                                                        "paddingLeft": "12px",
+                                                                        "paddingRight": "12px"
                                                                     },
                                                                     "globalContainerStyle": {},
                                                                     "statusArr": [],
@@ -8900,7 +8940,7 @@
                                                                 {
                                                                     "name": "Button",
                                                                     "label": "Button",
-                                                                    "uuid": "522001b1-2d0d-4d6a-be1b-4cc3849c114e",
+                                                                    "uuid": "8dca6f6f-d71d-47c6-a2d8-e9832dd8168b",
                                                                     "style": {
                                                                         "<980": {
                                                                             "borderRadius": "8px"
@@ -8916,7 +8956,7 @@
                                                                         "lineHeight": "var(--lh-s)",
                                                                         "fontWeight": "var(--fw-normal)",
                                                                         "width": "calc(100% - 32px)",
-                                                                        "height": "40px",
+                                                                        "height": "auto",
                                                                         "display": "flex",
                                                                         "borderRadius": "6px",
                                                                         "minWidth": "",
@@ -8928,7 +8968,12 @@
                                                                         "--hover-background": "",
                                                                         "--active-background": "",
                                                                         "marginTop": "16px",
-                                                                        "marginBottom": "16px"
+                                                                        "marginBottom": "16px",
+                                                                        "minHeight": "40px",
+                                                                        "paddingTop": "4px",
+                                                                        "paddingBottom": "4px",
+                                                                        "paddingLeft": "12px",
+                                                                        "paddingRight": "12px"
                                                                     },
                                                                     "globalContainerStyle": {},
                                                                     "statusArr": [],
@@ -9585,32 +9630,38 @@
                                                                         {
                                                                             "name": "Button",
                                                                             "label": "Button",
-                                                                            "uuid": "12a5d5b2-c36e-4610-bbdf-276da1965f9f",
+                                                                            "uuid": "4c7a94d6-a841-4d44-9e43-c0ffba705601",
                                                                             "style": {
                                                                                 "<980": {
                                                                                     "fontSize": "var(--fs-base)"
                                                                                 },
                                                                                 "980-1023": {
                                                                                     "fontSize": "var(--fs-sm)",
-                                                                                    "height": "auto",
                                                                                     "borderRadius": "8px",
                                                                                     "marginTop": "24px",
                                                                                     "minHeight": "36px",
                                                                                     "paddingTop": "8px",
-                                                                                    "paddingBottom": "8px"
+                                                                                    "paddingBottom": "8px",
+                                                                                    "paddingLeft": "20px",
+                                                                                    "paddingRight": "20px"
                                                                                 },
                                                                                 "1024-1279": {
                                                                                     "fontSize": "var(--fs-sm)",
-                                                                                    "height": "auto",
                                                                                     "borderRadius": "8px",
                                                                                     "marginTop": "24px",
                                                                                     "minHeight": "36px",
                                                                                     "paddingTop": "8px",
-                                                                                    "paddingBottom": "8px"
+                                                                                    "paddingBottom": "8px",
+                                                                                    "paddingLeft": "20px",
+                                                                                    "paddingRight": "20px"
                                                                                 },
                                                                                 "1280-1679": {
                                                                                     "fontSize": "var(--fs-base)",
-                                                                                    "marginTop": "32px"
+                                                                                    "marginTop": "32px",
+                                                                                    "paddingTop": "8px",
+                                                                                    "paddingBottom": "8px",
+                                                                                    "paddingLeft": "24px",
+                                                                                    "paddingRight": "24px"
                                                                                 },
                                                                                 "1680-1920": {
                                                                                     "fontSize": "var(--fs-lg)"
@@ -9639,19 +9690,22 @@
                                                                                 "fontWeight": "var(--fw-normal)",
                                                                                 "display": "flex",
                                                                                 "borderRadius": "10px",
-                                                                                "paddingLeft": "24px",
-                                                                                "paddingRight": "24px",
+                                                                                "paddingLeft": "32px",
+                                                                                "paddingRight": "32px",
                                                                                 "transform": "translate(0px, 0px) scale(1)",
-                                                                                "height": "48px",
-                                                                                "lineHeight": "var(--lh-s)",
+                                                                                "height": "auto",
+                                                                                "lineHeight": "var(--lh-tight)",
                                                                                 "marginTop": "40px",
-                                                                                "width": "fit-content"
+                                                                                "width": "fit-content",
+                                                                                "minHeight": "48px",
+                                                                                "paddingTop": "10px",
+                                                                                "paddingBottom": "10px"
                                                                             },
                                                                             "globalProps": {
                                                                                 "text": "{{feature1_button_text}}",
                                                                                 "link": "{{feature1_button_link}}",
                                                                                 "gtm": "ga-seo_tools_view_all",
-                                                                                "target": "_self",
+                                                                                "target": "_blank",
                                                                                 "colorType": "minor-2",
                                                                                 "iconUrl": "",
                                                                                 "direction": "right",
@@ -9964,32 +10018,38 @@
                                                                         {
                                                                             "name": "Button",
                                                                             "label": "Button",
-                                                                            "uuid": "d6ec8c64-b06b-494a-b41f-a2a8c6566b71",
+                                                                            "uuid": "49dbc90e-ed7d-42eb-b0fe-df297988ad30",
                                                                             "style": {
                                                                                 "<980": {
                                                                                     "fontSize": "var(--fs-base)"
                                                                                 },
                                                                                 "980-1023": {
                                                                                     "fontSize": "var(--fs-sm)",
-                                                                                    "height": "auto",
                                                                                     "borderRadius": "8px",
                                                                                     "marginTop": "24px",
+                                                                                    "minHeight": "36px",
                                                                                     "paddingTop": "8px",
                                                                                     "paddingBottom": "8px",
-                                                                                    "minHeight": "36px"
+                                                                                    "paddingLeft": "20px",
+                                                                                    "paddingRight": "20px"
                                                                                 },
                                                                                 "1024-1279": {
                                                                                     "fontSize": "var(--fs-sm)",
-                                                                                    "height": "auto",
                                                                                     "borderRadius": "8px",
                                                                                     "marginTop": "24px",
+                                                                                    "minHeight": "36px",
                                                                                     "paddingTop": "8px",
                                                                                     "paddingBottom": "8px",
-                                                                                    "minHeight": "36px"
+                                                                                    "paddingLeft": "20px",
+                                                                                    "paddingRight": "20px"
                                                                                 },
                                                                                 "1280-1679": {
                                                                                     "fontSize": "var(--fs-base)",
-                                                                                    "marginTop": "32px"
+                                                                                    "marginTop": "32px",
+                                                                                    "paddingTop": "8px",
+                                                                                    "paddingBottom": "8px",
+                                                                                    "paddingLeft": "24px",
+                                                                                    "paddingRight": "24px"
                                                                                 },
                                                                                 "1680-1920": {
                                                                                     "fontSize": "var(--fs-lg)"
@@ -10018,13 +10078,16 @@
                                                                                 "fontWeight": "var(--fw-normal)",
                                                                                 "display": "flex",
                                                                                 "borderRadius": "10px",
-                                                                                "paddingLeft": "24px",
-                                                                                "paddingRight": "24px",
+                                                                                "paddingLeft": "32px",
+                                                                                "paddingRight": "32px",
                                                                                 "transform": "translate(0px, 0px) scale(1)",
-                                                                                "height": "48px",
-                                                                                "lineHeight": "var(--lh-s)",
+                                                                                "height": "auto",
+                                                                                "lineHeight": "var(--lh-tight)",
                                                                                 "marginTop": "40px",
-                                                                                "width": "fit-content"
+                                                                                "width": "fit-content",
+                                                                                "minHeight": "48px",
+                                                                                "paddingTop": "10px",
+                                                                                "paddingBottom": "10px"
                                                                             },
                                                                             "globalProps": {
                                                                                 "text": "{{feature2_button_text}}",
@@ -10442,32 +10505,38 @@
                                                                         {
                                                                             "name": "Button",
                                                                             "label": "Button",
-                                                                            "uuid": "92da14ec-1391-4bbb-b86a-c86bbe332fcf",
+                                                                            "uuid": "c7bf45d4-3e58-4661-a558-2d42d799c40e",
                                                                             "style": {
                                                                                 "<980": {
                                                                                     "fontSize": "var(--fs-base)"
                                                                                 },
                                                                                 "980-1023": {
                                                                                     "fontSize": "var(--fs-sm)",
-                                                                                    "height": "auto",
                                                                                     "borderRadius": "8px",
                                                                                     "marginTop": "24px",
                                                                                     "minHeight": "36px",
                                                                                     "paddingTop": "8px",
-                                                                                    "paddingBottom": "8px"
+                                                                                    "paddingBottom": "8px",
+                                                                                    "paddingLeft": "20px",
+                                                                                    "paddingRight": "20px"
                                                                                 },
                                                                                 "1024-1279": {
                                                                                     "fontSize": "var(--fs-sm)",
-                                                                                    "height": "auto",
                                                                                     "borderRadius": "8px",
                                                                                     "marginTop": "24px",
                                                                                     "minHeight": "36px",
                                                                                     "paddingTop": "8px",
-                                                                                    "paddingBottom": "8px"
+                                                                                    "paddingBottom": "8px",
+                                                                                    "paddingLeft": "20px",
+                                                                                    "paddingRight": "20px"
                                                                                 },
                                                                                 "1280-1679": {
                                                                                     "fontSize": "var(--fs-base)",
-                                                                                    "marginTop": "32px"
+                                                                                    "marginTop": "32px",
+                                                                                    "paddingTop": "8px",
+                                                                                    "paddingBottom": "8px",
+                                                                                    "paddingLeft": "24px",
+                                                                                    "paddingRight": "24px"
                                                                                 },
                                                                                 "1680-1920": {
                                                                                     "fontSize": "var(--fs-lg)"
@@ -10496,13 +10565,16 @@
                                                                                 "fontWeight": "var(--fw-normal)",
                                                                                 "display": "flex",
                                                                                 "borderRadius": "10px",
-                                                                                "paddingLeft": "24px",
-                                                                                "paddingRight": "24px",
+                                                                                "paddingLeft": "32px",
+                                                                                "paddingRight": "32px",
                                                                                 "transform": "translate(0px, 0px) scale(1)",
-                                                                                "height": "48px",
-                                                                                "lineHeight": "var(--lh-s)",
+                                                                                "height": "auto",
+                                                                                "lineHeight": "var(--lh-tight)",
                                                                                 "marginTop": "40px",
-                                                                                "width": "fit-content"
+                                                                                "width": "fit-content",
+                                                                                "minHeight": "48px",
+                                                                                "paddingTop": "10px",
+                                                                                "paddingBottom": "10px"
                                                                             },
                                                                             "globalProps": {
                                                                                 "text": "{{feature3_button_text}}",
@@ -10824,32 +10896,38 @@
                                                                         {
                                                                             "name": "Button",
                                                                             "label": "Button",
-                                                                            "uuid": "5a22d369-4241-4162-b9a0-b32dc4be0900",
+                                                                            "uuid": "f0dc1508-cc0f-49b4-82f4-d7273af5bc8e",
                                                                             "style": {
                                                                                 "<980": {
                                                                                     "fontSize": "var(--fs-base)"
                                                                                 },
                                                                                 "980-1023": {
                                                                                     "fontSize": "var(--fs-sm)",
-                                                                                    "height": "auto",
                                                                                     "borderRadius": "8px",
                                                                                     "marginTop": "24px",
+                                                                                    "minHeight": "36px",
                                                                                     "paddingTop": "8px",
                                                                                     "paddingBottom": "8px",
-                                                                                    "minHeight": "36px"
+                                                                                    "paddingLeft": "20px",
+                                                                                    "paddingRight": "20px"
                                                                                 },
                                                                                 "1024-1279": {
                                                                                     "fontSize": "var(--fs-sm)",
-                                                                                    "height": "auto",
                                                                                     "borderRadius": "8px",
                                                                                     "marginTop": "24px",
+                                                                                    "minHeight": "36px",
                                                                                     "paddingTop": "8px",
                                                                                     "paddingBottom": "8px",
-                                                                                    "minHeight": "36px"
+                                                                                    "paddingLeft": "20px",
+                                                                                    "paddingRight": "20px"
                                                                                 },
                                                                                 "1280-1679": {
                                                                                     "fontSize": "var(--fs-base)",
-                                                                                    "marginTop": "32px"
+                                                                                    "marginTop": "32px",
+                                                                                    "paddingTop": "8px",
+                                                                                    "paddingBottom": "8px",
+                                                                                    "paddingLeft": "24px",
+                                                                                    "paddingRight": "24px"
                                                                                 },
                                                                                 "1680-1920": {
                                                                                     "fontSize": "var(--fs-lg)"
@@ -10878,13 +10956,16 @@
                                                                                 "fontWeight": "var(--fw-normal)",
                                                                                 "display": "flex",
                                                                                 "borderRadius": "10px",
-                                                                                "paddingLeft": "24px",
-                                                                                "paddingRight": "24px",
+                                                                                "paddingLeft": "32px",
+                                                                                "paddingRight": "32px",
                                                                                 "transform": "translate(0px, 0px) scale(1)",
-                                                                                "height": "48px",
-                                                                                "lineHeight": "var(--lh-s)",
+                                                                                "height": "auto",
+                                                                                "lineHeight": "var(--lh-tight)",
                                                                                 "marginTop": "40px",
-                                                                                "width": "fit-content"
+                                                                                "width": "fit-content",
+                                                                                "minHeight": "48px",
+                                                                                "paddingTop": "10px",
+                                                                                "paddingBottom": "10px"
                                                                             },
                                                                             "globalProps": {
                                                                                 "text": "{{feature4_button_text}}",
@@ -13932,60 +14013,69 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
-                                            "uuid": "7835d3bc-3263-4ab1-98c0-19d2834b1f37",
+                                            "uuid": "4a951949-a0b5-4475-b14b-4c6439b42166",
                                             "style": {
                                                 "<980": {
                                                     "fontSize": "var(--fs-sm)",
                                                     "lineHeight": "var(--lh-normal)",
-                                                    "height": "40px",
                                                     "marginTop": "24px",
                                                     "marginBottom": "24px",
                                                     "paddingLeft": "24px",
                                                     "paddingRight": "24px",
-                                                    "borderRadius": "8px"
+                                                    "borderRadius": "8px",
+                                                    "minHeight": "40px",
+                                                    "paddingTop": "6px",
+                                                    "paddingBottom": "6px"
                                                 },
                                                 "980-1023": {
                                                     "fontSize": "var(--fs-base)",
-                                                    "lineHeight": "var(--lh-normal)",
-                                                    "height": "48px",
-                                                    "marginTop": "48px",
-                                                    "marginBottom": "56px",
+                                                    "lineHeight": "var(--lh-tight)",
+                                                    "marginTop": "80px",
+                                                    "marginBottom": "100px",
+                                                    "paddingTop": "6px",
+                                                    "minHeight": "48px",
+                                                    "paddingBottom": "6px",
                                                     "paddingLeft": "24px",
                                                     "paddingRight": "24px",
-                                                    "borderRadius": "8px"
+                                                    "maxWidth": "calc(100% - 48px)"
                                                 },
                                                 "1024-1279": {
                                                     "fontSize": "var(--fs-base)",
-                                                    "lineHeight": "60px",
-                                                    "height": "48px",
-                                                    "marginTop": "48px",
-                                                    "marginBottom": "56px",
+                                                    "lineHeight": "var(--lh-tight)",
+                                                    "marginTop": "80px",
+                                                    "marginBottom": "100px",
+                                                    "paddingTop": "6px",
+                                                    "minHeight": "48px",
+                                                    "paddingBottom": "6px",
                                                     "paddingLeft": "24px",
                                                     "paddingRight": "24px",
-                                                    "borderRadius": "8px"
+                                                    "maxWidth": "calc(100% - 48px)"
                                                 },
                                                 "1280-1679": {
                                                     "fontSize": "var(--fs-lg)",
-                                                    "lineHeight": "60px",
-                                                    "height": "56px",
-                                                    "marginTop": "56px",
-                                                    "marginBottom": "72px",
+                                                    "lineHeight": "var(--lh-tight)",
+                                                    "marginTop": "80px",
+                                                    "marginBottom": "100px",
+                                                    "paddingTop": "6px",
+                                                    "minHeight": "50px",
+                                                    "paddingBottom": "6px",
                                                     "paddingLeft": "36px",
-                                                    "paddingRight": "36px"
+                                                    "paddingRight": "36px",
+                                                    "maxWidth": "calc(100% - 96px)"
                                                 },
                                                 "1680-1920": {
                                                     "fontSize": "var(--fs-lg)",
-                                                    "lineHeight": "60px",
-                                                    "height": "60px",
+                                                    "lineHeight": "var(--lh-tight)",
                                                     "marginTop": "80px",
-                                                    "marginBottom": "100px"
+                                                    "marginBottom": "100px",
+                                                    "paddingTop": "10px"
                                                 },
                                                 ">1920": {
                                                     "fontSize": "var(--fs-lg)",
-                                                    "lineHeight": "60px",
-                                                    "height": "60px",
+                                                    "lineHeight": "var(--lh-tight)",
                                                     "marginTop": "80px",
-                                                    "marginBottom": "100px"
+                                                    "marginBottom": "100px",
+                                                    "paddingTop": "10px"
                                                 }
                                             },
                                             "props": {},
@@ -14013,7 +14103,11 @@
                                                 "minWidth": "100px",
                                                 "paddingLeft": "48px",
                                                 "paddingRight": "48px",
-                                                "transform": "translate(0px, 0px) scale(1)"
+                                                "transform": "translate(0px, 0px) scale(1)",
+                                                "height": "auto",
+                                                "minHeight": "60px",
+                                                "paddingBottom": "10px",
+                                                "maxWidth": "calc(100% - 128px)"
                                             },
                                             "globalProps": {
                                                 "text": "{{try_text}}",
@@ -14028,7 +14122,8 @@
                                                 "hoverFontColor": "",
                                                 "activeFontColor": "",
                                                 "hoverBackground": "",
-                                                "activeBackground": ""
+                                                "activeBackground": "",
+                                                "isOpenAnimation": false
                                             },
                                             "globalContainerStyle": {}
                                         }
@@ -17853,51 +17948,54 @@
                                                         {
                                                             "name": "Button",
                                                             "label": "Button",
-                                                            "uuid": "c3a0c4d9-c472-489f-be1a-72d4d8196c07",
+                                                            "uuid": "9bc366c3-3e63-46c9-8fd1-fd485b2237eb",
                                                             "style": {
-                                                                "<980": {
-                                                                    "fontSize": "var(--fs-sm)",
-                                                                    "paddingTop": "11px",
-                                                                    "paddingBottom": "11px",
-                                                                    "paddingLeft": "24px",
-                                                                    "paddingRight": "24px",
-                                                                    "marginTop": "16px",
-                                                                    "borderRadius": "8px",
-                                                                    "height": "40px"
-                                                                },
-                                                                "980-1023": {
-                                                                    "marginTop": "48px",
-                                                                    "paddingTop": "16px",
-                                                                    "paddingBottom": "16px",
-                                                                    "paddingLeft": "36px",
-                                                                    "paddingRight": "36px",
-                                                                    "fontSize": "var(--fs-lg)",
-                                                                    "fontWeight": "var(--fw-medium)",
-                                                                    "height": "56px"
+                                                                "1280-1679": {
+                                                                    "minHeight": "64px",
+                                                                    "paddingTop": "8px",
+                                                                    "paddingBottom": "8px",
+                                                                    "paddingLeft": "40px",
+                                                                    "paddingRight": "40px"
                                                                 },
                                                                 "1024-1279": {
-                                                                    "marginTop": "48px",
-                                                                    "paddingTop": "16px",
-                                                                    "paddingBottom": "16px",
-                                                                    "paddingLeft": "36px",
-                                                                    "paddingRight": "36px",
                                                                     "fontSize": "var(--fs-lg)",
-                                                                    "fontWeight": "var(--fw-medium)",
-                                                                    "height": "56px"
+                                                                    "minHeight": "56px",
+                                                                    "paddingTop": "8px",
+                                                                    "paddingBottom": "8px",
+                                                                    "paddingLeft": "36px",
+                                                                    "paddingRight": "36px"
+                                                                },
+                                                                "980-1023": {
+                                                                    "fontSize": "var(--fs-lg)",
+                                                                    "minHeight": "56px",
+                                                                    "paddingTop": "8px",
+                                                                    "paddingBottom": "8px",
+                                                                    "paddingLeft": "36px",
+                                                                    "paddingRight": "36px"
+                                                                },
+                                                                "<980": {
+                                                                    "fontSize": "var(--fs-sm)",
+                                                                    "borderRadius": "8px",
+                                                                    "marginTop": "16px",
+                                                                    "minHeight": "40px",
+                                                                    "paddingTop": "6px",
+                                                                    "paddingBottom": "6px",
+                                                                    "paddingLeft": "24px",
+                                                                    "paddingRight": "24px"
                                                                 },
                                                                 ">1920": {
-                                                                    "height": "64px",
-                                                                    "marginTop": "48px"
+                                                                    "paddingLeft": "48px",
+                                                                    "paddingRight": "48px",
+                                                                    "minHeight": "64px",
+                                                                    "paddingTop": "10px",
+                                                                    "paddingBottom": "10px"
                                                                 },
                                                                 "1680-1920": {
-                                                                    "paddingTop": "18px",
-                                                                    "paddingBottom": "18px",
-                                                                    "height": "64px",
-                                                                    "marginTop": "48px"
-                                                                },
-                                                                "1280-1679": {
-                                                                    "height": "64px",
-                                                                    "marginTop": "56px"
+                                                                    "paddingLeft": "48px",
+                                                                    "paddingRight": "48px",
+                                                                    "minHeight": "64px",
+                                                                    "paddingTop": "10px",
+                                                                    "paddingBottom": "10px"
                                                                 }
                                                             },
                                                             "props": {
@@ -17905,12 +18003,10 @@
                                                                     "iconWidth": "12px"
                                                                 },
                                                                 "980-1023": {
-                                                                    "iconWidth": "20px",
-                                                                    "distance": "12px"
+                                                                    "iconWidth": "20px"
                                                                 },
-                                                                "1024-1279": {
-                                                                    "iconWidth": "20px",
-                                                                    "distance": "12px"
+                                                                "1680-1920": {
+                                                                    "iconWidth": "20px"
                                                                 },
                                                                 ">1920": {
                                                                     "iconWidth": "20px"
@@ -17922,20 +18018,25 @@
                                                             "children": [],
                                                             "globalStyle": {
                                                                 "fontSize": "var(--fs-l)",
-                                                                "lineHeight": "var(--lh-normal)",
+                                                                "lineHeight": "var(--lh-tight)",
                                                                 "fontWeight": "var(--fw-normal)",
                                                                 "width": "fit-content",
+                                                                "height": "auto",
                                                                 "display": "flex",
                                                                 "borderRadius": "12px",
-                                                                "minWidth": "",
-                                                                "marginLeft": "auto",
-                                                                "marginRight": "auto",
-                                                                "marginTop": "72px",
+                                                                "--font-color": "",
+                                                                "--hover-font-color": "",
+                                                                "--active-font-color": "",
+                                                                "--hover-border": "",
+                                                                "--active-border": "",
+                                                                "--hover-background": "",
+                                                                "--active-background": "",
+                                                                "marginTop": "48px",
                                                                 "marginBottom": "0px",
-                                                                "paddingTop": "18px",
-                                                                "paddingBottom": "18px",
-                                                                "paddingLeft": "48px",
-                                                                "paddingRight": "48px"
+                                                                "paddingLeft": "32px",
+                                                                "paddingRight": "32px",
+                                                                "marginLeft": "auto",
+                                                                "marginRight": "auto"
                                                             },
                                                             "globalContainerStyle": {},
                                                             "statusArr": [],
@@ -17947,17 +18048,11 @@
                                                                 "gtm": "ga-seo_tools_try",
                                                                 "target": "_blank",
                                                                 "colorType": "minor-2",
-                                                                "iconUrl": "//cdn.pacdora.com/ui/topic/0af7c533-8dac-41d1-8f62-f789396e51e1.svg",
+                                                                "iconUrl": "//cdn.pacdora.com/ui/topic/24382910-f214-4592-811a-3e5c6ed3932d.svg",
                                                                 "direction": "right",
                                                                 "distance": "12px",
                                                                 "iconWidth": "20px",
-                                                                "fontColor": "",
-                                                                "hoverFontColor": "",
-                                                                "activeFontColor": "",
-                                                                "hoverBorder": "",
-                                                                "activeBorder": "",
-                                                                "hoverBackground": "",
-                                                                "activeBackground": ""
+                                                                "isOpenAnimation": true
                                                             },
                                                             "transition": []
                                                         }
