@@ -7,6 +7,8 @@ from PySide6.QtGui import QFont, QPainter, QColor, QLinearGradient, QRadialGradi
 from qt_material import apply_stylesheet
 import math
 
+
+
 # PyInstaller兼容性修复
 if hasattr(sys, '_MEIPASS'):
     import multiprocessing
@@ -25,6 +27,12 @@ class ModernSplashScreen(QWidget):
         self.setup_window()
         self.setup_ui()
         self.setup_animations()
+        
+        shadow = QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(20)
+        shadow.setColor(QColor(243, 115, 53, 153))  # 0.6 透明度对应 153
+        shadow.setOffset(0, 0)
+        self.logo_label.setGraphicsEffect(shadow)
         
         # 延迟加载主应用
         QTimer.singleShot(100, self.load_main_app)
@@ -63,7 +71,6 @@ class ModernSplashScreen(QWidget):
                 font-size: 56px;
                 color: #F37335;
                 background: transparent;
-                text-shadow: 0 0 20px rgba(243, 115, 53, 0.6);
             }
         """)
         logo_layout.addWidget(self.logo_label)
@@ -83,7 +90,6 @@ class ModernSplashScreen(QWidget):
                 color: #2C3E50;
                 background: transparent;
                 letter-spacing: 1px;
-                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
         """)
         layout.addWidget(self.title_label)
