@@ -62,7 +62,7 @@ class ResourceManager:
         
         return user_resource
     
-    def ensure_user_resources(self):
+    def ensure_user_resources(self) -> bool:
         """确保用户目录中有必要的资源文件"""
         critical_resources = ['size.csv', 'temps', 'aws_config.json']
         
@@ -70,8 +70,10 @@ class ResourceManager:
             try:
                 self.get_writable_resource_path(resource)
                 print(f"✓ Resource '{resource}' ready at: {self.user_data_path / resource}")
+                return True
             except Exception as e:
                 print(f"✗ Failed to prepare resource '{resource}': {e}")
+                return False
     
     def get_temp_dir(self):
         """获取临时文件目录"""
