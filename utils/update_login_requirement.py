@@ -1,6 +1,3 @@
-from turtle import update
-
-
 target = '},{"key":"background-colors"'
 to = '},{"key":"need-login","value":"true"},{"key":"background-colors"'
 
