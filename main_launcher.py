@@ -95,7 +95,7 @@ class ModernSplashScreen(QWidget):
         layout.addWidget(self.title_label)
         
         # 版本信息
-        self.version_label = QLabel("Version 0.6.2")
+        self.version_label = QLabel("Version 0.7.10")
         self.version_label.setAlignment(Qt.AlignCenter)
         version_font = QFont("Segoe UI", 11)
         self.version_label.setFont(version_font)
@@ -343,7 +343,7 @@ def main():
     
     # 设置应用信息
     app.setApplicationName("Web Setup Automation")
-    app.setApplicationVersion("0.6.2")
+    app.setApplicationVersion("0.7.10")
     app.setOrganizationName("Victor Li")
     
     # 应用Qt-Material样式

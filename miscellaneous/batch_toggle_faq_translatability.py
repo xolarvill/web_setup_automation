@@ -96,10 +96,27 @@ driver = webdriver.Chrome(
     options=chrome_options
     )
 
-# 打开登录页面进行手动登录
+# 尝试从文件加载cookie进行自动登录
+cookie_file = 'cookies.pkl'
 print(f"🚩正在打开登录页面: {login_url}")
 driver.get(login_url)
-print("🚩请在浏览器中手动登录...")
+
+if os.path.exists(cookie_file):
+    print("🔄正在尝试使用已保存的cookie登录...")
+    with open(cookie_file, 'rb') as f:
+        cookies = pickle.load(f)
+    for cookie in cookies:
+        driver.add_cookie(cookie)
+    driver.refresh()
+else:
+    print("🚩未找到cookie文件，请手动登录...")
+    # 等待手动登录完成
+    WebDriverWait(driver, timeout).until(lambda d: dashboard_url_contains in d.current_url)
+    # 保存cookie以供下次使用
+    cookies = driver.get_cookies()
+    with open(cookie_file, 'wb') as f:
+        pickle.dump(cookies, f)
+    print("✅已保存cookie供下次使用")
 
 # 等待URL包含dashboard，表示登录成功
 try:
@@ -201,7 +218,7 @@ for target in remaining_targets:
         print(f"    ❌更新失败：{e}")
         print(f"    ⚠️程序中断，已保存当前进度，下次运行将从断点继续")
         save_progress(completed_targets)  # 保存当前进度
-        driver.quit()
+        #driver.quit()
         exit(1)
 
 # 所有目标处理完成

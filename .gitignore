@@ -9,6 +9,7 @@ client_secrets.json
 cookies.json
 gemini.md
 mockup_faq_content.csv
+cookies.pkl
 .vercel/
 dist/
 build/
