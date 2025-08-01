@@ -33,6 +33,7 @@ from utils.tools_generator import generate_tools_json
 from utils.update_old_resource_page import update_old_resource_page
 from ui.elements import CollapsibleBox, LabeledLineEditWithCopy, HorizontalCollapsibleTabs
 from utils.resource_manager import get_writable_path, get_resource_path
+from utils.update_login_requirement import update_login_requirment
 
 # PyInstaller兼容性修复
 if hasattr(sys, '_MEIPASS'):
@@ -781,15 +782,33 @@ class WSA(QMainWindow):
         self.batch_replace_button.clicked.connect(self.batch_replace_to_clipboard)
         layout.addWidget(self.batch_replace_button)
         
+        # 添加一个按钮用于增加login requirement
+        self.add_login_requirement_button = QPushButton("Add login requirement")
+        self.add_login_requirement_button.setToolTip("Add login requirement to the json string")
+        self.add_login_requirement_button.clicked.connect(self.add_login_requirement)
+        layout.addWidget(self.add_login_requirement_button)
+        
         # 显示窗口
         self.explore_discover_window.show()
     
+    def add_login_requirement(self):
+        try:
+            t = QGuiApplication.clipboard().text()
+            if t:
+                t = update_login_requirment(t)
+                QGuiApplication.clipboard().setText(t)
+                self.add_output_message("Add login requirement success", "success")
+            else:
+                self.add_output_message("Clipboard is empty", "warning")
+        except Exception as e:
+            self.add_output_message(f"Error: {e}", "error")
+    
     def batch_replace_to_clipboard(self):
         try:
-            t = QClipboard.text()
+            t = QGuiApplication.clipboard().text()
             if t:
                 t = update_old_resource_page(t)
-                QClipboard.setText(t)
+                QGuiApplication.clipboard().setText(t)
                 self.add_output_message("Replace success", "success")
             else:
                 self.add_output_message("Clipboard is empty", "warning")
