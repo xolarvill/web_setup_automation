@@ -167,7 +167,13 @@ class WSA(QMainWindow):
         page_label = QLabel("Type:")
         page_label.setMinimumWidth(100)
         self.page_type = QComboBox()
-        self.page_type.addItems(["Mockup tool", "Mockup resource", "Mockup content", "Dieline tool", "Dieline resource", "TOOLS", "Landing page"])
+        self.page_type.addItems(["Mockup tool", 
+                                 "Mockup resource", 
+                                 "Mockup universal topic", 
+                                 "Dieline tool", 
+                                 "Dieline renderer", 
+                                 "Landing page", 
+                                 "TOOLS"])
         self.page_type.setCurrentIndex(0)
         self.page_type.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         page_type_layout.addWidget(page_label)
@@ -777,10 +783,10 @@ class WSA(QMainWindow):
         layout = QVBoxLayout(central_widget)
         
         # 添加一个按钮用于批量替换旧resource页面
-        self.batch_replace_button = QPushButton("Batch replace old resource pages")
-        self.batch_replace_button.setToolTip("确保点击前已经复制了旧resource页面的json字符串")
-        self.batch_replace_button.clicked.connect(self.batch_replace_to_clipboard)
-        layout.addWidget(self.batch_replace_button)
+        self.replace_old_resource_button = QPushButton("Replace old resource pages")
+        self.replace_old_resource_button.setToolTip("确保点击前已经复制了旧resource页面的json字符串")
+        self.replace_old_resource_button.clicked.connect(self.replace_old_resource_to_clipboard)
+        layout.addWidget(self.replace_old_resource_button)
         
         # 添加一个按钮用于增加login requirement
         self.add_login_requirement_button = QPushButton("Add login requirement")
@@ -803,7 +809,7 @@ class WSA(QMainWindow):
         except Exception as e:
             self.add_output_message(f"Error: {e}", "error")
     
-    def batch_replace_to_clipboard(self):
+    def replace_old_resource_to_clipboard(self):
         try:
             t = QGuiApplication.clipboard().text()
             if t:
@@ -877,16 +883,31 @@ class WSA(QMainWindow):
         type = self.page_type.currentText()
         if type == "Mockup tool":
             self.update_action_mockup_tool()
+            
+        elif type == "Mockup resource":
+            self.update_action_mockup_tool() # NOTICE: here resource page uses the update action of mockup tool!!!
+            
+        elif type == "Mockup uinversal topic":
+            self.update_action_mockup_tool() # NOTICE: here universal topic page uses the update action of mockup tool!!!
+            
+        elif type == "Dieline tool":
+            self.update_action_dieline_tool()
+            
+        elif type == "Dieline renderer":
+            self.update_action_dieline_renderer()
+            
         elif type == "Landing page":
             self.update_action_landing_page()
-        elif type == "Mockup resource":
-            self.update_action_mockup_tool()
-        elif type == "Uinversal topic":
-            self.update_action_universal_topic()
+            
         else:
             self.add_output_message("Unavailable page type...","warning")
 
+    def update_action_dieline_renderer(self):
+        pass
     
+    def update_action_dieline_tool(self):
+        pass
+
     def update_action_landing_page(self):
         self.add_output_message("Processing clipboard content...", "info")
         clipboard = QGuiApplication.clipboard()
@@ -1097,7 +1118,7 @@ class WSA(QMainWindow):
     def generate_json_action(self):
         chosen_type = self.page_type.currentText()
         if chosen_type == 'Mockup tool':
-            self.generate_json_action_mockup_tools()
+            self.generate_json_action_mockup_tool()
         elif chosen_type == 'Landing page':
             self.generate_json_action_landing_page()
         elif chosen_type == 'TOOLS':
@@ -1106,7 +1127,354 @@ class WSA(QMainWindow):
             self.generate_json_action_mockup_resource()
         elif chosen_type == 'Universal topic':
             self.generate_json_universal_topic()
+        elif chosen_type == 'Dieline tool':
+            self.generate_json_action_dieline_tool()
+        elif chosen_type == 'Dieline renderer':
+            self.generate_json_action_dieline_rendered()
         
+    def generate_json_action_dieline_tool(self):
+        pass
+    
+    def generate_json_action_dieline_rendered(self):
+        pass
+    
+    def generate_json_action_mockup_universal_topic(self):
+        self.add_output_message("Generating JSON output...", "info")
+        
+        # 获取关键字段
+        view_text = self.view_widget.text().split(":")[0].strip()
+        view_link_raw = self.view_widget.text().split(":")[1].strip()
+        view_link_spicy = f"{view_link_raw}"
+        view_link = view_link_spicy
+        
+        try_text = self.try_widget.text().split(":")[0].strip()
+        try_link_raw = self.try_widget.text().split(":")[1].strip() 
+        try_link_spicy = f"{try_link_raw}"
+        try_link = try_link_spicy
+        
+        breadcrumb = self.keywords_widget.text()
+        # 处理面包屑文本,保持AI和3D大写
+        breadcrumb_lower = breadcrumb.capitalize().replace("Ai", "AI").replace("ai", "AI").replace("3d", "3D")
+        
+        banner_cdn = cdn_placeholder_image(self.banner_cdn_widget, type='banner')
+        
+        part2 = self.segments[1]
+        part2_text = part2.splitlines()[1]
+        
+        part3 = [line for line in self.segments[2].splitlines() if line.strip()]
+        part3_title = part3[0]
+        part3_text = process_text_with_links(part3[1:])
+        
+        
+        # 样机展示链接
+        part4 = self.segments[3].splitlines()
+        part4_title = part4[0]
+        
+        # 检查是否存在 var.json，如果有则读取，否则fetch并写入
+        var_json_path = os.path.join(self.pics_path_widget.text(), "var_v.json")
+        if os.path.exists(var_json_path):
+            self.add_output_message("Found var_v.json file. Reading mockup details.", "info")
+            with open(var_json_path, "r", encoding="utf-8") as f:
+                var_json_data = json.load(f)
+            model_1_name = var_json_data["model_1"]["name"]
+            model_1_image_url = var_json_data["model_1"]["image_url"]
+            model_1_editor_inner_link = var_json_data["model_1"]["editor_inner_link"]
+            model_2_name = var_json_data["model_2"]["name"]
+            model_2_image_url = var_json_data["model_2"]["image_url"]
+            model_2_editor_inner_link = var_json_data["model_2"]["editor_inner_link"]
+            model_3_name = var_json_data["model_3"]["name"]
+            model_3_image_url = var_json_data["model_3"]["image_url"]
+            model_3_editor_inner_link = var_json_data["model_3"]["editor_inner_link"]
+            model_4_name = var_json_data["model_4"]["name"]
+            model_4_image_url = var_json_data["model_4"]["image_url"]
+            model_4_editor_inner_link = var_json_data["model_4"]["editor_inner_link"]
+            model_5_name = var_json_data["model_5"]["name"]
+            model_5_image_url = var_json_data["model_5"]["image_url"]
+            model_5_editor_inner_link = var_json_data["model_5"]["editor_inner_link"]
+            model_6_name = var_json_data["model_6"]["name"]
+            model_6_image_url = var_json_data["model_6"]["image_url"]
+            model_6_editor_inner_link = var_json_data["model_6"]["editor_inner_link"]
+            model_7_name = var_json_data["model_7"]["name"]
+            model_7_image_url = var_json_data["model_7"]["image_url"]
+            model_7_editor_inner_link = var_json_data["model_7"]["editor_inner_link"]
+            model_8_name = var_json_data["model_8"]["name"]
+            model_8_image_url = var_json_data["model_8"]["image_url"]
+            model_8_editor_inner_link = var_json_data["model_8"]["editor_inner_link"]
+        else:
+            urls = extract_url(part4)
+            model_1_name, model_1_image_url, model_1_editor_inner_link = fetch_mockup_details(urls[0], self.add_output_message)
+            model_2_name, model_2_image_url, model_2_editor_inner_link = fetch_mockup_details(urls[1], self.add_output_message)
+            model_3_name, model_3_image_url, model_3_editor_inner_link = fetch_mockup_details(urls[2], self.add_output_message)
+            model_4_name, model_4_image_url, model_4_editor_inner_link = fetch_mockup_details(urls[3], self.add_output_message)
+            model_5_name, model_5_image_url, model_5_editor_inner_link = fetch_mockup_details(urls[4], self.add_output_message)
+            model_6_name, model_6_image_url, model_6_editor_inner_link = fetch_mockup_details(urls[5], self.add_output_message)
+            model_7_name, model_7_image_url, model_7_editor_inner_link = fetch_mockup_details(urls[6], self.add_output_message)
+            model_8_name, model_8_image_url, model_8_editor_inner_link = fetch_mockup_details(urls[7], self.add_output_message)
+            # 写入 var.json
+            var_json_data = {
+            "model_1": {
+                "name": model_1_name,
+                "image_url": model_1_image_url,
+                "editor_inner_link": model_1_editor_inner_link
+            },
+            "model_2": {
+                "name": model_2_name,
+                "image_url": model_2_image_url,
+                "editor_inner_link": model_2_editor_inner_link
+            },
+            "model_3": {
+                "name": model_3_name,
+                "image_url": model_3_image_url,
+                "editor_inner_link": model_3_editor_inner_link
+            },
+            "model_4": {
+                "name": model_4_name,
+                "image_url": model_4_image_url,
+                "editor_inner_link": model_4_editor_inner_link
+            },
+            "model_5": {
+                "name": model_5_name,
+                "image_url": model_5_image_url,
+                "editor_inner_link": model_5_editor_inner_link
+            },
+            "model_6": {
+                "name": model_6_name,
+                "image_url": model_6_image_url,
+                "editor_inner_link": model_6_editor_inner_link
+            },
+            "model_7": {
+                "name": model_7_name,
+                "image_url": model_7_image_url,
+                "editor_inner_link": model_7_editor_inner_link
+            },
+            "model_8": {
+                "name": model_8_name,
+                "image_url": model_8_image_url,
+                "editor_inner_link": model_8_editor_inner_link
+            }
+            }
+            with open(var_json_path, "w", encoding="utf-8") as f:
+                json.dump(var_json_data, f, ensure_ascii=False, indent=2)
+            self.add_output_message("Fetched mockup details and wrote var_v.json.", "success")
+        
+        step1_cdn = cdn_placeholder_image(self.step1_cdn_widget.text(),type='1')
+        step2_cdn = cdn_placeholder_image(self.step2_cdn_widget.text(),type='2')
+        step3_cdn = cdn_placeholder_image(self.step3_cdn_widget.text(),type='3')
+        
+        part5 = [line for line in self.segments[4].splitlines() if line.strip()]
+        part5_title = part5[0].strip()
+        part5_step1_a = part5[1].strip()
+        part5_step1_b = part5[2].strip()
+        
+        part5_step2_a = part5[3].strip()
+        part5_step2_b = part5[4].strip()
+        
+        part5_step3_a = part5[5].strip()
+        part5_step3_b = part5[6].strip()
+        
+        
+        part6 = [line for line in self.segments[5].splitlines() if line.strip()]
+        
+        part6_1_feature_cdn = cdn_placeholder_image(self.feature1_cdn_widget.text(),type='a')
+        part6_2_feature_cdn = cdn_placeholder_image(self.feature2_cdn_widget.text(),type='b')
+        part6_3_feature_cdn = cdn_placeholder_image(self.feature3_cdn_widget.text(),type='c')
+        part6_4_feature_cdn = cdn_placeholder_image(self.feature4_cdn_widget.text(),type='d')
+        
+        part6_title = part6[0]
+        
+        part6_1_title = part6[1].strip()
+        part6_1_a = part6[2].strip()
+        part6_1_b = part6[3].strip()
+        part6_1_button = part6[4].strip()
+        # 根据给定的文案判断是try还是view，由于try的变种文案太多，所以用view来判断
+        if part6_1_button.startswith("View"):
+            part6_1_button_text = view_text
+            part6_1_button_link = view_link_spicy
+            part6_1_button_gtm = 'ga-seo_tools_view_all'
+        else:
+            part6_1_button_text = try_text
+            part6_1_button_link = try_link_spicy
+            part6_1_button_gtm = 'ga-seo_tools_try'
+
+        part6_2_title = part6[5].strip()
+        part6_2_a = part6[6].strip()
+        part6_2_b = part6[7].strip()
+        part6_2_button = part6[8].strip()
+        if part6_2_button.startswith("View"):
+            part6_2_button_text = view_text
+            part6_2_button_link = view_link_spicy
+            part6_2_button_gtm = 'ga-seo_tools_view_all'
+        else:
+            part6_2_button_text = try_text
+            part6_2_button_link = try_link_spicy
+            part6_2_button_gtm = 'ga-seo_tools_try'
+        
+        part6_3_title = part6[9].strip()
+        part6_3_a = part6[10].strip()
+        part6_3_b = part6[11].strip()
+        part6_3_button = part6[12].strip()
+        if part6_3_button.startswith("View"):
+            part6_3_button_text = view_text
+            part6_3_button_link = view_link_spicy
+            part6_3_button_gtm = 'ga-seo_tools_view_all'
+        else:
+            part6_3_button_text = try_text
+            part6_3_button_link = try_link_spicy
+            part6_3_button_gtm = 'ga-seo_tools_try'
+        
+        part6_4_title = part6[13].strip()
+        part6_4_a = part6[14].strip()
+        part6_4_b = part6[15].strip()
+        part6_4_button = part6[16].strip()
+        if part6_4_button.startswith("View"):
+            part6_4_button_text = view_text
+            part6_4_button_link = view_link_spicy
+            part6_4_button_gtm = 'ga-seo_tools_view_all'
+        else:
+            part6_4_button_text = try_text
+            part6_4_button_link = try_link_spicy
+            part6_4_button_gtm = 'ga-seo_tools_try'
+        
+        # FAQ环节
+        part7 = self.segments[6]
+        part7_block = parse_faq_text(part7)
+        
+        part7_q1 = part7_block[0]['question'].strip()
+        part7_a1 = part7_block[0]['answer'].strip()
+        
+        part7_q2 = part7_block[1]['question'].strip()
+        part7_a2 = part7_block[1]['answer'].strip()
+        
+        part7_q3 = part7_block[2]['question'].strip()
+        part7_a3 = part7_block[2]['answer'].strip()
+        
+        part7_q4 = part7_block[3]['question'].strip()
+        part7_a4 = part7_block[3]['answer'].strip()
+        
+        part7_q5 = part7_block[4]['question'].strip()
+        part7_a5_raw = part7_block[4]['answer'].strip()
+        part7_a5 = part7_a5_raw.replace(
+            "pricing page", 
+            '<a class="pac-ui-editor-a" href=/pricing target=_self gtm="" rel="noopener noreferrer">pricing page</a>'
+        )
+        
+        part8_text = self.segments[7].splitlines()[0]
+        
+        folder_path = self.pics_path_widget.text()
+        self.ensure_folder_exists(folder_path = folder_path)
+        
+        # 读取模板内容
+        temp_path = get_resource_path('temps/mockup_universal_topic.json')
+        with open(temp_path, 'r', encoding='utf-8') as f:
+            template_str = f.read()
+
+        # 构建替换字典
+        replace_dict = {
+            "view_text": view_text,
+            "view_link": view_link,
+            "try_text": try_text,
+            "try_link": try_link,
+            "breadcrumb": breadcrumb,
+            "breadcrumb_lower": breadcrumb_lower,
+            "banner_cdn": banner_cdn,
+            "part2_text": part2_text,
+            "part3_title": part3_title,
+            "part3_text": part3_text,
+            "part4_title": part4_title,
+            "model_1_image_url": model_1_image_url,
+            "model_1_name": model_1_name,
+            "model_1_editor_inner_link": model_1_editor_inner_link,
+            "model_2_image_url": model_2_image_url,
+            "model_2_name": model_2_name,
+            "model_2_editor_inner_link": model_2_editor_inner_link,
+            "model_3_image_url": model_3_image_url,
+            "model_3_name": model_3_name,
+            "model_3_editor_inner_link": model_3_editor_inner_link,
+            "model_4_image_url": model_4_image_url,
+            "model_4_name": model_4_name,
+            "model_4_editor_inner_link": model_4_editor_inner_link,
+            "model_5_image_url": model_5_image_url,
+            "model_5_name": model_5_name,
+            "model_5_editor_inner_link": model_5_editor_inner_link,
+            "model_6_image_url": model_6_image_url,
+            "model_6_name": model_6_name,
+            "model_6_editor_inner_link": model_6_editor_inner_link,
+            "model_7_image_url": model_7_image_url,
+            "model_7_name": model_7_name,
+            "model_7_editor_inner_link": model_7_editor_inner_link,
+            "model_8_image_url": model_8_image_url,
+            "model_8_name": model_8_name,
+            "model_8_editor_inner_link": model_8_editor_inner_link,
+            "step1_cdn": step1_cdn,
+            "step2_cdn": step2_cdn,
+            "step3_cdn": step3_cdn,
+            "part5_title": part5_title,
+            "part5_step1_a": part5_step1_a,
+            "part5_step1_b": part5_step1_b,
+            "part5_step2_a": part5_step2_a,
+            "part5_step2_b": part5_step2_b,
+            "part5_step3_a": part5_step3_a,
+            "part5_step3_b": part5_step3_b,
+            "part6_title": part6_title,
+            "part6_1_title": part6_1_title,
+            "part6_1_feature_cdn": part6_1_feature_cdn,
+            "part6_1_a": part6_1_a,
+            "part6_1_b": part6_1_b,
+            "part6_1_button_text" : part6_1_button_text,
+            "part6_1_button_link" : part6_1_button_link,
+            "part6_1_button_gtm" : part6_1_button_gtm,
+            "part6_2_title": part6_2_title,
+            "part6_2_feature_cdn": part6_2_feature_cdn,
+            "part6_2_a": part6_2_a,
+            "part6_2_b": part6_2_b,
+            "part6_2_button_text" : part6_2_button_text,
+            "part6_2_button_link" : part6_2_button_link,
+            "part6_2_button_gtm" : part6_2_button_gtm,
+            "part6_3_title": part6_3_title,
+            "part6_3_feature_cdn": part6_3_feature_cdn,
+            "part6_3_a": part6_3_a,
+            "part6_3_b": part6_3_b,
+            "part6_3_button_text" : part6_3_button_text,
+            "part6_3_button_link" : part6_3_button_link,
+            "part6_3_button_gtm" : part6_3_button_gtm,
+            "part6_4_title": part6_4_title,
+            "part6_4_feature_cdn": part6_4_feature_cdn,
+            "part6_4_a": part6_4_a,
+            "part6_4_b": part6_4_b,
+            "part6_4_button_text" : part6_4_button_text,
+            "part6_4_button_link" : part6_4_button_link,
+            "part6_4_button_gtm" : part6_4_button_gtm,
+            "part7_q1": part7_q1,
+            "part7_a1": part7_a1,
+            "part7_q2": part7_q2,
+            "part7_a2": part7_a2,
+            "part7_q3": part7_q3,
+            "part7_a3": part7_a3,
+            "part7_q4": part7_q4,
+            "part7_a4": part7_a4,
+            "part7_q5": part7_q5,
+            "part7_a5": part7_a5,
+            "part8_text": part8_text,
+        }
+
+        # 替换所有{{key}}为对应值
+        for key, value in replace_dict.items():
+            if isinstance(value, str):
+                # 使用json.dumps正确处理JSON字符串中的特殊字符
+                value = json.dumps(value)[1:-1]  # 去掉json.dumps添加的外层引号
+            template_str = template_str.replace(f"{{{{{key}}}}}", str(value))
+
+        # 尝试解析为json
+        try:
+            json_obj = json.loads(template_str)
+            json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
+            # self.json_widget.setText(json_string)
+            self.output_json = json_string
+            QGuiApplication.clipboard().setText(json_string)
+            self.add_output_message("JSON generated and copied to clipboard!", "success")
+        except Exception as e:
+            self.add_output_message(f"Error generating JSON: {e}", "error")
+    
     def generate_json_action_mockup_resource(self):
         self.add_output_message("Generating JSON output...", "info")
         
@@ -1632,7 +2000,7 @@ class WSA(QMainWindow):
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
     
-    def generate_json_action_mockup_tools(self):
+    def generate_json_action_mockup_tool(self):
         self.add_output_message("Generating JSON output...", "info")
         
         # 获取关键字段
@@ -1905,8 +2273,8 @@ class WSA(QMainWindow):
         replace_dict = {
             "view_text": view_text,
             "view_link": view_link,
-            "make_text": try_text,
-            "make_link": try_link,
+            "try_text": try_text,
+            "try_link": try_link,
             "breadcrumb": breadcrumb,
             "breadcrumb_lower": breadcrumb_lower,
             "part2_text": part2_text,

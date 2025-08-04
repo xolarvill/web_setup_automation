@@ -8653,8 +8653,8 @@
                                         "width": "fit-content"
                                     },
                                     "globalProps": {
-                                        "text": "{{make_text}}",
-                                        "link": "{{make_link}}",
+                                        "text": "{{try_text}}",
+                                        "link": "{{try_link}}",
                                         "gtm": "ga-seo_tools_try",
                                         "target": "_blank",
                                         "colorType": "minor-2",
@@ -13280,7 +13280,7 @@
                                 {
                                     "name": "Row",
                                     "label": "块容器",
-                                    "uuid": "e77e3d39-4976-446f-982f-11fd8818c61c",
+                                    "uuid": "a2808fd4-a599-40e9-98c5-789a8ee470f2",
                                     "style": {
                                         "1680-1920": {
                                             "width": "calc(100% - 400px)"
@@ -13310,7 +13310,7 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
-                                            "uuid": "dde6bba5-5ace-418c-be65-fc4fa7d45cd1",
+                                            "uuid": "d352bc67-032c-443e-8567-57a46c4e8300",
                                             "style": {
                                                 "1280-1679": {
                                                     "marginRight": "24px",
@@ -13329,11 +13329,8 @@
                                                     "marginRight": "12px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
-                                                    "height": "auto",
                                                     "fontSize": "var(--fs-sm)",
                                                     "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -13345,13 +13342,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -13364,15 +13360,16 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "Custom Perfume Bottle",
-                                                "link": "/tools/custom-perfume-bottle",
+                                                "text": "",
+                                                "link": "",
                                                 "gtm": "ga-seo_explore_more_tools",
                                                 "target": "_self",
                                                 "colorType": "custom",
@@ -13387,7 +13384,7 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
-                                            "uuid": "72ee4df1-3d7c-41d1-a384-a3a880164ed3",
+                                            "uuid": "3c527963-926c-4bb1-a589-2d3043a65778",
                                             "style": {
                                                 "1280-1679": {
                                                     "marginRight": "24px",
@@ -13406,11 +13403,8 @@
                                                     "marginRight": "12px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
-                                                    "height": "auto",
                                                     "fontSize": "var(--fs-sm)",
                                                     "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -13422,13 +13416,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -13441,15 +13434,16 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "Shopping Bag Mockup Generator",
-                                                "link": "/tools/3d-shopping-bag-mockup-generator",
+                                                "text": "",
+                                                "link": "",
                                                 "gtm": "ga-seo_explore_more_tools",
                                                 "target": "_self",
                                                 "colorType": "custom",
@@ -13464,7 +13458,7 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
-                                            "uuid": "0694e673-4fe5-4477-8f9d-6587c1ee5568",
+                                            "uuid": "2a2f1ee2-6c8f-45fc-a618-2c95a2283600",
                                             "style": {
                                                 "1280-1679": {
                                                     "marginRight": "24px",
@@ -13483,11 +13477,8 @@
                                                     "marginRight": "12px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
-                                                    "height": "auto",
                                                     "fontSize": "var(--fs-sm)",
                                                     "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -13499,13 +13490,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -13518,92 +13508,16 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "Bottle Mockup Generator",
-                                                "link": "/tools/3d-bottle-mockup-generator",
-                                                "gtm": "ga-seo_explore_more_tools",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "56cd7910-8a34-42fe-a683-ffbd9ecded0c",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginRight": "24px",
-                                                    "marginTop": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "height": "auto",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "Jar Mockup Generator",
-                                                "link": "/tools/3d-jar-mockup-generator",
+                                                "text": "",
+                                                "link": "",
                                                 "gtm": "ga-seo_explore_more_tools",
                                                 "target": "_self",
                                                 "colorType": "custom",
@@ -13776,7 +13690,7 @@
                                 {
                                     "name": "Row",
                                     "label": "块容器",
-                                    "uuid": "0bd93c78-77e7-4a0f-b366-395df95d95bf",
+                                    "uuid": "18a427d0-1d86-40cf-ac38-053856d04bcd",
                                     "style": {
                                         "1680-1920": {
                                             "width": "calc(100% - 400px)"
@@ -13806,546 +13720,7 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
-                                            "uuid": "d5791530-8edc-4b6f-94c0-58b5f6bd0582",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "height": "auto",
-                                                    "borderRadius": "6px",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "Cosmetic Bottle Mockup",
-                                                "link": "/mockups/cosmetic-bottle-mockups",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "e6d07d8b-2b09-4694-b2cf-aed9da55ebab",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "height": "auto",
-                                                    "borderRadius": "6px",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "Pump Bottle Mockup",
-                                                "link": "/mockups/pump-bottle-mockups",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "cdaeb5b9-54c5-4fe5-a5ee-5b090ca7d1e4",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "height": "auto",
-                                                    "borderRadius": "6px",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": " Spray Bottle Mockup",
-                                                "link": "/mockups/spray-bottle-mockups",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "db4f15c1-14b9-4e19-b649-da9f5ff7ed14",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "height": "auto",
-                                                    "borderRadius": "6px",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "Lotion Bottle Mockup",
-                                                "link": "/tools/lotion-bottle-mockup",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "b69d1f87-cd44-46b7-89b5-0f2c1e00bfec",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "height": "auto",
-                                                    "borderRadius": "6px",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "White Spray Bottle Mockup",
-                                                "link": "/tools/white-spray-bottle-mockup",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "05a6c21c-2cda-4cd3-b691-2375f4b252d1",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "height": "auto",
-                                                    "borderRadius": "6px",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "Cosmetic Jar Mockup",
-                                                "link": "/mockups/cosmetic-jar-mockups",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "6af82fc9-e3ce-4443-80e4-18d2ac14bf71",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "borderRadius": "6px",
-                                                    "height": "auto",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "Tube Mockup",
-                                                "link": "/mockups/tube-mockups",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "cd382e90-ff8a-416e-8404-ac760326bf07",
+                                            "uuid": "2c0ab3f4-e9b3-43b7-858e-43d7e8c060ff",
                                             "style": {
                                                 "1280-1679": {
                                                     "marginRight": "24px",
@@ -14364,11 +13739,8 @@
                                                     "marginRight": "12px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
-                                                    "height": "auto",
                                                     "fontSize": "var(--fs-sm)",
                                                     "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -14380,13 +13752,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -14399,7 +13770,600 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
+                                            },
+                                            "globalContainerStyle": {},
+                                            "statusArr": [],
+                                            "curStatus": "default",
+                                            "status": {},
+                                            "globalProps": {
+                                                "text": "",
+                                                "link": "",
+                                                "gtm": "ga-seo_explore_more_tools",
+                                                "target": "_self",
+                                                "colorType": "custom",
+                                                "iconUrl": "",
+                                                "direction": "right",
+                                                "distance": "10px",
+                                                "iconWidth": "20px",
+                                                "fontColor": "#191919"
+                                            },
+                                            "transition": []
+                                        },
+                                        {
+                                            "name": "Button",
+                                            "label": "Button",
+                                            "uuid": "b472b494-9215-436f-8675-5335e1886a2a",
+                                            "style": {
+                                                "1280-1679": {
+                                                    "marginRight": "24px",
+                                                    "marginTop": "24px"
+                                                },
+                                                "1024-1279": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "980-1023": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "<980": {
+                                                    "marginTop": "12px",
+                                                    "marginRight": "12px",
+                                                    "paddingLeft": "16px",
+                                                    "paddingRight": "16px",
+                                                    "fontSize": "var(--fs-sm)",
+                                                    "borderRadius": "6px",
+                                                    "paddingTop": "8px",
+                                                    "paddingBottom": "8px"
+                                                }
+                                            },
+                                            "props": {},
+                                            "containerStyle": {},
+                                            "isBlock": true,
+                                            "isContainer": false,
+                                            "children": [],
+                                            "globalStyle": {
+                                                "fontSize": "var(--fs-base)",
+                                                "lineHeight": "var(--lh-none)",
+                                                "fontWeight": "var(--fw-normal)",
+                                                "width": "auto",
+                                                "height": "auto",
+                                                "display": "flex",
+                                                "borderRadius": "10px",
+                                                "--font-color": "#191919",
+                                                "--hover-font-color": "#191919",
+                                                "--active-font-color": "#191919",
+                                                "--hover-border": "solid 1px #191919",
+                                                "--active-border": "solid 1px #191919",
+                                                "--hover-background": "#F7F7F7",
+                                                "--active-background": "#F7F7F7",
+                                                "paddingLeft": "24px",
+                                                "paddingRight": "24px",
+                                                "background": "#F7F7F7",
+                                                "marginRight": "32px",
+                                                "border": "solid 1px #D1D0D2",
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
+                                            },
+                                            "globalContainerStyle": {},
+                                            "statusArr": [],
+                                            "curStatus": "default",
+                                            "status": {},
+                                            "globalProps": {
+                                                "text": "",
+                                                "link": "",
+                                                "gtm": "ga-seo_explore_more_tools",
+                                                "target": "_self",
+                                                "colorType": "custom",
+                                                "iconUrl": "",
+                                                "direction": "right",
+                                                "distance": "10px",
+                                                "iconWidth": "20px",
+                                                "fontColor": "#191919"
+                                            },
+                                            "transition": []
+                                        },
+                                        {
+                                            "name": "Button",
+                                            "label": "Button",
+                                            "uuid": "b95d461e-9f30-4eec-b63c-3a4aa3d7b795",
+                                            "style": {
+                                                "1280-1679": {
+                                                    "marginRight": "24px",
+                                                    "marginTop": "24px"
+                                                },
+                                                "1024-1279": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "980-1023": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "<980": {
+                                                    "marginTop": "12px",
+                                                    "marginRight": "12px",
+                                                    "paddingLeft": "16px",
+                                                    "paddingRight": "16px",
+                                                    "fontSize": "var(--fs-sm)",
+                                                    "borderRadius": "6px",
+                                                    "paddingTop": "8px",
+                                                    "paddingBottom": "8px"
+                                                }
+                                            },
+                                            "props": {},
+                                            "containerStyle": {},
+                                            "isBlock": true,
+                                            "isContainer": false,
+                                            "children": [],
+                                            "globalStyle": {
+                                                "fontSize": "var(--fs-base)",
+                                                "lineHeight": "var(--lh-none)",
+                                                "fontWeight": "var(--fw-normal)",
+                                                "width": "auto",
+                                                "height": "auto",
+                                                "display": "flex",
+                                                "borderRadius": "10px",
+                                                "--font-color": "#191919",
+                                                "--hover-font-color": "#191919",
+                                                "--active-font-color": "#191919",
+                                                "--hover-border": "solid 1px #191919",
+                                                "--active-border": "solid 1px #191919",
+                                                "--hover-background": "#F7F7F7",
+                                                "--active-background": "#F7F7F7",
+                                                "paddingLeft": "24px",
+                                                "paddingRight": "24px",
+                                                "background": "#F7F7F7",
+                                                "marginRight": "32px",
+                                                "border": "solid 1px #D1D0D2",
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
+                                            },
+                                            "globalContainerStyle": {},
+                                            "statusArr": [],
+                                            "curStatus": "default",
+                                            "status": {},
+                                            "globalProps": {
+                                                "text": "",
+                                                "link": "",
+                                                "gtm": "ga-seo_explore_more_tools",
+                                                "target": "_self",
+                                                "colorType": "custom",
+                                                "iconUrl": "",
+                                                "direction": "right",
+                                                "distance": "10px",
+                                                "iconWidth": "20px",
+                                                "fontColor": "#191919"
+                                            },
+                                            "transition": []
+                                        },
+                                        {
+                                            "name": "Button",
+                                            "label": "Button",
+                                            "uuid": "d37cf468-9918-4488-9505-6b04ee785916",
+                                            "style": {
+                                                "1280-1679": {
+                                                    "marginRight": "24px",
+                                                    "marginTop": "24px"
+                                                },
+                                                "1024-1279": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "980-1023": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "<980": {
+                                                    "marginTop": "12px",
+                                                    "marginRight": "12px",
+                                                    "paddingLeft": "16px",
+                                                    "paddingRight": "16px",
+                                                    "fontSize": "var(--fs-sm)",
+                                                    "borderRadius": "6px",
+                                                    "paddingTop": "8px",
+                                                    "paddingBottom": "8px"
+                                                }
+                                            },
+                                            "props": {},
+                                            "containerStyle": {},
+                                            "isBlock": true,
+                                            "isContainer": false,
+                                            "children": [],
+                                            "globalStyle": {
+                                                "fontSize": "var(--fs-base)",
+                                                "lineHeight": "var(--lh-none)",
+                                                "fontWeight": "var(--fw-normal)",
+                                                "width": "auto",
+                                                "height": "auto",
+                                                "display": "flex",
+                                                "borderRadius": "10px",
+                                                "--font-color": "#191919",
+                                                "--hover-font-color": "#191919",
+                                                "--active-font-color": "#191919",
+                                                "--hover-border": "solid 1px #191919",
+                                                "--active-border": "solid 1px #191919",
+                                                "--hover-background": "#F7F7F7",
+                                                "--active-background": "#F7F7F7",
+                                                "paddingLeft": "24px",
+                                                "paddingRight": "24px",
+                                                "background": "#F7F7F7",
+                                                "marginRight": "32px",
+                                                "border": "solid 1px #D1D0D2",
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
+                                            },
+                                            "globalContainerStyle": {},
+                                            "statusArr": [],
+                                            "curStatus": "default",
+                                            "status": {},
+                                            "globalProps": {
+                                                "text": "Free Mockup Generator",
+                                                "link": "/tools/mockup-generator",
+                                                "gtm": "ga-discover_more_tools",
+                                                "target": "_self",
+                                                "colorType": "custom",
+                                                "iconUrl": "",
+                                                "direction": "right",
+                                                "distance": "10px",
+                                                "iconWidth": "20px",
+                                                "fontColor": "#191919"
+                                            },
+                                            "transition": []
+                                        },
+                                        {
+                                            "name": "Button",
+                                            "label": "Button",
+                                            "uuid": "26923f25-4d05-4ede-85ef-48d785b4ca08",
+                                            "style": {
+                                                "1280-1679": {
+                                                    "marginRight": "24px",
+                                                    "marginTop": "24px"
+                                                },
+                                                "1024-1279": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "980-1023": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "<980": {
+                                                    "marginTop": "12px",
+                                                    "marginRight": "12px",
+                                                    "paddingLeft": "16px",
+                                                    "paddingRight": "16px",
+                                                    "fontSize": "var(--fs-sm)",
+                                                    "borderRadius": "6px",
+                                                    "paddingTop": "8px",
+                                                    "paddingBottom": "8px"
+                                                }
+                                            },
+                                            "props": {},
+                                            "containerStyle": {},
+                                            "isBlock": true,
+                                            "isContainer": false,
+                                            "children": [],
+                                            "globalStyle": {
+                                                "fontSize": "var(--fs-base)",
+                                                "lineHeight": "var(--lh-none)",
+                                                "fontWeight": "var(--fw-normal)",
+                                                "width": "auto",
+                                                "height": "auto",
+                                                "display": "flex",
+                                                "borderRadius": "10px",
+                                                "--font-color": "#191919",
+                                                "--hover-font-color": "#191919",
+                                                "--active-font-color": "#191919",
+                                                "--hover-border": "solid 1px #191919",
+                                                "--active-border": "solid 1px #191919",
+                                                "--hover-background": "#F7F7F7",
+                                                "--active-background": "#F7F7F7",
+                                                "paddingLeft": "24px",
+                                                "paddingRight": "24px",
+                                                "background": "#F7F7F7",
+                                                "marginRight": "32px",
+                                                "border": "solid 1px #D1D0D2",
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
+                                            },
+                                            "globalContainerStyle": {},
+                                            "statusArr": [],
+                                            "curStatus": "default",
+                                            "status": {},
+                                            "globalProps": {
+                                                "text": "Free Dieline Generator",
+                                                "link": "/tools/dieline-generator",
+                                                "gtm": "ga-discover_more_tools",
+                                                "target": "_self",
+                                                "colorType": "custom",
+                                                "iconUrl": "",
+                                                "direction": "right",
+                                                "distance": "10px",
+                                                "iconWidth": "20px",
+                                                "fontColor": "#191919"
+                                            },
+                                            "transition": []
+                                        },
+                                        {
+                                            "name": "Button",
+                                            "label": "Button",
+                                            "uuid": "bcc9b417-6d97-4efa-a203-68d27303ba3b",
+                                            "style": {
+                                                "1280-1679": {
+                                                    "marginRight": "24px",
+                                                    "marginTop": "24px"
+                                                },
+                                                "1024-1279": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "980-1023": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "<980": {
+                                                    "marginTop": "12px",
+                                                    "marginRight": "12px",
+                                                    "paddingLeft": "16px",
+                                                    "paddingRight": "16px",
+                                                    "fontSize": "var(--fs-sm)",
+                                                    "borderRadius": "6px",
+                                                    "paddingTop": "8px",
+                                                    "paddingBottom": "8px"
+                                                }
+                                            },
+                                            "props": {},
+                                            "containerStyle": {},
+                                            "isBlock": true,
+                                            "isContainer": false,
+                                            "children": [],
+                                            "globalStyle": {
+                                                "fontSize": "var(--fs-base)",
+                                                "lineHeight": "var(--lh-none)",
+                                                "fontWeight": "var(--fw-normal)",
+                                                "width": "auto",
+                                                "height": "auto",
+                                                "display": "flex",
+                                                "borderRadius": "10px",
+                                                "--font-color": "#191919",
+                                                "--hover-font-color": "#191919",
+                                                "--active-font-color": "#191919",
+                                                "--hover-border": "solid 1px #191919",
+                                                "--active-border": "solid 1px #191919",
+                                                "--hover-background": "#F7F7F7",
+                                                "--active-background": "#F7F7F7",
+                                                "paddingLeft": "24px",
+                                                "paddingRight": "24px",
+                                                "background": "#F7F7F7",
+                                                "marginRight": "32px",
+                                                "border": "solid 1px #D1D0D2",
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
+                                            },
+                                            "globalContainerStyle": {},
+                                            "statusArr": [],
+                                            "curStatus": "default",
+                                            "status": {},
+                                            "globalProps": {
+                                                "text": "Free 3D Modeling Software",
+                                                "link": "/3d-creator",
+                                                "gtm": "ga-discover_more_tools",
+                                                "target": "_self",
+                                                "colorType": "custom",
+                                                "iconUrl": "",
+                                                "direction": "right",
+                                                "distance": "10px",
+                                                "iconWidth": "20px",
+                                                "fontColor": "#191919"
+                                            },
+                                            "transition": []
+                                        },
+                                        {
+                                            "name": "Button",
+                                            "label": "Button",
+                                            "uuid": "4046477e-bcbc-4d14-ad81-8eabad31732f",
+                                            "style": {
+                                                "1280-1679": {
+                                                    "marginRight": "24px",
+                                                    "marginTop": "24px"
+                                                },
+                                                "1024-1279": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "980-1023": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "<980": {
+                                                    "marginTop": "12px",
+                                                    "marginRight": "12px",
+                                                    "paddingLeft": "16px",
+                                                    "paddingRight": "16px",
+                                                    "fontSize": "var(--fs-sm)",
+                                                    "borderRadius": "6px",
+                                                    "paddingTop": "8px",
+                                                    "paddingBottom": "8px"
+                                                }
+                                            },
+                                            "props": {},
+                                            "containerStyle": {},
+                                            "isBlock": true,
+                                            "isContainer": false,
+                                            "children": [],
+                                            "globalStyle": {
+                                                "fontSize": "var(--fs-base)",
+                                                "lineHeight": "var(--lh-none)",
+                                                "fontWeight": "var(--fw-normal)",
+                                                "width": "auto",
+                                                "height": "auto",
+                                                "display": "flex",
+                                                "borderRadius": "10px",
+                                                "--font-color": "#191919",
+                                                "--hover-font-color": "#191919",
+                                                "--active-font-color": "#191919",
+                                                "--hover-border": "solid 1px #191919",
+                                                "--active-border": "solid 1px #191919",
+                                                "--hover-background": "#F7F7F7",
+                                                "--active-background": "#F7F7F7",
+                                                "paddingLeft": "24px",
+                                                "paddingRight": "24px",
+                                                "background": "#F7F7F7",
+                                                "marginRight": "32px",
+                                                "border": "solid 1px #D1D0D2",
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
+                                            },
+                                            "globalContainerStyle": {},
+                                            "statusArr": [],
+                                            "curStatus": "default",
+                                            "status": {},
+                                            "globalProps": {
+                                                "text": "Free AI Background Generator",
+                                                "link": "/tools/ai-background-generator",
+                                                "gtm": "ga-discover_more_tools",
+                                                "target": "_self",
+                                                "colorType": "custom",
+                                                "iconUrl": "",
+                                                "direction": "right",
+                                                "distance": "10px",
+                                                "iconWidth": "20px",
+                                                "fontColor": "#191919"
+                                            },
+                                            "transition": []
+                                        },
+                                        {
+                                            "name": "Button",
+                                            "label": "Button",
+                                            "uuid": "4670fda9-0631-4622-9129-8bafb920f6d3",
+                                            "style": {
+                                                "1280-1679": {
+                                                    "marginRight": "24px",
+                                                    "marginTop": "24px"
+                                                },
+                                                "1024-1279": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "980-1023": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "<980": {
+                                                    "marginTop": "12px",
+                                                    "marginRight": "12px",
+                                                    "paddingLeft": "16px",
+                                                    "paddingRight": "16px",
+                                                    "fontSize": "var(--fs-sm)",
+                                                    "borderRadius": "6px",
+                                                    "paddingTop": "8px",
+                                                    "paddingBottom": "8px"
+                                                }
+                                            },
+                                            "props": {},
+                                            "containerStyle": {},
+                                            "isBlock": true,
+                                            "isContainer": false,
+                                            "children": [],
+                                            "globalStyle": {
+                                                "fontSize": "var(--fs-base)",
+                                                "lineHeight": "var(--lh-none)",
+                                                "fontWeight": "var(--fw-normal)",
+                                                "width": "auto",
+                                                "height": "auto",
+                                                "display": "flex",
+                                                "borderRadius": "10px",
+                                                "--font-color": "#191919",
+                                                "--hover-font-color": "#191919",
+                                                "--active-font-color": "#191919",
+                                                "--hover-border": "solid 1px #191919",
+                                                "--active-border": "solid 1px #191919",
+                                                "--hover-background": "#F7F7F7",
+                                                "--active-background": "#F7F7F7",
+                                                "paddingLeft": "24px",
+                                                "paddingRight": "24px",
+                                                "background": "#F7F7F7",
+                                                "marginRight": "32px",
+                                                "border": "solid 1px #D1D0D2",
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
+                                            },
+                                            "globalContainerStyle": {},
+                                            "statusArr": [],
+                                            "curStatus": "default",
+                                            "status": {},
+                                            "globalProps": {
+                                                "text": "QR Code Generator",
+                                                "link": "/tools/qrcode-generator",
+                                                "gtm": "ga-discover_more_tools",
+                                                "target": "_self",
+                                                "colorType": "custom",
+                                                "iconUrl": "",
+                                                "direction": "right",
+                                                "distance": "10px",
+                                                "iconWidth": "20px",
+                                                "fontColor": "#191919"
+                                            },
+                                            "transition": []
+                                        },
+                                        {
+                                            "name": "Button",
+                                            "label": "Button",
+                                            "uuid": "9c6e8cd1-fd3f-4071-bd62-f256a0f4bc9f",
+                                            "style": {
+                                                "1280-1679": {
+                                                    "marginRight": "24px",
+                                                    "marginTop": "24px"
+                                                },
+                                                "1024-1279": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "980-1023": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "<980": {
+                                                    "marginTop": "12px",
+                                                    "marginRight": "12px",
+                                                    "paddingLeft": "16px",
+                                                    "paddingRight": "16px",
+                                                    "fontSize": "var(--fs-sm)",
+                                                    "borderRadius": "6px",
+                                                    "paddingTop": "8px",
+                                                    "paddingBottom": "8px"
+                                                }
+                                            },
+                                            "props": {},
+                                            "containerStyle": {},
+                                            "isBlock": true,
+                                            "isContainer": false,
+                                            "children": [],
+                                            "globalStyle": {
+                                                "fontSize": "var(--fs-base)",
+                                                "lineHeight": "var(--lh-none)",
+                                                "fontWeight": "var(--fw-normal)",
+                                                "width": "auto",
+                                                "height": "auto",
+                                                "display": "flex",
+                                                "borderRadius": "10px",
+                                                "--font-color": "#191919",
+                                                "--hover-font-color": "#191919",
+                                                "--active-font-color": "#191919",
+                                                "--hover-border": "solid 1px #191919",
+                                                "--active-border": "solid 1px #191919",
+                                                "--hover-background": "#F7F7F7",
+                                                "--active-background": "#F7F7F7",
+                                                "paddingLeft": "24px",
+                                                "paddingRight": "24px",
+                                                "background": "#F7F7F7",
+                                                "marginRight": "32px",
+                                                "border": "solid 1px #D1D0D2",
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
@@ -14408,161 +14372,7 @@
                                             "globalProps": {
                                                 "text": "Barcode Generator",
                                                 "link": "/tools/barcode-generator_upc-a",
-                                                "gtm": "ga-seo_explore_more_tools",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "d028fed0-0756-4832-9646-8f7b58e2e77a",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginRight": "24px",
-                                                    "marginTop": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "height": "auto",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": " Free Mockup Generator",
-                                                "link": "/tools/mockup-generator",
-                                                "gtm": "ga-seo_explore_more_tools",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "8d90e975-b8c7-44bf-abbc-0fa360fa049f",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginRight": "24px",
-                                                    "marginTop": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "height": "auto",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "AI Background Generator",
-                                                "link": "/tools/ai-background-generator",
-                                                "gtm": "ga-seo_explore_more_tools",
+                                                "gtm": "ga-discover_more_tools",
                                                 "target": "_self",
                                                 "colorType": "custom",
                                                 "iconUrl": "",
@@ -14601,8 +14411,7 @@
                                         "dy": "0px",
                                         "blur": "0px",
                                         "spread": "0px",
-                                        "color": "#000000",
-                                        "text": "Cup Mockup"
+                                        "color": "#000000"
                                     },
                                     "transition": []
                                 }
@@ -14863,8 +14672,8 @@
                                     "curStatus": "default",
                                     "status": {},
                                     "globalProps": {
-                                        "text": "{{make_text}}",
-                                        "link": "{{make_link}}",
+                                        "text": "{{try_text}}",
+                                        "link": "{{try_link}}",
                                         "gtm": "ga-seo_tools_try",
                                         "target": "_blank",
                                         "colorType": "minor-2",

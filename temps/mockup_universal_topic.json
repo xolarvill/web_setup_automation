@@ -93,7 +93,7 @@
                                                 "href": "/tools"
                                             },
                                             {
-                                                "label": "Jewelry Box Mockup",
+                                                "label": "{{breadcrumb}}",
                                                 "href": ""
                                             }
                                         ],
@@ -888,7 +888,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>Jewelry box mockup</p>",
+                                                                "text": "<p>{{breadcrumb_lower}}</p>",
                                                                 "tag": "h1",
                                                                 "isOpenAnimation": true
                                                             },
@@ -935,7 +935,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>Pacdora offers a variety of 3D jewelry box mockups, including magnetic boxes, lift-off lid boxes, drawer boxes and more styles. Just pick your ideal mockup, and customize the design to create premium jewelry packaging. Download HD visuals instantly!</p>",
+                                                                "text": "<p>{{part2_text}}</p>",
                                                                 "isOpenAnimation": true,
                                                                 "isShow": true
                                                             },
@@ -1091,8 +1091,8 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "Design a jewelry box mockup ",
-                                                                "link": "/mockup-detail/magnetic-gift-box-mockup-36101102?key=99&tag=219",
+                                                                "text": "{{try_text}}",
+                                                                "link": "{{try_link}}",
                                                                 "gtm": "ga-seo_tools_try",
                                                                 "target": "_blank",
                                                                 "colorType": "custom",
@@ -1244,9 +1244,9 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "url": "https://cdn.pacdora.com/page-img/0e61c7a9-e7d5-405a-a53e-20f7289f8a00.webp",
-                                                        "title": "Jewelry box mockup",
-                                                        "alt": "Jewelry box mockup",
+                                                        "url": "{{banner_cdn}}",
+                                                        "title": "{{breadcrumb_lower}}",
+                                                        "alt": "{{breadcrumb_lower}}",
                                                         "isOpenAnimation": true,
                                                         "size1": 1200,
                                                         "size2": 1200,
@@ -3025,7 +3025,7 @@
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "<p>Make premium-quality jewelry box mockups instantly with Pacdora!</p>",
+                                                "text": "<p>{{part3_title}}</p>",
                                                 "tag": "h2",
                                                 "isOpenAnimation": true
                                             },
@@ -3072,7 +3072,7 @@
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "<p>Finding it difficult to make top-tier jewelry box mockups online? Use Pacdora to design impressive jewelry packaging in just a few clicks. Browse our 3D box mockup collection and select your favorite mockup, such as magnetic boxes or double door jewelry boxes. Customize the box dimensions, upload design elements, tweak colors, and download high-resolution PNG/JPG images, MP4 videos, or printable dieline files. Start designing now!</p>",
+                                                "text": "<p>{{part3_text}}</p>",
                                                 "isOpenAnimation": false,
                                                 "isShow": true
                                             },
@@ -3252,7 +3252,7 @@
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "<p>Browse 100+ jewelry box mockups now</p>",
+                                                "text": "<p>{{part4_title}}</p>",
                                                 "tag": "h2",
                                                 "isOpenAnimation": true
                                             },
@@ -3391,9 +3391,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1734932099488/11385610.jpg",
-                                                                        "title": "Flip top square magnetic box mockup",
-                                                                        "alt": "Flip top square magnetic box mockup",
+                                                                        "url": "{{model_1_image_url}}",
+                                                                        "title": "{{model_1_name}}",
+                                                                        "alt": "{{model_1_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -3480,7 +3480,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>Flip top square magnetic box mockup</p>",
+                                                                "text": "<p>{{model_1_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -3494,7 +3494,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/square-magnetic-36101101",
+                                                        "href": "{{model_1_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -3607,9 +3607,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1734330641482/11352179.jpg",
-                                                                        "title": "Flip top magnetic gift box mockup",
-                                                                        "alt": "Flip top magnetic gift box mockup",
+                                                                        "url": "{{model_2_image_url}}",
+                                                                        "title": "{{model_2_name}}",
+                                                                        "alt": "{{model_2_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -3696,7 +3696,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>Flip top magnetic gift box mockup</p>",
+                                                                "text": "<p>{{model_2_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -3710,7 +3710,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/book-box-luxury-box-mockup-361011",
+                                                        "href": "{{model_2_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -3823,9 +3823,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1734685813262/11376679.jpg",
-                                                                        "title": "Flip top coffee box mockup",
-                                                                        "alt": "Flip top coffee box mockup",
+                                                                        "url": "{{model_3_image_url}}",
+                                                                        "title": "{{model_3_name}}",
+                                                                        "alt": "{{model_3_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -3912,7 +3912,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>Flip top coffee box mockup</p>",
+                                                                "text": "<p>{{model_3_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -3926,7 +3926,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/tray-boxes-angled-mockup-128130",
+                                                        "href": "{{model_3_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -4039,9 +4039,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1733454564640/11304361.jpg",
-                                                                        "title": "Open gift box mockup",
-                                                                        "alt": "Open gift box mockup",
+                                                                        "url": "{{model_4_image_url}}",
+                                                                        "title": "{{model_4_name}}",
+                                                                        "alt": "{{model_4_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -4128,7 +4128,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>Open gift box mockup</p>",
+                                                                "text": "<p>{{model_4_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -4142,7 +4142,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/gift-box-mockup-36011001",
+                                                        "href": "{{model_4_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -4255,9 +4255,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1716979815151/10449891.jpg",
-                                                                        "title": "Square magnetic gift box mockup",
-                                                                        "alt": "Square magnetic gift box mockup",
+                                                                        "url": "{{model_5_image_url}}",
+                                                                        "title": "{{model_5_name}}",
+                                                                        "alt": "{{model_5_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -4344,7 +4344,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>Square magnetic gift box mockup</p>",
+                                                                "text": "<p>{{model_5_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -4358,7 +4358,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/square-magnetic-gift-box-36010101",
+                                                        "href": "{{model_5_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -4471,9 +4471,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1717057098326/10452378.jpg",
-                                                                        "title": "Open square gift box mockup",
-                                                                        "alt": "Open square gift box mockup",
+                                                                        "url": "{{model_6_image_url}}",
+                                                                        "title": "{{model_6_name}}",
+                                                                        "alt": "{{model_6_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -4560,7 +4560,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>Open square gift box mockup</p>",
+                                                                "text": "<p>{{model_6_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -4574,7 +4574,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/open-square-gift-box-mockup-36009001",
+                                                        "href": "{{model_6_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -4687,9 +4687,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1716977381135/10449792.jpg",
-                                                                        "title": "Open square magnetic gift box mockup",
-                                                                        "alt": "Open square magnetic gift box mockup",
+                                                                        "url": "{{model_7_image_url}}",
+                                                                        "title": "Open {{model_7_name}}",
+                                                                        "alt": "Open {{model_7_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -4776,7 +4776,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>Open square magnetic gift box mockup</p>",
+                                                                "text": "<p>Open {{model_7_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -4790,7 +4790,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/open-square-magnetic-gift-box--36010102",
+                                                        "href": "{{model_7_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -4903,9 +4903,9 @@
                                                                         }
                                                                     },
                                                                     "globalProps": {
-                                                                        "url": "https://cdn.pacdora.com/render/1752202371289/12539397.png",
-                                                                        "title": "Custom rigid sliding drawer gift box mockup",
-                                                                        "alt": "Custom rigid sliding drawer gift box mockup",
+                                                                        "url": "{{model_8_image_url}}",
+                                                                        "title": "{{model_8_name}}",
+                                                                        "alt": "{{model_8_name}}",
                                                                         "isOpenAnimation": false,
                                                                         "size1": 1200,
                                                                         "size2": 1200,
@@ -4992,7 +4992,7 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "<p>Custom rigid sliding drawer gift box mockup</p>",
+                                                                "text": "<p>{{model_8_name}}</p>",
                                                                 "isOpenAnimation": false
                                                             },
                                                             "transition": []
@@ -5006,7 +5006,7 @@
                                                     "curStatus": "default",
                                                     "status": {},
                                                     "globalProps": {
-                                                        "href": "/mockup-detail/custom-rigid-sliding-drawer-gift-box-mockup-603651",
+                                                        "href": "{{model_8_editor_inner_link}}",
                                                         "target": "_blank",
                                                         "isOpenAnimation": true,
                                                         "linkId": "",
@@ -5132,8 +5132,8 @@
                                                 "maxWidth": "calc(100% - 128px)"
                                             },
                                             "globalProps": {
-                                                "text": "View all jewelry box mockups",
-                                                "link": "/mockups/gift-box-mockups",
+                                                "text": "{{view_text}}",
+                                                "link": "{{view_link}}",
                                                 "gtm": "ga-seo_tools_view_all",
                                                 "target": "_self",
                                                 "colorType": "minor-2",
@@ -5318,7 +5318,7 @@
                                     "curStatus": "default",
                                     "status": {},
                                     "globalProps": {
-                                        "text": "<p>How to make a jewelry box mockup online?</p>",
+                                        "text": "<p>{{part5_title}}</p>",
                                         "tag": "h2",
                                         "isOpenAnimation": true,
                                         "isShow": true
@@ -5462,9 +5462,9 @@
                                                                 "display": "inline-block"
                                                             },
                                                             "globalProps": {
-                                                                "url": "https://cdn.pacdora.com/page-img/59191e29-a3e0-4886-898e-79ede5ac6e76.webp",
-                                                                "title": "Step 1: Select a jewelry box mockup",
-                                                                "alt": "Step 1: Select a jewelry box mockup",
+                                                                "url": "{{step1_cdn}}",
+                                                                "title": "{{part5_step1_a}}",
+                                                                "alt": "{{part5_step1_a}}",
                                                                 "isOpenAnimation": true,
                                                                 "size1": "unset",
                                                                 "size2": "1200",
@@ -5604,7 +5604,7 @@
                                                                 "lineHeight": "var(--lh-normal)"
                                                             },
                                                             "globalProps": {
-                                                                "text": "<p>Step 1: Select a jewelry box mockup</p>",
+                                                                "text": "<p>{{part5_step1_a}}</p>",
                                                                 "tag": "h3",
                                                                 "isOpenAnimation": true
                                                             },
@@ -5666,7 +5666,7 @@
                                                                 "marginBottom": "48px"
                                                             },
                                                             "globalProps": {
-                                                                "text": "<p>Select a suitable jewelry box design from Pacdora's vast collection that includes flip-top or double door boxes.</p>",
+                                                                "text": "<p>{{part5_step1_b}}</p>",
                                                                 "isOpenAnimation": true
                                                             },
                                                             "globalContainerStyle": {},
@@ -5754,9 +5754,9 @@
                                                                 "display": "inline-block"
                                                             },
                                                             "globalProps": {
-                                                                "url": "https://cdn.pacdora.com/page-img/08a43158-d584-4b61-98c3-a17024ac4823.webp",
-                                                                "title": "Step 2: Upload images and adjust",
-                                                                "alt": "Step 2: Upload images and adjust",
+                                                                "url": "{{step2_cdn}}",
+                                                                "title": "{{part5_step2_a}}",
+                                                                "alt": "{{part5_step2_a}}",
                                                                 "isOpenAnimation": true,
                                                                 "size1": "1200",
                                                                 "size2": "1200",
@@ -5901,7 +5901,7 @@
                                                                 "lineHeight": "var(--lh-normal)"
                                                             },
                                                             "globalProps": {
-                                                                "text": "<p>Step 2: Upload images and adjust</p>",
+                                                                "text": "<p>{{part5_step2_a}}</p>",
                                                                 "tag": "h3",
                                                                 "isOpenAnimation": true
                                                             },
@@ -5963,7 +5963,7 @@
                                                                 "marginBottom": "48px"
                                                             },
                                                             "globalProps": {
-                                                                "text": "<p>Adjust the box' dimensions, upload images, logos, text, or patterns to customize your jewelry box mockup.</p>",
+                                                                "text": "<p>{{part5_step2_b}}</p>",
                                                                 "isOpenAnimation": true
                                                             },
                                                             "globalContainerStyle": {},
@@ -6047,9 +6047,9 @@
                                                             "children": [],
                                                             "transition": [],
                                                             "globalProps": {
-                                                                "title": "Step 3: Download your final design",
-                                                                "alt": "Step 3: Download your final design",
-                                                                "url": "https://cdn.pacdora.com/page-img/363dbcf7-ddfc-4e0f-80af-496968250b7d.webp",
+                                                                "title": "{{part5_step3_a}}",
+                                                                "alt": "{{part5_step3_a}}",
+                                                                "url": "{{step3_cdn}}",
                                                                 "isOpenAnimation": true,
                                                                 "size1": "1200",
                                                                 "size2": "1200",
@@ -6183,7 +6183,7 @@
                                                             "isContainer": false,
                                                             "children": [],
                                                             "globalProps": {
-                                                                "text": "<p>Step 3: Download your final design</p>",
+                                                                "text": "<p>{{part5_step3_a}}</p>",
                                                                 "tag": "h3",
                                                                 "isOpenAnimation": true
                                                             },
@@ -6255,7 +6255,7 @@
                                                                 "marginBottom": "48px"
                                                             },
                                                             "globalProps": {
-                                                                "text": "<p>Download your jewelry box mockups as high-quality images or videos. Or export printable dieline files for production.</p>",
+                                                                "text": "<p>{{part5_step3_b}}</p>",
                                                                 "isOpenAnimation": true
                                                             },
                                                             "globalContainerStyle": {},
@@ -6436,9 +6436,9 @@
                                         "maxWidth": "calc(100% - 128px)"
                                     },
                                     "globalProps": {
-                                        "text": "Design a jewelry box mockup",
-                                        "link": "/mockup-detail/magnetic-gift-box-mockup-36101102?key=99&tag=219",
-                                        "gtm": "ga-seo_tools_view_all",
+                                        "text": "{{try_text}}",
+                                        "link": "{{try_link}}",
+                                        "gtm": "ga-seo_tools_try",
                                         "target": "_blank",
                                         "colorType": "minor-2",
                                         "iconUrl": "",
@@ -6602,7 +6602,7 @@
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "<p>Why should I design jewelry box mockups online?</p>",
+                                                "text": "<p>{{part6_title}}</p>",
                                                 "tag": "h2",
                                                 "isOpenAnimation": true
                                             },
@@ -6672,9 +6672,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "url": "https://cdn.pacdora.com/page-img/f9c386d3-c948-45ca-9f73-eacafd3069fd.webp",
-                                                                "title": "Multiple box styles that grab attention",
-                                                                "alt": "Multiple box styles that grab attention",
+                                                                "url": "{{part6_1_feature_cdn}}",
+                                                                "title": "{{part6_1_title}}",
+                                                                "alt": "{{part6_1_title}}",
                                                                 "isOpenAnimation": false,
                                                                 "size1": 1200,
                                                                 "size2": 1200,
@@ -6726,7 +6726,7 @@
                                                                     "curStatus": "default",
                                                                     "status": {},
                                                                     "globalProps": {
-                                                                        "text": "<p>Multiple box styles that grab attention</p>",
+                                                                        "text": "<p>{{part6_1_title}}</p>",
                                                                         "isOpenAnimation": false
                                                                     },
                                                                     "transition": []
@@ -6765,7 +6765,7 @@
                                                                     "curStatus": "default",
                                                                     "status": {},
                                                                     "globalProps": {
-                                                                        "text": "<p>Select the best box designs to attract your customers. You can choose a flip-top box for rings, a lift-off lid box for bracelets, or a drawer box for necklaces.</p>",
+                                                                        "text": "<p>{{part6_1_a}}</p>",
                                                                         "isOpenAnimation": false
                                                                     },
                                                                     "transition": []
@@ -6803,7 +6803,7 @@
                                                                     "curStatus": "default",
                                                                     "status": {},
                                                                     "globalProps": {
-                                                                        "text": "<p>Our jewelry box mockups are designed with precise dimensions that fully comply with industry requirements, making them ready for manufacturing and printing.</p>",
+                                                                        "text": "<p>{{part6_1_b}}</p>",
                                                                         "isOpenAnimation": false
                                                                     },
                                                                     "transition": []
@@ -6881,9 +6881,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "View all jewelry box mockups ",
-                                                                "link": "/mockups/gift-box-mockups",
-                                                                "gtm": "ga-seo_tools_view_all",
+                                                                "text": "{{part6_1_button_text}}",
+                                                                "link": "{{part6_1_button_link}}",
+                                                                "gtm": "{{part6_1_button_gtm}}",
                                                                 "target": "_self",
                                                                 "colorType": "minor-2",
                                                                 "iconUrl": "",
@@ -6962,9 +6962,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "url": "https://cdn.pacdora.com/page-img/1e8bfd3a-e15d-429d-b215-a0ee58356f6d.webp",
-                                                                "title": "Colors suited to your jewelry's style",
-                                                                "alt": "Colors suited to your jewelry's style",
+                                                                "url": "{{part6_2_feature_cdn}}",
+                                                                "title": "{{part6_2_title}}",
+                                                                "alt": "{{part6_2_title}}",
                                                                 "isOpenAnimation": false,
                                                                 "size1": 1200,
                                                                 "size2": 1200,
@@ -7016,7 +7016,7 @@
                                                                     "curStatus": "default",
                                                                     "status": {},
                                                                     "globalProps": {
-                                                                        "text": "<p>Colors suited to your jewelry's style</p>",
+                                                                        "text": "<p>{{part6_2_title}}</p>",
                                                                         "isOpenAnimation": false
                                                                     },
                                                                     "transition": []
@@ -7054,7 +7054,7 @@
                                                                     "curStatus": "default",
                                                                     "status": {},
                                                                     "globalProps": {
-                                                                        "text": "<p>Engaging colors are important for a jewelry box because they reflect style. Beige, pink, or lavender colors give a soft, friendly feel, making them suitable for everyday jewelry boxes.</p>",
+                                                                        "text": "<p>{{part6_2_a}}</p>",
                                                                         "isOpenAnimation": false
                                                                     },
                                                                     "transition": []
@@ -7091,7 +7091,7 @@
                                                                     "curStatus": "default",
                                                                     "status": {},
                                                                     "globalProps": {
-                                                                        "text": "<p>On the other hand, burgundy, navy blue, or black create a bold and rich look, ideal for high-end jewelry items.</p>",
+                                                                        "text": "<p>{{part6_2_b}}</p>",
                                                                         "isOpenAnimation": false
                                                                     },
                                                                     "transition": []
@@ -7170,9 +7170,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "Design a jewelry box mockup",
-                                                                "link": "/mockups/gift-box-mockups",
-                                                                "gtm": "ga-seo_tools_view_all",
+                                                                "text": "{{part6_2_button_text}}",
+                                                                "link": "{{part6_2_button_link}}",
+                                                                "gtm": "{{part6_2_button_gtm}}",
                                                                 "target": "_blank",
                                                                 "colorType": "minor-2",
                                                                 "iconUrl": "",
@@ -7252,9 +7252,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "url": "https://cdn.pacdora.com/page-img/2fa3ff83-4f4c-43e5-ac5f-ef419bb64c52.webp",
-                                                                "title": "Custom designs for a refined look",
-                                                                "alt": "Custom designs for a refined look",
+                                                                "url": "{{part6_3_feature_cdn}}",
+                                                                "title": "{{part6_3_title}}",
+                                                                "alt": "{{part6_3_title}}",
                                                                 "isOpenAnimation": false,
                                                                 "size1": 1200,
                                                                 "size2": 1200,
@@ -7306,7 +7306,7 @@
                                                                     "curStatus": "default",
                                                                     "status": {},
                                                                     "globalProps": {
-                                                                        "text": "<p>Custom designs for a refined look</p>",
+                                                                        "text": "<p>{{part6_3_title}}</p>",
                                                                         "isOpenAnimation": false
                                                                     },
                                                                     "transition": []
@@ -7344,7 +7344,7 @@
                                                                     "curStatus": "default",
                                                                     "status": {},
                                                                     "globalProps": {
-                                                                        "text": "<p>The box design represents your company's style, so it should be perfect. Adding floral prints or geometric borders along the edges can make your jewelry boxes visually appealing.</p>",
+                                                                        "text": "<p>{{part6_3_a}}</p>",
                                                                         "isOpenAnimation": false
                                                                     },
                                                                     "transition": []
@@ -7381,7 +7381,7 @@
                                                                     "curStatus": "default",
                                                                     "status": {},
                                                                     "globalProps": {
-                                                                        "text": "<p>The top center or middle of the box is ideal for logo placement because it remains visible on a display shelf.</p>",
+                                                                        "text": "<p>{{part6_3_b}}</p>",
                                                                         "isOpenAnimation": false
                                                                     },
                                                                     "transition": []
@@ -7460,9 +7460,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "Design a jewelry box mockup",
-                                                                "link": "/mockups/gift-box-mockups",
-                                                                "gtm": "ga-seo_tools_view_all",
+                                                                "text": "{{part6_3_button_text}}",
+                                                                "link": "{{part6_3_button_link}}",
+                                                                "gtm": "{{part6_3_button_gtm}}",
                                                                 "target": "_blank",
                                                                 "colorType": "minor-2",
                                                                 "iconUrl": "",
@@ -7542,9 +7542,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "url": "https://cdn.pacdora.com/page-img/1588a4fa-681c-4573-9d5c-f3de81c9ebce.webp",
-                                                                "title": "Box size adjustment for a perfect fit",
-                                                                "alt": "Box size adjustment for a perfect fit",
+                                                                "url": "{{part6_4_feature_cdn}}",
+                                                                "title": "{{part6_4_title}}",
+                                                                "alt": "{{part6_4_title}}",
                                                                 "isOpenAnimation": false,
                                                                 "size1": 1200,
                                                                 "size2": 1200,
@@ -7596,7 +7596,7 @@
                                                                     "curStatus": "default",
                                                                     "status": {},
                                                                     "globalProps": {
-                                                                        "text": "<p>Box size adjustment for a perfect fit</p>",
+                                                                        "text": "<p>{{part6_4_title}}</p>",
                                                                         "isOpenAnimation": false
                                                                     },
                                                                     "transition": []
@@ -7634,7 +7634,7 @@
                                                                     "curStatus": "default",
                                                                     "status": {},
                                                                     "globalProps": {
-                                                                        "text": "<p>Adjust the size of your box mockups to ensure your jewelry fits perfectly.</p>",
+                                                                        "text": "<p>{{part6_4_a}}</p>",
                                                                         "isOpenAnimation": false
                                                                     },
                                                                     "transition": []
@@ -7671,7 +7671,7 @@
                                                                     "curStatus": "default",
                                                                     "status": {},
                                                                     "globalProps": {
-                                                                        "text": "<p>A 4 × 4 × 1.5 inches box is great for single jewelry items like rings. A 6 × 4 × 2 inches box offers adequate space for packing layered necklaces. A large 8 × 6 × 2.5 inches box is perfect for packaging complete jewelry sets.</p>",
+                                                                        "text": "<p>{{part6_4_b}}</p>",
                                                                         "isOpenAnimation": false
                                                                     },
                                                                     "transition": []
@@ -7750,9 +7750,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "text": "Design a jewelry box mockup",
-                                                                "link": "/mockups/gift-box-mockups",
-                                                                "gtm": "ga-seo_tools_view_all",
+                                                                "text": "{{part6_4_button_text}}",
+                                                                "link": "{{part6_4_button_link}}",
+                                                                "gtm": "{{part6_4_button_gtm}}",
                                                                 "target": "_blank",
                                                                 "colorType": "minor-2",
                                                                 "iconUrl": "",
@@ -7893,9 +7893,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "url": "https://cdn.pacdora.com/page-img/f9c386d3-c948-45ca-9f73-eacafd3069fd.webp",
-                                                                "title": "Multiple box styles that grab attention",
-                                                                "alt": "Multiple box styles that grab attention",
+                                                                "url": "{{part6_1_feature_cdn}}",
+                                                                "title": "{{part6_1_title}}",
+                                                                "alt": "{{part6_1_title}}",
                                                                 "isOpenAnimation": false,
                                                                 "size1": 1200,
                                                                 "size2": 1200,
@@ -7989,7 +7989,7 @@
                                                                             "curStatus": "default",
                                                                             "status": {},
                                                                             "globalProps": {
-                                                                                "text": "<p>Multiple box styles that grab attention</p>",
+                                                                                "text": "<p>{{part6_1_title}}</p>",
                                                                                 "tag": "h3",
                                                                                 "isOpenAnimation": false,
                                                                                 "isShow": true,
@@ -8034,7 +8034,7 @@
                                                                             "curStatus": "default",
                                                                             "status": {},
                                                                             "globalProps": {
-                                                                                "text": "<p>Select the best box designs to attract your customers. You can choose a flip-top box for rings, a lift-off lid box for bracelets, or a drawer box for necklaces.</p>",
+                                                                                "text": "<p>{{part6_1_a}}</p>",
                                                                                 "isOpenAnimation": false
                                                                             },
                                                                             "transition": []
@@ -8077,7 +8077,7 @@
                                                                             "curStatus": "default",
                                                                             "status": {},
                                                                             "globalProps": {
-                                                                                "text": "<p>Our jewelry box mockups are designed with precise dimensions that fully comply with industry requirements, making them ready for manufacturing and printing.</p>",
+                                                                                "text": "<p>{{part6_1_b}}</p>",
                                                                                 "isOpenAnimation": false
                                                                             },
                                                                             "transition": []
@@ -8187,9 +8187,9 @@
                                                                         "paddingBottom": "10px"
                                                                     },
                                                                     "globalProps": {
-                                                                        "text": "View all jewelry box mockups",
-                                                                        "link": "/mockups/gift-box-mockups",
-                                                                        "gtm": "ga-seo_tools_view_all",
+                                                                        "text": "{{part6_1_button_text}}",
+                                                                        "link": "{{part6_1_button_link}}",
+                                                                        "gtm": "{{part6_1_button_gtm}}",
                                                                         "target": "_self",
                                                                         "colorType": "minor-2",
                                                                         "iconUrl": "",
@@ -8376,7 +8376,7 @@
                                                                             "curStatus": "default",
                                                                             "status": {},
                                                                             "globalProps": {
-                                                                                "text": "<p>Colors suited to your jewelry's style</p>",
+                                                                                "text": "<p>{{part6_2_title}}</p>",
                                                                                 "tag": "h3",
                                                                                 "isOpenAnimation": false,
                                                                                 "isShow": true,
@@ -8421,7 +8421,7 @@
                                                                             "curStatus": "default",
                                                                             "status": {},
                                                                             "globalProps": {
-                                                                                "text": "<p>Engaging colors are important for a jewelry box because they reflect style. Beige, pink, or lavender colors give a soft, friendly feel, making them suitable for everyday jewelry boxes.</p>",
+                                                                                "text": "<p>{{part6_2_a}}</p>",
                                                                                 "isOpenAnimation": false
                                                                             },
                                                                             "transition": []
@@ -8464,7 +8464,7 @@
                                                                             "curStatus": "default",
                                                                             "status": {},
                                                                             "globalProps": {
-                                                                                "text": "<p>On the other hand, burgundy, navy blue, or black create a bold and rich look, ideal for high-end jewelry items.</p>",
+                                                                                "text": "<p>{{part6_2_b}}</p>",
                                                                                 "isOpenAnimation": false
                                                                             },
                                                                             "transition": []
@@ -8575,9 +8575,9 @@
                                                                         "paddingBottom": "10px"
                                                                     },
                                                                     "globalProps": {
-                                                                        "text": "View all jewelry box mockups",
-                                                                        "link": "/mockups/gift-box-mockups",
-                                                                        "gtm": "ga-seo_tools_view_all",
+                                                                        "text": "{{part6_2_button_text}}",
+                                                                        "link": "{{part6_2_button_link}}",
+                                                                        "gtm": "{{part6_2_button_gtm}}",
                                                                         "target": "_self",
                                                                         "colorType": "minor-2",
                                                                         "iconUrl": "",
@@ -8666,9 +8666,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "url": "https://cdn.pacdora.com/page-img/1e8bfd3a-e15d-429d-b215-a0ee58356f6d.webp",
-                                                                "title": "Colors suited to your jewelry's style",
-                                                                "alt": "Colors suited to your jewelry's style",
+                                                                "url": "{{part6_2_feature_cdn}}",
+                                                                "title": "{{part6_2_title}}",
+                                                                "alt": "{{part6_2_title}}",
                                                                 "isOpenAnimation": false,
                                                                 "size1": 1200,
                                                                 "size2": 1200,
@@ -8767,9 +8767,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "url": "https://cdn.pacdora.com/page-img/2fa3ff83-4f4c-43e5-ac5f-ef419bb64c52.webp",
-                                                                "title": "Custom designs for a refined look",
-                                                                "alt": "Custom designs for a refined look",
+                                                                "url": "{{part6_3_feature_cdn}}",
+                                                                "title": "{{part6_3_title}}",
+                                                                "alt": "{{part6_3_title}}",
                                                                 "isOpenAnimation": false,
                                                                 "size1": 1200,
                                                                 "size2": 1200,
@@ -8863,7 +8863,7 @@
                                                                             "curStatus": "default",
                                                                             "status": {},
                                                                             "globalProps": {
-                                                                                "text": "<p>Custom designs for a refined look</p>",
+                                                                                "text": "<p>{{part6_3_title}}</p>",
                                                                                 "tag": "h3",
                                                                                 "isOpenAnimation": false,
                                                                                 "isShow": true,
@@ -8908,7 +8908,7 @@
                                                                             "curStatus": "default",
                                                                             "status": {},
                                                                             "globalProps": {
-                                                                                "text": "<p>The box design represents your company's style, so it should be perfect. Adding floral prints or geometric borders along the edges can make your jewelry boxes visually appealing.</p>",
+                                                                                "text": "<p>{{part6_3_a}}</p>",
                                                                                 "isOpenAnimation": false
                                                                             },
                                                                             "transition": []
@@ -8951,7 +8951,7 @@
                                                                             "curStatus": "default",
                                                                             "status": {},
                                                                             "globalProps": {
-                                                                                "text": "<p>The top center or middle of the box is ideal for logo placement because it remains visible on a display shelf.</p>",
+                                                                                "text": "<p>{{part6_3_b}}</p>",
                                                                                 "isOpenAnimation": false
                                                                             },
                                                                             "transition": []
@@ -9062,9 +9062,9 @@
                                                                         "paddingBottom": "10px"
                                                                     },
                                                                     "globalProps": {
-                                                                        "text": "View all jewelry box mockups",
-                                                                        "link": "/mockups/gift-box-mockups",
-                                                                        "gtm": "ga-seo_tools_view_all",
+                                                                        "text": "{{part6_3_button_text}}",
+                                                                        "link": "{{part6_3_button_link}}",
+                                                                        "gtm": "{{part6_3_button_gtm}}",
                                                                         "target": "_self",
                                                                         "colorType": "minor-2",
                                                                         "iconUrl": "",
@@ -9254,7 +9254,7 @@
                                                                             "curStatus": "default",
                                                                             "status": {},
                                                                             "globalProps": {
-                                                                                "text": "<p>Box size adjustment for a perfect fit</p>",
+                                                                                "text": "<p>{{part6_4_title}}</p>",
                                                                                 "tag": "h3",
                                                                                 "isOpenAnimation": false,
                                                                                 "isShow": true,
@@ -9299,7 +9299,7 @@
                                                                             "curStatus": "default",
                                                                             "status": {},
                                                                             "globalProps": {
-                                                                                "text": "<p>Adjust the size of your box mockups to ensure your jewelry fits perfectly.</p>",
+                                                                                "text": "<p>{{part6_4_a}}</p>",
                                                                                 "isOpenAnimation": false
                                                                             },
                                                                             "transition": []
@@ -9342,7 +9342,7 @@
                                                                             "curStatus": "default",
                                                                             "status": {},
                                                                             "globalProps": {
-                                                                                "text": "<p>A 4 × 4 × 1.5 inches box is great for single jewelry items like rings. A 6 × 4 × 2 inches box offers adequate space for packing layered necklaces. A large 8 × 6 × 2.5 inches box is perfect for packaging complete jewelry sets.</p>",
+                                                                                "text": "<p>{{part6_4_b}}</p>",
                                                                                 "isOpenAnimation": false
                                                                             },
                                                                             "transition": []
@@ -9453,9 +9453,9 @@
                                                                         "paddingBottom": "10px"
                                                                     },
                                                                     "globalProps": {
-                                                                        "text": "View all jewelry box mockups",
-                                                                        "link": "/mockups/gift-box-mockups",
-                                                                        "gtm": "ga-seo_tools_view_all",
+                                                                        "text": "{{part6_4_button_text}}",
+                                                                        "link": "{{part6_4_button_link}}",
+                                                                        "gtm": "{{part6_4_button_gtm}}",
                                                                         "target": "_self",
                                                                         "colorType": "minor-2",
                                                                         "iconUrl": "",
@@ -9544,9 +9544,9 @@
                                                             "curStatus": "default",
                                                             "status": {},
                                                             "globalProps": {
-                                                                "url": "https://cdn.pacdora.com/page-img/1588a4fa-681c-4573-9d5c-f3de81c9ebce.webp",
-                                                                "title": "Box size adjustment for a perfect fit",
-                                                                "alt": "Box size adjustment for a perfect fit",
+                                                                "url": "{{part6_4_feature_cdn}}",
+                                                                "title": "{{part6_4_title}}",
+                                                                "alt": "{{part6_4_title}}",
                                                                 "isOpenAnimation": false,
                                                                 "size1": 1200,
                                                                 "size2": 1200,
@@ -10909,24 +10909,24 @@
                                     "globalProps": {
                                         "dataList": [
                                             {
-                                                "question": "Can I use the jewelry box design directly for printing?",
-                                                "answer": "<p>Yes, you can export your jewelry box mockups as dieline files in print-ready PDF or DXF formats. A dieline file is a printable file that precisely marks the cut and fold areas in a box design. It also ensures that logos, patterns, and text will be in the right place during the box assembly.</p>"
+                                                "question": "{{part7_q1}}",
+                                                "answer": "<p>{{part7_a1}}</p>"
                                             },
                                             {
-                                                "question": "Can I make jewelry box mockups without downloading PSD files?",
-                                                "answer": "<p>Yes! Pacdora does not require you to download any PSD file in order to make a jewelry box mockup. Just open your browser, go to Pacdora's official website, search jewelry box mockups, choose your favorite, and start customizing it. This way, you can make all varieties of jewelry box mockups online without using additional files or software.</p>"
+                                                "question": "{{part7_q2}}",
+                                                "answer": "<p>{{part7_a2}}</p>"
                                             },
                                             {
-                                                "question": "What is the best format for uploading images to my jewelry box mockups?",
-                                                "answer": "<p>It depends on your needs. You can select the SVG format for adding geometric patterns, illustrations, and icons. PNG is a suitable format if you want to upload logos or graphics with transparent backgrounds. Whereas, JPG is a good option for uploading graphics or logos with complex details and color variations.</p>"
+                                                "question": "{{part7_q3}}",
+                                                "answer": "<p>{{part7_a3}}</p>"
                                             },
                                             {
-                                                "question": "Can I add a background to my jewelry box mockup on Pacdora?",
-                                                "answer": "<p>Yes. You can incorporate different colors, scenes, and custom images into the background of your jewelry box mockups. Change the different background colors to highlight your box design. You can also add personalized images, such as a vanity table, showroom setting, or fabric textures, to give your jewelry packaging a custom look.</p>"
+                                                "question": "{{part7_q4}}",
+                                                "answer": "<p>{{part7_a4}}</p>"
                                             },
                                             {
-                                                "question": "Can I design a jewelry box mockup for free on Pacdora?",
-                                                "answer": "<p>Yes, you can design various styles of jewelry box mockups at no cost using Pacdora! Or visit our <a class=\"pac-ui-editor-a\" href=\"/pricing\" rel=\"noopener noreferrer\" target=\"_self\">pricing page</a> to check out more advanced features.</p>"
+                                                "question": "{{part7_q5}}",
+                                                "answer": "<p>{{part7_a5}}</p>"
                                             }
                                         ],
                                         "title": "",
@@ -11094,7 +11094,7 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
-                                            "uuid": "6539c328-91c4-42da-b53a-35bd5e857a68",
+                                            "uuid": "cbc06030-f2d1-42a4-8999-006d2635740c",
                                             "style": {
                                                 "1280-1679": {
                                                     "marginRight": "24px",
@@ -11113,11 +11113,8 @@
                                                     "marginRight": "12px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
-                                                    "height": "auto",
                                                     "fontSize": "var(--fs-sm)",
                                                     "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -11129,13 +11126,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -11148,15 +11144,16 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "Box Mockup Generator",
-                                                "link": "/tools/3d-box-mockup-generator",
+                                                "text": "",
+                                                "link": "",
                                                 "gtm": "ga-seo_explore_more_tools",
                                                 "target": "_self",
                                                 "colorType": "custom",
@@ -11171,161 +11168,7 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
-                                            "uuid": "d87064c3-3437-4ef5-9d97-d6e6b226fc01",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "paddingLeft": "16px",
-                                                    "height": "auto",
-                                                    "borderRadius": "6px",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingRight": "16px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "Custom Jewelry Box",
-                                                "link": "/tools/custom-jewelry-box",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "654efa85-911e-46d9-a051-f33207c45b58",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "paddingLeft": "16px",
-                                                    "height": "auto",
-                                                    "borderRadius": "6px",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingRight": "16px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "Box Maker",
-                                                "link": "/tools/box-maker",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "06a343bb-0bd6-4c05-92a5-762d765d650b",
+                                            "uuid": "a78b5d46-75b4-430a-aad9-efddb440bbad",
                                             "style": {
                                                 "1280-1679": {
                                                     "marginRight": "24px",
@@ -11344,11 +11187,8 @@
                                                     "marginRight": "12px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
-                                                    "height": "auto",
                                                     "fontSize": "var(--fs-sm)",
                                                     "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -11360,13 +11200,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -11379,15 +11218,16 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "Customizable Packaging Boxes",
-                                                "link": "/tools/customizable-packaging-boxes",
+                                                "text": "",
+                                                "link": "",
                                                 "gtm": "ga-seo_explore_more_tools",
                                                 "target": "_self",
                                                 "colorType": "custom",
@@ -11402,11 +11242,11 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
-                                            "uuid": "bb57bbf7-d7df-4201-86f9-c46f157ce4ab",
+                                            "uuid": "cee0b23b-0844-48c7-9d36-b9c4a074e35d",
                                             "style": {
                                                 "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
+                                                    "marginRight": "24px",
+                                                    "marginTop": "24px"
                                                 },
                                                 "1024-1279": {
                                                     "marginTop": "24px",
@@ -11419,13 +11259,10 @@
                                                 "<980": {
                                                     "marginTop": "12px",
                                                     "marginRight": "12px",
-                                                    "height": "auto",
-                                                    "borderRadius": "6px",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
+                                                    "fontSize": "var(--fs-sm)",
+                                                    "borderRadius": "6px",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -11437,13 +11274,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -11456,16 +11292,17 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "Gift Box Template Maker",
-                                                "link": "/tools/gift-box-template-maker",
-                                                "gtm": "ga-discover_more_mockups",
+                                                "text": "",
+                                                "link": "",
+                                                "gtm": "ga-seo_explore_more_tools",
                                                 "target": "_self",
                                                 "colorType": "custom",
                                                 "iconUrl": "",
@@ -11667,6 +11504,154 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
+                                            "uuid": "dff56717-5249-4d20-8022-36a3bef2355b",
+                                            "style": {
+                                                "1280-1679": {
+                                                    "marginRight": "24px",
+                                                    "marginTop": "24px"
+                                                },
+                                                "1024-1279": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "980-1023": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "<980": {
+                                                    "marginTop": "12px",
+                                                    "marginRight": "12px",
+                                                    "paddingLeft": "16px",
+                                                    "paddingRight": "16px",
+                                                    "fontSize": "var(--fs-sm)",
+                                                    "borderRadius": "6px",
+                                                    "paddingTop": "8px",
+                                                    "paddingBottom": "8px"
+                                                }
+                                            },
+                                            "props": {},
+                                            "containerStyle": {},
+                                            "isBlock": true,
+                                            "isContainer": false,
+                                            "children": [],
+                                            "globalStyle": {
+                                                "fontSize": "var(--fs-base)",
+                                                "lineHeight": "var(--lh-none)",
+                                                "fontWeight": "var(--fw-normal)",
+                                                "width": "auto",
+                                                "height": "auto",
+                                                "display": "flex",
+                                                "borderRadius": "10px",
+                                                "--font-color": "#191919",
+                                                "--hover-font-color": "#191919",
+                                                "--active-font-color": "#191919",
+                                                "--hover-border": "solid 1px #191919",
+                                                "--active-border": "solid 1px #191919",
+                                                "--hover-background": "#F7F7F7",
+                                                "--active-background": "#F7F7F7",
+                                                "paddingLeft": "24px",
+                                                "paddingRight": "24px",
+                                                "background": "#F7F7F7",
+                                                "marginRight": "32px",
+                                                "border": "solid 1px #D1D0D2",
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
+                                            },
+                                            "globalContainerStyle": {},
+                                            "statusArr": [],
+                                            "curStatus": "default",
+                                            "status": {},
+                                            "globalProps": {
+                                                "text": "",
+                                                "link": "",
+                                                "gtm": "ga-seo_explore_more_tools",
+                                                "target": "_self",
+                                                "colorType": "custom",
+                                                "iconUrl": "",
+                                                "direction": "right",
+                                                "distance": "10px",
+                                                "iconWidth": "20px",
+                                                "fontColor": "#191919"
+                                            },
+                                            "transition": []
+                                        },
+                                        {
+                                            "name": "Button",
+                                            "label": "Button",
+                                            "uuid": "7c3830c9-65da-4758-b3a0-ba394ba7d27c",
+                                            "style": {
+                                                "1280-1679": {
+                                                    "marginRight": "24px",
+                                                    "marginTop": "24px"
+                                                },
+                                                "1024-1279": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "980-1023": {
+                                                    "marginTop": "24px",
+                                                    "marginRight": "24px"
+                                                },
+                                                "<980": {
+                                                    "marginTop": "12px",
+                                                    "marginRight": "12px",
+                                                    "paddingLeft": "16px",
+                                                    "paddingRight": "16px",
+                                                    "fontSize": "var(--fs-sm)",
+                                                    "borderRadius": "6px",
+                                                    "paddingTop": "8px",
+                                                    "paddingBottom": "8px"
+                                                }
+                                            },
+                                            "props": {},
+                                            "containerStyle": {},
+                                            "isBlock": true,
+                                            "isContainer": false,
+                                            "children": [],
+                                            "globalStyle": {
+                                                "fontSize": "var(--fs-base)",
+                                                "lineHeight": "var(--lh-none)",
+                                                "fontWeight": "var(--fw-normal)",
+                                                "width": "auto",
+                                                "height": "auto",
+                                                "display": "flex",
+                                                "borderRadius": "10px",
+                                                "--font-color": "#191919",
+                                                "--hover-font-color": "#191919",
+                                                "--active-font-color": "#191919",
+                                                "--hover-border": "solid 1px #191919",
+                                                "--active-border": "solid 1px #191919",
+                                                "--hover-background": "#F7F7F7",
+                                                "--active-background": "#F7F7F7",
+                                                "paddingLeft": "24px",
+                                                "paddingRight": "24px",
+                                                "background": "#F7F7F7",
+                                                "marginRight": "32px",
+                                                "border": "solid 1px #D1D0D2",
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
+                                            },
+                                            "globalContainerStyle": {},
+                                            "statusArr": [],
+                                            "curStatus": "default",
+                                            "status": {},
+                                            "globalProps": {
+                                                "text": "",
+                                                "link": "",
+                                                "gtm": "ga-seo_explore_more_tools",
+                                                "target": "_self",
+                                                "colorType": "custom",
+                                                "iconUrl": "",
+                                                "direction": "right",
+                                                "distance": "10px",
+                                                "iconWidth": "20px",
+                                                "fontColor": "#191919"
+                                            },
+                                            "transition": []
+                                        },
+                                        {
+                                            "name": "Button",
+                                            "label": "Button",
                                             "uuid": "f9d9dcf0-8d3b-415d-9575-80ac2761a32a",
                                             "style": {
                                                 "1280-1679": {
@@ -11686,11 +11671,8 @@
                                                     "marginRight": "12px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
-                                                    "height": "auto",
                                                     "fontSize": "var(--fs-sm)",
                                                     "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -11702,13 +11684,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -11721,15 +11702,16 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "Jewelry Box Template",
-                                                "link": "/tools/jewelry-box-template",
+                                                "text": "",
+                                                "link": "",
                                                 "gtm": "ga-seo_explore_more_tools",
                                                 "target": "_self",
                                                 "colorType": "custom",
@@ -11744,7 +11726,7 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
-                                            "uuid": "94cfcae9-2f21-42bc-8bbf-a45597e5ea24",
+                                            "uuid": "7720a1be-1058-498e-a986-077e31e3350d",
                                             "style": {
                                                 "1280-1679": {
                                                     "marginRight": "24px",
@@ -11763,11 +11745,8 @@
                                                     "marginRight": "12px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
-                                                    "height": "auto",
                                                     "fontSize": "var(--fs-sm)",
                                                     "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -11779,13 +11758,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -11798,16 +11776,17 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "Christmas Box Template",
-                                                "link": "/tools/christmas-box-template",
-                                                "gtm": "ga-seo_explore_more_tools",
+                                                "text": "Free Mockup Generator",
+                                                "link": "/tools/mockup-generator",
+                                                "gtm": "ga-discover_more_tools",
                                                 "target": "_self",
                                                 "colorType": "custom",
                                                 "iconUrl": "",
@@ -11821,392 +11800,7 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
-                                            "uuid": "fceec409-2cf1-4fe1-96f9-9050bd129b19",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "borderRadius": "6px",
-                                                    "height": "auto",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "Sliding Box Mockup",
-                                                "link": "/tools/sliding-box-mockup",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "31e2da04-7244-49d5-b073-1f1e9d7beb9f",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "borderRadius": "6px",
-                                                    "height": "auto",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "Customizable Shipping Boxes",
-                                                "link": "/tools/customizable-shipping-boxes",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "45837505-6450-4b15-a215-835e4f6d6b6d",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "borderRadius": "6px",
-                                                    "height": "auto",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "Gift Box Mockup",
-                                                "link": "/mockups/gift-box-mockups",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "e072955f-3719-4504-8eac-9f04d17a5104",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "paddingLeft": "16px",
-                                                    "height": "auto",
-                                                    "borderRadius": "6px",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingRight": "16px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": " Display Box Mockup",
-                                                "link": "/mockups/display-box-mockups",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "d0916263-ab45-42ee-914d-e35f23468e44",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "height": "auto",
-                                                    "borderRadius": "6px",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "minHeight": "36px",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "Plastic Box Mockup",
-                                                "link": "/mockups/plastic-box-mockups",
-                                                "gtm": "ga-discover_more_mockups",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "34e3b615-d80b-42e0-8e3a-cbf7c45a1f91",
+                                            "uuid": "7bb23278-2373-4c40-8da0-6d43ae63f975",
                                             "style": {
                                                 "1280-1679": {
                                                     "marginRight": "24px",
@@ -12225,11 +11819,8 @@
                                                     "marginRight": "12px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
-                                                    "height": "auto",
                                                     "fontSize": "var(--fs-sm)",
                                                     "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -12241,13 +11832,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -12260,16 +11850,17 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "Box Template Maker",
-                                                "link": "/tools/box-template-maker",
-                                                "gtm": "ga-seo_explore_more_tools",
+                                                "text": "Free Dieline Generator",
+                                                "link": "/tools/dieline-generator",
+                                                "gtm": "ga-discover_more_tools",
                                                 "target": "_self",
                                                 "colorType": "custom",
                                                 "iconUrl": "",
@@ -12283,7 +11874,7 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
-                                            "uuid": "e4be9e21-0521-4400-ab33-7ff943222f6d",
+                                            "uuid": "8b9fb2fa-5f1a-41bb-8bd7-178989c10210",
                                             "style": {
                                                 "1280-1679": {
                                                     "marginRight": "24px",
@@ -12302,11 +11893,8 @@
                                                     "marginRight": "12px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
-                                                    "height": "auto",
                                                     "fontSize": "var(--fs-sm)",
                                                     "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -12318,13 +11906,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -12337,16 +11924,17 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "Paper Box Template Maker",
-                                                "link": "/tools/paper-box-template-maker",
-                                                "gtm": "ga-seo_explore_more_tools",
+                                                "text": "Free 3D Modeling Software",
+                                                "link": "/3d-creator",
+                                                "gtm": "ga-discover_more_tools",
                                                 "target": "_self",
                                                 "colorType": "custom",
                                                 "iconUrl": "",
@@ -12360,7 +11948,7 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
-                                            "uuid": "021960de-bed7-417d-8984-e30d4b88c1a4",
+                                            "uuid": "462a7cd7-0043-4fdb-ba02-6285de6763d4",
                                             "style": {
                                                 "1280-1679": {
                                                     "marginRight": "24px",
@@ -12379,11 +11967,8 @@
                                                     "marginRight": "12px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
-                                                    "height": "auto",
                                                     "fontSize": "var(--fs-sm)",
                                                     "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -12395,13 +11980,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -12414,16 +11998,17 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": " Shipping Box Template",
-                                                "link": "/dielines/shipping-box-dielines",
-                                                "gtm": "ga-discover_more_dielines",
+                                                "text": "Free AI Background Generator",
+                                                "link": "/tools/ai-background-generator",
+                                                "gtm": "ga-discover_more_tools",
                                                 "target": "_self",
                                                 "colorType": "custom",
                                                 "iconUrl": "",
@@ -12437,7 +12022,7 @@
                                         {
                                             "name": "Button",
                                             "label": "Button",
-                                            "uuid": "e51bf264-fa12-4b6c-9ee9-4000f592ed22",
+                                            "uuid": "2cbbdb2b-c824-4cac-8a92-796e827beebb",
                                             "style": {
                                                 "1280-1679": {
                                                     "marginRight": "24px",
@@ -12456,11 +12041,8 @@
                                                     "marginRight": "12px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
-                                                    "height": "auto",
                                                     "fontSize": "var(--fs-sm)",
                                                     "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -12472,13 +12054,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -12491,16 +12072,17 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": " Mailer Box Template",
-                                                "link": "/dielines/mailer-box-dielines",
-                                                "gtm": "ga-discover_more_dielines",
+                                                "text": "QR Code Generator",
+                                                "link": "/tools/qrcode-generator",
+                                                "gtm": "ga-discover_more_tools",
                                                 "target": "_self",
                                                 "colorType": "custom",
                                                 "iconUrl": "",
@@ -12533,11 +12115,8 @@
                                                     "marginRight": "12px",
                                                     "paddingLeft": "16px",
                                                     "paddingRight": "16px",
-                                                    "height": "auto",
                                                     "fontSize": "var(--fs-sm)",
                                                     "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
                                                     "paddingTop": "8px",
                                                     "paddingBottom": "8px"
                                                 }
@@ -12549,13 +12128,12 @@
                                             "children": [],
                                             "globalStyle": {
                                                 "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
+                                                "lineHeight": "var(--lh-none)",
                                                 "fontWeight": "var(--fw-normal)",
                                                 "width": "auto",
-                                                "height": "48px",
+                                                "height": "auto",
                                                 "display": "flex",
                                                 "borderRadius": "10px",
-                                                "minWidth": "",
                                                 "--font-color": "#191919",
                                                 "--hover-font-color": "#191919",
                                                 "--active-font-color": "#191919",
@@ -12568,84 +12146,8 @@
                                                 "background": "#F7F7F7",
                                                 "marginRight": "32px",
                                                 "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
-                                            },
-                                            "globalContainerStyle": {},
-                                            "statusArr": [],
-                                            "curStatus": "default",
-                                            "status": {},
-                                            "globalProps": {
-                                                "text": "QR Code Generator",
-                                                "link": "/tools/qrcode-generator",
-                                                "gtm": "ga-discover_more_tools",
-                                                "target": "_self",
-                                                "colorType": "custom",
-                                                "iconUrl": "",
-                                                "direction": "right",
-                                                "distance": "10px",
-                                                "iconWidth": "20px",
-                                                "fontColor": "#191919"
-                                            },
-                                            "transition": []
-                                        },
-                                        {
-                                            "name": "Button",
-                                            "label": "Button",
-                                            "uuid": "93fd44b6-41c8-4b92-a3a5-fafde1a13075",
-                                            "style": {
-                                                "1280-1679": {
-                                                    "marginRight": "24px",
-                                                    "marginTop": "24px"
-                                                },
-                                                "1024-1279": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "980-1023": {
-                                                    "marginTop": "24px",
-                                                    "marginRight": "24px"
-                                                },
-                                                "<980": {
-                                                    "marginTop": "12px",
-                                                    "marginRight": "12px",
-                                                    "paddingLeft": "16px",
-                                                    "paddingRight": "16px",
-                                                    "height": "auto",
-                                                    "fontSize": "var(--fs-sm)",
-                                                    "borderRadius": "6px",
-                                                    "minHeight": "36px",
-                                                    "lineHeight": "var(--lh-none)",
-                                                    "paddingTop": "8px",
-                                                    "paddingBottom": "8px"
-                                                }
-                                            },
-                                            "props": {},
-                                            "containerStyle": {},
-                                            "isBlock": true,
-                                            "isContainer": false,
-                                            "children": [],
-                                            "globalStyle": {
-                                                "fontSize": "var(--fs-base)",
-                                                "lineHeight": "40px",
-                                                "fontWeight": "var(--fw-normal)",
-                                                "width": "auto",
-                                                "height": "48px",
-                                                "display": "flex",
-                                                "borderRadius": "10px",
-                                                "minWidth": "",
-                                                "--font-color": "#191919",
-                                                "--hover-font-color": "#191919",
-                                                "--active-font-color": "#191919",
-                                                "--hover-border": "solid 1px #191919",
-                                                "--active-border": "solid 1px #191919",
-                                                "--hover-background": "#F7F7F7",
-                                                "--active-background": "#F7F7F7",
-                                                "paddingLeft": "24px",
-                                                "paddingRight": "24px",
-                                                "background": "#F7F7F7",
-                                                "marginRight": "32px",
-                                                "border": "solid 1px #D1D0D2",
-                                                "marginTop": "32px"
+                                                "marginTop": "32px",
+                                                "minHeight": "48px"
                                             },
                                             "globalContainerStyle": {},
                                             "statusArr": [],
@@ -12855,7 +12357,7 @@
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "<p>Kickstart your exciting journey of designing jewelry box mockups online</p>",
+                                                "text": "<p>{{part8_text}}</p>",
                                                 "isOpenAnimation": true
                                             },
                                             "transition": []
@@ -12929,12 +12431,12 @@
                                                 "1680-1920": {
                                                     "distance": "10px",
                                                     "iconWidth": "20px",
-                                                    "text": "Design a jewelry box mockup"
+                                                    "text": "{{try_text}}"
                                                 },
                                                 ">1920": {
                                                     "distance": "10px",
                                                     "iconWidth": "20px",
-                                                    "text": "Design a jewelry box mockup"
+                                                    "text": "{{try_text}}"
                                                 }
                                             },
                                             "containerStyle": {},
@@ -12966,8 +12468,8 @@
                                             "curStatus": "default",
                                             "status": {},
                                             "globalProps": {
-                                                "text": "Design a jewelry box mockup",
-                                                "link": "/mockup-detail/magnetic-gift-box-mockup-36101102?key=99&tag=219",
+                                                "text": "{{try_text}}",
+                                                "link": "{{try_link}}",
                                                 "gtm": "ga-seo_tools_try",
                                                 "target": "_blank",
                                                 "colorType": "minor-2",
@@ -13308,8 +12810,8 @@
                     "curStatus": "default",
                     "status": {},
                     "globalProps": {
-                        "text": "Design a jewelry box mockup",
-                        "link": "/mockup-detail/magnetic-gift-box-mockup-36101102?key=99&tag=219",
+                        "text": "{{try_text}}",
+                        "link": "{{try_link}}",
                         "gtm": "ga-seo_tools_try",
                         "target": "_blank",
                         "colorType": "minor-2",
