@@ -58,7 +58,7 @@ class FAQTranslationToggleBot:
         try:
             with open(self.checkpoint_file, 'wb') as f:
                 pickle.dump(completed_targets, f)
-            print(f"  ✔️进度已保存到 {self.checkpoint_file}")
+            print(f"  ✔️ 进度已保存到 {self.checkpoint_file}")
         except Exception as e:
             print(f"    ❌保存进度失败: {e}")
     
@@ -75,7 +75,7 @@ class FAQTranslationToggleBot:
                     # 通过ID定位input
                     search_input = page.ele(f'#{input_id}')
                     if search_input:
-                        print("  ✔️通过label定位到搜索输入框")
+                        print("  ✔️ 通过label定位到搜索输入框")
                         return search_input
         except Exception as e:
             print(f"通过label定位失败: {e}")
@@ -84,7 +84,7 @@ class FAQTranslationToggleBot:
         try:
             search_input = page.ele('.v-text-field__slot input')
             if search_input:
-                print("  ✔️通过CSS类名定位到搜索输入框")
+                print("  ✔️ 通过CSS类名定位到搜索输入框")
                 return search_input
         except Exception as e:
             print(f"通过CSS类名定位失败: {e}")
@@ -93,7 +93,7 @@ class FAQTranslationToggleBot:
         try:
             search_input = page.ele('tag:input@type=text')
             if search_input:
-                print("  ✔️通过input type定位到搜索输入框")
+                print("  ✔️ 通过input type定位到搜索输入框")
                 return search_input
         except Exception as e:
             print(f"通过input type定位失败: {e}")
@@ -131,7 +131,7 @@ class FAQTranslationToggleBot:
             try:
                 with open(self.checkpoint_file, 'rb') as f:
                     completed_targets = pickle.load(f)
-                print(f"  ✔️已从 {self.checkpoint_file} 加载进度，已完成 {len(completed_targets)} 个目标")
+                print(f"  ✔️ 已从 {self.checkpoint_file} 加载进度，已完成 {len(completed_targets)} 个目标")
                 return completed_targets
             except Exception as e:
                 print(f"    ❌加载进度文件失败: {e}")
@@ -146,7 +146,7 @@ class FAQTranslationToggleBot:
             cookies = page.cookies()
             with open(self.cookie_file, 'wb') as f:
                 pickle.dump(cookies, f)
-            print("  ✔️已保存cookie供下次使用")
+            print("  ✔️ 已保存cookie供下次使用")
         except Exception as e:
             print(f"    ❌保存cookie失败: {e}")
     
@@ -166,24 +166,24 @@ class FAQTranslationToggleBot:
     
     def login(self) -> bool:
         """执行登录流程"""
-        print(f"🚩正在打开登录页面: {self.login_url}")
+        print(f"🚀正在打开登录页面: {self.login_url}")
         page = self.browser.latest_tab
         page.get(self.login_url)
         
         # 尝试使用cookie登录
         if self.load_cookies(page):
-            print("🔄正在尝试使用已保存的cookie登录...")
+            print("🍪正在尝试使用已保存的cookie登录...")
             page.refresh()
             
             # 检查是否成功登录
             if page.wait.url_change(self.dashboard_url_contains, timeout=5):
-                print("  ✔️使用cookie登录成功")
+                print("  ✔️ 使用cookie登录成功")
                 return True
         
         print("🚩未找到有效cookie或cookie已过期，请手动登录...")
         # 等待手动登录完成
         if page.wait.url_change(self.dashboard_url_contains, timeout=self.timeout * 50):
-            print("  ✔️手动登录成功")
+            print("  ✔️ 手动登录成功")
             self.save_cookies(page)
             return True
         else:
@@ -197,7 +197,7 @@ class FAQTranslationToggleBot:
         page.get(self.operate_url)
         
         if page.wait.url_change(self.operate_url_contains, timeout=self.timeout):
-            print("  ✔️成功跳转到操作页面")
+            print("  ✔️ 成功跳转到操作页面")
             return True
         else:
             print("    ❌跳转到操作页面失败")
@@ -215,7 +215,7 @@ class FAQTranslationToggleBot:
             if search_input:
                 # 使用专门的输入方法
                 if self._input_text_to_search(page, search_input, target):
-                    print(f"  ✔️成功输入搜索目标: {target}")
+                    print(f"  ✔️ 成功输入搜索目标: {target}")
                 else:
                     print(f"    ❌输入搜索目标失败: {target}")
                     return 0
@@ -286,7 +286,7 @@ class FAQTranslationToggleBot:
             # 获取最新的tab（可视化编辑器页面）
             editor_tab = self.browser.latest_tab
             editor_tab.set.activate()
-            print("  ✔️成功打开可视化编辑器")
+            print("  ✔️ 成功打开可视化编辑器")
             
             # 点击JSON工具按钮
             json_tool_button = editor_tab.ele("@@type=button@@class^el-button")
@@ -301,15 +301,14 @@ class FAQTranslationToggleBot:
                 
                 get_json_button = editor_tab.ele("获取当前JSON")
                 if get_json_button:
-                    print('找到获取JSON按钮')
                     get_json_button.click()
-                    print("  ✔️成功获取json")
+                    print("  ✔️ 成功获取json")
                     
                     # 获取剪贴板内容并替换
                     time.sleep(1)  # 等待复制完成
                     json_str = pyperclip.paste()
                     replaced_str = self.update_json(json_str)
-                    print("  ✔️成功替换json")
+                    print("  ✔️ 成功替换json")
                     
                     # 输入替换后的JSON
                     json_input = editor_tab.ele("@class=app-writer")
@@ -327,7 +326,7 @@ class FAQTranslationToggleBot:
                             save_pop_up_editor_button = editor_tab.ele("@@type=button@@class^el-button",index=8)
                             if save_pop_up_editor_button:
                                 save_pop_up_editor_button.click()
-                                print("  ✔️成功保存json")
+                                print("  ✔️ 成功保存json")
                                 
                                 # 等待标签页关闭
                                 time.sleep(5)
@@ -339,11 +338,11 @@ class FAQTranslationToggleBot:
                                 final_save_button = edit_page.ele('保存')
                                 if final_save_button:
                                     final_save_button.click()
-                                    print("正在保存编辑页...")
+                                    print("🚩正在保存编辑页...")
                                         
                                     # 等待返回列表页
                                     if edit_page.wait.url_change('https://op.pacdora.com/topic/List',timeout=60):
-                                        print("  ✔️成功保存编辑页")
+                                        print("  ✔️ 成功保存编辑页")
                                         return True
             
             return False
@@ -378,13 +377,14 @@ class FAQTranslationToggleBot:
             # 处理剩余目标
             for i, target in enumerate(remaining_targets):
                 try:
-                    print(f"🚩正在处理: {target} (进度: {len(completed_targets)+i+1}/{len(all_targets)})")
+                    current_progress = len(all_targets) - len(remaining_targets) + i + 1
+                    print(f"🚩正在处理: {target} (进度: {current_progress}/{len(all_targets)})")
                     
                     # 搜索目标
                     result_count = self.search_target(target)
                     
                     if result_count == 0:
-                        print(f"  ⚠️{target}未找到搜索结果")
+                        print(f"  ❌{target}未找到搜索结果")
                         continue
                     elif result_count >= 3:
                         print(f"  ⚠️{target}有多个搜索结果，请手动处理")
@@ -393,17 +393,19 @@ class FAQTranslationToggleBot:
                             continue
                         
                     elif result_count == 2:
-                        print("定位成功")
+                        print("  ✔️ 定位成功")
                         if not self.open_editor():
                             continue
                     
                     # 处理目标
                     if self.process_single_target(target):
-                        print(f"😍{target}已成功更新")
+                        print(f"✅ {target}已成功更新")
                         completed_targets.append(target)
                         self.save_progress(completed_targets)
                     else:
                         print(f"    ❌{target}处理失败")
+                    
+                    print('='*50)
                         
                 except Exception as e:
                     print(f"    ❌处理{target}时发生错误: {e}")
@@ -413,9 +415,9 @@ class FAQTranslationToggleBot:
             
             # 完成处理
             if not remaining_targets:
-                print("  ✔️没有需要处理的目标，所有任务已完成")
+                print("  ✔️ 没有需要处理的目标，所有任务已完成")
             else:
-                print("  ✔️所有剩余目标已处理完成！")
+                print("  ✔️ 所有剩余目标已处理完成！")
                 print(f"📊总共处理了 {len(completed_targets)}/{len(all_targets)} 个目标")
                 
         except Exception as e:
