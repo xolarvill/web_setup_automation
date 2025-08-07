@@ -887,7 +887,7 @@ class WSA(QMainWindow):
         elif type == "Mockup resource":
             self.update_action_mockup_tool() # NOTICE: here resource page uses the update action of mockup tool!!!
             
-        elif type == "Mockup uinversal topic":
+        elif type == "Mockup universal topic":
             self.update_action_mockup_tool() # NOTICE: here universal topic page uses the update action of mockup tool!!!
             
         elif type == "Dieline tool":
@@ -1119,18 +1119,20 @@ class WSA(QMainWindow):
         chosen_type = self.page_type.currentText()
         if chosen_type == 'Mockup tool':
             self.generate_json_action_mockup_tool()
-        elif chosen_type == 'Landing page':
-            self.generate_json_action_landing_page()
-        elif chosen_type == 'TOOLS':
-            self.generate_json_action_tools()
         elif chosen_type == 'Mockup resource':
             self.generate_json_action_mockup_resource()
-        elif chosen_type == 'Universal topic':
-            self.generate_json_universal_topic()
+        elif chosen_type == 'Mockup universal topic':
+            self.generate_json_action_mockup_universal_topic()
+        
         elif chosen_type == 'Dieline tool':
             self.generate_json_action_dieline_tool()
         elif chosen_type == 'Dieline renderer':
             self.generate_json_action_dieline_rendered()
+            
+        elif chosen_type == 'Landing page':
+            self.generate_json_action_landing_page()
+        elif chosen_type == 'TOOLS':
+            self.generate_json_action_tools()
         
     def generate_json_action_dieline_tool(self):
         pass
@@ -1146,6 +1148,7 @@ class WSA(QMainWindow):
         view_link_raw = self.view_widget.text().split(":")[1].strip()
         view_link_spicy = f"{view_link_raw}"
         view_link = view_link_spicy
+        #print('test point 1')
         
         try_text = self.try_widget.text().split(":")[0].strip()
         try_link_raw = self.try_widget.text().split(":")[1].strip() 
@@ -1164,7 +1167,6 @@ class WSA(QMainWindow):
         part3 = [line for line in self.segments[2].splitlines() if line.strip()]
         part3_title = part3[0]
         part3_text = process_text_with_links(part3[1:])
-        
         
         # 样机展示链接
         part4 = self.segments[3].splitlines()
@@ -1364,7 +1366,7 @@ class WSA(QMainWindow):
         self.ensure_folder_exists(folder_path = folder_path)
         
         # 读取模板内容
-        temp_path = get_resource_path('temps/mockup_universal_topic.json')
+        temp_path = get_resource_path('json_templates/mockup_universal_topic.json')
         with open(temp_path, 'r', encoding='utf-8') as f:
             template_str = f.read()
 
@@ -1841,7 +1843,7 @@ class WSA(QMainWindow):
         self.ensure_folder_exists(folder_path = folder_path)
         
         # 读取模板内容
-        temp_path = get_resource_path('temps/mockup_resource.json')
+        temp_path = get_resource_path('json_templates/mockup_resource.json')
         with open(temp_path, 'r', encoding='utf-8') as f:
             template_str = f.read()
 
@@ -2238,7 +2240,7 @@ class WSA(QMainWindow):
         
         # FAQ环节
         part7 = self.segments[6]
-        part7_block = parse_faq_text(part7)
+        part7_block = parse_faq_text(part7) # 使用parse_faq_text函数处理过的文本会自动识别有序列表
         
         part7_q1 = part7_block[0]['question'].strip()
         part7_a1 = part7_block[0]['answer'].strip()
@@ -2265,7 +2267,7 @@ class WSA(QMainWindow):
         self.ensure_folder_exists(folder_path = folder_path)
         
         # 读取模板内容
-        temp_path = get_resource_path('temps/mockup_tool.json')
+        temp_path = get_resource_path('json_templates/mockup_tool.json')
         with open(temp_path, 'r', encoding='utf-8') as f:
             template_str = f.read()
 
@@ -2472,7 +2474,7 @@ class WSA(QMainWindow):
         self.ensure_folder_exists(folder_path=folder_path)
         
         # 读取模板内容
-        temp_path = get_resource_path('temps/mockup_landing.json')
+        temp_path = get_resource_path('json_templates/mockup_landing.json')
         with open(temp_path,'r') as f:
             template_str = f.read()
         
@@ -2806,7 +2808,7 @@ class WSA(QMainWindow):
                 if key_to_update is None:
                     key_to_update = filename
 
-                # 检��是否需要上传
+                # 检查是否需要上传
                 if not cdn_data.get(key_to_update):
                     self.add_output_message(f"Uploading ({i+1}/{total_images}): {image_name}...", "info")
                     file_path = os.path.join(folder_path, image_name)

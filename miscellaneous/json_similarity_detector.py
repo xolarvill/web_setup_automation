@@ -276,5 +276,5 @@ if __name__ == "__main__":
     
     print("示例比较:")
     #report = comparator.compare_json_data(sample_data1, sample_data2)
-    report = comparator.compare_json_files('temps/mockup_tool.json','temps/mockup_universal_topic.json')
+    report = comparator.compare_json_files('json_templates/mockup_tool.json','json_templates/mockup_universal_topic.json')
     print_comparison_report(report)

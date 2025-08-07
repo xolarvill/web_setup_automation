@@ -2,7 +2,7 @@
 import sys
 import os
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QProgressBar, QGraphicsDropShadowEffect
-from PySide6.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve, QRect, QParallelAnimationGroup
+from PySide6.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QFont, QPainter, QColor, QLinearGradient, QRadialGradient, QPen, QBrush
 from qt_material import apply_stylesheet
 import math
