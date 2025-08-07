@@ -5,11 +5,12 @@ import pickle
 from pathlib import Path
 from DrissionPage import Chromium
 import pyperclip
+from utils.update import update_faq_translatability
 
 
-class FAQTranslationToggleBot:
+class BatchJsonTaskBot:
     """
-    使用DrissionPage批量切换FAQ翻译状态的自动化机器人
+    使用DrissionPage进行JSON批量任务的自动化机器人
     自动化程度：全自动 + 人工监督分岔节点
     """
     
@@ -20,8 +21,8 @@ class FAQTranslationToggleBot:
         self.operate_url_contains = "List"
         self.edit_url_contains = "edit"
         self.timeout = 10  # 优化超时时间
-        self.checkpoint_file = 'faq_progress.pkl'
-        self.cookie_file = 'cookies.pkl'
+        self.checkpoint_file = 'cache/faq_progress.pkl'
+        self.cookie_file = 'cache/cookies.pkl'
         
         # 加载XPath配置
         with open('miscellaneous/web_ui_xpath.json', 'r', encoding='utf-8') as f:
@@ -30,11 +31,7 @@ class FAQTranslationToggleBot:
         # 初始化浏览器
         self.browser = Chromium()
         
-    def update_json(self, json_str: str) -> str:
-        """更新JSON字符串中的翻译状态"""
-        target = '"text":"FAQ","tag":"h2","isNeedTranslate":false,'
-        to_target = '"text":"FAQ","tag":"h2","isNeedTranslate":true,'
-        return json_str.replace(target, to_target)
+    
     
     def read_csv_to_list(self, csv_path: str) -> list:
         """读取CSV文件的第一列内容"""
@@ -307,7 +304,7 @@ class FAQTranslationToggleBot:
                     # 获取剪贴板内容并替换
                     time.sleep(1)  # 等待复制完成
                     json_str = pyperclip.paste()
-                    replaced_str = self.update_json(json_str)
+                    replaced_str = update_faq_translatability(json_str)
                     print("  ✔️ 成功替换json")
                     
                     # 输入替换后的JSON
@@ -430,7 +427,7 @@ class FAQTranslationToggleBot:
 
 def main():
     """主函数"""
-    bot = FAQTranslationToggleBot()
+    bot = BatchJsonTaskBot()
     bot.run()
 
 
