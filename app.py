@@ -2559,7 +2559,7 @@ class WSA(QMainWindow):
             return
 
         # Define paths for the generator
-        templates_path = get_resource_path('temps')
+        templates_path = get_resource_path('json_templates')
 
         # Generate the JSON string
         json_string = generate_tools_json(

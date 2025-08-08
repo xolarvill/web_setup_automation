@@ -64,7 +64,7 @@ class ResourceManager:
     
     def ensure_user_resources(self) -> bool:
         """确保用户目录中有必要的资源文件"""
-        critical_resources = ['size.csv', 'temps', 'aws_config.json']
+        critical_resources = ['size.csv', 'json_templates', 'aws_config.json']
         
         for resource in critical_resources:
             try:

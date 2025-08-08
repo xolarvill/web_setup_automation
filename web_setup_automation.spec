@@ -22,7 +22,7 @@ a = Analysis(
     binaries=[],
     datas=[
         ('resources', 'resources'),
-        ('temps', 'temps'),
+        ('json_templates', 'json_templates'),
         ('ui', 'ui'),
         ('utils', 'utils'),
         ('size.csv', '.'),
