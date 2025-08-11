@@ -465,3 +465,13 @@ class SCConfigDialog(QDialog):
                     self.save_current_api()
             
         super().accept()
+        
+        
+def get_all_llm_providers() -> list:
+    """
+    获取所有已配置的LLM提供商列表。
+    """
+    return list(load_llm_apis().keys())
+
+if __name__ == "__main__":
+    get_all_llm_providers()

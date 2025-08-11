@@ -10,6 +10,7 @@ dependencies = [
     "drissionpage>=4.1.1.2",
     "helium>=5.1.1",
     "keyring>=25.6.0",
+    "openai>=1.99.6",
     "pillow>=11.3.0",
     "pyinstaller>=6.14.0",
     "pyperclip>=1.9.0",
@@ -18,6 +19,7 @@ dependencies = [
     "requests>=2.32.4",
     "selenium>=4.33.0",
     "seleniumbase>=4.40.8",
+    "simplellmfunc>=0.2.13",
     "webdriver-manager>=4.0.2",
 ]
 

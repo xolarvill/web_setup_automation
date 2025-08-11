@@ -709,17 +709,81 @@ class WSA(QMainWindow):
         self.explore_discover_window.setCentralWidget(central_widget)
         layout = QVBoxLayout(central_widget)
         
+        
+        # layout1的标题
+        layout1_title = QLabel("Miscellaneous")
+        layout1_title.setStyleSheet("font-size: 16px; font-weight: bold;")
+        layout.addWidget(layout1_title)
+        
+        # 创建layout1按钮布局
+        layout1 = QHBoxLayout()
+        
         # 添加一个按钮用于批量替换旧resource页面
         self.replace_old_resource_button = QPushButton("Replace old resource pages")
         self.replace_old_resource_button.setToolTip("确保点击前已经复制了旧resource页面的json字符串")
         self.replace_old_resource_button.clicked.connect(self.replace_old_resource_to_clipboard)
-        layout.addWidget(self.replace_old_resource_button)
+        layout1.addWidget(self.replace_old_resource_button)
         
         # 添加一个按钮用于增加login requirement
         self.add_login_requirement_button = QPushButton("Add login requirement")
         self.add_login_requirement_button.setToolTip("Add login requirement to the json string")
         self.add_login_requirement_button.clicked.connect(self.add_login_requirement)
-        layout.addWidget(self.add_login_requirement_button)
+        layout1.addWidget(self.add_login_requirement_button)
+        
+        layout.addLayout(layout1)
+        
+        
+        # 添加分割线
+        line = QFrame()
+        line.setFrameShape(QFrame.HLine)
+        line.setFrameShadow(QFrame.Sunken)
+        layout.addWidget(line)
+        
+        # 创建第二个布局
+        layout2 = QVBoxLayout()
+        
+        # layout2的标题
+        layout2_title = QLabel("Bot and dialog")
+        layout2_title.setStyleSheet("font-size: 16px; font-weight: bold;")
+        layout.addWidget(layout2_title)
+        
+        # 添加BOT和对话框
+        ## bot参数
+        bot_page_type_group = QHBoxLayout()
+        bot_page_type_label = QLabel("Bot page type:")
+        bot_page_type_group.addWidget(bot_page_type_label)
+        
+        self.bot_page_type_widget = QComboBox()
+        self.bot_page_type_widget.addItems(["Tools/resource", "Landing"])
+        bot_page_type_group.addWidget(self.bot_page_type_widget)
+        
+        layout2.addLayout(bot_page_type_group)
+        
+        ## bot语言
+        bot_language_group = QHBoxLayout()
+        bot_language_label = QLabel("Bot language:")
+        bot_language_group.addWidget(bot_language_label)
+        
+        self.bot_language_widget = QComboBox()
+        self.bot_language_widget.addItems(["English", "Spanish", "Portuguese","Chinese"])
+        bot_language_group.addWidget(self.bot_language_widget)
+        
+        layout2.addLayout(bot_language_group)
+        
+        ## 使用对话框实现与LLM的交互（此处调用SimpleFuncLLM）
+        self.bot_dialog_widget = QTextEdit()
+        layout2.addWidget(self.bot_dialog_widget)
+        
+        ## 与LLM交互按钮
+        self.interact_with_llm_button = QPushButton("Send Requirement")
+        layout2.addWidget(self.interact_with_llm_button)
+        
+        ## 激活bot按钮
+        self.activate_bot_button = QPushButton("Activate bot")
+        layout2.addWidget(self.activate_bot_button)
+        
+        
+        layout.addLayout(layout2)
         
         # 显示窗口
         self.explore_discover_window.show()
