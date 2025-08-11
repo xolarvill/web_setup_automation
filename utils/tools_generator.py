@@ -121,7 +121,7 @@ def generate_tools_json(csv_path: str, templates_path: str, logger: Callable = p
             if title in excluded_titles:
                 continue
 
-            category = '2.0' if page_type in ("样机工具页", "刀版工具页") else '3.0'
+            category = '2.0' if page_type in ("样机工具页", "刀版工具页", "AI工具页") else '3.0'
             
             tools_ga = ''
             uuid_1 = str(uuid.uuid4())
