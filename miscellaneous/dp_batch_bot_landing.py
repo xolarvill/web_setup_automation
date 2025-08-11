@@ -438,7 +438,7 @@ class BatchJsonTaskBot:
 
 def main():
     """主函数"""
-    english_bot = BatchJsonTaskBot(language = '英语')
+    english_bot = BatchJsonTaskBot(language = '中文',operate_url = '')
     english_bot.run()
 
 
