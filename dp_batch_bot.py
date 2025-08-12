@@ -5,16 +5,21 @@ import pickle
 from pathlib import Path
 from DrissionPage import Chromium
 import pyperclip
-from utils.update import update_faq_translatability
-
+from utils.update import *
+from typing import Callable, Literal, List
 
 class BatchJsonTaskBot:
     """
     使用DrissionPage进行JSON批量任务的自动化机器人
     自动化程度：全自动 + 人工监督分岔节点
+    
+    可接收的args:
+        language: Literal['English','Chinese'] 模型应该在哪个语言下进行操作
+        update_action: Callable[[str], str] 更新JSON文件的具体操作
+        csv_path: str 如果目标列表是在一个csv文件中可以填入 否则会读取
     """
     
-    def __init__(self):
+    def __init__(self, language: Literal['English','Chinese'], update_action: Callable[[str], str], target_list: list, target_csv_path: str):
         self.login_url = "https://op.pacdora.com/login"
         self.dashboard_url_contains = "dashboard"
         self.operate_url = "https://op.pacdora.com/topic/List"
@@ -23,7 +28,10 @@ class BatchJsonTaskBot:
         self.timeout = 10  # 优化超时时间
         self.checkpoint_file = 'cache/faq_progress.pkl'
         self.cookie_file = 'cache/cookies.pkl'
-        self.language = '英语'
+        self.language = language
+        self.update_action = update_action
+        self.target_list = target_list
+        self.target_csv_path = target_csv_path
         
         # 加载XPath配置
         with open('miscellaneous/web_ui_xpath.json', 'r', encoding='utf-8') as f:
@@ -315,7 +323,7 @@ class BatchJsonTaskBot:
                     # 获取剪贴板内容并替换
                     time.sleep(1)  # 等待复制完成
                     json_str = pyperclip.paste()
-                    replaced_str = update_faq_translatability(json_str)
+                    replaced_str = self.update_action(json_str)
                     print("  ✔️ 成功替换json")
                     
                     # 输入替换后的JSON
@@ -363,7 +371,13 @@ class BatchJsonTaskBot:
         """主运行方法"""
         try:
             # 读取所有目标
-            all_targets = self.read_csv_to_list('mockup_faq_content.csv')
+            
+            if self.target_list:
+                all_targets = self.target_list
+            else:
+                if self.target_csv_path:
+                    all_targets = self.read_csv_to_list(self.target_csv_path)
+                    
             if not all_targets:
                 print("    ❌未找到任何目标")
                 return
@@ -438,7 +452,7 @@ class BatchJsonTaskBot:
 
 def main():
     """主函数"""
-    english_bot = BatchJsonTaskBot(language = '英语')
+    english_bot = BatchJsonTaskBot(language = '英语', update_action = update_faq_translatability, csv_path='mockup_faq_content.csv')
     english_bot.run()
 
 
