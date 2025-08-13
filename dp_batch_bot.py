@@ -5,7 +5,7 @@ import pickle
 from pathlib import Path
 from DrissionPage import Chromium
 import pyperclip
-from utils.update import *
+from utils.update_json_action import *
 from typing import Callable, Literal, List
 
 class BatchJsonTaskBot:
@@ -452,7 +452,7 @@ class BatchJsonTaskBot:
 
 def main():
     """主函数"""
-    english_bot = BatchJsonTaskBot(language = '英语', update_action = update_faq_translatability, csv_path='mockup_faq_content.csv')
+    english_bot = BatchJsonTaskBot(language = '英语', update_action = update_faq_translatability, csv_path = 'mockup_faq_content.csv')
     english_bot.run()
 
 

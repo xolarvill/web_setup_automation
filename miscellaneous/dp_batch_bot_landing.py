@@ -5,7 +5,7 @@ import pickle
 from pathlib import Path
 from DrissionPage import Chromium
 import pyperclip
-from utils.update import update_faq_translatability
+from utils.update_json_action import update_faq_translatability
 
 
 class BatchJsonTaskBot:

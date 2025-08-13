@@ -19,7 +19,7 @@ from PySide6.QtGui import QClipboard, QIcon, QGuiApplication
 from qt_material import apply_stylesheet
 
 # 本地模块导入
-from utils.credentials import save_credentials, load_credentials, save_llm_api, load_llm_apis, delete_llm_api
+
 from utils.parse import (
     extract_url, segment, parse_faq_text,
     extract_cutout_nextline, extract_cutout_currentline,
@@ -30,10 +30,9 @@ from utils.upload_boto import S3Uploader
 from utils.upload_selenium_class import ImageUploader
 from utils.cdn_placeholder_image import cdn_placeholder_image
 from utils.tools_generator import generate_tools_json
-from utils.update_old_resource_page import update_old_resource_page
 from ui.elements import CollapsibleBox, LabeledLineEditWithCopy, HorizontalCollapsibleTabs
 from utils.resource_manager import get_writable_path, get_resource_path
-from utils.update_login_requirement import update_login_requirment
+from utils.update_json_action import update_login_requirment, update_old_resource_page
 from utils.credentials import SCConfigDialog
 
 # PyInstaller兼容性修复
