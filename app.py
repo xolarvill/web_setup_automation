@@ -39,7 +39,7 @@ from ui.elements import CollapsibleBox, LabeledLineEditWithCopy, HorizontalColla
 # 打包应用后无法读取文件必须要设立一个读取函数
 from utils.resource_manager import get_writable_path, get_resource_path
 # 更新JSON文件的具体动作
-from utils.update_json_action import update_login_requirment, update_old_resource_page
+from utils.update_json_action import update_login_requirment, update_old_resource_page, iterate
 # AWS和LLM API管理器
 from utils.credentials import SCConfigDialog
 
@@ -2592,37 +2592,22 @@ class WSA(QMainWindow):
         
         if empty_fields:
             self.add_output_message(f'{len(empty_fields)} cdn addresses are not valid.','error')
+            return
         else:
             self.add_output_message('All cdn fields are filled. Proceeding...','success')
+            
             # 读取剪切板
             json_str = QGuiApplication.clipboard().text()
             
             # 替换
-            try:
-                # 定义需要替换的占位图片和对应的新CDN链接
-                replacements = {
-                    'https://cdn.pacdora.com/page-img/d49f2f9a-e538-43c0-90cb-7c3ea47c3e56.png': self.step1_cdn_widget.text(),
-                    'https://cdn.pacdora.com/page-img/1254454b-396c-4b92-8e4d-77a7ecbf3752.png': self.step2_cdn_widget.text(),
-                    'https://cdn.pacdora.com/page-img/8166ae2d-77e4-4189-a128-ca98b768d846.png': self.step3_cdn_widget.text(),
-                    'https://cdn.pacdora.com/page-img/46816878-bc73-443c-b7b3-328202fd844a.png': self.feature1_cdn_widget.text(),
-                    'https://cdn.pacdora.com/page-img/0229c1bc-09ab-431c-aebc-22b9b34da372.png': self.feature2_cdn_widget.text(),
-                    'https://cdn.pacdora.com/page-img/91d172ef-0de5-4bd2-a088-c3156b758113.png': self.feature3_cdn_widget.text(),
-                    'https://cdn.pacdora.com/page-img/45d178a0-f6ce-4027-a2a7-e0b82808af5a.png': self.feature4_cdn_widget.text()
-                }
-                
-                # 使用字典推导式一次性完成所有替换
-                for old_url, new_url in replacements.items():
-                    json_str = json_str.replace(old_url, new_url)
-                    
-                self.add_output_message('Replace done.','success')
-                
-                # 将替换过的json传入剪切板
-                QGuiApplication.clipboard().setText(json_str)
-                self.add_output_message('Replace json copied to clipboard.','success')  
+            replaced = iterate(json_str, self.step1_cdn_widget,self.step2_cdn_widget,self.step3_cdn_widget,self.feature1_cdn_widget,self.feature2_cdn_widget,self.feature3_cdn_widget,self.feature4_cdn_widget)
             
-            # 稳健抛出可能的错误
-            except Exception as e:
-                self.add_output_message(f'Error: {e}','error')
+            self.add_output_message('Replace done.','success')
+            
+            # 将替换过的json传入剪切板
+            QGuiApplication.clipboard().setText(replaced)
+            self.add_output_message('Replace json copied to clipboard.','success')  
+            
 
     def current_time(self):
         return datetime.now().strftime("%H:%M:%S")
