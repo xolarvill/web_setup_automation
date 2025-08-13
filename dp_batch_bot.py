@@ -7,6 +7,7 @@ from DrissionPage import Chromium
 import pyperclip
 from utils.update_json_action import *
 from typing import Callable, Literal, List
+from utils.resource_manager import get_resource_path
 
 class BatchJsonTaskBot:
     """
@@ -16,7 +17,8 @@ class BatchJsonTaskBot:
     可接收的args:
         language: Literal['English','Chinese'] 模型应该在哪个语言下进行操作
         update_action: Callable[[str], str] 更新JSON文件的具体操作
-        csv_path: str 如果目标列表是在一个csv文件中可以填入 否则会读取
+        target_list: list 短链接目标表格，例如you-are-more-than-what-you-have-become，而不是you are或者是"https://pacdora.com/you-are"，如果不存在列表输入则会使用csv_path
+        csv_path: str 如果目标列表是在一个csv文件中可以填入
     """
     
     def __init__(self, language: Literal['English','Chinese'], update_action: Callable[[str], str], target_list: list, target_csv_path: str):
@@ -376,7 +378,7 @@ class BatchJsonTaskBot:
                 all_targets = self.target_list
             else:
                 if self.target_csv_path:
-                    all_targets = self.read_csv_to_list(self.target_csv_path)
+                    all_targets = self.read_csv_to_list(get_resource_path(self.target_csv_path))
                     
             if not all_targets:
                 print("    ❌未找到任何目标")

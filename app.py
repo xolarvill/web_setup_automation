@@ -19,20 +19,28 @@ from PySide6.QtGui import QClipboard, QIcon, QGuiApplication
 from qt_material import apply_stylesheet
 
 # 本地模块导入
-
+# 解析文本
 from utils.parse import (
     extract_url, segment, parse_faq_text,
     extract_cutout_nextline, extract_cutout_currentline,
     parse_size_csv, process_text_with_links
 )
+# 获取样机信息
 from utils.fetch_mockup_details import fetch_mockup_details
+# 图片上传
 from utils.upload_boto import S3Uploader
 from utils.upload_selenium_class import ImageUploader
+# 无图可用时的占位图
 from utils.cdn_placeholder_image import cdn_placeholder_image
+# 生成tools页面json
 from utils.tools_generator import generate_tools_json
+# 解耦的UI组件
 from ui.elements import CollapsibleBox, LabeledLineEditWithCopy, HorizontalCollapsibleTabs
+# 打包应用后无法读取文件必须要设立一个读取函数
 from utils.resource_manager import get_writable_path, get_resource_path
+# 更新JSON文件的具体动作
 from utils.update_json_action import update_login_requirment, update_old_resource_page
+# AWS和LLM API管理器
 from utils.credentials import SCConfigDialog
 
 # PyInstaller兼容性修复

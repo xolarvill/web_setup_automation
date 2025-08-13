@@ -66,6 +66,8 @@ def fetch_mockup_details(model_name_key: str, output_callback: Optional[Callable
                             continue
 
                     model_name = data.get("mockupName", "").strip()
+                    # 如果模型名称以数字结尾，则删除结尾的数字
+                    model_name = ' '.join(word for word in model_name.split() if not word[-1].isdigit() or not all(c.isdigit() for c in word))
                     try:
                         image = data["modeSetting"][0]["image"].strip()
                     except (KeyError, IndexError):
