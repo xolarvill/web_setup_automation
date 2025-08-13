@@ -209,7 +209,7 @@ class BatchJsonTaskBot:
             
             language_setting = page.ele(self.language)
             if language_setting:
-                print("  ✔️ 成功识别到操作英语")
+                print(f"  ✔️ 成功识别到{language_setting}")
                 return True
             else:
                 default_language = page.ele('英语')

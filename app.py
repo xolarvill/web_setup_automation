@@ -6,6 +6,7 @@ import re
 from datetime import datetime
 import random
 import webbrowser
+from typing import Callable
 
 # 第三方库导入
 from PySide6.QtWidgets import (
@@ -42,12 +43,10 @@ from utils.resource_manager import get_writable_path, get_resource_path
 from utils.update_json_action import update_login_requirment, update_old_resource_page, iterate
 # AWS和LLM API管理器
 from utils.credentials import SCConfigDialog
-
-# PyInstaller兼容性修复
-if hasattr(sys, '_MEIPASS'):
-    import multiprocessing
-    multiprocessing.freeze_support()
-    os.environ['NUMPY_MADVISE_HUGEPAGE'] = '0'
+# 文本模式分析器
+from utils.string_action import StringPatternTransformer
+# 批量处理机器人
+from dp_batch_bot import BatchJsonTaskBot
 
 class WSA(QMainWindow):
     def __init__(self):
@@ -351,12 +350,6 @@ class WSA(QMainWindow):
         
         mid_layout.addLayout(mid_buttons_layout1)
         
-        # 分隔线
-        # separator_mid5 = QFrame()
-        # separator_mid5.setFrameShape(QFrame.HLine)
-        # separator_mid5.setFrameShadow(QFrame.Sunken)
-        # mid_layout.addWidget(separator_mid5)
-        
         # 2.1 pic path folder in NAS
         self.pics_path_widget = LabeledLineEditWithCopy("NAS path","Enter the path of your pics folder here. OR use the Browse button.")
         mid_layout.addWidget(self.pics_path_widget)
@@ -576,8 +569,9 @@ class WSA(QMainWindow):
         # 5. 杂项
         self.uploader = ImageUploader()
         self.aws_upload = S3Uploader()
+        self.pattern: StringPatternTransformer = None
         self.output_json = ""
-
+        
         # Load mockup sizes and populate the combo box
         self.mockup_sizes_data = self.load_mockup_sizes()
         self.mockup_type_combo.addItem("-- Select a Type --")  # Add placeholder
@@ -794,24 +788,75 @@ class WSA(QMainWindow):
         
         layout2.addLayout(bot_language_group)
         
-        ## 使用对话框实现与LLM的交互（此处调用SimpleFuncLLM）
-        self.bot_dialog_widget = QTextEdit()
-        layout2.addWidget(self.bot_dialog_widget)
+        ## 添加两个输入框，实现StringPatternTransformer的初始化
+        compare_json_panel_title = QLabel("放入你需要的对比文本")
+        compare_json_panel_input_layout = QHBoxLayout()
+        old_json_input = QTextEdit(placeholderText='请放入改动前的旧文本',undoRedoEnabled=True)
+        new_json_input = QTextEdit(placeholderText='请放入改动后的文本')
+        compare_json_button = QPushButton('点击自动分析文本之间的差异并初始化bot')
+        compare_json_button.clicked.connect(
+            lambda: self.initialize_pattern(
+                old_p=old_json_input.toPlainText(),
+                new_p=new_json_input.toPlainText()
+            )
+        )
+        compare_json_panel_input_layout.addWidget(old_json_input)
+        compare_json_panel_input_layout.addWidget(new_json_input)
+        layout2.addWidget(compare_json_panel_title)
+        layout2.addLayout(compare_json_panel_input_layout)
+        layout2.addWidget(compare_json_button)
         
-        ## 与LLM交互按钮
-        self.interact_with_llm_button = QPushButton("Send Requirement")
-        layout2.addWidget(self.interact_with_llm_button)
+        ## 输入想要进行操作的页面的短链接
+        self.bot_target_list_widget = QTextEdit(placeholderText='输入想要进行操作的页面的短链接')
+        layout2.addWidget(self.bot_target_list_widget)
         
         ## 激活bot按钮
         self.activate_bot_button = QPushButton("Activate bot")
+        self.activate_bot_button.clicked.connect(self.on_activate_bot_clicked)
         layout2.addWidget(self.activate_bot_button)
-        
         
         layout.addLayout(layout2)
         
         # 显示窗口
         self.explore_discover_window.show()
+        
+        
+    def initialize_pattern(self, old_p, new_p):
+        """
+        根据初始文本实例化
+        """
+        try:
+            self.pattern = StringPatternTransformer(string_a=old_p,string_b=new_p)
+            self.add_output_message('Successfully analyzed pattern differences.','success')
+        except Exception as e:
+            self.add_output_message(f"Error happened during string pattern recognization: {e}","error")
+        
+        
+    def pattern_update(self,input) -> str:
+        """
+        使用StringPatternTransformer转化文本
+        """
+        if self.pattern:
+            output = self.pattern.transform(input)
+        return output
     
+    def on_activate_bot_clicked(self):
+        self.add_output_message('Starting analyzing pattern differences.','info')
+        self.start_bot_batch_operation(
+            language=self.bot_language_widget.currentText(),
+            target_list=self.bot_target_list_widget.toPlainText(),
+            update_action=lambda input_val: self.pattern_update(input_val)
+        )
+    
+    def start_bot_batch_operation(self, language, target_list, update_action: Callable):
+        try:
+            if self.pattern:
+                bot = BatchJsonTaskBot(language=language, target_list = target_list, update_action=update_action)
+                self.add_output_message('Activating the auto bot, you should see a new chrome window any time soon.','info')
+                bot.run()
+        except Exception as e:
+            self.add_output_message(f"Error happened during bot launching: {e}",'error')
+        
     def add_login_requirement(self):
         try:
             t = QGuiApplication.clipboard().text()
@@ -3096,9 +3141,5 @@ def main():
     sys.exit(app.exec())
 
 if __name__ == "__main__":
-    # PyInstaller兼容性修复
-    if hasattr(sys, '_MEIPASS'):
-        multiprocessing.freeze_support()
     main()
-
-
+    
