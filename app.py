@@ -101,13 +101,30 @@ class WSA(QMainWindow):
         page_label = QLabel("Type:")
         page_label.setMinimumWidth(100)
         self.page_type = QComboBox()
-        self.page_type.addItems(["Mockup tool", 
-                                 "Mockup resource", 
-                                 "Mockup universal topic", 
-                                 "Dieline tool", 
-                                 "Dieline renderer", 
-                                 "Landing page", 
-                                 "TOOLS"])
+        # 添加 Mockup 组
+        self.page_type.addItems([
+            "Mockup tool",
+            "Mockup resource",
+            "Mockup universal topic",
+            "Mockup landing page"
+        ])
+        # 插入分隔线
+        self.page_type.insertSeparator(self.page_type.count())
+        
+        # 添加 Dieline 组
+        self.page_type.addItems([
+            "Dieline tool",
+            "Dieline resource",
+            "Dieline universal topic",
+            "Dieline landing page"
+        ])
+        # 插入分隔线
+        self.page_type.insertSeparator(self.page_type.count())
+
+        # 添加最后的项
+        self.page_type.addItems([
+            "TOOLS"
+        ])
         self.page_type.setCurrentIndex(0)
         self.page_type.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         page_type_layout.addWidget(page_label)
@@ -894,8 +911,8 @@ class WSA(QMainWindow):
         elif type == "Dieline renderer":
             self.update_action_dieline_renderer()
             
-        elif type == "Landing page":
-            self.update_action_landing_page()
+        elif type == "Mockup landing page":
+            self.update_action_mockup_landing_page()
             
         else:
             self.add_output_message("Unavailable page type...","warning")
@@ -906,7 +923,7 @@ class WSA(QMainWindow):
     def update_action_dieline_tool(self):
         pass
 
-    def update_action_landing_page(self):
+    def update_action_mockup_landing_page(self):
         self.add_output_message("Processing clipboard content...", "info")
         clipboard = QGuiApplication.clipboard()
         clipboard_text = clipboard.text()
@@ -1127,8 +1144,8 @@ class WSA(QMainWindow):
         elif chosen_type == 'Dieline renderer':
             self.generate_json_action_dieline_rendered()
             
-        elif chosen_type == 'Landing page':
-            self.generate_json_action_landing_page()
+        elif chosen_type == 'Mockup landing page':
+            self.generate_json_action_mockup_landing_page()
         elif chosen_type == 'TOOLS':
             self.generate_json_action_tools()
         
@@ -2390,7 +2407,7 @@ class WSA(QMainWindow):
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
             
-    def generate_json_action_landing_page(self):
+    def generate_json_action_mockup_landing_page(self):
         self.add_output_message("Generating JSON output...", "info")
         
         try:
@@ -3027,8 +3044,10 @@ class WSA(QMainWindow):
                 url_type = 'tools/' 
             elif type == 'Mockup resource':
                 url_type = 'resource/'
-            elif type == 'Landing page':
+            elif type == 'Mockup landing page':
                 url_type = 'mockups/'
+            elif type == "Dieline landing page":
+                url_type = "dielines/"
             else:
                 url_type = ''
             url = f'https://canary.pacdora.com/{url_type}{target}'
