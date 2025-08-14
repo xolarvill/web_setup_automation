@@ -22,8 +22,7 @@ from qt_material import apply_stylesheet
 # 本地模块导入
 # 解析文本
 from utils.parse import (
-    extract_url, segment, parse_faq_text,
-    extract_cutout_nextline, extract_cutout_currentline,
+    extract_url, segment, parse_faq_text, extract_structured_fields,
     parse_size_csv, process_text_with_links
 )
 # 获取样机信息
@@ -969,211 +968,222 @@ class WSA(QMainWindow):
         pass
 
     def update_action_mockup_landing_page(self):
+        """
+        适配landing page的改进更新函数
+        """
         self.add_output_message("Processing clipboard content...", "info")
+    
         clipboard = QGuiApplication.clipboard()
         clipboard_text = clipboard.text()
-        cutout_keywords_nextline = ["URL", "Title", "Meta Description", "Breadcrumb"]
-        cutout_keywords_currentline = ["View all", "Make a", "Design a", "Create a", "Custom a", "Customize a"]
         
         # 如果剪切板非空
         if clipboard_text:
             preview_start = clipboard_text[:50]
             self.add_output_message(f"Clipboard content captured: {preview_start}...", "info")
             
-            # 先解析关键词字段返回到field中
-            try:
-                dict_parsed1 = extract_cutout_nextline(text=clipboard_text, keywords=cutout_keywords_nextline)
-                dict_parse2 = extract_cutout_currentline(text=clipboard_text, keywords=cutout_keywords_currentline)
-                
-                if dict_parsed1 and dict_parse2:
-                    merged = dict_parsed1.copy()
-                    merged.update(dict_parse2)
-                    # 检查所有关键字段是否为空
-                    required_fields = ["URL", "Title", "Meta Description", "Breadcrumb", "View all", "Make a"]
-                    empty_fields = [field for field in required_fields if not merged.get(field) or (isinstance(merged.get(field), str) and merged.get(field).strip() == "")]
-                    
-                    if len(empty_fields) == len(required_fields):
-                        self.add_output_message("Parsing failed: All required fields are empty. Please check your input format.", "error")
-                    else:
-                        self.add_output_message("Article parsed successfully! Keywords detected and extracted.", "success")
-                    
-                    # 更新界面字段
-                    if "URL" in merged:
-                        value = merged["URL"]
-                        # 简化处理mockup名称,去除mockup字样和连字符,并去除首尾空格
-                        mockup_list_name = value.strip().replace("mockup","").replace("-"," ")
-                        self.mockup_list_1_name_widget.setText(mockup_list_name.strip().capitalize())
-                        # 判断系统是Windows还是Mac
-                        if sys.platform.startswith('darwin'):
-                            self.pics_path_widget.setText(f"/Volumes/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
-                        elif os.name == 'nt':
-                            self.pics_path_widget.setText(f"//nas01.tools.baoxiaohe.com/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
-                        else:
-                            self.add_output_message(f"Detected system: {sys.platform}", "info")
-                        self.file_path_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
-
-                    if "Title" in merged:
-                        value = merged["Title"]
-                        self.title_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
-                    if "Meta Description" in merged:
-                        value = merged["Meta Description"]
-                        self.description_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
-                    if "Breadcrumb" in merged:
-                        value = merged["Breadcrumb"]
-                        self.keywords_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
-                    if "View all" in merged:
-                        value = merged["View all"]
-                        self.view_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
-                    if "Make a" in merged:
-                        value = merged["Make a"]
-                        # 如果"Make a"为空白，尝试用"Design a"或"Create a"中的非空值替代
-                        if (not value or (isinstance(value, str) and value.strip() == "")):
-                            if "Design a" in merged and merged["Design a"] and (not isinstance(merged["Design a"], str) or merged["Design a"].strip() != ""):
-                                value = merged["Design a"]
-                            elif "Create a" in merged and merged["Create a"] and (not isinstance(merged["Create a"], str) or merged["Create a"].strip() != ""):
-                                value = merged["Create a"]
-                            elif "Custom a" in merged and merged["Custom a"] and (not isinstance(merged["Custom a"], str) or merged["Custom a"].strip() != ""):
-                                value = merged["Custom a"]
-                            elif "Customize a" in merged and merged["Customize a"] and (not isinstance(merged["Customize a"], str) or merged["Customize a"].strip() != ""):
-                                value = merged["Customize a"]
-                        self.try_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
-                else:
-                    self.add_output_message("Parsing failed: No keywords detected. Please ensure you've copied the correct article. This could happen when the article is not correctly formatted. Go check it.", "error")
-                
-                # 补齐文件夹
-                folder_path = self.pics_path_widget.text()
-                self.ensure_folder_exists(folder_path=folder_path)
-                
-                # 判断是否存在cdn
-                cdn_records_exist = self.detect_cdn_records(folder_path=folder_path)
-                if cdn_records_exist:
-                    self.pass_cdn_records()
-                    self.add_output_message("Detected cdn records, auto fill.","succcess")
-                
-            except Exception as e:
-                self.add_output_message(f"Error parsing content: {e}", "error")
-            
-            # 解析本文，验证是否正确
+            # 首先进行分段验证
             try:
                 self.segments = segment(clipboard_text)
                 self.add_output_message(f"Text segmented into {len(self.segments)} parts.", "info")
+                
                 if len(self.segments) != 5:
-                    self.add_output_message(f"Wrong number of segments: The number of segments is not 5 for {type}. Please check the input text. Maybe you added the wrong number of #. There should be 4 of them.", "error")
-                    html = [line for line in self.segments[0].splitlines() if line.strip()]
-                    self.h1_title_widget.setText(html[-2])
-                    self.h1_text_widget.setText(html[-1])
+                    self.add_output_message(f"Wrong number of segments: The number of segments is not 5 for landing page. Please check the input text. Maybe you added the wrong number of #. There should be 4 of them.", "error")
+                    # 如果分段错误，仍尝试处理H1标题和文本（从原代码保留的逻辑）
+                    if self.segments and len(self.segments) > 0:
+                        html = [line for line in self.segments[0].splitlines() if line.strip()]
+                        if len(html) >= 2:
+                            self.h1_title_widget.setText(html[-2])
+                            self.h1_text_widget.setText(html[-1])
+                    return
                 else:
                     self.add_output_message("Text segmented successfully.", "success")
                     
             except Exception as e:
                 self.add_output_message(f"Error segmenting text: {e}", "error")
+                return
+            
+            # 从第一段提取结构化信息
+            try:
+                first_segment = self.segments[0] if self.segments else ""
+                if not first_segment.strip():
+                    self.add_output_message("First segment is empty, cannot extract structured fields.", "error")
+                    return
+                    
+                # 使用新的解析函数解析第一段
+                parsed_data = extract_structured_fields(first_segment)
+                
+                # 检查必要字段是否为空
+                required_fields = ["URL", "Title", "Meta Description", "Breadcrumb"]
+                view_try_fields = ["view_text", "try_text"]
+                
+                empty_basic_fields = [field for field in required_fields if not parsed_data.get(field, "").strip()]
+                empty_view_try = [field for field in view_try_fields if not parsed_data.get(field, "").strip()]
+                
+                if len(empty_basic_fields) == len(required_fields) and len(empty_view_try) == len(view_try_fields):
+                    self.add_output_message("Parsing failed: All required fields are empty in first segment. Please check your input format.", "error")
+                    return
+                
+                self.add_output_message("Structured fields parsed successfully from first segment!", "success")
+                
+                # 更新界面字段
+                # URL字段处理
+                if parsed_data.get("URL"):
+                    url_value = parsed_data["URL"]
+                    # 简化处理mockup名称
+                    mockup_list_name = url_value.strip().replace("mockup", "").replace("-", " ")
+                    self.mockup_list_1_name_widget.setText(mockup_list_name.strip().capitalize())
+                    
+                    # 设置路径（根据系统类型）
+                    if sys.platform.startswith('darwin'):
+                        self.pics_path_widget.setText(f"/Volumes/shared/pacdora.com/{url_value}")
+                    elif os.name == 'nt':
+                        self.pics_path_widget.setText(f"//nas01.tools.baoxiaohe.com/shared/pacdora.com/{url_value}")
+                    else:
+                        self.add_output_message(f"Detected system: {sys.platform}", "info")
+                    
+                    self.file_path_widget.setText(url_value)
+                
+                # 其他基础字段更新
+                if parsed_data.get("Title"):
+                    self.title_widget.setText(parsed_data["Title"])
+                
+                if parsed_data.get("Meta Description"):
+                    self.description_widget.setText(parsed_data["Meta Description"])
+                
+                if parsed_data.get("Breadcrumb"):
+                    self.keywords_widget.setText(parsed_data["Breadcrumb"])
+                
+                # View字段更新
+                if parsed_data.get("view"):
+                    self.view_widget.setText(parsed_data["view"])
+                
+                # Try字段更新
+                if parsed_data.get("try"):
+                    self.try_widget.setText(parsed_data["try"])
+                
+            except Exception as e:
+                self.add_output_message(f"Error parsing structured fields from first segment: {e}", "error")
+                return
+            
+            # 补齐文件夹
+            folder_path = self.pics_path_widget.text()
+            self.ensure_folder_exists(folder_path=folder_path)
+            
+            # 判断是否存在cdn
+            cdn_records_exist = self.detect_cdn_records(folder_path=folder_path)
+            if cdn_records_exist:
+                self.pass_cdn_records()
+                self.add_output_message("Detected cdn records, auto fill.", "success")
         
-        # 如果剪切板为空      
         else:
             self.add_output_message("Clipboard is empty or does not contain text.", "warning")
-            
+
+
+
     def update_action_mockup_tool(self):
+        """
+        改进后的更新函数，使用新的解析逻辑
+        """
         self.add_output_message("Processing clipboard content...", "info")
-        
+    
         clipboard = QGuiApplication.clipboard()
         clipboard_text = clipboard.text()
-        cutout_keywords_nextline = ["URL", "Title", "Meta Description", "Breadcrumb"]
-        cutout_keywords_currentline = ["View all", "Make a", "Design a", "Create a", "Custom a", "Customize a"]
         
         # 如果剪切板非空
         if clipboard_text:
             preview_start = clipboard_text[:50]
             self.add_output_message(f"Clipboard content captured: {preview_start}...", "info")
             
-            # 先解析关键词字段返回到field中
-            try:
-                dict_parsed1 = extract_cutout_nextline(text=clipboard_text, keywords=cutout_keywords_nextline)
-                dict_parse2 = extract_cutout_currentline(text=clipboard_text, keywords=cutout_keywords_currentline)
-                
-                if dict_parsed1 and dict_parse2:
-                    merged = dict_parsed1.copy()
-                    merged.update(dict_parse2)
-                    # 检查所有关键字段是否为空
-                    required_fields = ["URL", "Title", "Meta Description", "Breadcrumb", "View all", "Make a"]
-                    empty_fields = [field for field in required_fields if not merged.get(field) or (isinstance(merged.get(field), str) and merged.get(field).strip() == "")]
-                    
-                    if len(empty_fields) == len(required_fields):
-                        self.add_output_message("Parsing failed: All required fields are empty. Please check your input format.", "error")
-                    else:
-                        self.add_output_message("Article parsed successfully! Keywords detected and extracted.", "success")
-                    
-                    # 更新界面字段
-                    if "URL" in merged:
-                        value = merged["URL"]
-                        # 简化处理mockup名称,去除mockup字样和连字符,并去除首尾空格
-                        mockup_list_name = value.strip().replace("mockup","").replace("-"," ")
-                        self.mockup_list_1_name_widget.setText(mockup_list_name.capitalize())
-                        # 判断系统是Windows还是Mac
-                        if sys.platform.startswith('darwin'):
-                            self.pics_path_widget.setText(f"/Volumes/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
-                        elif os.name == 'nt':
-                            self.pics_path_widget.setText(f"//nas01.tools.baoxiaohe.com/shared/pacdora.com/{value}" if isinstance(value, str) else ", ".join(map(str, value)))
-                        else:
-                            self.add_output_message(f"Detected system: {sys.platform}", "info")
-                        self.file_path_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
-
-                    if "Title" in merged:
-                        value = merged["Title"]
-                        self.title_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
-                    if "Meta Description" in merged:
-                        value = merged["Meta Description"]
-                        self.description_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
-                    if "Breadcrumb" in merged:
-                        value = merged["Breadcrumb"]
-                        self.keywords_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
-                    if "View all" in merged:
-                        value = merged["View all"]
-                        self.view_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
-                    if "Make a" in merged:
-                        value = merged["Make a"]
-                        # 如果"Make a"为空白，尝试用"Design a"或"Create a"中的非空值替代
-                        if (not value or (isinstance(value, str) and value.strip() == "")):
-                            if "Design a" in merged and merged["Design a"] and (not isinstance(merged["Design a"], str) or merged["Design a"].strip() != ""):
-                                value = merged["Design a"]
-                            elif "Create a" in merged and merged["Create a"] and (not isinstance(merged["Create a"], str) or merged["Create a"].strip() != ""):
-                                value = merged["Create a"]
-                            elif "Custom a" in merged and merged["Custom a"] and (not isinstance(merged["Custom a"], str) or merged["Custom a"].strip() != ""):
-                                value = merged["Custom a"]
-                            elif "Customize a" in merged and merged["Customize a"] and (not isinstance(merged["Customize a"], str) or merged["Customize a"].strip() != ""):
-                                value = merged["Customize a"]
-                        self.try_widget.setText(value if isinstance(value, str) else ", ".join(map(str, value)))
-                else:
-                    self.add_output_message("Parsing failed: No keywords detected. Please ensure you've copied the correct article. This could happen when the article is not correctly formatted. Go check it.", "error")
-                
-                # 补齐文件夹
-                folder_path = self.pics_path_widget.text()
-                self.ensure_folder_exists(folder_path=folder_path)
-                
-                # 判断是否存在cdn
-                cdn_records_exist = self.detect_cdn_records(folder_path=folder_path)
-                if cdn_records_exist:
-                    self.pass_cdn_records()
-                    self.add_output_message("Detected cdn records, auto fill.","succcess")
-                
-            except Exception as e:
-                self.add_output_message(f"Error parsing content: {e}", "error")
-            
-            # 解析本文，验证是否正确
+            # 首先进行分段验证
             try:
                 self.segments = segment(clipboard_text)
                 self.add_output_message(f"Text segmented into {len(self.segments)} parts.", "info")
+                
                 if len(self.segments) != 8:
                     self.add_output_message("Wrong number of segments: The number of segments is not 8. Please check the input text. Maybe you added the wrong number of #. There should be 7 of them.", "error")
+                    return
                 else:
                     self.add_output_message("Text segmented successfully.", "success")
                     
-                    
             except Exception as e:
                 self.add_output_message(f"Error segmenting text: {e}", "error")
+                return
+            
+            # 从第一段提取结构化信息
+            try:
+                first_segment = self.segments[0] if self.segments else ""
+                if not first_segment.strip():
+                    self.add_output_message("First segment is empty, cannot extract structured fields.", "error")
+                    return
+                    
+                # 使用新的解析函数解析第一段
+                parsed_data = extract_structured_fields(first_segment)
+                
+                # 检查必要字段是否为空
+                required_fields = ["URL", "Title", "Meta Description", "Breadcrumb"]
+                empty_fields = [field for field in required_fields if not parsed_data.get(field, "").strip()]
+                
+                if len(empty_fields) == len(required_fields):
+                    self.add_output_message("Parsing failed: All required fields are empty in first segment. Please check your input format.", "error")
+                    return
+                
+                self.add_output_message("Structured fields parsed successfully from first segment!", "success")
+                
+                # 更新界面字段
+                # URL字段处理
+                if parsed_data.get("URL"):
+                    url_value = parsed_data["URL"]
+                    # 简化处理mockup名称
+                    mockup_list_name = url_value.strip().replace("mockup", "").replace("-", " ")
+                    self.mockup_list_1_name_widget.setText(mockup_list_name.capitalize())
+                    
+                    # 设置路径（根据系统类型）
+                    if sys.platform.startswith('darwin'):
+                        self.pics_path_widget.setText(f"/Volumes/shared/pacdora.com/{url_value}")
+                    elif os.name == 'nt':
+                        self.pics_path_widget.setText(f"//nas01.tools.baoxiaohe.com/shared/pacdora.com/{url_value}")
+                    else:
+                        self.add_output_message(f"Detected system: {sys.platform}", "info")
+                    
+                    self.file_path_widget.setText(url_value)
+                
+                # 其他字段更新
+                if parsed_data.get("Title"):
+                    self.title_widget.setText(parsed_data["Title"])
+                
+                if parsed_data.get("Meta Description"):
+                    self.description_widget.setText(parsed_data["Meta Description"])
+                
+                if parsed_data.get("Breadcrumb"):
+                    self.keywords_widget.setText(parsed_data["Breadcrumb"])
+                
+                if parsed_data.get("view"):
+                    self.view_widget.setText(parsed_data["view"])
+                
+                if parsed_data.get("try"):
+                    self.try_widget.setText(parsed_data["try"])
+                
+                # 如果有链接需要处理，可以在这里添加
+                # 例如：self.view_link = parsed_data.get("view_link", "")
+                #      self.try_link = parsed_data.get("try_link", "")
+                
+            except Exception as e:
+                self.add_output_message(f"Error parsing structured fields from first segment: {e}", "error")
+                return
+            
+            # 补齐文件夹
+            folder_path = self.pics_path_widget.text()
+            self.ensure_folder_exists(folder_path=folder_path)
+            
+            # 判断是否存在cdn
+            cdn_records_exist = self.detect_cdn_records(folder_path=folder_path)
+            if cdn_records_exist:
+                self.pass_cdn_records()
+                self.add_output_message("Detected cdn records, auto fill.", "success")
         
-        # 如果剪切板为空      
         else:
             self.add_output_message("Clipboard is empty or does not contain text.", "warning")
+
         
     def generate_json_action(self):
         chosen_type = self.page_type.currentText()
@@ -2662,7 +2672,14 @@ class WSA(QMainWindow):
             json_str = QGuiApplication.clipboard().text()
             
             # 替换
-            replaced = iterate(json_str, self.step1_cdn_widget,self.step2_cdn_widget,self.step3_cdn_widget,self.feature1_cdn_widget,self.feature2_cdn_widget,self.feature3_cdn_widget,self.feature4_cdn_widget)
+            replaced = iterate(json_str, 
+                               self.step1_cdn_widget.text(),
+                               self.step2_cdn_widget.text(),
+                               self.step3_cdn_widget.text(),
+                               self.feature1_cdn_widget.text(),
+                               self.feature2_cdn_widget.text(),
+                               self.feature3_cdn_widget.text(),
+                               self.feature4_cdn_widget.text())
             
             self.add_output_message('Replace done.','success')
             
@@ -2676,7 +2693,7 @@ class WSA(QMainWindow):
     
     def manual_secret_configure(self):
         """
-        打开一个对话框,允许用户输入并使用keyring保存AWS凭证。
+        打开一个对话框,允许用户输入并使用keyring保存凭证。
         """
         dialog = SCConfigDialog(self)
         if dialog.exec():  # Show the dialog and wait for user action
@@ -2685,15 +2702,6 @@ class WSA(QMainWindow):
             QMessageBox.information(self, "Success", "All configurations have been securely saved.")
         else:
             self.add_output_message("Configuration cancelled by user.", "info")
-        
-    def uploader_activate(self):
-        self.add_output_message("Activating the automator. This could take a while.","info")
-        self.add_output_message("If you are using the app for the first time, log in manually.","info")
-        _ = self.uploader.activate()
-        if _:
-            self.add_output_message(f"Something went wrong during activation: {_}","error")
-        elif self.uploader.activated_status:
-            self.add_output_message("The upload automator is activated.","success")
             
     def ensure_folder_exists(self, folder_path):
         try:
@@ -2828,7 +2836,7 @@ class WSA(QMainWindow):
                     key_to_update = f"step{filename}_cdn"
                 elif filename in ['a', 'b', 'c', 'd']:
                     key_to_update = f"feature{ord(filename) - ord('a') + 1}_cdn"
-                elif "mockup" in filename:
+                elif "mockup" or "custom" in filename:
                     parts = filename.replace("_", " ").split()
                     number = parts[-1] if parts[-1].isdigit() else ""
                     if "more" in parts:

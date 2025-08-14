@@ -1,63 +1,89 @@
 from typing import List
 import re
 
-def extract_cutout_nextline(text: str, keywords: List[str]) -> dict:
+def extract_structured_fields(text: str) -> dict:
     """
-    从文本中提取以指定关键词开头的行的下一行内容（比较时大小写不敏感，提取原文时保留原始大小写）。
-    此函数会跳过关键词后的空行，直到找到第一个非空行。
-
-    :param text: 输入的多行字符串
-    :param keywords: 关键词列表
-    :return: dict，key为关键词，value为对应cutout内容
+    从结构化文本中提取字段信息
+    专门处理包含URL、Title、Meta Description、Breadcrumb和链接信息的文本
     """
     lines = text.splitlines()
-    cutouts = {}
-    keyword_map = {k.lower(): k for k in keywords}
-    found_keywords = set()
-
-    for i, line in enumerate(lines):
-        stripped_line = line.strip()
-        for kw_lower, kw_orig in keyword_map.items():
-            if kw_orig not in found_keywords and stripped_line.lower().startswith(kw_lower):
-                # 找到关键词，现在开始查找下一个非空行
-                next_line_index = i + 1
-                while next_line_index < len(lines) and not lines[next_line_index].strip():
-                    next_line_index += 1  # 跳过空行
-
-                if next_line_index < len(lines):
-                    cutouts[kw_orig] = lines[next_line_index].rstrip()
-                else:
-                    cutouts[kw_orig] = ""  # 如果关键词后没有非空行
+    result = {}
+    
+    # 初始化所有字段为空
+    fields = ["URL", "Title", "Meta Description", "Breadcrumb"]
+    for field in fields:
+        result[field] = ""
+    
+    # 初始化链接字段
+    result["view_text"] = ""
+    result["view_link"] = ""
+    result["try_text"] = ""
+    result["try_link"] = ""
+    result["view"] = ""
+    result["try"] = ""
+    
+    i = 0
+    while i < len(lines):
+        line = lines[i].strip()
+        
+        # 处理基础字段（URL, Title, Meta Description, Breadcrumb）
+        for field in fields:
+            # 匹配字段标识行（不区分大小写），注意这里没有**符号
+            field_pattern = f"{field.lower()}:"
+            if line.lower() == field_pattern:
+                # 找到字段标识行，获取下一个非空行的内容
+                next_i = i + 1
+                while next_i < len(lines) and not lines[next_i].strip():
+                    next_i += 1
                 
-                found_keywords.add(kw_orig)
-                break  # 处理完一个关键词后，跳出内层循环
-
-    # 确保所有关键词都有返回值
-    for keyword in keywords:
-        if keyword not in cutouts:
-            cutouts[keyword] = ""
+                if next_i < len(lines):
+                    result[field] = lines[next_i].strip()
+                break
+        
+        # 特殊处理Breadcrumb部分的链接信息
+        if line.lower() == "breadcrumb:":
+            # 从当前位置开始查找包含 :/ 的行
+            search_start = i + 1
             
-    return cutouts
-
-def extract_cutout_currentline(text: str, keywords: List[str]) -> dict:
-    """
-    提取以指定关键词开头的所有行（比较时大小写不敏感，提取原文时保留原始大小写）。
-    :param text: 输入的多行字符串
-    :param keywords: 关键词列表
-    :return: dict，key为关键词，value为所有匹配行组成的列表
-    """
-    lines = text.splitlines()
-    # 构建小写关键词集合用于比较
-    keyword_map = {k.lower(): k for k in keywords}
-    cutouts = {k: [] for k in keywords}
-    found = set()
-    for line in lines:
-        stripped = line.strip()
-        for kw_lower, kw_orig in keyword_map.items():
-            if kw_orig not in found and stripped.lower().startswith(kw_lower):
-                cutouts[kw_orig].append(line.rstrip())
-                found.add(kw_orig)
-    return cutouts
+            # 先获取Breadcrumb字段的值（第一个非空行）
+            breadcrumb_found = False
+            j = search_start
+            while j < len(lines):
+                current_line = lines[j].strip()
+                
+                # 如果遇到下一个字段标识，停止搜索
+                if current_line.lower().endswith(":") and any(current_line.lower().startswith(f.lower()) for f in fields):
+                    break
+                
+                # 如果还没找到breadcrumb值，且当前行不包含:/（不是链接行）
+                if not breadcrumb_found and current_line and ":/" not in current_line:
+                    result["Breadcrumb"] = current_line
+                    breadcrumb_found = True
+                
+                # 处理包含链接的行
+                elif ":/" in current_line:
+                    # 查找最后一个冒号（不是://中的冒号）
+                    colon_pos = current_line.rfind(":")
+                    if colon_pos > 0 and not (colon_pos > 0 and current_line[colon_pos-1:colon_pos+2] == "://"):
+                        text_part = current_line[:colon_pos].strip()
+                        link_part = current_line[colon_pos+1:].strip()
+                        
+                        # 判断是view还是try
+                        if text_part.lower().startswith("view"):
+                            result["view_text"] = text_part
+                            result["view_link"] = link_part
+                            result["view"] = current_line
+                        else:
+                            # 其他情况都当作try处理
+                            result["try_text"] = text_part
+                            result["try_link"] = link_part
+                            result["try"] = current_line
+                
+                j += 1
+        
+        i += 1
+    
+    return result
 
 def segment(text: str) -> List[str]:
     '''
