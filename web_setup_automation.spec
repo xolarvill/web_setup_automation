@@ -23,10 +23,12 @@ a = Analysis(
     datas=[
         ('resources', 'resources'),
         ('json_templates', 'json_templates'),
+        ('cache','cache'),
         ('ui', 'ui'),
         ('utils', 'utils'),
         ('size.csv', '.'),
         ('aws_config.json', '.'),
+        ('dp_batch_bot.py','.'),
         ('app.py', '.')
     ],
     hiddenimports=[
@@ -136,8 +138,8 @@ if sys.platform.startswith('darwin'):
             'NSAppleScriptEnabled': False,
             'CFBundleDisplayName': 'Web Setup Automation',
             'CFBundleName': 'Web Setup Automation',
-            'CFBundleShortVersionString': '0.7.10',
-            'CFBundleVersion': '0.7.10',
+            'CFBundleShortVersionString': '1.0.2',
+            'CFBundleVersion': '1.0.2',
             'LSMinimumSystemVersion': '10.13.0',
             'NSRequiresAquaSystemAppearance': False,
         }
