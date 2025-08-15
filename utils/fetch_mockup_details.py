@@ -3,6 +3,23 @@ import time
 from urllib.parse import urlparse
 from typing import Callable, Optional
 
+def remove_trailing_number(model_name: str) -> str:
+    """
+    移除字符串末尾的纯数字。
+
+    Args:
+        model_name: 待处理的字符串。
+
+    Returns:
+        处理后的字符串。
+    """
+    words = model_name.split()
+    if words and words[-1].isdigit():
+        return ' '.join(words[:-1])
+    else:
+        return model_name
+
+
 def fetch_mockup_details(model_name_key: str, output_callback: Optional[Callable[[str, str], None]] = None) -> tuple:
     """
     根据模型名称或URL获取模型/刀模图的详细信息。
@@ -66,8 +83,9 @@ def fetch_mockup_details(model_name_key: str, output_callback: Optional[Callable
                             continue
 
                     model_name = data.get("mockupName", "").strip()
+                    
                     # 如果模型名称以数字结尾，则删除结尾的数字
-                    model_name = ' '.join(word for word in model_name.split() if not word[-1].isdigit() or not all(c.isdigit() for c in word))
+                    model_name = remove_trailing_number(model_name)
                     try:
                         image = data["modeSetting"][0]["image"].strip()
                     except (KeyError, IndexError):
@@ -100,5 +118,5 @@ def fetch_mockup_details(model_name_key: str, output_callback: Optional[Callable
 
 
 if __name__ == "__main__":
-    a,b,c = fetch_mockup_details("https://www.pacdora.com/mockup-detail/clipboard-menu-mockup-911447")
+    a,b,c = fetch_mockup_details("https://www.pacdora.com/mockup-detail/stand-up-pouch-coffee-pouch-mockup-605630")
     print(a,b,c)

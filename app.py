@@ -45,7 +45,7 @@ from utils.credentials import SCConfigDialog
 # 文本模式分析器
 from utils.string_action import StringPatternTransformer
 # 批量处理机器人
-from dp_batch_bot import BatchJsonTaskBot
+from dp_bot import BatchJsonTaskBot
 
 class WSA(QMainWindow):
     def __init__(self):
@@ -1562,7 +1562,7 @@ class WSA(QMainWindow):
         try_link = try_link_spicy
         
         breadcrumb = self.keywords_widget.text()
-        breadcrumb_lower = breadcrumb.capitalize()
+        breadcrumb_lower = breadcrumb.capitalize().replace("Ai", "AI").replace("ai", "AI").replace("3d", "3D")
         
         part2 = self.segments[1]
         part2_text = part2.splitlines()[1]
@@ -2087,7 +2087,7 @@ class WSA(QMainWindow):
         try_link = try_link_spicy
         
         breadcrumb = self.keywords_widget.text()
-        breadcrumb_lower = breadcrumb.capitalize()
+        breadcrumb_lower = breadcrumb.capitalize().replace("Ai", "AI").replace("ai", "AI").replace("3d", "3D")
         
         part2 = self.segments[1]
         part2_text = part2.splitlines()[1]

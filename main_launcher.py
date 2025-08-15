@@ -8,13 +8,6 @@ from qt_material import apply_stylesheet
 import math
 
 
-
-# PyInstaller兼容性修复
-if hasattr(sys, '_MEIPASS'):
-    import multiprocessing
-    multiprocessing.freeze_support()
-    os.environ['NUMPY_MADVISE_HUGEPAGE'] = '0'
-
 class ModernSplashScreen(QWidget):
     """
     现代化启动画面 - 具有玻璃质感和呼吸动画效果
@@ -95,7 +88,7 @@ class ModernSplashScreen(QWidget):
         layout.addWidget(self.title_label)
         
         # 版本信息
-        self.version_label = QLabel("Version 1.0.2")
+        self.version_label = QLabel("Version v1.1.4")
         self.version_label.setAlignment(Qt.AlignCenter)
         version_font = QFont("Segoe UI", 11)
         self.version_label.setFont(version_font)
@@ -111,6 +104,8 @@ class ModernSplashScreen(QWidget):
         # 状态标签
         self.status_label = QLabel("正在启动应用...")
         self.status_label.setAlignment(Qt.AlignCenter)
+        self.status_label.setWordWrap(True)
+        self.status_label.setMaximumHeight(60)
         status_font = QFont("Segoe UI", 12)
         self.status_label.setFont(status_font)
         self.status_label.setStyleSheet("""
@@ -343,7 +338,7 @@ def main():
     
     # 设置应用信息
     app.setApplicationName("Web Setup Automation")
-    app.setApplicationVersion("1.0.2")
+    app.setApplicationVersion("v1.1.4")
     app.setOrganizationName("Victor Li")
     
     # 应用Qt-Material样式

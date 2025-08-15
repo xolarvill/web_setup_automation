@@ -21,7 +21,16 @@ class BatchJsonTaskBot:
         csv_path: str 如果目标列表是在一个csv文件中可以填入
     """
     
-    def __init__(self, language: Literal['English','Chinese'], update_action: Callable[[str], str], target_list: list, target_csv_path: str):
+    def __init__(self, language: Literal['English','Chinese'], 
+                 update_action: Callable[[str], str], 
+                 target_list: list | None = None, 
+                 target_csv_path: str | None = None):
+        
+        if target_list is None and target_csv_path is None:
+            raise ValueError("Either 'target_list' or 'target_csv_path' must be provided, but both are None.")
+        if target_list is not None and target_csv_path is not None:
+            raise ValueError("Only one of 'target_list' or 'target_csv_path' should be provided, not both.")
+        
         self.login_url = "https://op.pacdora.com/login"
         self.dashboard_url_contains = "dashboard"
         self.operate_url = "https://op.pacdora.com/topic/List"
@@ -454,7 +463,7 @@ class BatchJsonTaskBot:
 
 def main():
     """主函数"""
-    english_bot = BatchJsonTaskBot(language = '英语', update_action = update_faq_translatability, csv_path = 'mockup_faq_content.csv')
+    english_bot = BatchJsonTaskBot(language = '英语', update_action = update_faq_translatability, target_csv_path = 'mockup_faq_content.csv')
     english_bot.run()
 
 

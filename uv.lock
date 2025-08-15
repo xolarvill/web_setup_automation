@@ -1885,7 +1885,7 @@ wheels = [
 
 [[package]]
 name = "wsa"
-version = "1.0.2"
+version = "v1.1.4"
 source = { virtual = "." }
 dependencies = [
     { name = "awscli" },
