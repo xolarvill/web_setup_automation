@@ -45,7 +45,7 @@ from utils.credentials import SCConfigDialog
 # 文本模式分析器
 from utils.string_action import StringPatternTransformer
 # 批量处理机器人
-from dp_batch_bot import BatchJsonTaskBot
+from dp_bot import BatchJsonTaskBot
 
 class WSA(QMainWindow):
     def __init__(self):
