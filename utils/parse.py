@@ -353,22 +353,16 @@ def process_text_with_links(lines_list):
 
 # 示例用法
 if __name__ == "__main__":
-    # str = '''
-    #     Browse more menu mockups now
-    #     https://www.pacdora.com/mockup-detail/clipboard-menu-mockup-911447
-    #     https://www.pacdora.com/mockup-detail/bifold-menu-card-mockup-911439
-    #     https://www.pacdora.com/mockup-detail/menu-mockup-911458
-    #     https://www.pacdora.com/mockup-detail/clipboard-mockup-911448
-    #     https://www.pacdora.com/mockup-detail/table-tent-mockup-911459
-    #     https://www.pacdora.com/mockup-detail/menu-mockup-911455
-    #     https://www.pacdora.com/mockup-detail/trifold-brochure-mockup-24200402
-    #     https://www.pacdora.com/mockup-detail/a4-flyer-mockup-608040
-    #     View all menu mockups
-    #     '''
-    # result = extract_url(str)
-    # print(result)
-    
-    # Test parse_size_csv
-    sizes = parse_size_csv('../size.csv')
-    import json
-    print(json.dumps(sizes, indent=2))
+    t = """
+URL:
+black-tote-bag-mockup 
+Title：
+Free Black Tote Bag Mockup - Design & Download
+Meta Description:
+Design stylish black tote bag mockups with Pacdora. Add your logo, pick the canvas or denim material, and export 4K visuals to promote your branding projects. 
+Breadcrumb:
+Black Tote Bag Mockup
+View all black tote bag mockups:/mockups/tote-bag-mockup
+Create a black tote bag mockup:/mockup-detail/hanging-canvas-tote-bag-mockup-610140?key=99&tag=313
+"""
+    print(extract_structured_fields(t))
