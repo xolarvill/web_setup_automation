@@ -35,7 +35,8 @@ from utils.cdn_placeholder_image import cdn_placeholder_image
 # 生成tools页面json
 from utils.tools_generator import generate_tools_json
 # 解耦的UI组件
-from ui.elements import CollapsibleBox, LabeledLineEditWithCopy, HorizontalCollapsibleTabs
+from ui.collapsible_tab import CollapsibleBox, HorizontalCollapsibleTabs
+from ui.label_input import LabeledLineEditWithCopy
 # 打包应用后无法读取文件必须要设立一个读取函数
 from utils.resource_manager import get_writable_path, get_resource_path
 # 更新JSON文件的具体动作
@@ -2465,10 +2466,9 @@ class WSA(QMainWindow):
     def generate_json_action_mockup_landing_page(self):
         self.add_output_message("Generating JSON output...", "info")
         
-        try:
-            if self.whole_page_background_color_widget.text() is not None:
+        if self.whole_page_background_color_widget.text() is not None:
                 whole_page_background_color = self.whole_page_background_color_widget.text() 
-        except:
+        else:
             whole_page_background_color = 'rgba(255, 255, 255, 1)'
             self.add_output_message('Since no background color is provided, the default value is rgba(255, 255, 255, 1)','warning')
         
