@@ -47,6 +47,8 @@ from utils.credentials import SCConfigDialog
 from utils.string_action import StringPatternTransformer
 # 批量处理机器人
 from dp_bot import BatchJsonTaskBot
+from dp_bot_manager import BotFactory, ModularBatchBot
+import glob
 
 class WSA(QMainWindow):
     def __init__(self):
@@ -783,7 +785,7 @@ class WSA(QMainWindow):
         bot_language_group.addWidget(bot_language_label)
         
         self.bot_language_widget = QComboBox()
-        self.bot_language_widget.addItems(["English", "Spanish", "Portuguese","Chinese"])
+        self.bot_language_widget.addItems(["英语", "西班牙语", "葡萄牙语","法语","印度尼西亚语","日语","中文"])
         bot_language_group.addWidget(self.bot_language_widget)
         
         layout2.addLayout(bot_language_group)
@@ -830,10 +832,23 @@ class WSA(QMainWindow):
         self.bot_target_list_widget = QTextEdit(placeholderText='输入想要进行操作的页面的短链接')
         layout2.addWidget(self.bot_target_list_widget)
         
-        ## 激活bot按钮
+        ## bot操作按钮
+        bot_button_layout = QHBoxLayout()
+        
+        self.clear_cache_button = QPushButton('Clear cache')
+        self.clear_cache_button.setToolTip('如果遇到先前任务已读条需要重新进行，请先清楚cache')
+        self.clear_cache_button.clicked.connect(self.clear_cache)
+        bot_button_layout.addWidget(self.clear_cache_button)
+        
         self.activate_bot_button = QPushButton("Activate bot")
         self.activate_bot_button.clicked.connect(self.on_activate_bot_clicked)
-        layout2.addWidget(self.activate_bot_button)
+        bot_button_layout.addWidget(self.activate_bot_button)
+        
+        self.continue_bot_button = QPushButton("Continue")
+        self.continue_bot_button.setToolTip('如果遇到需要手动介入的情况，请在操作完成后点击此处继续')
+        bot_button_layout.addWidget(self.continue_bot_button)
+        
+        layout2.addLayout(bot_button_layout)
         
         layout.addLayout(layout2)
         
@@ -861,22 +876,131 @@ class WSA(QMainWindow):
         return output
     
     def on_activate_bot_clicked(self):
-        type = self.default_task_widget.currentText()
+        """
+        激活机器人的主要函数，根据选择的任务类型执行不同的自动化操作
+        """
+        task_type = self.default_task_widget.currentText()
+        language = self.bot_language_widget.currentText()
+        target_list_text = self.bot_target_list_widget.toPlainText().strip()
         
-        if type == '批量上传替换图片':
-            pass
-        elif type == '批量设为启用':
-            pass
-        elif type == '自定义批量':
-            if self.pattern is not None:
-                self.add_output_message('Operating based on custom demand','info')
-                self.start_bot_batch_operation(
-                    language=self.bot_language_widget.currentText(),
-                    target_list=self.bot_target_list_widget.toPlainText(),
-                    update_action=lambda input_val: self.pattern_update(input_val)
-                )
-            else:
-                self.add_output_message('If seems you have not given any demand. Or you have not clicked the analyze button','warning')
+        # 验证目标列表
+        if not target_list_text:
+            self.add_output_message('请输入目标页面的短链接列表', 'error')
+            return
+        
+        # 将文本转换为列表
+        target_list = [line.strip() for line in target_list_text.split('\n') if line.strip()]
+        
+        if not target_list:
+            self.add_output_message('目标列表为空，请输入有效的短链接', 'error')
+            return
+        
+        self.add_output_message(f'准备处理 {len(target_list)} 个目标页面', 'info')
+        
+        if task_type == '批量上传替换图片':
+            self.activate_batch_upload_replace_bot(language, target_list)
+        elif task_type == '批量设为启用':
+            self.activate_batch_set_online_bot(language, target_list)
+        elif task_type == '自定义批量':
+            self.activate_custom_batch_bot(language, target_list)
+        else:
+            self.add_output_message(f'未知的任务类型: {task_type}', 'error')
+    
+    def activate_batch_upload_replace_bot(self, language: str, target_list: list):
+        """
+        激活批量上传替换图片机器人
+        结合 upload 和 iterate 功能的循环处理
+        """
+        try:
+            self.add_output_message('启动批量上传替换图片机器人...', 'info')
+            
+            # 检查必要的CDN字段是否已填充
+            cdn_fields = [
+                self.step1_cdn_widget,
+                self.step2_cdn_widget,
+                self.step3_cdn_widget,
+                self.feature1_cdn_widget,
+                self.feature2_cdn_widget,
+                self.feature3_cdn_widget,
+                self.feature4_cdn_widget
+            ]
+            
+            empty_fields = [widget for widget in cdn_fields if not widget.text().strip()]
+            
+            if empty_fields:
+                self.add_output_message(f'有 {len(empty_fields)} 个CDN字段为空，请先上传图片获取CDN链接', 'error')
+                return
+            
+            # 定义更新动作：替换CDN占位符
+            def batch_upload_update_action(json_str: str) -> str:
+                """批量上传的更新动作：替换JSON中的CDN占位符"""
+                return iterate(json_str, 
+                             self.step1_cdn_widget.text(),
+                             self.step2_cdn_widget.text(),
+                             self.step3_cdn_widget.text(),
+                             self.feature1_cdn_widget.text(),
+                             self.feature2_cdn_widget.text(),
+                             self.feature3_cdn_widget.text(),
+                             self.feature4_cdn_widget.text())
+            
+            # 创建并启动机器人
+            bot = BotFactory.create_pacdora_json_bot(
+                language=language,
+                update_action=batch_upload_update_action,
+                target_list=target_list
+            )
+            
+            self.add_output_message('批量上传替换图片机器人已启动，请查看新打开的浏览器窗口', 'success')
+            bot.run()
+            
+        except Exception as e:
+            self.add_output_message(f'启动批量上传替换图片机器人时发生错误: {e}', 'error')
+    
+    def activate_batch_set_online_bot(self, language: str, target_list: list):
+        """
+        激活批量设为启用机器人
+        使用 BotFactory.create_online_sync_bot
+        """
+        try:
+            self.add_output_message('启动批量设为启用机器人...', 'info')
+            
+            # 定义空的更新动作（因为这个机器人不需要编辑JSON，只是设置同步状态）
+            def dummy_update_action(json_str: str) -> str:
+                return json_str
+            
+            # 创建并启动批量设为启用机器人
+            bot = BotFactory.create_online_sync_bot(
+                language=language,
+                target_list=target_list
+            )
+            
+            self.add_output_message('批量设为启用机器人已启动，请查看新打开的浏览器窗口', 'success')
+            bot.run()
+            
+        except Exception as e:
+            self.add_output_message(f'启动批量设为启用机器人时发生错误: {e}', 'error')
+    
+    def activate_custom_batch_bot(self, language: str, target_list: list):
+        """
+        激活自定义批量机器人
+        通过 StringPatternTransformer 分析差异，逐个打开页面进行操作
+        """
+        try:
+            if self.pattern is None:
+                self.add_output_message('请先分析文本差异并初始化模式转换器', 'warning')
+                return
+            
+            self.add_output_message('启动自定义批量机器人...', 'info')
+            
+            # 使用现有的 start_bot_batch_operation 方法
+            self.start_bot_batch_operation(
+                language=language,
+                target_list=target_list,
+                update_action=lambda input_val: self.pattern_update(input_val)
+            )
+            
+        except Exception as e:
+            self.add_output_message(f'启动自定义批量机器人时发生错误: {e}', 'error')
         
     
     def start_bot_batch_operation(self, language, target_list, update_action: Callable):
@@ -887,6 +1011,23 @@ class WSA(QMainWindow):
                 bot.run()
         except Exception as e:
             self.add_output_message(f"Error happened during bot launching: {e}",'error')
+            
+    def clear_cache(self):
+        cache_dir = os.path.join(os.path.dirname(__file__), "cache")
+        if not os.path.isdir(cache_dir):
+            self.add_output_message(f"Cache directory not found: {cache_dir}", "warning")
+            return
+
+        deleted = 0
+        for pkl_file in glob.glob(os.path.join(cache_dir, "*.pkl")):
+            if os.path.basename(pkl_file) != "cookies.pkl":
+                try:
+                    os.remove(pkl_file)
+                    deleted += 1
+                except Exception as e:
+                    self.add_output_message(f"Failed to delete {pkl_file}: {e}", "error")
+
+        self.add_output_message(f"Deleted {deleted} cache .pkl files (except cookies.pkl).", "success")
         
     def add_login_requirement(self):
         try:
@@ -3181,4 +3322,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
