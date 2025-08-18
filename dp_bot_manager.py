@@ -6,8 +6,9 @@ from pathlib import Path
 from DrissionPage import Chromium
 from abc import ABC, abstractmethod
 from typing import Callable, Literal, List, Dict, Any, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
+from utils.resource_manager import get_writable_path
 
 class ProcessResult(Enum):
     SUCCESS = "success"
@@ -23,10 +24,10 @@ class OperationConfig:
     operate_url: str
     operate_url_contains: str
     edit_url_contains: str
-    timeout: int = 10
-    checkpoint_file: str = 'cache/progress.pkl'
-    cookie_file: str = 'cache/cookies.pkl'
-    xpath_config_file: str = 'miscellaneous/web_ui_xpath.json'
+    timeout: int = 20
+    checkpoint_file: str = field(default_factory=lambda: get_writable_path('cache/progress.pkl'))
+    cookie_file: str = field(default_factory=lambda: get_writable_path('cache/cookies.pkl'))
+    xpath_config_file: str = field(default_factory=lambda:  get_writable_path('miscellaneous/web_ui_xpath.json'))
 
 # =========================== 策略接口 ===========================
 
@@ -36,7 +37,7 @@ class LoginStrategy(ABC):
     @abstractmethod
     def execute_login(self, page, config: OperationConfig) -> bool:
         """执行登录"""
-        pass
+        raise NotImplementedError("必须实现登录方法")
 
 class NavigationStrategy(ABC):
     """导航策略接口"""
@@ -44,7 +45,7 @@ class NavigationStrategy(ABC):
     @abstractmethod
     def navigate_to_target(self, page, config: OperationConfig) -> bool:
         """导航到目标页面"""
-        pass
+        raise NotImplementedError("必须实现导航方法")
 
 class SearchStrategy(ABC):
     """搜索策略接口"""
@@ -52,7 +53,7 @@ class SearchStrategy(ABC):
     @abstractmethod
     def search_target(self, page, target: str) -> int:
         """搜索目标，返回结果数量"""
-        pass
+        raise NotImplementedError("必须实现搜索方法")
 
 class EditorStrategy(ABC):
     """编辑器策略接口"""
@@ -60,7 +61,7 @@ class EditorStrategy(ABC):
     @abstractmethod
     def open_editor(self, page, target: str) -> bool:
         """打开编辑器"""
-        pass
+        raise NotImplementedError("必须实现编辑方法")
 
 class ProcessStrategy(ABC):
     """处理策略接口"""
@@ -68,12 +69,15 @@ class ProcessStrategy(ABC):
     @abstractmethod
     def process_target(self, page, target: str, update_action: Callable[[str], str]) -> ProcessResult:
         """处理单个目标"""
-        pass
+        raise NotImplementedError("必须实现处理方法")
 
 # =========================== 具体策略实现 ===========================
 
 class CookieLoginStrategy(LoginStrategy):
-    """基于Cookie的登录策略"""
+    """
+    基于Cookie的登录策略
+    使用pickle保存信息到cache中
+    """
     
     def execute_login(self, page, config: OperationConfig) -> bool:
         print(f"🚀正在打开登录页面: {config.login_url}")
@@ -334,6 +338,145 @@ class JsonProcessStrategy(ProcessStrategy):
         except Exception as e:
             print(f"    ❌处理目标失败: {e}")
             return ProcessResult.FAILED
+        
+class SyncOnlineProcessor(ProcessStrategy):
+    """
+    同步状态处理器
+    """
+    def process(self, page, target):
+        """处理单个目标的同步状态设置"""
+        try:
+            print(f"🚩开始处理 {target} 的同步状态")
+            
+            # 1. 点击编辑按钮
+            if not self._click_edit_button(page):
+                return ProcessResult.FAILED
+            
+            # 2. 等待页面稳定
+            time.sleep(2)
+            
+            # 3. 悬浮到"同步状态"并等待悬浮框
+            if not self._hover_and_wait_tooltip(page):
+                return ProcessResult.FAILED
+            
+            # 4. 点击"同步启用"
+            if not self._click_sync_enable(page):
+                return ProcessResult.FAILED
+            
+            # 5. 等待页面刷新
+            if not self._wait_page_refresh(page):
+                return ProcessResult.FAILED
+            
+            print(f"  ✅ {target} 同步状态设置成功")
+            return ProcessResult.SUCCESS
+            
+        except Exception as e:
+            print(f"    ❌处理 {target} 时发生错误: {e}")
+            return ProcessResult.FAILED
+    
+    def _click_edit_button(self, page):
+        """点击编辑按钮"""
+        try:
+            edit_button = page.ele('@class=table-td', -1)
+            if not edit_button:
+                print("    ❌未找到编辑按钮")
+                return False
+            
+            edit_button.click()
+            print("  ✔️ 成功点击编辑按钮")
+            
+            # 等待下拉菜单出现
+            time.sleep(1)
+            
+            edit_option = page.ele("@role=option", -3)
+            if not edit_option:
+                print("    ❌未找到编辑选项")
+                return False
+            
+            edit_option.click()
+            print("  ✔️ 成功点击编辑选项")
+            time.sleep(2)  # 等待页面跳转
+            return True
+            
+        except Exception as e:
+            print(f"    ❌点击编辑按钮失败: {e}")
+            return False
+    
+    def _hover_and_wait_tooltip(self, page):
+        """悬浮到"同步状态"并等待悬浮框出现"""
+        try:
+            # 查找"同步状态"元素
+            sync_status_element = page.ele('同步状态')
+            if not sync_status_element:
+                print("    ❌未找到'同步状态'元素")
+                return False
+            
+            print("  ✔️ 找到'同步状态'元素，开始悬浮")
+            
+            # 悬浮到元素上
+            sync_status_element.hover()
+            
+            # 等待悬浮框出现（通过检测"同步启用"元素）
+            max_wait = 10  # 最多等待10秒
+            for i in range(max_wait):
+                try:
+                    sync_enable_element = page.ele('同步启用')
+                    if sync_enable_element:
+                        print("  ✔️ 悬浮框已出现，找到'同步启用'选项")
+                        return True
+                except:
+                    pass
+                time.sleep(1)
+            
+            print("    ❌等待悬浮框超时")
+            return False
+            
+        except Exception as e:
+            print(f"    ❌悬浮操作失败: {e}")
+            return False
+    
+    def _click_sync_enable(self, page):
+        """点击"同步启用"""
+        try:
+            sync_enable_element = page.ele('同步启用')
+            if not sync_enable_element:
+                print("    ❌未找到'同步启用'元素")
+                return False
+            
+            sync_enable_element.click()
+            print("  ✔️ 成功点击'同步启用'")
+            return True
+            
+        except Exception as e:
+            print(f"    ❌点击'同步启用'失败: {e}")
+            return False
+    
+    def _wait_page_refresh(self, page):
+        """等待页面自动刷新"""
+        try:
+            print("  🔄 等待页面自动刷新...")
+            
+            # 方法1: 等待URL变化（回到列表页）
+            if page.wait.url_change('https://op.pacdora.com/topic/List', timeout=60):
+                print("  ✔️ 页面已刷新，返回列表页")
+                return True
+            
+            # 方法2: 如果URL没变化，等待页面元素重新加载
+            time.sleep(5)  # 给页面一些时间刷新
+            
+            # 检查是否回到了列表页面
+            search_elements = page.eles("tag:tr")
+            if len(search_elements) > 1:  # 有搜索结果表格
+                print("  ✔️ 页面已刷新，检测到表格内容")
+                return True
+            
+            print("    ❌页面刷新超时或异常")
+            return False
+            
+        except Exception as e:
+            print(f"    ❌等待页面刷新失败: {e}")
+            return False
+
 
 # =========================== 主框架 ===========================
 
@@ -499,7 +642,7 @@ class BotFactory:
     def create_pacdora_json_bot(language: str, update_action: Callable[[str], str], 
                                target_list: Optional[List[str]] = None,
                                target_csv_path: Optional[str] = None) -> ModularBatchBot:
-        """创建Pacdora JSON处理机器人"""
+        """创建默认的Pacdora JSON处理机器人"""
         
         config = OperationConfig(
             login_url="https://op.pacdora.com/login",
@@ -520,6 +663,26 @@ class BotFactory:
             target_list=target_list,
             target_csv_path=target_csv_path
         )
+        
+    @staticmethod
+    def create_batch_set_online_bot(language: str, update_action: Callable[[str], str], 
+                               target_list: Optional[List[str]] = None,
+                               target_csv_path: Optional[str] = None) -> ModularBatchBot:
+        """
+        创建自动化上线Bot
+        """
+        config = OperationConfig()
+        
+        return ModularBatchBot(
+            config=config,
+            login_strategy=CookieLoginStrategy(),
+            navigation_strategy=StandardNavigationStrategy(language),
+            search_strategy=FlexibleSearchStrategy(),
+            process_strategy=SyncOnlineProcessor(),
+            update_action=update_action,
+            target_list=target_list,
+            target_csv_path=target_csv_path
+        )
     
     @staticmethod
     def create_custom_bot(config: OperationConfig,
@@ -530,7 +693,7 @@ class BotFactory:
                          process_strategy: ProcessStrategy,
                          update_action: Callable[[str], str],
                          **kwargs) -> ModularBatchBot:
-        """创建自定义机器人"""
+        """创建自定义的批量化Bot"""
         return ModularBatchBot(
             config=config,
             login_strategy=login_strategy,

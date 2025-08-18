@@ -788,11 +788,32 @@ class WSA(QMainWindow):
         
         layout2.addLayout(bot_language_group)
         
+        ## 默认任务类型
+        default_task_group = QHBoxLayout()
+        default_task_label = QLabel("Default task:")
+        default_task_group.addWidget(default_task_label)
+        
+        self.default_task_widget = QComboBox()
+        self.default_task_widget.addItems(["批量上传替换图片","批量设为启用","自定义批量"])
+        default_task_group.addWidget(self.default_task_widget)
+        
+        layout2.addLayout(default_task_group)
+        
+        ## 自定义批量任务
+        self.custom_batch_bot = CollapsibleBox("自定义批量BOT")
+        
+        custom_batch_bot_content_layout = QVBoxLayout()
         ## 添加两个输入框，实现StringPatternTransformer的初始化
         compare_json_panel_title = QLabel("放入你需要的对比文本")
+        custom_batch_bot_content_layout.addWidget(compare_json_panel_title)
+        
         compare_json_panel_input_layout = QHBoxLayout()
         old_json_input = QTextEdit(placeholderText='请放入改动前的旧文本',undoRedoEnabled=True)
         new_json_input = QTextEdit(placeholderText='请放入改动后的文本')
+        compare_json_panel_input_layout.addWidget(old_json_input)
+        compare_json_panel_input_layout.addWidget(new_json_input)
+        custom_batch_bot_content_layout.addLayout(compare_json_panel_input_layout)
+        
         compare_json_button = QPushButton('点击自动分析文本之间的差异并初始化bot')
         compare_json_button.clicked.connect(
             lambda: self.initialize_pattern(
@@ -800,11 +821,10 @@ class WSA(QMainWindow):
                 new_p=new_json_input.toPlainText()
             )
         )
-        compare_json_panel_input_layout.addWidget(old_json_input)
-        compare_json_panel_input_layout.addWidget(new_json_input)
-        layout2.addWidget(compare_json_panel_title)
-        layout2.addLayout(compare_json_panel_input_layout)
-        layout2.addWidget(compare_json_button)
+        custom_batch_bot_content_layout.addWidget(compare_json_button)
+        
+        self.custom_batch_bot.setContentLayout(custom_batch_bot_content_layout)
+        layout2.addWidget(self.custom_batch_bot)
         
         ## 输入想要进行操作的页面的短链接
         self.bot_target_list_widget = QTextEdit(placeholderText='输入想要进行操作的页面的短链接')
@@ -841,12 +861,23 @@ class WSA(QMainWindow):
         return output
     
     def on_activate_bot_clicked(self):
-        self.add_output_message('Starting analyzing pattern differences.','info')
-        self.start_bot_batch_operation(
-            language=self.bot_language_widget.currentText(),
-            target_list=self.bot_target_list_widget.toPlainText(),
-            update_action=lambda input_val: self.pattern_update(input_val)
-        )
+        type = self.default_task_widget.currentText()
+        
+        if type == '批量上传替换图片':
+            pass
+        elif type == '批量设为启用':
+            pass
+        elif type == '自定义批量':
+            if self.pattern is not None:
+                self.add_output_message('Operating based on custom demand','info')
+                self.start_bot_batch_operation(
+                    language=self.bot_language_widget.currentText(),
+                    target_list=self.bot_target_list_widget.toPlainText(),
+                    update_action=lambda input_val: self.pattern_update(input_val)
+                )
+            else:
+                self.add_output_message('If seems you have not given any demand. Or you have not clicked the analyze button','warning')
+        
     
     def start_bot_batch_operation(self, language, target_list, update_action: Callable):
         try:

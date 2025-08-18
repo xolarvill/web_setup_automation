@@ -21,7 +21,6 @@ class HorizontalCollapsibleTabs(QWidget):
     改进点：
     - 添加了缓动动画效果
     - 改进了内存管理和性能
-    - 增加了主题样式支持
     - 添加了键盘导航支持
     - 更好的错误处理
     - 支持禁用/启用标签页
@@ -100,8 +99,6 @@ class HorizontalCollapsibleTabs(QWidget):
         # 动画完成回调
         self.animation_group.finished.connect(self._on_animation_finished)
 
-
-
     def add_tab(self, title: str, widget: QWidget, enabled: bool = True, 
                 tooltip: str = "", icon = None) -> int:
         """
@@ -135,7 +132,7 @@ class HorizontalCollapsibleTabs(QWidget):
             
             # 连接按钮点击事件
             tab_index = len(self.tabs)
-            button.pressed.connect(lambda: self._on_tab_clicked(tab_index))
+            button.pressed.connect(lambda idx=tab_index: self._on_tab_clicked(idx))
             
             # 键盘导航支持
             button.setFocusPolicy(Qt.TabFocus)
@@ -209,7 +206,7 @@ class HorizontalCollapsibleTabs(QWidget):
         self.content_height = self.tabs[tab_index]['content_height']
         
         # 设置动画
-        start_height = 0 if not self.is_expanded else self.content_scroll.height()
+        start_height = 0 if not self.is_expanded else self.content_container.height()
         self.content_animation.setStartValue(start_height)
         self.content_animation.setEndValue(self.content_height)
         
@@ -302,7 +299,6 @@ class CollapsibleBox(QWidget):
     改进点：
     - 添加了缓动动画效果
     - 更好的内容高度计算
-    - 添加了加载状态指示
     - 改进了内存管理
     - 添加了更多信号
     """
@@ -347,8 +343,7 @@ class CollapsibleBox(QWidget):
         self.content_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.content_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.content_area.setWidgetResizable(True)
-
-                
+        
         # 布局
         lay = QVBoxLayout(self)
         lay.setSpacing(0)
@@ -469,4 +464,48 @@ class CollapsibleBox(QWidget):
         return self.toggle_button.isChecked()
 
 
-
+# 示例使用代码
+if __name__ == "__main__":
+    import sys
+    
+    app = QApplication(sys.argv)
+    
+    # 创建主窗口
+    main_window = QWidget()
+    main_window.setWindowTitle("改进的折叠面板控件示例")
+    main_window.resize(600, 400)
+    
+    main_layout = QVBoxLayout(main_window)
+    
+    # 水平标签页示例
+    tabs = HorizontalCollapsibleTabs(parent_window=main_window)
+    
+    # 添加标签页
+    for i in range(3):
+        content = QWidget()
+        layout = QVBoxLayout(content)
+        layout.addWidget(QLabel(f"这是标签页 {i+1} 的内容"))
+        layout.addWidget(QPushButton(f"按钮 {i+1}"))
+        tabs.add_tab(f"标签页 {i+1}", content, tooltip=f"这是第{i+1}个标签页")
+    
+    main_layout.addWidget(tabs)
+    
+    # 折叠框示例
+    collapsible = CollapsibleBox("设置选项")
+    settings_layout = QVBoxLayout()
+    settings_layout.addWidget(QLabel("用户名:"))
+    settings_layout.addWidget(QLineEdit())
+    settings_layout.addWidget(QLabel("密码:"))
+    settings_layout.addWidget(QLineEdit())
+    collapsible.setContentLayout(settings_layout)
+    
+    main_layout.addWidget(collapsible)
+    
+    # 连接信号
+    tabs.tabExpanded.connect(lambda idx: print(f"标签页 {idx} 已展开"))
+    tabs.tabCollapsed.connect(lambda idx: print(f"标签页 {idx} 已收起"))
+    collapsible.expanded.connect(lambda: print("折叠框已展开"))
+    collapsible.collapsed.connect(lambda: print("折叠框已收起"))
+    
+    main_window.show()
+    sys.exit(app.exec())
