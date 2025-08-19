@@ -47,7 +47,7 @@ from utils.credentials import SCConfigDialog
 from utils.string_action import StringPatternTransformer
 # 批量处理机器人
 from dp_bot import BatchJsonTaskBot
-from dp_bot_manager import BotFactory, ModularBatchBot
+from dp_bot_manager import BotFactory, ModularBatchBot, GuiInteractionHandler
 import glob
 
 class WSA(QMainWindow):
@@ -583,6 +583,8 @@ class WSA(QMainWindow):
         # Initial update to clear fields
         self.update_mockup_size_info()
         
+        self.interaction_handler = GuiInteractionHandler()
+        
     def on_fun_button_clicked(self):
         """
         一个有趣的按钮，用于与用户互动。
@@ -846,6 +848,12 @@ class WSA(QMainWindow):
         
         self.continue_bot_button = QPushButton("Continue")
         self.continue_bot_button.setToolTip('如果遇到需要手动介入的情况，请在操作完成后点击此处继续')
+        # 将 Continue 按钮连接到交互处理器
+        self.continue_bot_button.clicked.connect(
+            lambda: self.interaction_handler.continue_action(confirmed=True)
+        )
+        # 添加continue提示信息
+        self.interaction_handler.on_request = lambda msg: self.add_output_message(f"⏸️ 等待确认: {msg}", "warning")
         bot_button_layout.addWidget(self.continue_bot_button)
         
         layout2.addLayout(bot_button_layout)
@@ -855,6 +863,12 @@ class WSA(QMainWindow):
         # 显示窗口
         self.explore_discover_window.show()
         
+    def request_confirmation(self, message: str, on_confirm: Callable[[bool], None]):
+        self._on_confirm = on_confirm
+        self._is_waiting = True
+        # ✅ 发送信号或调用主界面方法更新状态栏/日志
+        if hasattr(self, 'on_request'):
+            self.on_request(message)  # 可由 WSA 绑定
         
     def initialize_pattern(self, old_p, new_p):
         """
@@ -947,11 +961,13 @@ class WSA(QMainWindow):
             bot = BotFactory.create_pacdora_json_bot(
                 language=language,
                 update_action=batch_upload_update_action,
-                target_list=target_list
+                target_list=target_list,
+                interaction_strategy=self.interaction_handler
             )
             
-            self.add_output_message('批量上传替换图片机器人已启动，请查看新打开的浏览器窗口', 'success')
-            bot.run()
+            self.add_output_message('批量上传替换图片机器人已创建成功，请查看新打开的浏览器窗口', 'success')
+            from threading import Thread
+            Thread(target=bot.run, daemon=True).start()
             
         except Exception as e:
             self.add_output_message(f'启动批量上传替换图片机器人时发生错误: {e}', 'error')
@@ -964,18 +980,16 @@ class WSA(QMainWindow):
         try:
             self.add_output_message('启动批量设为启用机器人...', 'info')
             
-            # 定义空的更新动作（因为这个机器人不需要编辑JSON，只是设置同步状态）
-            def dummy_update_action(json_str: str) -> str:
-                return json_str
-            
-            # 创建并启动批量设为启用机器人
+            # 创建并启动批量设为启用机器人，启用机器人不需要传入update函数
             bot = BotFactory.create_online_sync_bot(
                 language=language,
-                target_list=target_list
+                target_list=target_list,
+                interaction_strategy=self.interaction_handler
             )
             
-            self.add_output_message('批量设为启用机器人已启动，请查看新打开的浏览器窗口', 'success')
-            bot.run()
+            self.add_output_message('批量设为启用机器人已创建成功，请查看新打开的浏览器窗口', 'success')
+            from threading import Thread
+            Thread(target=bot.run, daemon=True).start()
             
         except Exception as e:
             self.add_output_message(f'启动批量设为启用机器人时发生错误: {e}', 'error')
@@ -992,25 +1006,19 @@ class WSA(QMainWindow):
             
             self.add_output_message('启动自定义批量机器人...', 'info')
             
-            # 使用现有的 start_bot_batch_operation 方法
-            self.start_bot_batch_operation(
+            # 创建自定义 bot（假设你有对应的构造方式）
+            bot = BotFactory.create_pacdora_json_bot(
                 language=language,
+                update_action=lambda x: self.pattern_update(x),
                 target_list=target_list,
-                update_action=lambda input_val: self.pattern_update(input_val)
+                interaction_strategy=self.interaction_handler
             )
+            self.add_output_message('自定义机器人已创建成功，请查看新打开的浏览器窗口', 'success')
+            from threading import Thread
+            Thread(target=bot.run, daemon=True).start()
             
         except Exception as e:
             self.add_output_message(f'启动自定义批量机器人时发生错误: {e}', 'error')
-        
-    
-    def start_bot_batch_operation(self, language, target_list, update_action: Callable):
-        try:
-            if self.pattern:
-                bot = BatchJsonTaskBot(language=language, target_list = target_list, update_action=update_action)
-                self.add_output_message('Activating the auto bot, you should see a new chrome window any time soon.','info')
-                bot.run()
-        except Exception as e:
-            self.add_output_message(f"Error happened during bot launching: {e}",'error')
             
     def clear_cache(self):
         cache_dir = os.path.join(os.path.dirname(__file__), "cache")
@@ -3100,121 +3108,6 @@ class WSA(QMainWindow):
             self.add_output_message("UI fields populated from cdn.json.", "success")
         except Exception as e:
             self.add_output_message(f"Passing cdn addresses failed: {str(e)}","error")
-           
-    def uploader_upload_folder_legacy(self):
-        folder_path = self.pics_path_widget.text()
-        #if folder_path == "/Volumes/shared/pacdora.com/" or "//nas01.tools.baoxiaohe.com/shared/pacdora.com":
-            #self.add_output_message("You cannot upload this folder.","error")
-            #raise ValueError("You cannot upload this folder.")
-
-        self.ensure_folder_exists(folder_path=folder_path)
-        if self.detect_cdn_records(folder_path=folder_path): # already uploaded and recorded
-            self.add_output_message("already uploaded","info")
-            self.pass_cdn_records()
-            self.add_output_message("Passing recorded cdn addresses.","success")
-        else: # no records
-            self.add_output_message("Uploading images for the first time, this could take a while.","info")
-            # 获取文件夹内所有图片
-            image_files = [f for f in os.listdir(folder_path) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))]
-            
-            # 用于存储CDN链接的字典
-            cdn_links = {}
-            
-            total_images = len(image_files)
-            current_image = 0
-            
-            for image in image_files:
-                # 上传图片并获取CDN链接
-                file_path = os.path.join(folder_path, image)
-                cdn_url = self.aws_upload.upload_file(file_path)
-                current_image += 1
-                self.add_output_message(f"Uploading image {current_image}/{total_images}: {image}", "info")
-                
-                # 获取文件名（不含扩展名）
-                filename = os.path.splitext(image)[0]
-                
-                # 根据文件名分配CDN链接
-                if filename in ['1', '2', '3']:
-                    step_num = int(filename)
-                    if step_num == 1:
-                        self.step1_cdn_widget.setText(cdn_url)
-                        cdn_links['step1_cdn'] = cdn_url
-                    elif step_num == 2:
-                        self.step2_cdn_widget.setText(cdn_url)
-                        cdn_links['step2_cdn'] = cdn_url
-                    elif step_num == 3:
-                        self.step3_cdn_widget.setText(cdn_url)
-                        cdn_links['step3_cdn'] = cdn_url
-
-                # 新增处理 abc mockup 123456.png 命名格式
-                elif "mockup" in filename:
-                    # 解析文件名，假设格式为 "abc mockup 123456" 或 "abc mockup more 123456"
-                    parts = filename.replace("_"," ").split()
-                    # 查找"mockup"或"mockup more"的位置
-                    if "mockup" in parts:
-                        idx = parts.index("mockup")
-                        # 检查是否有"more"
-                        if idx + 1 < len(parts) and parts[idx + 1] == "more":
-                            # mockup more
-                            number = parts[-1] if parts[-1].isdigit() else ""
-                            cdn_links['cover_more_cdn'] = cdn_url
-                            self.cover_more_cdn_widget.setText(cdn_url)
-                            if number:
-                                self.mockup_list_2_number_widget.setText(number)
-                                cdn_links['mockup_list_2_number'] = number
-                        else:
-                            # mockup
-                            number = parts[-1] if parts[-1].isdigit() else ""
-                            cdn_links['cover_cdn'] = cdn_url
-                            self.cover_cdn_widget.setText(cdn_url)
-                            if number:
-                                self.mockup_list_1_number_widget.setText(number)
-                                cdn_links['mockup_list_1_number'] = number
-
-                elif filename in ['cover1','cover2']:
-                    feature_num = {'cover1': 'cover_cdn', 'cover2': 'cover_more_cdn'}[filename]
-                    cdn_links[feature_num] = cdn_url
-                
-                elif filename in ['a', 'b', 'c', 'd']:
-                    feature_num = {'a': 1, 'b': 2, 'c': 3, 'd': 4}[filename]
-                    if feature_num == 1:
-                        self.feature1_cdn_widget.setText(cdn_url)
-                        cdn_links['feature1_cdn'] = cdn_url
-                    elif feature_num == 2:
-                        self.feature2_cdn_widget.setText(cdn_url)
-                        cdn_links['feature2_cdn'] = cdn_url
-                    elif feature_num == 3:
-                        self.feature3_cdn_widget.setText(cdn_url)
-                        cdn_links['feature3_cdn'] = cdn_url
-                    elif feature_num == 4:
-                        self.feature4_cdn_widget.setText(cdn_url)
-                        cdn_links['feature4_cdn'] = cdn_url
-            
-            # 定义cdn模板
-            template = {
-                "cover_cdn": "",
-                "cover_more_cdn": "",
-                "mockup_list_1_number": "",
-                "mockup_list_2_number": "",
-                "step1_cdn": "",
-                "step2_cdn": "",
-                "step3_cdn": "",
-                "feature1_cdn": "",
-                "feature2_cdn": "",
-                "feature3_cdn": "",
-                "feature4_cdn": ""
-            }
-            
-            # 将上传的cdn链接更新到模板中
-            merged_data = template.copy()  # 创建template的副本
-            merged_data.update(cdn_links)  # 使用update方法合并两个字典
-            
-            # 保存更新后的JSON文件
-            json_path = os.path.join(folder_path, 'cdn.json')
-            with open(json_path, 'w') as f:
-                json.dump(merged_data, f, indent=4)
-                
-            self.add_output_message(f"All cdn addresses recorded at {json_path}", "success")
             
     def load_mockup_sizes(self):
         """

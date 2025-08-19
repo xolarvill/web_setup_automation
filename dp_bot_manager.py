@@ -54,6 +54,18 @@ class SearchStrategy(ABC):
     def search_target(self, page, target: str) -> int:
         """搜索目标，返回结果数量"""
         raise NotImplementedError("必须实现搜索方法")
+    
+class InteractionStrategy(ABC):
+    """交互策略接口，用于处理需要用户确认的场景"""
+    
+    @abstractmethod
+    def request_confirmation(self, message: str, on_confirm: Callable[[bool], None]):
+        """
+        请求用户确认
+        :param message: 提示信息
+        :param on_confirm: 回调函数，传入 True 表示继续，False 表示跳过
+        """
+        raise NotImplementedError
 
 class EditorStrategy(ABC):
     """编辑器策略接口"""
@@ -256,6 +268,45 @@ class FlexibleSearchStrategy(SearchStrategy):
             print(f"输入文本失败: {e}")
             return False
 
+class ConsoleInteractionHandler(InteractionStrategy):
+    """控制台交互处理器（默认）"""
+    
+    def request_confirmation(self, message: str, on_confirm: Callable[[bool], None]):
+        try:
+            choice = input(f"{message} (y/n): ").strip().lower()
+            on_confirm(choice in ['y', 'yes', '是'])
+        except:
+            on_confirm(False)
+
+class GuiInteractionHandler(InteractionStrategy):
+    """
+    GUI 交互处理器
+    与 PySide6 界面通信，通过按钮触发继续
+    """
+    
+    def __init__(self):
+        self._on_confirm: Optional[Callable[[bool], None]] = None
+        self._is_waiting = False
+    
+    def is_waiting_for_input(self) -> bool:
+        return self._is_waiting
+
+    def request_confirmation(self, message: str, on_confirm: Callable[[bool], None]):
+        self._on_confirm = on_confirm
+        self._is_waiting = True
+        # 通过信号通知 GUI 显示提示（可选）
+        print(f"⏸️ GUI 交互请求: {message}")
+        # 实际行为由 GUI 按钮触发 continue_action
+    
+    def continue_action(self, confirmed: bool = True):
+        """由 GUI 按钮调用，恢复任务"""
+        if not self._is_waiting or not self._on_confirm:
+            return
+        
+        self._on_confirm(confirmed)
+        self._on_confirm = None
+        self._is_waiting = False
+
 class StandardEditorStrategy(EditorStrategy):
     """标准编辑器策略"""
     
@@ -420,6 +471,7 @@ class ModularBatchBot:
                  editor_strategy: EditorStrategy,
                  process_strategy: ProcessStrategy,
                  update_action: Callable[[str], str],
+                 interaction_strategy: Optional[InteractionStrategy] = None,
                  target_list: Optional[List[str]] = None,
                  target_csv_path: Optional[str] = None):
         
@@ -526,45 +578,74 @@ class ModularBatchBot:
     
     def _process_targets(self, remaining_targets: List[str], all_targets: List[str], completed_targets: List[str]):
         """批量处理目标"""
-        for i, target in enumerate(remaining_targets):
+        i = 0
+
+        def process_next_target():
+            nonlocal i
+            if i >= len(remaining_targets):
+                print("✅ 所有目标处理完成。")
+                return
+
+            target = remaining_targets[i]
             try:
                 current_progress = len(all_targets) - len(remaining_targets) + i + 1
                 print(f"🚩正在处理: {target} (进度: {current_progress}/{len(all_targets)})")
-                
+
                 # 搜索目标
                 result_count = self.search_strategy.search_target(self.browser.latest_tab, target)
-                
+
                 if result_count == 0:
-                    print(f"  ❌{target}未找到搜索结果")
-                    continue
+                    print(f"  ❌ {target}未找到搜索结果")
+                    i += 1
+                    process_next_target()
                 elif result_count >= 3:
-                    print(f"  ⚠️{target}有多个搜索结果")
-                    manual_confirm = input("❓是否继续处理此目标？(y/n): ")
-                    if manual_confirm.lower() != 'y':
-                        continue
+                    print(f"  ⚠️ {target}有多个搜索结果")
+
+                    # ✅ 使用交互策略
+                    self.interaction_strategy.request_confirmation(
+                        f"目标 '{target}' 有多个结果，是否继续？",
+                        on_confirm=lambda confirmed: handle_confirm(confirmed, target, result_count)
+                    )
                 elif result_count == 2:
                     print("  ✔️ 定位成功")
-                    if not self.editor_strategy.open_editor(self.browser.latest_tab, target):
-                        continue
-                
-                # 处理目标
-                result = self.process_strategy.process_target(
-                    self.browser.latest_tab, target, self.update_action
-                )
-                
-                if result == ProcessResult.SUCCESS:
-                    print(f"✅ {target}已成功更新")
-                    completed_targets.append(target)
-                    self._save_progress(completed_targets)
-                else:
-                    print(f"    ❌{target}处理失败")
-                
-                print('='*50)
-                
+                    if self.editor_strategy.open_editor(self.browser.latest_tab, target):
+                        finalize_process(target)
+                    else:
+                        i += 1
+                        process_next_target()
+
             except Exception as e:
                 print(f"    ❌处理{target}时发生错误: {e}")
                 self._save_progress(completed_targets)
-                break
+        
+        def handle_confirm(confirmed, target, result_count):
+            if confirmed and result_count >= 2:
+                if self.editor_strategy.open_editor(self.browser.latest_tab, target):
+                    finalize_process(target)
+                else:
+                    i += 1
+                    process_next_target()
+            else:
+                i += 1
+                process_next_target()
+
+        def finalize_process(target):
+            result = self.process_strategy.process_target(
+                self.browser.latest_tab, target, self.update_action
+            )
+            if result == ProcessResult.SUCCESS:
+                print(f"✅ {target}已成功更新")
+                completed_targets.append(target)
+                self._save_progress(completed_targets)
+            else:
+                print(f"    ❌{target}处理失败")
+            print('='*50)
+            nonlocal i
+            i += 1
+            process_next_target()
+
+        # 开始处理第一个
+        process_next_target()
 
 # =========================== 工厂方法 ===========================
 
@@ -574,7 +655,8 @@ class BotFactory:
     @staticmethod
     def create_pacdora_json_bot(language: str, update_action: Callable[[str], str], 
                                target_list: Optional[List[str]] = None,
-                               target_csv_path: Optional[str] = None) -> ModularBatchBot:
+                               target_csv_path: Optional[str] = None,
+                               interaction_strategy: Optional[InteractionStrategy] = None) -> ModularBatchBot:
         """创建默认的Pacdora JSON处理机器人"""
         
         config = OperationConfig(
@@ -593,6 +675,7 @@ class BotFactory:
             editor_strategy=StandardEditorStrategy(),
             process_strategy=JsonProcessStrategy(),
             update_action=update_action,
+            interaction_strategy=interaction_strategy,
             target_list=target_list,
             target_csv_path=target_csv_path
         )
@@ -600,7 +683,8 @@ class BotFactory:
     @staticmethod
     def create_online_sync_bot(language: str,
                               target_list: Optional[List[str]] = None,
-                              target_csv_path: Optional[str] = None) -> ModularBatchBot:
+                              target_csv_path: Optional[str] = None,
+                              interaction_strategy: Optional[InteractionStrategy] = None) -> ModularBatchBot:
         """创建同步启用机器人"""
         
         config = OperationConfig(
@@ -620,6 +704,7 @@ class BotFactory:
             editor_strategy=DummyEditorStrategy, # 传入dummy，因为不需要editor策略，直接在process里进行
             process_strategy=SyncOnlineProcessStrategy(),  # 新的同步处理策略
             update_action=lambda x: x,  # 不需要更新函数
+            interaction_strategy=interaction_strategy,
             target_list=target_list,
             target_csv_path=target_csv_path
         )
