@@ -6,7 +6,7 @@ from pathlib import Path
 from DrissionPage import Chromium
 from abc import ABC, abstractmethod
 from typing import Callable, Literal, List, Dict, Any, Optional
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from utils.resource_manager import get_writable_path
 
@@ -406,12 +406,87 @@ class JsonProcessStrategy(ProcessStrategy):
         except Exception as e:
             print(f"    ❌处理目标失败: {e}")
             return ProcessResult.FAILED
-        
+
+class ReplacePlaceholderJsonStrategy(ProcessStrategy):
+    """
+    从本地 cdn.json 读取 CDN 链接并替换 JSON 的策略
+    与 GUI 解耦，只需传入 base_folder
+    """
+    def __init__(self, base_folder: str):
+        self.base_folder = Path(base_folder)
+
+    def process_target(self, page, target: str, update_action: Callable[[str], str]) -> ProcessResult:
+        try:
+            import pyperclip
+            page.wait.load_start()
+
+            # 打开编辑器
+            if not page.ele('编辑值').click(by_js=True):
+                return ProcessResult.FAILED
+            time.sleep(1.5)
+
+            # 切换到编辑标签页
+            editor_tab = page.browser.latest_tab
+            editor_tab.set.activate()
+
+            # 获取 JSON
+            editor_tab.ele("@@type=button@@class^el-button").click(by_js=True)
+            time.sleep(0.5)
+            editor_tab.ele("获取当前JSON").click()
+            time.sleep(1)
+
+            original_json = pyperclip.paste()
+            if not original_json:
+                return ProcessResult.FAILED
+
+            # 读取 cdn.json
+            json_path = Path(self.base_folder) / target / 'cdn.json'
+            if not json_path.exists():
+                print(f"❌ 找不到 cdn.json: {json_path}")
+                return ProcessResult.FAILED
+
+            with open(json_path, 'r', encoding='utf-8') as f:
+                cdn_data = json.load(f)
+
+            # 替换（调用 iterate）
+            from utils.update_json_action import iterate
+            replaced_json = iterate(
+                original_json,
+                cdn_data.get("step1_cdn", ""),
+                cdn_data.get("step2_cdn", ""),
+                cdn_data.get("step3_cdn", ""),
+                cdn_data.get("feature1_cdn", ""),
+                cdn_data.get("feature2_cdn", ""),
+                cdn_data.get("feature3_cdn", ""),
+                cdn_data.get("feature4_cdn", "")
+            )
+
+            # 输入新 JSON
+            input_ele = editor_tab.ele("@class=app-writer")
+            input_ele.click()
+            input_ele.input(replaced_json)
+
+            # 保存 JSON 编辑器
+            editor_tab.ele("确定").click()
+            time.sleep(0.5)
+            editor_tab.eles("@@type=button@@class^el-button")[-1].click()  # 保存
+            time.sleep(3)
+
+            # 回主页面保存
+            edit_page = page.browser.get_tab(1)
+            edit_page.ele('保存').click()
+            if edit_page.wait.url_change('https://op.pacdora.com/topic/List', timeout=60):
+                return ProcessResult.SUCCESS
+
+        except Exception as e:
+            print(f"❌ 处理失败: {e}")
+        return ProcessResult.FAILED
+
 class DummyEditorStrategy(EditorStrategy):
     def open_editor(self, page, target: str = None) -> bool:
         return True
         
-class SyncOnlineProcessStrategy:
+class SyncOnlineProcessStrategy(ProcessStrategy):
     """同步启用处理策略"""
     
     def process_target(self, page, target, update_action):
@@ -675,6 +750,42 @@ class BotFactory:
             editor_strategy=StandardEditorStrategy(),
             process_strategy=JsonProcessStrategy(),
             update_action=update_action,
+            interaction_strategy=interaction_strategy,
+            target_list=target_list,
+            target_csv_path=target_csv_path
+        )
+        
+    # dp_bot_manager.py
+
+    @staticmethod
+    def create_upload_replace_bot(
+        language: str,
+        base_folder: str,
+        target_list: Optional[List[str]] = None,
+        target_csv_path: Optional[str] = None,
+        interaction_strategy: Optional[InteractionStrategy] = None
+    ) -> ModularBatchBot:
+        """
+        创建「上传图片 + 替换 CDN」专用机器人
+        """
+        config = OperationConfig(
+            login_url="https://op.pacdora.com/login",
+            dashboard_url_contains="dashboard",
+            operate_url="https://op.pacdora.com/topic/List",
+            operate_url_contains="List",
+            edit_url_contains="edit",
+            checkpoint_file="cache/upload_replace_progress.pkl",
+            cookie_file="cache/cookies.pkl"
+        )
+
+        return ModularBatchBot(
+            config=config,
+            login_strategy=CookieLoginStrategy(),
+            navigation_strategy=StandardNavigationStrategy(language),
+            search_strategy=FlexibleSearchStrategy(),
+            editor_strategy=StandardEditorStrategy(),
+            process_strategy=ReplacePlaceholderJsonStrategy(base_folder=base_folder),
+            update_action=lambda x: x,  # 占位，实际替换在策略内部完成
             interaction_strategy=interaction_strategy,
             target_list=target_list,
             target_csv_path=target_csv_path

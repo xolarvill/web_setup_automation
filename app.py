@@ -880,7 +880,6 @@ class WSA(QMainWindow):
         except Exception as e:
             self.add_output_message(f"Error happened during string pattern recognization: {e}","error")
         
-        
     def pattern_update(self,input) -> str:
         """
         使用StringPatternTransformer转化文本
@@ -920,58 +919,56 @@ class WSA(QMainWindow):
         else:
             self.add_output_message(f'未知的任务类型: {task_type}', 'error')
     
+    # app.py 或 WSA 类中
+
     def activate_batch_upload_replace_bot(self, language: str, target_list: list):
-        """
-        激活批量上传替换图片机器人
-        结合 upload 和 iterate 功能的循环处理
-        """
         try:
-            self.add_output_message('启动批量上传替换图片机器人...', 'info')
-            
-            # 检查必要的CDN字段是否已填充
-            cdn_fields = [
-                self.step1_cdn_widget,
-                self.step2_cdn_widget,
-                self.step3_cdn_widget,
-                self.feature1_cdn_widget,
-                self.feature2_cdn_widget,
-                self.feature3_cdn_widget,
-                self.feature4_cdn_widget
-            ]
-            
-            empty_fields = [widget for widget in cdn_fields if not widget.text().strip()]
-            
-            if empty_fields:
-                self.add_output_message(f'有 {len(empty_fields)} 个CDN字段为空，请先上传图片获取CDN链接', 'error')
-                return
-            
-            # 定义更新动作：替换CDN占位符
-            def batch_upload_update_action(json_str: str) -> str:
-                """批量上传的更新动作：替换JSON中的CDN占位符"""
-                return iterate(json_str, 
-                             self.step1_cdn_widget.text(),
-                             self.step2_cdn_widget.text(),
-                             self.step3_cdn_widget.text(),
-                             self.feature1_cdn_widget.text(),
-                             self.feature2_cdn_widget.text(),
-                             self.feature3_cdn_widget.text(),
-                             self.feature4_cdn_widget.text())
-            
-            # 创建并启动机器人
-            bot = BotFactory.create_pacdora_json_bot(
+            self.add_output_message(f"🚀 开始处理 {len(target_list)} 个目标...", "info")
+
+            # --- 1. 确定基础路径（GUI 层决策）---
+            if sys.platform.startswith('darwin'):
+                base_folder = "/Volumes/shared/pacdora.com/"
+                if not os.path.isdir(base_folder):
+                    self.add_output_message(f"⚠️ NAS不可达，改用桌面", "warning")
+                    base_folder = os.path.expanduser("~/Desktop/")
+            else:
+                base_folder = "//nas01.tools.baoxiaohe.com/shared/pacdora.com/"
+
+            # --- 2. 上传所有目标图片 ---
+            for i, target in enumerate(target_list):
+                folder_path = os.path.join(base_folder, target)
+                if not os.path.exists(folder_path):
+                    self.add_output_message(f"❌ 路径不存在: {folder_path}", "error")
+                    continue
+                self.add_output_message(f"🖼️ [{i+1}/{len(target_list)}] 上传: {target}", "info")
+                self.uploader_upload_folder(given_folder_path=folder_path, is_pass_cdn=False)
+
+            self.add_output_message("图片上传完成，启动自动化替换", "success")
+
+            # --- 3. 使用工厂创建专用 Bot ---
+            bot = BotFactory.create_upload_replace_bot(
                 language=language,
-                update_action=batch_upload_update_action,
+                base_folder=base_folder,
                 target_list=target_list,
                 interaction_strategy=self.interaction_handler
             )
-            
-            self.add_output_message('批量上传替换图片机器人已创建成功，请查看新打开的浏览器窗口', 'success')
+
+            self.add_output_message("🤖 机器人已启动，请查看浏览器", "success")
+
+            # --- 4. 子线程运行 ---
+            def run_bot():
+                try:
+                    bot.run()
+                finally:
+                    from PySide6.QtCore import QTimer
+                    QTimer.singleShot(0, lambda: self.add_output_message("🎉 所有任务已完成！", "success"))
+
             from threading import Thread
-            Thread(target=bot.run, daemon=True).start()
-            
+            Thread(target=run_bot, daemon=True).start()
+
         except Exception as e:
-            self.add_output_message(f'启动批量上传替换图片机器人时发生错误: {e}', 'error')
-    
+            self.add_output_message(f"❌ 批量上传替换失败: {e}", "error")
+        
     def activate_batch_set_online_bot(self, language: str, target_list: list):
         """
         激活批量设为启用机器人
@@ -2966,7 +2963,7 @@ class WSA(QMainWindow):
             self.add_output_message(f"Detected unsupported system: {sys.platform}", "info")
             raise Exception("Unknown system. Please check your system.")
         
-    def uploader_upload_folder(self):
+    def uploader_upload_folder(self, given_folder_path : str = None, is_pass_cdn : bool = True):
         """
         增量上传文件夹中的图片。
         - 读取现有的cdn.json（如果存在）。
@@ -2974,7 +2971,14 @@ class WSA(QMainWindow):
         - 如果遇到意料之外的图片（命名不符合所有预设的字段），则在cdn.json中另外保存，按照其文件名+cdn链接的格式。
         - 更新并保存cdn.json。
         """
-        folder_path = self.pics_path_widget.text()
+        
+        # 可接受指定文件夹路径的上传
+        if given_folder_path is not None:
+            folder_path = given_folder_path
+        else:
+            folder_path = self.pics_path_widget.text()
+            
+        # 如不存在 创建文件夹
         if not os.path.isdir(folder_path):
             self.add_output_message("Invalid folder path. Please select a valid folder.", "error")
             return
@@ -3053,7 +3057,8 @@ class WSA(QMainWindow):
             self.add_output_message(f"CDN records updated successfully at {json_path}", "success")
             
             # 4. 更新UI界面
-            self.pass_cdn_records()
+            if is_pass_cdn:
+                self.pass_cdn_records()
 
         except Exception as e:
             self.add_output_message(f"An error occurred during upload: {e}", "error")
