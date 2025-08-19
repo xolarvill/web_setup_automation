@@ -10,6 +10,29 @@ from dataclasses import dataclass
 from enum import Enum
 from utils.resource_manager import get_writable_path
 
+# =========================== 日志接口 ===========================
+
+# 定义一个可被外部设置的日志回调函数
+_log_callback = None
+
+def log(msg: str, level: str = "info"):
+    """统一日志接口：同时输出到终端和 GUI（如果注册了回调）"""
+    print(f"[BOT] {msg}")  # 保留终端输出用于调试. 注意：这里必须用 print，不能用 log，否则无限递归！
+    
+    if _log_callback:
+        _log_callback(msg, level)  # 调用 GUI 的 add_output_message
+
+def set_log_callback(callback):
+    """
+    设置日志回调函数
+    :param callback: func(message: str, level: str)
+    """
+    global _log_callback
+    _log_callback = callback
+        
+        
+# =========================== 基础定义 ===========================
+
 class ProcessResult(Enum):
     SUCCESS = "success"
     FAILED = "failed"
@@ -93,25 +116,25 @@ class CookieLoginStrategy(LoginStrategy):
     
     def execute_login(self, page, config: OperationConfig) -> bool:
         from utils.resource_manager import get_writable_path
-        print(f"🚀正在打开登录页面: {config.login_url}")
+        log(f"🚀正在打开登录页面: {config.login_url}")
         page.get(config.login_url)
 
         # 尝试使用cookie登录
         if self._load_cookies(page, config.cookie_file):
-            print("🍪正在尝试使用已保存的cookie登录...")
+            log("🍪正在尝试使用已保存的cookie登录...")
             page.refresh()
 
             if page.wait.url_change(config.dashboard_url_contains, timeout=5):
-                print("  ✔️ 使用cookie登录成功")
+                log("  ✔️ 使用cookie登录成功")
                 return True
 
-        print("🚩未找到有效cookie或cookie已过期，请手动登录...")
+        log("🚩未找到有效cookie或cookie已过期，请手动登录...")
         if page.wait.url_change(config.dashboard_url_contains, timeout=config.timeout * 50):
-            print("  ✔️ 手动登录成功")
+            log("  ✔️ 手动登录成功")
             self._save_cookies(page, config.cookie_file)
             return True
         else:
-            print("    ❌登录失败或超时")
+            log("    ❌登录失败或超时")
             return False
 
     def _load_cookies(self, page, cookie_file: str) -> bool:
@@ -122,21 +145,21 @@ class CookieLoginStrategy(LoginStrategy):
         path.parent.mkdir(parents=True, exist_ok=True)
 
         if not path.exists():
-            print(f"    🟡 cookie 文件不存在，将进行手动登录: {abs_cookie_file}")
+            log(f"    🟡 cookie 文件不存在，将进行手动登录: {abs_cookie_file}")
             return False
 
         try:
             with open(path, 'rb') as f:
                 cookies = pickle.load(f)
-            print(f"✅ 成功加载 {len(cookies)} 个 cookies")
+            log(f"✅ 成功加载 {len(cookies)} 个 cookies")
             for cookie in cookies:
                 page.set.cookies(cookie)
             return True
         except EOFError:
-            print("    ❌ cookies.pkl 文件为空或损坏，建议删除后重新登录")
+            log("    ❌ cookies.pkl 文件为空或损坏，建议删除后重新登录")
             return False
         except Exception as e:
-            print(f"    ❌ 加载 cookie 失败: {type(e).__name__}: {e}")
+            log(f"    ❌ 加载 cookie 失败: {type(e).__name__}: {e}")
             return False
 
     def _save_cookies(self, page, cookie_file: str):
@@ -148,9 +171,9 @@ class CookieLoginStrategy(LoginStrategy):
             cookies = page.cookies()
             with open(abs_cookie_file, 'wb') as f:
                 pickle.dump(cookies, f)
-            print(f"  ✔️ 已保存 cookie 到: {abs_cookie_file}")
+            log(f"  ✔️ 已保存 cookie 到: {abs_cookie_file}")
         except Exception as e:
-            print(f"    ❌保存cookie失败: {e}")
+            log(f"    ❌保存cookie失败: {e}")
 
 class StandardNavigationStrategy(NavigationStrategy):
     """标准导航策略"""
@@ -159,11 +182,11 @@ class StandardNavigationStrategy(NavigationStrategy):
         self.language = language
     
     def navigate_to_target(self, page, config: OperationConfig) -> bool:
-        print(f"🚩正在跳转到操作页面: {config.operate_url}")
+        log(f"🚩正在跳转到操作页面: {config.operate_url}")
         page.get(config.operate_url)
         
         if page.wait.url_change(config.operate_url_contains, timeout=config.timeout):
-            print("  ✔️ 成功跳转到操作页面")
+            log("  ✔️ 成功跳转到操作页面")
             return self._switch_language(page)
         return False
     
@@ -171,7 +194,7 @@ class StandardNavigationStrategy(NavigationStrategy):
         try:
             language_setting = page.ele(self.language)
             if language_setting:
-                print(f"  ✔️ 成功识别到{self.language}")
+                log(f"  ✔️ 成功识别到{self.language}")
                 return True
             else:
                 default_language = page.ele('英语')
@@ -180,10 +203,10 @@ class StandardNavigationStrategy(NavigationStrategy):
                 to_language = page.ele(self.language)
                 if to_language:
                     to_language.click()
-                    print(f"  ✔️ 成功切换到{self.language}")
+                    log(f"  ✔️ 成功切换到{self.language}")
                     return True
         except Exception as e:
-            print(f"切换语言失败: {e}")
+            log(f"切换语言失败: {e}")
         return False
 
 class FlexibleSearchStrategy(SearchStrategy):
@@ -196,7 +219,7 @@ class FlexibleSearchStrategy(SearchStrategy):
             
             if search_input:
                 if self._input_text_to_search(page, search_input, target):
-                    print(f"  ✔️ 成功输入搜索目标: {target}")
+                    log(f"  ✔️ 成功输入搜索目标: {target}")
                 else:
                     return 0
                 
@@ -215,10 +238,10 @@ class FlexibleSearchStrategy(SearchStrategy):
                     tr_elements = page.eles("tag:tr")
                 
                 result_count = len(tr_elements)
-                print(f"🚩搜索结果数量: {result_count-1}")
+                log(f"🚩搜索结果数量: {result_count-1}")
                 return result_count
         except Exception as e:
-            print(f"    ❌搜索目标失败: {e}")
+            log(f"    ❌搜索目标失败: {e}")
         return 0
     
     def _find_search_input(self, page):
@@ -248,7 +271,7 @@ class FlexibleSearchStrategy(SearchStrategy):
         return None
     
     def _click_by_coordinates(self, page):
-        print("⚠️使用坐标点击方法")
+        log("⚠️使用坐标点击方法")
         return "coordinate_click"
     
     def _input_text_to_search(self, page, search_input, text):
@@ -265,7 +288,7 @@ class FlexibleSearchStrategy(SearchStrategy):
                 search_input.input(text)
                 return True
         except Exception as e:
-            print(f"输入文本失败: {e}")
+            log(f"输入文本失败: {e}")
             return False
 
 class ConsoleInteractionHandler(InteractionStrategy):
@@ -295,7 +318,7 @@ class GuiInteractionHandler(InteractionStrategy):
         self._on_confirm = on_confirm
         self._is_waiting = True
         # 通过信号通知 GUI 显示提示（可选）
-        print(f"⏸️ GUI 交互请求: {message}")
+        log(f"⏸️ GUI 交互请求: {message}")
         # 实际行为由 GUI 按钮触发 continue_action
     
     def continue_action(self, confirmed: bool = True):
@@ -317,7 +340,7 @@ class StandardEditorStrategy(EditorStrategy):
                 return False
             
             edit_button.click()
-            print("🚩正在打开编辑页")
+            log("🚩正在打开编辑页")
             
             edit_option = page.ele("@role=option", -3)
             if not edit_option:
@@ -327,7 +350,7 @@ class StandardEditorStrategy(EditorStrategy):
             time.sleep(2)
             return True
         except Exception as e:
-            print(f"    ❌打开编辑页失败: {e}")
+            log(f"    ❌打开编辑页失败: {e}")
             return False
 
 class JsonProcessStrategy(ProcessStrategy):
@@ -404,7 +427,7 @@ class JsonProcessStrategy(ProcessStrategy):
             return ProcessResult.FAILED
             
         except Exception as e:
-            print(f"    ❌处理目标失败: {e}")
+            log(f"    ❌处理目标失败: {e}")
             return ProcessResult.FAILED
 
 class ReplacePlaceholderJsonStrategy(ProcessStrategy):
@@ -442,7 +465,7 @@ class ReplacePlaceholderJsonStrategy(ProcessStrategy):
             # 读取 cdn.json
             json_path = Path(self.base_folder) / target / 'cdn.json'
             if not json_path.exists():
-                print(f"❌ 找不到 cdn.json: {json_path}")
+                log(f"❌ 找不到 cdn.json: {json_path}")
                 return ProcessResult.FAILED
 
             with open(json_path, 'r', encoding='utf-8') as f:
@@ -479,7 +502,7 @@ class ReplacePlaceholderJsonStrategy(ProcessStrategy):
                 return ProcessResult.SUCCESS
 
         except Exception as e:
-            print(f"❌ 处理失败: {e}")
+            log(f"❌ 处理失败: {e}")
         return ProcessResult.FAILED
 
 class DummyEditorStrategy(EditorStrategy):
@@ -498,7 +521,7 @@ class SyncOnlineProcessStrategy(ProcessStrategy):
             # 点击编辑按钮
             edit_button = page.ele('@class=table-td', -1)
             if not edit_button:
-                print("    ❌未找到编辑按钮")
+                log("    ❌未找到编辑按钮")
                 return "failed"
             
             edit_button.click()
@@ -506,7 +529,7 @@ class SyncOnlineProcessStrategy(ProcessStrategy):
             # 悬浮到同步状态
             sync_button = page.ele('同步状态')
             if not sync_button:
-                print("    ❌未找到同步状态按钮")
+                log("    ❌未找到同步状态按钮")
                 return "failed"
                 
             sync_button.hover()
@@ -514,7 +537,7 @@ class SyncOnlineProcessStrategy(ProcessStrategy):
             # 点击同步启用
             sync_online_button = page.ele('同步启用')
             if not sync_online_button:
-                print("    ❌未找到同步启用按钮")
+                log("    ❌未找到同步启用按钮")
                 return "failed"
                 
             sync_online_button.click()
@@ -525,11 +548,11 @@ class SyncOnlineProcessStrategy(ProcessStrategy):
             # 等待处理完成
             page.wait(8,10)
             
-            print(f"  ✔️ {target} 同步状态设置成功")
+            log(f"  ✔️ {target} 同步状态设置成功")
             return ProcessResult.SUCCESS
             
         except Exception as e:
-            print(f"    ❌处理目标失败: {e}")
+            log(f"    ❌处理目标失败: {e}")
             return ProcessResult.FAILED
 
 
@@ -577,14 +600,14 @@ class ModularBatchBot:
             # 1. 准备目标列表
             all_targets = self._prepare_targets()
             if not all_targets:
-                print("    ❌未找到任何目标")
+                log("    ❌未找到任何目标")
                 return
             
             # 2. 加载进度
             completed_targets = self._load_progress()
             remaining_targets = [t for t in all_targets if t not in completed_targets]
             
-            print(f"🔄总目标数: {len(all_targets)}, 已完成: {len(completed_targets)}, 剩余: {len(remaining_targets)}")
+            log(f"🔄总目标数: {len(all_targets)}, 已完成: {len(completed_targets)}, 剩余: {len(remaining_targets)}")
             
             # 3. 登录
             if not self._execute_login():
@@ -598,7 +621,7 @@ class ModularBatchBot:
             self._process_targets(remaining_targets, all_targets, completed_targets)
             
         except Exception as e:
-            print(f"    ❌程序运行出错: {e}")
+            log(f"    ❌程序运行出错: {e}")
         finally:
             if hasattr(self.browser, 'quit'):
                 self.browser.quit()
@@ -621,7 +644,7 @@ class ModularBatchBot:
                     if row:
                         targets.append(row[0])
         except Exception as e:
-            print(f"    ❌读取CSV文件出错: {e}")
+            log(f"    ❌读取CSV文件出错: {e}")
         return targets
     
     def _load_progress(self) -> List[str]:
@@ -631,7 +654,7 @@ class ModularBatchBot:
                 with open(self.config.checkpoint_file, 'rb') as f:
                     return pickle.load(f)
             except Exception as e:
-                print(f"    ❌加载进度失败: {e}")
+                log(f"    ❌加载进度失败: {e}")
         return []
     
     def _save_progress(self, completed_targets: List[str]):
@@ -641,7 +664,7 @@ class ModularBatchBot:
             with open(self.config.checkpoint_file, 'wb') as f:
                 pickle.dump(completed_targets, f)
         except Exception as e:
-            print(f"    ❌保存进度失败: {e}")
+            log(f"    ❌保存进度失败: {e}")
     
     def _execute_login(self) -> bool:
         """执行登录"""
@@ -658,23 +681,23 @@ class ModularBatchBot:
         def process_next_target():
             nonlocal i
             if i >= len(remaining_targets):
-                print("✅ 所有目标处理完成。")
+                log("✅ 所有目标处理完成。")
                 return
 
             target = remaining_targets[i]
             try:
                 current_progress = len(all_targets) - len(remaining_targets) + i + 1
-                print(f"🚩正在处理: {target} (进度: {current_progress}/{len(all_targets)})")
+                log(f"🚩正在处理: {target} (进度: {current_progress}/{len(all_targets)})")
 
                 # 搜索目标
                 result_count = self.search_strategy.search_target(self.browser.latest_tab, target)
 
                 if result_count == 0:
-                    print(f"  ❌ {target}未找到搜索结果")
+                    log(f"  ❌ {target}未找到搜索结果")
                     i += 1
                     process_next_target()
                 elif result_count >= 3:
-                    print(f"  ⚠️ {target}有多个搜索结果")
+                    log(f"  ⚠️ {target}有多个搜索结果")
 
                     # ✅ 使用交互策略
                     self.interaction_strategy.request_confirmation(
@@ -682,7 +705,7 @@ class ModularBatchBot:
                         on_confirm=lambda confirmed: handle_confirm(confirmed, target, result_count)
                     )
                 elif result_count == 2:
-                    print("  ✔️ 定位成功")
+                    log("  ✔️ 定位成功")
                     if self.editor_strategy.open_editor(self.browser.latest_tab, target):
                         finalize_process(target)
                     else:
@@ -690,7 +713,7 @@ class ModularBatchBot:
                         process_next_target()
 
             except Exception as e:
-                print(f"    ❌处理{target}时发生错误: {e}")
+                log(f"    ❌处理{target}时发生错误: {e}")
                 self._save_progress(completed_targets)
         
         def handle_confirm(confirmed, target, result_count):
@@ -709,12 +732,12 @@ class ModularBatchBot:
                 self.browser.latest_tab, target, self.update_action
             )
             if result == ProcessResult.SUCCESS:
-                print(f"✅ {target}已成功更新")
+                log(f"✅ {target}已成功更新")
                 completed_targets.append(target)
                 self._save_progress(completed_targets)
             else:
-                print(f"    ❌{target}处理失败")
-            print('='*50)
+                log(f"    ❌{target}处理失败")
+            log('='*50)
             nonlocal i
             i += 1
             process_next_target()

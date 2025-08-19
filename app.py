@@ -919,10 +919,12 @@ class WSA(QMainWindow):
         else:
             self.add_output_message(f'未知的任务类型: {task_type}', 'error')
     
-    # app.py 或 WSA 类中
-
     def activate_batch_upload_replace_bot(self, language: str, target_list: list):
         try:
+            # 注册日志回调函数
+            from dp_bot_manager import set_log_callback
+            set_log_callback(lambda msg, level: self.add_output_message(msg, level))
+            
             self.add_output_message(f"🚀 开始处理 {len(target_list)} 个目标...", "info")
 
             # --- 1. 确定基础路径（GUI 层决策）---
@@ -975,6 +977,9 @@ class WSA(QMainWindow):
         使用 BotFactory.create_online_sync_bot
         """
         try:
+            from dp_bot_manager import set_log_callback
+            set_log_callback(lambda msg, level: self.add_output_message(msg, level))
+            
             self.add_output_message('启动批量设为启用机器人...', 'info')
             
             # 创建并启动批量设为启用机器人，启用机器人不需要传入update函数
@@ -997,6 +1002,9 @@ class WSA(QMainWindow):
         通过 StringPatternTransformer 分析差异，逐个打开页面进行操作
         """
         try:
+            from dp_bot_manager import set_log_callback
+            set_log_callback(lambda msg, level: self.add_output_message(msg, level))
+            
             if self.pattern is None:
                 self.add_output_message('请先分析文本差异并初始化模式转换器', 'warning')
                 return
