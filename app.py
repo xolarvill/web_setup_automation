@@ -943,7 +943,7 @@ class WSA(QMainWindow):
                     self.add_output_message(f"❌ 路径不存在: {folder_path}", "error")
                     continue
                 self.add_output_message(f"🖼️ [{i+1}/{len(target_list)}] 上传: {target}", "info")
-                self.uploader_upload_folder(given_folder_path=folder_path, is_pass_cdn=False)
+                self.uploader_upload_folder_bot(given_folder_path=folder_path, is_pass_cdn=False)
 
             self.add_output_message("图片上传完成，启动自动化替换", "success")
 
@@ -2971,7 +2971,7 @@ class WSA(QMainWindow):
             self.add_output_message(f"Detected unsupported system: {sys.platform}", "info")
             raise Exception("Unknown system. Please check your system.")
         
-    def uploader_upload_folder(self, given_folder_path : str = None, is_pass_cdn : bool = True):
+    def uploader_upload_folder_bot(self, given_folder_path : str = None, is_pass_cdn : bool = True):
         """
         增量上传文件夹中的图片。
         - 读取现有的cdn.json（如果存在）。
@@ -2983,13 +2983,115 @@ class WSA(QMainWindow):
         # 可接受指定文件夹路径的上传
         if given_folder_path is not None:
             folder_path = given_folder_path
-        else:
-            folder_path = self.pics_path_widget.text()
             
         # 如不存在 创建文件夹
         if not os.path.isdir(folder_path):
-            self.add_output_message("Invalid folder path. Please select a valid folder.", "error")
-            return
+            try:
+                os.makedirs(folder_path, exist_ok=True)
+                self.add_output_message(f"Folder did not exist. Created: {folder_path}", "info")
+            except Exception as e:
+                self.add_output_message(f"Invalid folder path and failed to create folder: {e}", "error")
+                return
+
+        self.add_output_message("Starting incremental image upload...", "info")
+        
+        json_path = os.path.join(folder_path, 'cdn.json')
+        
+        # 1. 读取现有CDN记录或创建新模板
+        cdn_data = {
+            "cover_cdn": "", "cover_more_cdn": "",
+            "mockup_list_1_number": "", "mockup_list_2_number": "",
+            "step1_cdn": "", "step2_cdn": "", "step3_cdn": "",
+            "feature1_cdn": "", "feature2_cdn": "", "feature3_cdn": "", "feature4_cdn": "",
+            "banner_cdn": ""
+        }
+        if os.path.exists(json_path):
+            try:
+                with open(json_path, 'r') as f:
+                    cdn_data.update(json.load(f)) # 用文件中的数据更新模板
+                self.add_output_message("Loaded existing cdn.json.", "info")
+            except json.JSONDecodeError:
+                self.add_output_message("Warning: cdn.json is corrupted. Starting with a fresh record.", "warning")
+
+        # 2. 扫描本地图片并仅上传缺失的图片
+        try:
+            image_files = [f for f in os.listdir(folder_path) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))]
+            total_images = len(image_files)
+            self.add_output_message(f"Found {total_images} images in the folder.", "info")
+
+            for i, image_name in enumerate(image_files):
+                filename, _ = os.path.splitext(image_name)
+                key_to_update = None
+                
+                # 建立文件名到JSON键的映射
+                if filename == 'banner':
+                    key_to_update = 'banner_cdn'
+                elif filename in ['1', '2', '3']:
+                    key_to_update = f"step{filename}_cdn"
+                elif filename in ['a', 'b', 'c', 'd']:
+                    key_to_update = f"feature{ord(filename) - ord('a') + 1}_cdn"
+                elif "mockup" or "custom" in filename:
+                    parts = filename.replace("_", " ").split()
+                    number = parts[-1] if parts[-1].isdigit() else ""
+                    if "more" in parts:
+                        key_to_update = "cover_more_cdn"
+                        if number and not cdn_data.get("mockup_list_2_number"):
+                            cdn_data["mockup_list_2_number"] = number
+                    else:
+                        key_to_update = "cover_cdn"
+                        if number and not cdn_data.get("mockup_list_1_number"):
+                            cdn_data["mockup_list_1_number"] = number
+                
+                # 如果是未知图片，使用文件名作为key
+                if key_to_update is None:
+                    key_to_update = filename
+
+                # 检查是否需要上传
+                if not cdn_data.get(key_to_update):
+                    self.add_output_message(f"Uploading ({i+1}/{total_images}): {image_name}...", "info")
+                    file_path = os.path.join(folder_path, image_name)
+                    cdn_url = self.aws_upload.upload_file(file_path)
+                    
+                    if cdn_url:
+                        cdn_data[key_to_update] = cdn_url
+                        self.add_output_message(f"Upload successful: {cdn_url}", "success")
+                    else:
+                        self.add_output_message(f"Upload failed for {image_name}.", "error")
+                else:
+                    self.add_output_message(f"Skipping ({i+1}/{total_images}): {image_name} (already uploaded).", "info")
+
+            # 3. 回写JSON文件
+            with open(json_path, 'w') as f:
+                json.dump(cdn_data, f, indent=4)
+            
+            self.add_output_message(f"CDN records updated successfully at {json_path}", "success")
+            
+            # 4. 更新UI界面
+            if is_pass_cdn:
+                self.pass_cdn_records()
+
+        except Exception as e:
+            self.add_output_message(f"An error occurred during upload: {e}", "error")
+        
+    def uploader_upload_folder(self, given_folder_path : str = None, is_pass_cdn : bool = True):
+        """
+        增量上传文件夹中的图片。
+        - 读取现有的cdn.json（如果存在）。
+        - 只上传本地存在但json中缺少链接的图片。
+        - 如果遇到意料之外的图片（命名不符合所有预设的字段），则在cdn.json中另外保存，按照其文件名+cdn链接的格式。
+        - 更新并保存cdn.json。
+        """
+        
+        folder_path = self.pics_path_widget.text()
+            
+        # 如不存在 创建文件夹
+        if not os.path.isdir(folder_path):
+            try:
+                os.makedirs(folder_path, exist_ok=True)
+                self.add_output_message(f"Folder did not exist. Created: {folder_path}", "info")
+            except Exception as e:
+                self.add_output_message(f"Invalid folder path and failed to create folder: {e}", "error")
+                return
 
         self.add_output_message("Starting incremental image upload...", "info")
         
