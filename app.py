@@ -712,6 +712,9 @@ class WSA(QMainWindow):
         else:
             color = "#1D1D1F"
             icon = "•"
+
+        # ✅ 关键：将 \n 替换为 <br>，以便在 HTML 中换行
+        message_with_br = message.replace('\n', '<br>')
         
         formatted_message = f"""
         <div style="margin: 8px 0; padding: 0; border-left: 3px solid {color};">
@@ -719,7 +722,7 @@ class WSA(QMainWindow):
             {icon} {timestamp}
             </div>
             <div style="color: #1D1D1F; line-height: 1.3; padding: 0 12px;">
-            {message}
+            {message_with_br}
             </div>
         </div>
         """

@@ -341,6 +341,10 @@ class GuiInteractionHandler(InteractionStrategy):
         # 如果正在等待用户确认，取消它（视为“跳过”）
         if self._is_waiting:
             self.continue_action(confirmed=False)  # 自动跳过当前目标
+
+        # 触发外部注册的停止回调（比如关闭浏览器）
+        if self.on_stop_requested:
+            self.on_stop_requested()
         
         log(" CANCEL : 用户点击【终止任务】按钮，正在安全退出...")
 
@@ -579,6 +583,7 @@ class SyncOnlineProcessStrategy(ProcessStrategy):
                 return ProcessResult.FAILED
                 
             sync_button.hover()
+            time.sleep(1)
             
             # 点击同步启用
             sync_online_button = page.ele('同步启用')
@@ -648,12 +653,19 @@ class ModularBatchBot:
         cache_dir = Path(get_writable_path('cache')).parent
         cache_dir.mkdir(parents=True, exist_ok=True)
         
+        completed_targets = []  # 定义在外部，确保 finally 可访问
+        all_targets = []
+
         try:
             # 1. 准备目标列表
             all_targets = self._prepare_targets()
             if not all_targets:
                 log("    ❌未找到任何目标")
                 return
+
+            # 注册 stop 回调：允许 GUI 请求立即 quit
+            if hasattr(self.interaction_strategy, 'on_stop_requested'):
+                self.interaction_strategy.on_stop_requested = self.browser.quit
             
             # 2. 加载进度
             completed_targets = self._load_progress()
@@ -671,12 +683,25 @@ class ModularBatchBot:
             
             # 5. 批量处理目标
             self._process_targets(remaining_targets, all_targets, completed_targets)
+
+            # ✅ 处理完成后，计算失败/未完成的目标
+            failed_targets = [t for t in all_targets if t not in completed_targets]
+
+            if failed_targets:
+                failed_list = "\n".join(f"{target}" for target in failed_targets)
+                log(f"❌ 以下 {len(failed_targets)} 个目标处理失败或未完成:\n{failed_list}")
+            else:
+                log("🎉 所有目标均已成功处理！")
             
         except Exception as e:
             log(f"    ❌程序运行出错: {e}")
+            # 出错后也输出失败列表
+            failed_targets = [t for t in all_targets if t not in completed_targets]
+            if failed_targets:
+                failed_list = "\n".join(f"{target}" for target in failed_targets)
+                log(f"❌ 异常中断，以下 {len(failed_targets)} 个目标未完成:\n{failed_list}")
         finally:
-            if hasattr(self.browser, 'quit'):
-                self.browser.quit()
+            pass
     
     def _prepare_targets(self) -> List[str]:
         """准备目标列表"""
@@ -739,7 +764,7 @@ class ModularBatchBot:
         def process_next_target():
             nonlocal i
             if i >= len(remaining_targets):
-                log("✅ 所有目标处理完成。")
+                log("✅ 无目标可处理。")
                 return
             
              # 🔒 每次处理前检查中断标志
