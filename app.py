@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, QTimer, QSize, QParallelAnimationGroup, QPropertyAnimation, QAbstractAnimation, QPoint, QSequentialAnimationGroup, Signal
 from PySide6.QtGui import QClipboard, QIcon, QGuiApplication
-from qt_material import apply_stylesheet
+from qt_material import apply_stylesheet # type: ignore
 
 # 本地模块导入
 # 解析文本
@@ -932,52 +932,58 @@ class WSA(QMainWindow):
             self.add_output_message(f'未知的任务类型: {task_type}', 'error')
     
     def activate_batch_upload_replace_bot(self, language: str, target_list: list):
-        try:
-            # 注册日志回调函数
-            from dp_bot_manager import set_log_callback
-            set_log_callback(lambda msg, level: self.add_output_message(msg, level))
-            
-            self.add_output_message(f"🚀 开始处理 {len(target_list)} 个目标...", "info")
+        """
+        将整个批量上传和替换任务放入后台线程执行，以避免阻塞UI。
+        """
+        def worker():
+            try:
+                # 注册日志回调函数
+                from dp_bot_manager import set_log_callback
+                set_log_callback(lambda msg, level: self.add_output_message(msg, level))
+                
+                self.add_output_message(f"🚀 开始处理 {len(target_list)} 个目标...", "info")
 
-            # --- 1. 确定基础路径（GUI 层决策）---
-            if sys.platform.startswith('darwin'):
-                base_folder = "/Volumes/shared/pacdora.com/"
-                if not os.path.isdir(base_folder):
-                    self.add_output_message(f"⚠️ NAS不可达，改用桌面", "warning")
-                    base_folder = os.path.expanduser("~/Desktop/")
-            else:
-                base_folder = "//nas01.tools.baoxiaohe.com/shared/pacdora.com/"
+                # --- 1. 确定基础路径（GUI 层决策）---
+                if sys.platform.startswith('darwin'):
+                    base_folder = "/Volumes/shared/pacdora.com/"
+                    if not os.path.isdir(base_folder):
+                        self.add_output_message(f"⚠️ NAS不可达，改用桌面", "warning")
+                        base_folder = os.path.expanduser("~/Desktop/")
+                else:
+                    base_folder = "//nas01.tools.baoxiaohe.com/shared/pacdora.com/"
 
-            # --- 2. 上传所有目标图片 ---
-            for i, target in enumerate(target_list):
-                folder_path = os.path.join(base_folder, target)
-                if not os.path.exists(folder_path):
-                    self.add_output_message(f"❌ 路径不存在: {folder_path}", "error")
-                    continue
-                self.add_output_message(f"🖼️ [{i+1}/{len(target_list)}] 上传: {target}", "info")
-                self.uploader_upload_folder_bot(given_folder_path=folder_path, is_pass_cdn=False)
+                # --- 2. 上传所有目标图片 ---
+                for i, target in enumerate(target_list):
+                    folder_path = os.path.join(base_folder, target)
+                    if not os.path.exists(folder_path):
+                        self.add_output_message(f"❌ 路径不存在: {folder_path}", "error")
+                        continue
+                    self.add_output_message(f"🖼️ [{i+1}/{len(target_list)}] 上传: {target}", "info")
+                    self.uploader_upload_folder_bot(given_folder_path=folder_path, is_pass_cdn=False)
 
-            self.add_output_message("图片上传完成，启动自动化替换", "success")
+                self.add_output_message("图片上传完成，启动自动化替换", "success")
 
-            # --- 3. 使用工厂创建专用 Bot ---
-            bot = BotFactory.create_upload_replace_bot(
-                language=language,
-                base_folder=base_folder,
-                target_list=target_list,
-                interaction_strategy=self.interaction_handler
-            )
+                # --- 3. 使用工厂创建专用 Bot ---
+                bot = BotFactory.create_upload_replace_bot(
+                    language=language,
+                    base_folder=base_folder,
+                    target_list=target_list,
+                    interaction_strategy=self.interaction_handler
+                )
 
-            self.add_output_message("🤖 机器人已启动，请查看浏览器", "success")
+                self.add_output_message("🤖 机器人已启动，请查看浏览器", "success")
 
-            # --- 4. 子线程运行 ---
-            def run_bot():
+                # --- 4. 运行机器人 ---
                 bot.run()
+                self.add_output_message("🎉 所有任务已完成！", "success")
 
-            from threading import Thread
-            Thread(target=run_bot, daemon=True).start()
+            except Exception as e:
+                self.add_output_message(f"❌ 批量上传替换失败: {e}", "error")
 
-        except Exception as e:
-            self.add_output_message(f"❌ 批量上传替换失败: {e}", "error")
+        # --- 启动后台线程 ---
+        from threading import Thread
+        thread = Thread(target=worker, daemon=True)
+        thread.start()
         
     def activate_batch_set_online_bot(self, language: str, target_list: list):
         """
@@ -3081,7 +3087,7 @@ class WSA(QMainWindow):
         except Exception as e:
             self.add_output_message(f"An error occurred during upload: {e}", "error")
         
-    def uploader_upload_folder(self, given_folder_path : str = None, is_pass_cdn : bool = True):
+    def uploader_upload_folder(self, is_pass_cdn : bool = True):
         """
         增量上传文件夹中的图片。
         - 读取现有的cdn.json（如果存在）。
@@ -3089,97 +3095,101 @@ class WSA(QMainWindow):
         - 如果遇到意料之外的图片（命名不符合所有预设的字段），则在cdn.json中另外保存，按照其文件名+cdn链接的格式。
         - 更新并保存cdn.json。
         """
-        
-        folder_path = self.pics_path_widget.text()
+        from threading import Thread
+
+        def worker():
+            folder_path = self.pics_path_widget.text()
+                
+            # 如不存在 创建文件夹
+            if not os.path.isdir(folder_path):
+                try:
+                    os.makedirs(folder_path, exist_ok=True)
+                    self.add_output_message(f"Folder did not exist. Created: {folder_path}", "info")
+                except Exception as e:
+                    self.add_output_message(f"Invalid folder path and failed to create folder: {e}", "error")
+                    return
+
+            self.add_output_message("Starting incremental image upload...", "info")
             
-        # 如不存在 创建文件夹
-        if not os.path.isdir(folder_path):
+            json_path = os.path.join(folder_path, 'cdn.json')
+            
+            # 1. 读取现有CDN记录或创建新模板
+            cdn_data = {
+                "cover_cdn": "", "cover_more_cdn": "",
+                "mockup_list_1_number": "", "mockup_list_2_number": "",
+                "step1_cdn": "", "step2_cdn": "", "step3_cdn": "",
+                "feature1_cdn": "", "feature2_cdn": "", "feature3_cdn": "", "feature4_cdn": "",
+                "banner_cdn": ""
+            }
+            if os.path.exists(json_path):
+                try:
+                    with open(json_path, 'r') as f:
+                        cdn_data.update(json.load(f)) # 用文件中的数据更新模板
+                    self.add_output_message("Loaded existing cdn.json.", "info")
+                except json.JSONDecodeError:
+                    self.add_output_message("Warning: cdn.json is corrupted. Starting with a fresh record.", "warning")
+
+            # 2. 扫描本地图片并仅上传缺失的图片
             try:
-                os.makedirs(folder_path, exist_ok=True)
-                self.add_output_message(f"Folder did not exist. Created: {folder_path}", "info")
-            except Exception as e:
-                self.add_output_message(f"Invalid folder path and failed to create folder: {e}", "error")
-                return
+                image_files = [f for f in os.listdir(folder_path) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))]
+                total_images = len(image_files)
+                self.add_output_message(f"Found {total_images} images in the folder.", "info")
 
-        self.add_output_message("Starting incremental image upload...", "info")
-        
-        json_path = os.path.join(folder_path, 'cdn.json')
-        
-        # 1. 读取现有CDN记录或创建新模板
-        cdn_data = {
-            "cover_cdn": "", "cover_more_cdn": "",
-            "mockup_list_1_number": "", "mockup_list_2_number": "",
-            "step1_cdn": "", "step2_cdn": "", "step3_cdn": "",
-            "feature1_cdn": "", "feature2_cdn": "", "feature3_cdn": "", "feature4_cdn": "",
-            "banner_cdn": ""
-        }
-        if os.path.exists(json_path):
-            try:
-                with open(json_path, 'r') as f:
-                    cdn_data.update(json.load(f)) # 用文件中的数据更新模板
-                self.add_output_message("Loaded existing cdn.json.", "info")
-            except json.JSONDecodeError:
-                self.add_output_message("Warning: cdn.json is corrupted. Starting with a fresh record.", "warning")
-
-        # 2. 扫描本地图片并仅上传缺失的图片
-        try:
-            image_files = [f for f in os.listdir(folder_path) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))]
-            total_images = len(image_files)
-            self.add_output_message(f"Found {total_images} images in the folder.", "info")
-
-            for i, image_name in enumerate(image_files):
-                filename, _ = os.path.splitext(image_name)
-                key_to_update = None
-                
-                # 建立文件名到JSON键的映射
-                if filename == 'banner':
-                    key_to_update = 'banner_cdn'
-                elif filename in ['1', '2', '3']:
-                    key_to_update = f"step{filename}_cdn"
-                elif filename in ['a', 'b', 'c', 'd']:
-                    key_to_update = f"feature{ord(filename) - ord('a') + 1}_cdn"
-                elif "mockup" or "custom" in filename:
-                    parts = filename.replace("_", " ").split()
-                    number = parts[-1] if parts[-1].isdigit() else ""
-                    if "more" in parts:
-                        key_to_update = "cover_more_cdn"
-                        if number and not cdn_data.get("mockup_list_2_number"):
-                            cdn_data["mockup_list_2_number"] = number
-                    else:
-                        key_to_update = "cover_cdn"
-                        if number and not cdn_data.get("mockup_list_1_number"):
-                            cdn_data["mockup_list_1_number"] = number
-                
-                # 如果是未知图片，使用文件名作为key
-                if key_to_update is None:
-                    key_to_update = filename
-
-                # 检查是否需要上传
-                if not cdn_data.get(key_to_update):
-                    self.add_output_message(f"Uploading ({i+1}/{total_images}): {image_name}...", "info")
-                    file_path = os.path.join(folder_path, image_name)
-                    cdn_url = self.aws_upload.upload_file(file_path)
+                for i, image_name in enumerate(image_files):
+                    filename, _ = os.path.splitext(image_name)
+                    key_to_update = None
                     
-                    if cdn_url:
-                        cdn_data[key_to_update] = cdn_url
-                        self.add_output_message(f"Upload successful: {cdn_url}", "success")
+                    # 建立文件名到JSON键的映射
+                    if filename == 'banner':
+                        key_to_update = 'banner_cdn'
+                    elif filename in ['1', '2', '3']:
+                        key_to_update = f"step{filename}_cdn"
+                    elif filename in ['a', 'b', 'c', 'd']:
+                        key_to_update = f"feature{ord(filename) - ord('a') + 1}_cdn"
+                    elif "mockup" or "custom" in filename:
+                        parts = filename.replace("_", " ").split()
+                        number = parts[-1] if parts[-1].isdigit() else ""
+                        if "more" in parts:
+                            key_to_update = "cover_more_cdn"
+                            if number and not cdn_data.get("mockup_list_2_number"):
+                                cdn_data["mockup_list_2_number"] = number
+                        else:
+                            key_to_update = "cover_cdn"
+                            if number and not cdn_data.get("mockup_list_1_number"):
+                                cdn_data["mockup_list_1_number"] = number
+                    
+                    # 如果是未知图片，使用文件名作为key
+                    if key_to_update is None:
+                        key_to_update = filename
+
+                    # 检查是否需要上传
+                    if not cdn_data.get(key_to_update):
+                        self.add_output_message(f"Uploading ({i+1}/{total_images}): {image_name}...", "info")
+                        file_path = os.path.join(folder_path, image_name)
+                        cdn_url = self.aws_upload.upload_file(file_path)
+                        
+                        if cdn_url:
+                            cdn_data[key_to_update] = cdn_url
+                            self.add_output_message(f"Upload successful: {cdn_url}", "success")
+                        else:
+                            self.add_output_message(f"Upload failed for {image_name}.", "error")
                     else:
-                        self.add_output_message(f"Upload failed for {image_name}.", "error")
-                else:
-                    self.add_output_message(f"Skipping ({i+1}/{total_images}): {image_name} (already uploaded).", "info")
+                        self.add_output_message(f"Skipping ({i+1}/{total_images}): {image_name} (already uploaded).", "info")
 
-            # 3. 回写JSON文件
-            with open(json_path, 'w') as f:
-                json.dump(cdn_data, f, indent=4)
-            
-            self.add_output_message(f"CDN records updated successfully at {json_path}", "success")
-            
-            # 4. 更新UI界面
-            if is_pass_cdn:
-                self.pass_cdn_records()
+                # 3. 回写JSON文件
+                with open(json_path, 'w') as f:
+                    json.dump(cdn_data, f, indent=4)
+                
+                self.add_output_message(f"CDN records updated successfully at {json_path}", "success")
+                
+                # 4. 更新UI界面
+                if is_pass_cdn:
+                    self.pass_cdn_records()
 
-        except Exception as e:
-            self.add_output_message(f"An error occurred during upload: {e}", "error")
+            except Exception as e:
+                self.add_output_message(f"An error occurred during upload: {e}", "error")
+        
+        Thread(target=worker, daemon=True).start()
             
     def detect_var_records(self,folder_path) -> bool:
         """
