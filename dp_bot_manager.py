@@ -508,16 +508,17 @@ class ReplacePlaceholderJsonStrategy(ProcessStrategy):
             thumbnail = page.ele('修改字段',-6)
             thumbnail.click()
             
-            thumbnail_input = page.ele('https://cdn.pacdora.com')
-            thumbnail_input.click().clear()
-            
             random_choice = random.choice(
                                           [cdn_data.get("feature1_cdn", ""),
                 cdn_data.get("feature2_cdn", ""),
                 cdn_data.get("feature3_cdn", ""),
                 cdn_data.get("feature4_cdn", "")]
                                           )
-            thumbnail_input.input(random_choice)
+            
+            thumbnail_input = page.ele('@@required:required@@type=text',-1)
+            thumbnail_input.click()
+            thumbnail_input.clear()  # 先清空
+            thumbnail_input.input(random_choice)  # 输入新内容
             
             confirm = page.ele('确定')
             confirm.click()
@@ -893,22 +894,7 @@ class BotFactory:
 
 def example_usage():
     """使用示例"""
-    
-    # 方式1: 使用工厂方法创建现有类型的机器人
-    def dummy_update_action(json_str: str) -> str:
-        return json_str  # 这里放你的更新逻辑
-    
-    bot = BotFactory.create_pacdora_json_bot(
-        language='英语',
-        update_action=dummy_update_action,
-        target_csv_path='./mockup_faq_content.csv'
-    )
-    
-    # 方式2: 创建全新类型的机器人
-    # 只需要实现对应的策略类，然后组合即可
-    
-    #bot.run()
-    
+
     online_bot = BotFactory.create_online_sync_bot(language='英语', target_list= ['triangle-box-mockup'])
     online_bot.run()
     
