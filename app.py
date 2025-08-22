@@ -867,7 +867,13 @@ class WSA(QMainWindow):
         # 添加continue提示信息
         self.interaction_handler.on_request = lambda msg: self.add_output_message(f"⏸️ 等待确认: {msg}", "warning")
         bot_button_layout.addWidget(self.continue_bot_button)
-        
+
+        self.cancel_bot_button = QPushButton("Cancel")
+        self.cancel_bot_button.setToolTip('点击以安全终止当前任务')
+        self.cancel_bot_button.clicked.connect(self.interaction_handler.stop_task)
+        self.interaction_handler.on_request = lambda msg: self.add_output_message(f"⏸️ 取消任务: {msg}", "warning")
+        bot_button_layout.addWidget(self.cancel_bot_button)
+
         layout2.addLayout(bot_button_layout)
         
         layout.addLayout(layout2)
