@@ -452,12 +452,14 @@ class ReplacePlaceholderJsonStrategy(ProcessStrategy):
             # 切换到编辑标签页
             editor_tab = page.browser.latest_tab
             editor_tab.set.activate()
+            log(f"🚩切换到编辑标签页")
 
             # 获取 JSON
             editor_tab.ele("@@type=button@@class^el-button").click(by_js=True)
             time.sleep(0.5)
             editor_tab.ele("获取当前JSON").click()
             time.sleep(1)
+            log(f"   ✔️ 获取当前JSON成功")
 
             original_json = pyperclip.paste()
             if not original_json:
@@ -489,19 +491,20 @@ class ReplacePlaceholderJsonStrategy(ProcessStrategy):
             input_ele = editor_tab.ele("@class=app-writer")
             input_ele.click()
             input_ele.input(replaced_json)
-            
+            log(f"   ✔️ 输入替换后的JSON成功")
             # 保存JSON
             save_json_button = editor_tab.ele("确定")
             if save_json_button:
                 save_json_button.click()
                 time.sleep(1)
-            
+            log(f"   ✔️ 保存JSON成功")
+
             # 保存编辑器
             save_editor_button = editor_tab.ele("@@type=button@@class^el-button", index=8)
             if save_editor_button:
                 save_editor_button.click()
                 time.sleep(5)
-            
+            log(f"   ✔️ 保存编辑器成功")
             # 回主页面保存
             edit_page = page.browser.get_tab(1)
             
@@ -519,7 +522,7 @@ class ReplacePlaceholderJsonStrategy(ProcessStrategy):
             thumbnail_input.click()
             thumbnail_input.clear()  # 先清空
             thumbnail_input.input(random_choice)  # 输入新内容
-            
+            log(f"   ✔️ 输入随机Feature图片作为thumbnail成功")
             confirm = page.ele('确定')
             confirm.click()
             
@@ -548,7 +551,7 @@ class SyncOnlineProcessStrategy(ProcessStrategy):
             edit_button = page.ele('@class=table-td', -1)
             if not edit_button:
                 log("    ❌未找到编辑按钮")
-                return "failed"
+                return ProcessResult.FAILED
             
             edit_button.click()
             
@@ -556,7 +559,7 @@ class SyncOnlineProcessStrategy(ProcessStrategy):
             sync_button = page.ele('同步状态')
             if not sync_button:
                 log("    ❌未找到同步状态按钮")
-                return "failed"
+                return ProcessResult.FAILED
                 
             sync_button.hover()
             
@@ -564,12 +567,14 @@ class SyncOnlineProcessStrategy(ProcessStrategy):
             sync_online_button = page.ele('同步启用')
             if not sync_online_button:
                 log("    ❌未找到同步启用按钮")
-                return "failed"
+                return ProcessResult.FAILED
                 
             sync_online_button.click()
-            
+            log(f"   ✔️ 定位到同步启用按钮")
+
             sync_confirm_button = page.ele('@class=v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary',2)
             sync_confirm_button.click()
+            log(f"   ✔️ 确认同步启用")
             
             # 等待处理完成
             page.wait(8,10)
