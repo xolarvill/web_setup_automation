@@ -304,32 +304,49 @@ class ConsoleInteractionHandler(InteractionStrategy):
 
 class GuiInteractionHandler(InteractionStrategy):
     """
-    GUI 交互处理器
-    与 PySide6 界面通信，通过按钮触发继续
+    GUI 交互处理器，支持 continue 和 stop
+    与 PySide6 界面通信，通过按钮触发继续和终止
     """
     
     def __init__(self):
         self._on_confirm: Optional[Callable[[bool], None]] = None
         self._is_waiting = False
-    
+        self._should_stop = False
+        
+        # 可选：支持消息回调（如 add_output_message）
+        self.on_request = None  # 外部设置，用于显示提示
+
     def is_waiting_for_input(self) -> bool:
         return self._is_waiting
 
     def request_confirmation(self, message: str, on_confirm: Callable[[bool], None]):
         self._on_confirm = on_confirm
         self._is_waiting = True
-        # 通过信号通知 GUI 显示提示（可选）
+        if self.on_request:
+            self.on_request(message)
         log(f"⏸️ GUI 交互请求: {message}")
-        # 实际行为由 GUI 按钮触发 continue_action
-    
+
     def continue_action(self, confirmed: bool = True):
-        """由 GUI 按钮调用，恢复任务"""
         if not self._is_waiting or not self._on_confirm:
             return
         
         self._on_confirm(confirmed)
         self._on_confirm = None
         self._is_waiting = False
+
+    def stop_task(self):
+        """由 GUI 调用，请求终止任务"""
+        self._should_stop = True
+        
+        # 如果正在等待用户确认，取消它（视为“跳过”）
+        if self._is_waiting:
+            self.continue_action(confirmed=False)  # 自动跳过当前目标
+        
+        log(" CANCEL : 用户点击【终止任务】按钮，正在安全退出...")
+
+    def should_stop(self) -> bool:
+        return self._should_stop
+
 
 class StandardEditorStrategy(EditorStrategy):
     """标准编辑器策略"""
@@ -574,12 +591,15 @@ class SyncOnlineProcessStrategy(ProcessStrategy):
 
             sync_confirm_button = page.ele('@class=v-btn v-btn--is-elevated v-btn--has-bg theme--light v-size--default primary',2)
             sync_confirm_button.click()
-            log(f"   ✔️ 确认同步启用")
-            
+            log(f"   ✔️ 确认同步启用，请等待同步完成...")
+
             # 等待处理完成
             page.wait(8,10)
             
             log(f"  ✔️ {target} 同步状态设置成功")
+
+            page.refresh()
+
             return ProcessResult.SUCCESS
             
         except Exception as e:
@@ -618,6 +638,7 @@ class ModularBatchBot:
         self.update_action = update_action
         self.target_list = target_list
         self.target_csv_path = target_csv_path
+        self.interaction_strategy = interaction_strategy
         
         self.browser = Chromium()
     
@@ -709,11 +730,23 @@ class ModularBatchBot:
         """批量处理目标"""
         i = 0
 
+        def should_exit():
+            """检查是否需要退出"""
+            if hasattr(self.interaction_strategy, 'should_stop'):
+                return self.interaction_strategy.should_stop()
+            return False
+
         def process_next_target():
             nonlocal i
             if i >= len(remaining_targets):
                 log("✅ 所有目标处理完成。")
                 return
+            
+             # 🔒 每次处理前检查中断标志
+            if should_exit():
+                log(" CANCEL : 任务已被用户终止。")
+                self._save_progress(completed_targets)
+                return  # 直接退出，不再递归
 
             target = remaining_targets[i]
             try:
@@ -723,8 +756,14 @@ class ModularBatchBot:
                 # 搜索目标
                 result_count = self.search_strategy.search_target(self.browser.latest_tab, target)
 
+                if should_exit():  # 🔁 搜索后也检查
+                    log(" CANCEL : 任务在搜索后被终止。")
+                    self._save_progress(completed_targets)
+                    return
+
                 if result_count == 0:
                     log(f"  ❌ {target}未找到搜索结果")
+                    self.browser.latest_tab.refresh()  # 刷新页面
                     i += 1
                     process_next_target()
                 elif result_count >= 3:
@@ -748,6 +787,10 @@ class ModularBatchBot:
                 self._save_progress(completed_targets)
         
         def handle_confirm(confirmed, target, result_count):
+            if should_exit():
+                log(" CANCEL : 用户在确认阶段终止任务。")
+                return
+
             if confirmed and result_count >= 2:
                 if self.editor_strategy.open_editor(self.browser.latest_tab, target):
                     finalize_process(target)
@@ -759,6 +802,10 @@ class ModularBatchBot:
                 process_next_target()
 
         def finalize_process(target):
+            if should_exit():
+                log(" CANCEL : 任务在处理前被终止。")
+                return
+
             result = self.process_strategy.process_target(
                 self.browser.latest_tab, target, self.update_action
             )
@@ -768,6 +815,7 @@ class ModularBatchBot:
                 self._save_progress(completed_targets)
             else:
                 log(f"    ❌{target}处理失败")
+                self.browser.latest_tab.refresh()
             log('='*50)
             nonlocal i
             i += 1
