@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
     QFrame, QCheckBox, QSizePolicy, QToolButton, QScrollArea, QStyle,
     QDialog, QDialogButtonBox, QFormLayout, QMessageBox, QTabWidget
 )
-from PySide6.QtCore import Qt, QTimer, QSize, QParallelAnimationGroup, QPropertyAnimation, QAbstractAnimation, QPoint, QSequentialAnimationGroup
+from PySide6.QtCore import Qt, QTimer, QSize, QParallelAnimationGroup, QPropertyAnimation, QAbstractAnimation, QPoint, QSequentialAnimationGroup, Signal
 from PySide6.QtGui import QClipboard, QIcon, QGuiApplication
 from qt_material import apply_stylesheet
 
@@ -57,6 +57,10 @@ class WSA(QMainWindow):
         self.setMinimumSize(1350, 820)  # 增加最小窗口大小
         self.setWindowIcon(QIcon("resources/icon.png"))  # 可选：添加图标文件
         self.segments = []
+
+        # 自定义信号，用于跨线程更新UI
+        self.log_signal = Signal(str, str)
+        self.log_signal.connect(self.update_output_box)
 
         # 0. 中心小部件和主布局
         central_widget = QWidget()
@@ -679,7 +683,16 @@ class WSA(QMainWindow):
         self.output_box.clear()
 
     def add_output_message(self, message, msg_type="info"):
-        """Add styled message to output"""
+        """
+        通过发射信号来请求在主线程中添加消息。
+        这个方法现在是线程安全的。
+        """
+        self.log_signal.emit(message, msg_type)
+
+    def update_output_box(self, message, msg_type):
+        """
+        这是一个槽函数，它在主线程中被调用来安全地更新QTextEdit。
+        """
         timestamp = self.current_time()
         
         if msg_type == "info":
@@ -709,9 +722,6 @@ class WSA(QMainWindow):
         </div>
         """
         self.output_box.append(formatted_message)
-        
-        # 强制处理事件，确保GUI实时更新
-        QApplication.processEvents()
         
         # 自动滚动到底部
         scrollbar = self.output_box.verticalScrollBar()
@@ -959,11 +969,7 @@ class WSA(QMainWindow):
 
             # --- 4. 子线程运行 ---
             def run_bot():
-                try:
-                    bot.run()
-                finally:
-                    from PySide6.QtCore import QTimer
-                    QTimer.singleShot(0, lambda: self.add_output_message("🎉 所有任务已完成！", "success"))
+                bot.run()
 
             from threading import Thread
             Thread(target=run_bot, daemon=True).start()

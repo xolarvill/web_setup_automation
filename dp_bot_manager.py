@@ -2,6 +2,7 @@ import time
 import json
 import csv
 import pickle
+import random
 from pathlib import Path
 from DrissionPage import Chromium
 from abc import ABC, abstractmethod
@@ -488,15 +489,39 @@ class ReplacePlaceholderJsonStrategy(ProcessStrategy):
             input_ele = editor_tab.ele("@class=app-writer")
             input_ele.click()
             input_ele.input(replaced_json)
-
-            # 保存 JSON 编辑器
-            editor_tab.ele("确定").click()
-            time.sleep(0.5)
-            editor_tab.eles("@@type=button@@class^el-button")[-1].click()  # 保存
-            time.sleep(3)
-
+            
+            # 保存JSON
+            save_json_button = editor_tab.ele("确定")
+            if save_json_button:
+                save_json_button.click()
+                time.sleep(1)
+            
+            # 保存编辑器
+            save_editor_button = editor_tab.ele("@@type=button@@class^el-button", index=8)
+            if save_editor_button:
+                save_editor_button.click()
+                time.sleep(5)
+            
             # 回主页面保存
             edit_page = page.browser.get_tab(1)
+            
+            thumbnail = page.ele('修改字段',-6)
+            thumbnail.click()
+            
+            thumbnail_input = page.ele('https://cdn.pacdora.com')
+            thumbnail_input.click().clear()
+            
+            random_choice = random.choice(
+                                          [cdn_data.get("feature1_cdn", ""),
+                cdn_data.get("feature2_cdn", ""),
+                cdn_data.get("feature3_cdn", ""),
+                cdn_data.get("feature4_cdn", "")]
+                                          )
+            thumbnail_input.input(random_choice)
+            
+            confirm = page.ele('确定')
+            confirm.click()
+            
             edit_page.ele('保存').click()
             if edit_page.wait.url_change('https://op.pacdora.com/topic/List', timeout=60):
                 return ProcessResult.SUCCESS
