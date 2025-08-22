@@ -51,6 +51,9 @@ from dp_bot_manager import BotFactory, ModularBatchBot, GuiInteractionHandler
 import glob
 
 class WSA(QMainWindow):
+    # 自定义信号，用于跨线程更新UI
+    log_signal = Signal(str, str)
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Web Setup Automation")
@@ -58,8 +61,7 @@ class WSA(QMainWindow):
         self.setWindowIcon(QIcon("resources/icon.png"))  # 可选：添加图标文件
         self.segments = []
 
-        # 自定义信号，用于跨线程更新UI
-        self.log_signal = Signal(str, str)
+        # 连接信号到槽函数
         self.log_signal.connect(self.update_output_box)
 
         # 0. 中心小部件和主布局
