@@ -3074,7 +3074,7 @@ class WSA(QMainWindow):
                     key_to_update = f"step{filename}_cdn"
                 elif filename in ['a', 'b', 'c', 'd']:
                     key_to_update = f"feature{ord(filename) - ord('a') + 1}_cdn"
-                elif "mockup" or "custom" in filename:
+                elif "mockup" in filename or "custom" in filename:
                     parts = filename.replace("_", " ").split()
                     number = parts[-1] if parts[-1].isdigit() else ""
                     if "more" in parts:
@@ -3129,6 +3129,11 @@ class WSA(QMainWindow):
 
         def worker():
             folder_path = self.pics_path_widget.text()
+            
+            # 检查文件夹路径是否为空
+            if not folder_path:
+                self.add_output_message("Folder path is empty. Please set the folder path before uploading.", "error")
+                return
                 
             # 如不存在 创建文件夹
             if not os.path.isdir(folder_path):
@@ -3176,7 +3181,7 @@ class WSA(QMainWindow):
                         key_to_update = f"step{filename}_cdn"
                     elif filename in ['a', 'b', 'c', 'd']:
                         key_to_update = f"feature{ord(filename) - ord('a') + 1}_cdn"
-                    elif "mockup" or "custom" in filename:
+                    elif "mockup" in filename or "custom" in filename:
                         parts = filename.replace("_", " ").split()
                         number = parts[-1] if parts[-1].isdigit() else ""
                         if "more" in parts:
@@ -3213,7 +3218,11 @@ class WSA(QMainWindow):
                 self.add_output_message(f"CDN records updated successfully at {json_path}", "success")
                 
                 # 4. 更新UI界面
-                if is_pass_cdn:
+                # 使用信号在主线程中更新UI
+                # 判断是否存在cdn
+                cdn_records_exist = self.detect_cdn_records(folder_path=folder_path)
+                if cdn_records_exist:
+                    self.add_output_message("Detected cdn records, auto fill.", "success")
                     self.pass_cdn_records()
 
             except Exception as e:
@@ -3247,30 +3256,54 @@ class WSA(QMainWindow):
         
     def pass_cdn_records(self):
         folder_path = self.pics_path_widget.text()
+        if not folder_path:
+            self.add_output_message("Folder path is empty. Cannot populate CDN fields.", "warning")
+            return
+            
         json_path = os.path.join(folder_path, 'cdn.json')
+        self.add_output_message(f"Looking for cdn.json at: {json_path}", "info")
+        
         if not os.path.exists(json_path):
             self.add_output_message("cdn.json not found. Cannot populate fields.", "warning")
             return
             
-        with open(json_path,"r") as f:
-            cdn_json = json.load(f)
+        try:
+            with open(json_path,"r") as f:
+                cdn_json = json.load(f)
+            self.add_output_message(f"Successfully loaded cdn.json with {len(cdn_json)} entries", "info")
+        except Exception as e:
+            self.add_output_message(f"Failed to read cdn.json: {str(e)}", "error")
+            return
+            
         # 提取json中的每一行内容并赋入widget
         try:
-            self.mockup_list_1_number_widget.setText(cdn_json.get("mockup_list_1_number", ""))
-            self.mockup_list_2_number_widget.setText(cdn_json.get("mockup_list_2_number", ""))
-            self.cover_cdn_widget.setText(cdn_json.get("cover_cdn", ""))
-            self.cover_more_cdn_widget.setText(cdn_json.get("cover_more_cdn", ""))
-            self.step1_cdn_widget.setText(cdn_json.get("step1_cdn", ""))
-            self.step2_cdn_widget.setText(cdn_json.get("step2_cdn", ""))
-            self.step3_cdn_widget.setText(cdn_json.get("step3_cdn", ""))
-            self.feature1_cdn_widget.setText(cdn_json.get("feature1_cdn", ""))
-            self.feature2_cdn_widget.setText(cdn_json.get("feature2_cdn", ""))
-            self.feature3_cdn_widget.setText(cdn_json.get("feature3_cdn", ""))
-            self.feature4_cdn_widget.setText(cdn_json.get("feature4_cdn", ""))
-            self.banner_cdn_widget.setText(cdn_json.get("banner_cdn", ""))
-            self.add_output_message("UI fields populated from cdn.json.", "success")
+            updated_fields = 0
+            fields_to_update = [
+                ("mockup_list_1_number_widget", "mockup_list_1_number"),
+                ("mockup_list_2_number_widget", "mockup_list_2_number"),
+                ("cover_cdn_widget", "cover_cdn"),
+                ("cover_more_cdn_widget", "cover_more_cdn"),
+                ("step1_cdn_widget", "step1_cdn"),
+                ("step2_cdn_widget", "step2_cdn"),
+                ("step3_cdn_widget", "step3_cdn"),
+                ("feature1_cdn_widget", "feature1_cdn"),
+                ("feature2_cdn_widget", "feature2_cdn"),
+                ("feature3_cdn_widget", "feature3_cdn"),
+                ("feature4_cdn_widget", "feature4_cdn"),
+                ("banner_cdn_widget", "banner_cdn")
+            ]
+            
+            for widget_name, field_name in fields_to_update:
+                if hasattr(self, widget_name):
+                    widget = getattr(self, widget_name)
+                    value = cdn_json.get(field_name, "")
+                    widget.setText(value)
+                    if value:
+                        updated_fields += 1
+                        
+            self.add_output_message(f"UI fields populated from cdn.json. Updated {updated_fields} fields.", "success")
         except Exception as e:
-            self.add_output_message(f"Passing cdn addresses failed: {str(e)}","error")
+            self.add_output_message(f"Passing cdn addresses failed: {str(e)}", "error")
             
     def load_mockup_sizes(self):
         """
