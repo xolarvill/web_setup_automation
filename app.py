@@ -1479,7 +1479,8 @@ class WSA(QMainWindow):
         
         breadcrumb = self.keywords_widget.text()
         # 处理面包屑文本,保持AI和3D大写
-        breadcrumb_lower = breadcrumb.capitalize().replace("Ai", "AI").replace("ai", "AI").replace("3d", "3D")
+        import re
+        breadcrumb_lower = re.sub(r'\b3d\b', '3D', re.sub(r'\bai\b', 'AI', breadcrumb.capitalize(), flags=re.IGNORECASE), flags=re.IGNORECASE)
         
         banner_cdn = cdn_placeholder_image(self.banner_cdn_widget, type='banner')
         
@@ -1814,7 +1815,9 @@ class WSA(QMainWindow):
         try_link = try_link_spicy
         
         breadcrumb = self.keywords_widget.text()
-        breadcrumb_lower = breadcrumb.capitalize().replace("Ai", "AI").replace("ai", "AI").replace("3d", "3D")
+        # 处理面包屑文本,保持AI和3D大写
+        import re
+        breadcrumb_lower = re.sub(r'\b3d\b', '3D', re.sub(r'\bai\b', 'AI', breadcrumb.capitalize(), flags=re.IGNORECASE), flags=re.IGNORECASE)
         
         part2 = self.segments[1]
         part2_text = part2.splitlines()[1]
@@ -2339,7 +2342,9 @@ class WSA(QMainWindow):
         try_link = try_link_spicy
         
         breadcrumb = self.keywords_widget.text()
-        breadcrumb_lower = breadcrumb.capitalize().replace("Ai", "AI").replace("ai", "AI").replace("3d", "3D")
+        # 处理面包屑文本,保持AI和3D大写
+        import re
+        breadcrumb_lower = re.sub(r'\b3d\b', '3D', re.sub(r'\bai\b', 'AI', breadcrumb.capitalize(), flags=re.IGNORECASE), flags=re.IGNORECASE)
         
         part2 = self.segments[1]
         part2_text = part2.splitlines()[1]
