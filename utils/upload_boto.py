@@ -8,13 +8,20 @@ import socket
 import ssl
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
 
+# 导入凭证管理模块
+from utils.credentials import load_credentials
+
 # 配置日志，便于调试
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class S3Uploader:
     """
     一个用于将文件上传到 AWS S3 并获取 CDN 链接的类。
-    它依赖于已在本地 AWS CLI 中配置的凭证（例如，通过 ~/.aws/credentials 文件或环境变量）。
+    它按照以下优先级顺序查找 AWS 凭证：
+    1. Keyring (推荐) - 从操作系统的凭证管理器中加载
+    2. 环境变量 (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN)
+    3. AWS 配置文件 (~/.aws/credentials, ~/.aws/config)
+    4. aws_config.json (最终备选方案)
     """
 
     def __init__(
@@ -36,86 +43,147 @@ class S3Uploader:
         self.bucket_host = bucket_host
         self.region_name = region_name
 
-        # 初始化 S3 客户端。
-        # boto3 会自动查找 AWS 凭证，优先级通常是：
-        # 1. 环境变量 (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN)
-        # 2. AWS 配置文件 (~/.aws/credentials, ~/.aws/config)
-        # 3. ECS/EC2 实例配置文件
+        # 按照优先级顺序尝试初始化 S3 客户端
         logging.info(f"Initializing S3 client for region: {self.region_name}")
         
+        # 1. 首先尝试从keyring加载凭证
+        if self._try_initialize_with_keyring():
+            return
+            
+        # 2. 然后尝试使用默认配置初始化客户端（环境变量、AWS配置文件等）
+        if self._try_initialize_with_default():
+            return
+            
+        # 3. 最后尝试从aws_config.json文件加载凭证
+        if self._try_initialize_with_config_file():
+            return
+            
+        # 如果所有方法都失败了，抛出异常
+        logging.error("Failed to initialize S3 client with any available credentials")
+        raise Exception("无法初始化S3客户端，请确保已正确配置AWS凭证")
+
+    def _try_initialize_with_keyring(self) -> bool:
+        """
+        尝试使用keyring中存储的凭证初始化S3客户端。
+        返回True表示成功，False表示失败。
+        """
         try:
+            logging.info("Trying to load AWS credentials from keyring")
+            credentials = load_credentials()
+            
+            if credentials:
+                access_key = credentials.get('aws_access_key_id')
+                secret_key = credentials.get('aws_secret_access_key')
+                region = credentials.get('region_name', self.region_name)
+                
+                if access_key and secret_key:
+                    # 使用keyring中的凭证初始化客户端
+                    self.s3_client = boto3.client(
+                        "s3",
+                        region_name=region,
+                        aws_access_key_id=access_key,
+                        aws_secret_access_key=secret_key
+                    )
+                    
+                    # 验证凭证是否有效前先检查网络连接
+                    self._check_network_connectivity()
+                    self.s3_client.list_buckets()
+                    logging.info("Successfully initialized S3 client using keyring credentials")
+                    return True
+                else:
+                    logging.warning("Keyring credentials are incomplete")
+            else:
+                logging.info("No credentials found in keyring")
+        except ClientError as e:
+            error_code = e.response['Error']['Code']
+            logging.error(f"AWS client error when testing keyring credentials: {error_code} - {e}")
+        except Exception as e:
+            logging.error(f"Unexpected error when initializing S3 client with keyring credentials: {e}")
+            
+        return False
+
+    def _try_initialize_with_default(self) -> bool:
+        """
+        尝试使用默认配置初始化S3客户端（环境变量、AWS配置文件等）。
+        返回True表示成功，False表示失败。
+        """
+        try:
+            logging.info("Trying to initialize S3 client with default credentials")
             # 尝试使用默认配置初始化客户端
             self.s3_client = boto3.client("s3", region_name=self.region_name)
             # 验证凭证是否有效前先检查网络连接
             self._check_network_connectivity()
             self.s3_client.list_buckets()
             logging.info("Successfully initialized S3 client with default credentials")
+            return True
         except NoCredentialsError:
-            logging.warning("No AWS credentials found in default locations, trying aws_config.json")
-            # 如果默认配置失败，尝试从项目根目录读取aws_config.json
-            try:
-                # 获取项目根目录路径
-                root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-                config_path = os.path.join(root_dir, 'aws_config.json')
-                
-                # 检查配置文件是否存在
-                if not os.path.exists(config_path):
-                    logging.error(f"AWS config file not found at {config_path}")
-                    raise Exception(f"AWS配置文件不存在: {config_path}")
-                
-                # 读取配置文件
-                with open(config_path, 'r') as f:
-                    aws_config = json.load(f)
-                
-                # 检查必要的凭证字段
-                access_key = aws_config.get('aws_access_key_id')
-                secret_key = aws_config.get('aws_secret_access_key')
-                
-                if not access_key or not secret_key:
-                    logging.error("Missing required AWS credentials in aws_config.json")
-                    raise Exception("AWS配置文件缺少必要的凭证信息")
-                
-                # 使用配置文件中的凭证初始化客户端
-                self.s3_client = boto3.client(
-                    "s3",
-                    region_name=self.region_name,
-                    aws_access_key_id=access_key,
-                    aws_secret_access_key=secret_key
-                )
-                
-                # 验证凭证是否有效前先检查网络连接
-                self._check_network_connectivity()
-                self.s3_client.list_buckets()
-                logging.info("Successfully initialized S3 client using aws_config.json")
-            except FileNotFoundError:
-                logging.error("AWS config file not found")
-                raise Exception("AWS配置文件未找到，请检查文件路径")
-            except json.JSONDecodeError as e:
-                logging.error(f"Failed to parse AWS config file: {e}")
-                raise Exception(f"AWS配置文件格式错误: {e}")
-            except NoCredentialsError:
-                logging.error("Invalid AWS credentials in aws_config.json")
-                raise Exception("aws_config.json中的AWS凭证无效")
-            except PartialCredentialsError:
-                logging.error("Incomplete AWS credentials in aws_config.json")
-                raise Exception("aws_config.json中的AWS凭证不完整")
-            except ClientError as e:
-                error_code = e.response['Error']['Code']
-                logging.error(f"AWS client error when testing credentials: {error_code} - {e}")
-                raise Exception(f"AWS客户端错误: {error_code}")
-            except Exception as e:
-                logging.error(f"Failed to initialize S3 client using aws_config.json: {e}")
-                raise Exception(f"无法初始化S3客户端，请检查AWS配置: {e}")
+            logging.info("No AWS credentials found in default locations")
         except PartialCredentialsError:
             logging.error("Partial AWS credentials found in default locations")
-            raise Exception("默认位置的AWS凭证不完整")
         except ClientError as e:
             error_code = e.response['Error']['Code']
             logging.error(f"AWS client error when testing default credentials: {error_code} - {e}")
-            raise Exception(f"AWS客户端错误: {error_code}")
         except Exception as e:
-            logging.error(f"Unexpected error when initializing S3 client: {e}")
-            raise Exception(f"初始化S3客户端时发生未知错误: {e}")
+            logging.error(f"Unexpected error when initializing S3 client with default credentials: {e}")
+            
+        return False
+
+    def _try_initialize_with_config_file(self) -> bool:
+        """
+        尝试从aws_config.json文件加载凭证并初始化S3客户端。
+        返回True表示成功，False表示失败。
+        """
+        try:
+            logging.warning("No AWS credentials found in default locations, trying aws_config.json")
+            # 获取项目根目录路径
+            root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            config_path = os.path.join(root_dir, 'aws_config.json')
+            
+            # 检查配置文件是否存在
+            if not os.path.exists(config_path):
+                logging.error(f"AWS config file not found at {config_path}")
+                return False
+            
+            # 读取配置文件
+            with open(config_path, 'r') as f:
+                aws_config = json.load(f)
+            
+            # 检查必要的凭证字段
+            access_key = aws_config.get('aws_access_key_id')
+            secret_key = aws_config.get('aws_secret_access_key')
+            
+            if not access_key or not secret_key:
+                logging.error("Missing required AWS credentials in aws_config.json")
+                return False
+            
+            # 使用配置文件中的凭证初始化客户端
+            self.s3_client = boto3.client(
+                "s3",
+                region_name=self.region_name,
+                aws_access_key_id=access_key,
+                aws_secret_access_key=secret_key
+            )
+            
+            # 验证凭证是否有效前先检查网络连接
+            self._check_network_connectivity()
+            self.s3_client.list_buckets()
+            logging.info("Successfully initialized S3 client using aws_config.json")
+            return True
+        except FileNotFoundError:
+            logging.error("AWS config file not found")
+        except json.JSONDecodeError as e:
+            logging.error(f"Failed to parse AWS config file: {e}")
+        except NoCredentialsError:
+            logging.error("Invalid AWS credentials in aws_config.json")
+        except PartialCredentialsError:
+            logging.error("Incomplete AWS credentials in aws_config.json")
+        except ClientError as e:
+            error_code = e.response['Error']['Code']
+            logging.error(f"AWS client error when testing config file credentials: {error_code} - {e}")
+        except Exception as e:
+            logging.error(f"Failed to initialize S3 client using aws_config.json: {e}")
+            
+        return False
 
     def _check_network_connectivity(self):
         """
