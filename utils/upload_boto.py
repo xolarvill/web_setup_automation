@@ -4,6 +4,8 @@ import logging
 import boto3
 import time
 import json
+import socket
+import ssl
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
 
 # 配置日志，便于调试
@@ -44,7 +46,8 @@ class S3Uploader:
         try:
             # 尝试使用默认配置初始化客户端
             self.s3_client = boto3.client("s3", region_name=self.region_name)
-            # 验证凭证是否有效
+            # 验证凭证是否有效前先检查网络连接
+            self._check_network_connectivity()
             self.s3_client.list_buckets()
             logging.info("Successfully initialized S3 client with default credentials")
         except NoCredentialsError:
@@ -80,7 +83,8 @@ class S3Uploader:
                     aws_secret_access_key=secret_key
                 )
                 
-                # 验证凭证是否有效
+                # 验证凭证是否有效前先检查网络连接
+                self._check_network_connectivity()
                 self.s3_client.list_buckets()
                 logging.info("Successfully initialized S3 client using aws_config.json")
             except FileNotFoundError:
@@ -112,7 +116,58 @@ class S3Uploader:
         except Exception as e:
             logging.error(f"Unexpected error when initializing S3 client: {e}")
             raise Exception(f"初始化S3客户端时发生未知错误: {e}")
+
+    def _check_network_connectivity(self):
+        """
+        检查网络连接到 AWS S3 服务端点。
+        """
+        # AWS S3 服务端点
+        s3_endpoint = f"s3.{self.region_name}.amazonaws.com"
+        port = 443  # HTTPS port
         
+        logging.info(f"Checking network connectivity to {s3_endpoint}:{port}")
+        
+        # 检查 DNS 解析
+        try:
+            addr_info = socket.getaddrinfo(s3_endpoint, port)
+            logging.info(f"DNS resolution successful. Address info: {addr_info[0][:2]}")
+        except socket.gaierror as e:
+            logging.error(f"DNS resolution failed for {s3_endpoint}: {e}")
+            raise Exception(f"DNS解析失败: 无法解析 {s3_endpoint}")
+        
+        # 检查 TCP 连接
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(10)  # 10 seconds timeout
+            # 使用第一个解析的地址
+            addr = addr_info[0][4]
+            result = sock.connect_ex(addr)
+            sock.close()
+            
+            if result == 0:
+                logging.info(f"TCP connection to {addr} successful")
+            else:
+                logging.error(f"TCP connection to {addr} failed with error code: {result}")
+                raise Exception(f"TCP连接失败: 无法连接到 {addr}")
+        except Exception as e:
+            logging.error(f"TCP connection test failed: {e}")
+            raise Exception(f"网络连接测试失败: {e}")
+        
+        # 检查 SSL/TLS 连接
+        try:
+            context = ssl.create_default_context()
+            with socket.create_connection((s3_endpoint, port), timeout=10) as sock:
+                with context.wrap_socket(sock, server_hostname=s3_endpoint) as ssock:
+                    logging.info(f"SSL/TLS connection to {s3_endpoint} successful")
+                    # 获取证书信息
+                    cert = ssock.getpeercert()
+                    logging.debug(f"Server certificate: {cert}")
+        except ssl.SSLError as e:
+            logging.error(f"SSL/TLS connection failed: {e}")
+            raise Exception(f"SSL/TLS连接失败: {e}")
+        except Exception as e:
+            logging.error(f"SSL/TLS connection test failed: {e}")
+            raise Exception(f"SSL/TLS连接测试失败: {e}")
 
     def upload_file(self, file_path: str, s3_prefix: str = "page-img/") -> str | None:
         """
@@ -266,4 +321,3 @@ if __name__ == "__main__":
     except Exception as e:
         logging.error(f"Failed to initialize S3Uploader: {e}")
         print(f"S3Uploader initialization failed: {e}")
-
