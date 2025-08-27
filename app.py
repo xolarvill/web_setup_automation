@@ -576,7 +576,12 @@ class WSA(QMainWindow):
         
         # 5. 杂项
         self.uploader = ImageUploader()
-        self.aws_upload = S3Uploader()
+        try:
+            self.aws_upload = S3Uploader()
+        except Exception as e:
+            self.add_output_message(f"AWS S3上传功能初始化失败: {e}。请通过'SC CONFIGURE'按钮配置AWS凭证以启用此功能。", "warning")
+            # 创建一个空的上传器占位符
+            self.aws_upload = None
         self.pattern: StringPatternTransformer = None
         self.output_json = ""
         
@@ -894,6 +899,11 @@ class WSA(QMainWindow):
         """
         测试AWS是否可以正常上传
         """
+        # 检查AWS上传器是否已初始化
+        if self.aws_upload is None:
+            self.add_output_message("AWS S3上传功能未初始化。请通过'SC CONFIGURE'按钮配置AWS凭证以启用此功能。", "error")
+            return
+            
         try:
             # 尝试上传一个测试文件
             path = get_resource_path('resources/test.txt')
@@ -3024,6 +3034,11 @@ class WSA(QMainWindow):
         - 更新并保存cdn.json。
         """
         
+        # 检查AWS上传器是否已初始化
+        if self.aws_upload is None:
+            self.add_output_message("AWS S3上传功能未初始化。请通过'SC CONFIGURE'按钮配置AWS凭证以启用此功能。", "error")
+            return
+            
         # 可接受指定文件夹路径的上传
         if given_folder_path is not None:
             folder_path = given_folder_path
@@ -3094,13 +3109,16 @@ class WSA(QMainWindow):
                 if not cdn_data.get(key_to_update):
                     self.add_output_message(f"Uploading ({i+1}/{total_images}): {image_name}...", "info")
                     file_path = os.path.join(folder_path, image_name)
-                    cdn_url = self.aws_upload.upload_file(file_path)
-                    
-                    if cdn_url:
-                        cdn_data[key_to_update] = cdn_url
-                        self.add_output_message(f"Upload successful: {cdn_url}", "success")
-                    else:
-                        self.add_output_message(f"Upload failed for {image_name}.", "error")
+                    try:
+                        cdn_url = self.aws_upload.upload_file(file_path)
+                        
+                        if cdn_url:
+                            cdn_data[key_to_update] = cdn_url
+                            self.add_output_message(f"Upload successful: {cdn_url}", "success")
+                        else:
+                            self.add_output_message(f"Upload failed for {image_name}.", "error")
+                    except Exception as e:
+                        self.add_output_message(f"Upload failed for {image_name}: {e}", "error")
                 else:
                     self.add_output_message(f"Skipping ({i+1}/{total_images}): {image_name} (already uploaded).", "info")
 
@@ -3128,6 +3146,11 @@ class WSA(QMainWindow):
         from threading import Thread
 
         def worker():
+            # 检查AWS上传器是否已初始化
+            if self.aws_upload is None:
+                self.add_output_message("AWS S3上传功能未初始化。请通过'SC CONFIGURE'按钮配置AWS凭证以启用此功能。", "error")
+                return
+                
             folder_path = self.pics_path_widget.text()
             
             # 检查文件夹路径是否为空
@@ -3201,13 +3224,16 @@ class WSA(QMainWindow):
                     if not cdn_data.get(key_to_update):
                         self.add_output_message(f"Uploading ({i+1}/{total_images}): {image_name}...", "info")
                         file_path = os.path.join(folder_path, image_name)
-                        cdn_url = self.aws_upload.upload_file(file_path)
-                        
-                        if cdn_url:
-                            cdn_data[key_to_update] = cdn_url
-                            self.add_output_message(f"Upload successful: {cdn_url}", "success")
-                        else:
-                            self.add_output_message(f"Upload failed for {image_name}.", "error")
+                        try:
+                            cdn_url = self.aws_upload.upload_file(file_path)
+                            
+                            if cdn_url:
+                                cdn_data[key_to_update] = cdn_url
+                                self.add_output_message(f"Upload successful: {cdn_url}", "success")
+                            else:
+                                self.add_output_message(f"Upload failed for {image_name}.", "error")
+                        except Exception as e:
+                            self.add_output_message(f"Upload failed for {image_name}: {e}", "error")
                     else:
                         self.add_output_message(f"Skipping ({i+1}/{total_images}): {image_name} (already uploaded).", "info")
 

@@ -305,21 +305,75 @@ class ModernSplashScreen(QWidget):
             self.fade_out_animation()
             
         except Exception as e:
-            self.status_label.setText(f"启动失败: {e}")
-            print(f"Error loading main window: {e}")
-            import traceback
-            traceback.print_exc()
-            
-            # 停止动画并显示错误状态
-            self.animation_timer.stop()
-            self.progress_bar.setRange(0, 1)
-            self.progress_bar.setValue(1)
-            self.progress_bar.setStyleSheet("""
-                QProgressBar::chunk { 
-                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
-                        stop:0 #e74c3c, stop:1 #c0392b); 
-                }
-            """)
+            # 检查是否是AWS凭证相关的错误
+            error_msg = str(e)
+            if "AWS" in error_msg or "credentials" in error_msg.lower() or "S3" in error_msg:
+                self.handle_aws_config_error()
+            else:
+                self.status_label.setText(f"启动失败: {e}")
+                print(f"Error loading main window: {e}")
+                import traceback
+                traceback.print_exc()
+                
+                # 停止动画并显示错误状态
+                self.animation_timer.stop()
+                self.progress_bar.setRange(0, 1)
+                self.progress_bar.setValue(1)
+                self.progress_bar.setStyleSheet("""
+                    QProgressBar::chunk { 
+                        background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                            stop:0 #e74c3c, stop:1 #c0392b); 
+                    }
+                """)
+    
+    def handle_aws_config_error(self):
+        """处理AWS配置错误，引导用户进行配置"""
+        self.status_label.setText("AWS配置缺失，请配置凭证...")
+        self.progress_bar.setRange(0, 1)
+        self.progress_bar.setValue(1)
+        self.progress_bar.setStyleSheet("""
+            QProgressBar::chunk { 
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                    stop:0 #f39c12, stop:1 #e67e22); 
+            }
+        """)
+        
+        # 添加配置按钮
+        from PySide6.QtWidgets import QPushButton
+        self.config_button = QPushButton("配置AWS凭证")
+        self.layout().addWidget(self.config_button)
+        self.config_button.clicked.connect(self.open_aws_config_dialog)
+        
+        # 添加说明标签
+        from PySide6.QtWidgets import QLabel
+        self.instruction_label = QLabel("首次使用需要配置AWS凭证才能正常使用图片上传功能")
+        self.instruction_label.setAlignment(Qt.AlignCenter)
+        self.instruction_label.setStyleSheet("""
+            QLabel {
+                color: #34495E;
+                background: transparent;
+                margin-top: 10px;
+                font-style: italic;
+            }
+        """)
+        self.layout().addWidget(self.instruction_label)
+    
+    def open_aws_config_dialog(self):
+        """打开AWS配置对话框"""
+        try:
+            # 延迟导入以避免循环依赖
+            from utils.credentials import SCConfigDialog
+            dialog = SCConfigDialog()
+            if dialog.exec():
+                # 配置成功，重新尝试加载主应用
+                self.config_button.setParent(None)  # 移除按钮
+                self.instruction_label.setParent(None)  # 移除标签
+                self.status_label.setText("配置成功，正在重新加载...")
+                QTimer.singleShot(1000, self.load_main_app)
+            else:
+                self.status_label.setText("配置已取消，请点击按钮重新配置")
+        except Exception as e:
+            self.status_label.setText(f"配置失败: {e}")
             
     def fade_out_animation(self):
         """淡出动画"""

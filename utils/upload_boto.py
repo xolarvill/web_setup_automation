@@ -42,6 +42,7 @@ class S3Uploader:
         self.bucket_name = bucket_name
         self.bucket_host = bucket_host
         self.region_name = region_name
+        self.s3_client = None
 
         # 按照优先级顺序尝试初始化 S3 客户端
         logging.info(f"Initializing S3 client for region: {self.region_name}")
@@ -58,9 +59,9 @@ class S3Uploader:
         if self._try_initialize_with_config_file():
             return
             
-        # 如果所有方法都失败了，抛出异常
-        logging.error("Failed to initialize S3 client with any available credentials")
-        raise Exception("无法初始化S3客户端，请确保已正确配置AWS凭证")
+        # 如果所有方法都失败了，记录日志但不抛出异常
+        logging.warning("Failed to initialize S3 client with any available credentials. Upload functionality will be disabled.")
+        # 不抛出异常，允许程序继续运行
 
     def _try_initialize_with_keyring(self) -> bool:
         """
@@ -248,6 +249,11 @@ class S3Uploader:
         返回:
             str | None: 上传成功后文件的完整 CDN 链接，如果上传失败则返回 None。
         """
+        # 检查S3客户端是否已初始化
+        if self.s3_client is None:
+            logging.warning("S3 client is not initialized. Upload functionality is disabled.")
+            raise Exception("AWS S3客户端未初始化，请先配置AWS凭证以启用上传功能。")
+        
         # 检查文件是否存在
         if not os.path.exists(file_path):
             logging.error(f"Error: File not found at '{file_path}'")

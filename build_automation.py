@@ -18,11 +18,14 @@ def main():
     BUILD_PATH = Path("build")
 
     # 1. 手动输入版本号
-    while True:
-        version = input(f"请输入 '{APP_DISPLAY_NAME}' 的版本号 (例如 0.3.1): ").strip()
-        if version:
-            break
-        print("版本号不能为空，请重新输入。")
+    version = "1.5.7"  # 默认版本号
+    print(f"使用默认版本号: {version}")
+    # 如果需要手动输入，可以取消下面的注释
+    # while True:
+    #     version = input(f"请输入 '{APP_DISPLAY_NAME}' 的版本号 (例如 0.3.1): ").strip()
+    #     if version:
+    #         break
+    #     print("版本号不能为空，请重新输入。")
 
     # --- 平台检测和路径配置 ---
     if sys.platform == "darwin":
