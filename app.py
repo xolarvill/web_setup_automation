@@ -896,17 +896,14 @@ class WSA(QMainWindow):
         """
         try:
             # 尝试上传一个测试文件
-            with open('test.txt','w') as f:
-                f.write('test')
-            result = self.aws_upload.upload_file('test.txt')
+            path = get_resource_path('resources/test.txt')
+            result = self.aws_upload.upload_file(path)
             if result:
-                self.add_output_message(f'AWS BOTO上传测试成功，文件路径为: {result}','success')
+                self.add_output_message(f'AWS BOTO上传测试文件成功，文件路径为: {result}','success')
             else:
-                self.add_output_message('AWS BOTO上传测试失败','error')
-            # 上传后删除测试文件
-            os.remove('test.txt')
+                self.add_output_message('AWS BOTO上传测试文件失败','error')
         except Exception as e:
-            self.add_output_message(f'AWS BOTO上传测试过程中发生错误: {e}','error')
+            self.add_output_message(f'AWS BOTO上传测试文件过程中发生错误: {e}','error')
         
     def request_confirmation(self, message: str, on_confirm: Callable[[bool], None]):
         self._on_confirm = on_confirm
