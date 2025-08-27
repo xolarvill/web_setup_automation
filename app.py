@@ -767,6 +767,12 @@ class WSA(QMainWindow):
         self.add_login_requirement_button.clicked.connect(self.add_login_requirement)
         layout1.addWidget(self.add_login_requirement_button)
         
+        # 添加一个调试AWS BOTO上传的按钮
+        self.debug_aws_boto_upload_button = QPushButton("Debug AWS")
+        self.debug_aws_boto_upload_button.setToolTip("测试AWS是否可以正常上传")
+        self.debug_aws_boto_upload_button.clicked.connect(self.debug_aws_boto_upload)
+        layout1.addWidget(self.debug_aws_boto_upload_button)
+        
         layout.addLayout(layout1)
         
         
@@ -883,6 +889,24 @@ class WSA(QMainWindow):
         
         # 显示窗口
         self.explore_discover_window.show()
+        
+    def debug_aws_boto_upload(self):
+        """
+        测试AWS是否可以正常上传
+        """
+        try:
+            # 尝试上传一个测试文件
+            with open('test.txt','w') as f:
+                f.write('test')
+            result = self.aws_upload.upload_file('test.txt')
+            if result:
+                self.add_output_message(f'AWS BOTO上传测试成功，文件路径为: {result}','success')
+            else:
+                self.add_output_message('AWS BOTO上传测试失败','error')
+            # 上传后删除测试文件
+            os.remove('test.txt')
+        except Exception as e:
+            self.add_output_message(f'AWS BOTO上传测试过程中发生错误: {e}','error')
         
     def request_confirmation(self, message: str, on_confirm: Callable[[bool], None]):
         self._on_confirm = on_confirm
