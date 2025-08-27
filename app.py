@@ -1426,23 +1426,35 @@ class WSA(QMainWindow):
 
         
     def generate_json_action(self):
-        chosen_type = self.page_type.currentText()
-        if chosen_type == 'Mockup tool':
-            self.generate_json_action_mockup_tool()
-        elif chosen_type == 'Mockup resource':
-            self.generate_json_action_mockup_resource()
-        elif chosen_type == 'Mockup universal topic':
-            self.generate_json_action_mockup_universal_topic()
+        """在后台线程中执行JSON生成操作"""
+        from threading import Thread
         
-        elif chosen_type == 'Dieline tool':
-            self.generate_json_action_dieline_tool()
-        elif chosen_type == 'Dieline renderer':
-            self.generate_json_action_dieline_rendered()
-            
-        elif chosen_type == 'Mockup landing page':
-            self.generate_json_action_mockup_landing_page()
-        elif chosen_type == 'TOOLS':
-            self.generate_json_action_tools()
+        def worker():
+            try:
+                chosen_type = self.page_type.currentText()
+                if chosen_type == 'Mockup tool':
+                    self.generate_json_action_mockup_tool()
+                elif chosen_type == 'Mockup resource':
+                    self.generate_json_action_mockup_resource()
+                elif chosen_type == 'Mockup universal topic':
+                    self.generate_json_action_mockup_universal_topic()
+                
+                elif chosen_type == 'Dieline tool':
+                    self.generate_json_action_dieline_tool()
+                elif chosen_type == 'Dieline renderer':
+                    self.generate_json_action_dieline_rendered()
+                    
+                elif chosen_type == 'Mockup landing page':
+                    self.generate_json_action_mockup_landing_page()
+                elif chosen_type == 'TOOLS':
+                    self.generate_json_action_tools()
+            except Exception as e:
+                self.add_output_message(f"Error during JSON generation: {e}", "error")
+        
+        # 在后台线程中执行生成操作
+        self.add_output_message("Starting JSON generation in background thread...", "info")
+        thread = Thread(target=worker, daemon=True)
+        thread.start()
         
     def generate_json_action_dieline_tool(self):
         pass
