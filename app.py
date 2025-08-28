@@ -61,6 +61,8 @@ import glob
 class WSA(QMainWindow):
     # 自定义信号，用于跨线程更新UI
     log_signal = Signal(str, str)
+    # 自定义信号，用于跨线程复制到剪贴板
+    clipboard_signal = Signal(str)
 
     def __init__(self):
         super().__init__()
@@ -71,6 +73,7 @@ class WSA(QMainWindow):
 
         # 连接信号到槽函数
         self.log_signal.connect(self.update_output_box)
+        self.clipboard_signal.connect(self.copy_to_clipboard)
 
         # 0. 中心小部件和主布局
         central_widget = QWidget()
@@ -1803,7 +1806,7 @@ class WSA(QMainWindow):
             json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
             # self.json_widget.setText(json_string)
             self.output_json = json_string
-            self.copy_to_clipboard(json_string)
+            self.clipboard_signal.emit(json_string)
             self.add_output_message("JSON generated and copied to clipboard!", "success")
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
@@ -2330,7 +2333,7 @@ class WSA(QMainWindow):
             json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
             # self.json_widget.setText(json_string)
             self.output_json = json_string
-            self.copy_to_clipboard(json_string)
+            self.clipboard_signal.emit(json_string)
             self.add_output_message("JSON generated and copied to clipboard!", "success")
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
@@ -2722,7 +2725,7 @@ class WSA(QMainWindow):
             json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
             # self.json_widget.setText(json_string)
             self.output_json = json_string
-            self.copy_to_clipboard(json_string)
+            self.clipboard_signal.emit(json_string)
             self.add_output_message("JSON generated and copied to clipboard!", "success")
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
@@ -2871,7 +2874,7 @@ class WSA(QMainWindow):
             json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
             # self.json_widget.setText(json_string)
             self.output_json = json_string
-            self.copy_to_clipboard(json_string)
+            self.clipboard_signal.emit(json_string)
             self.add_output_message("JSON generated and copied to clipboard!", "success")
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
@@ -2904,7 +2907,7 @@ class WSA(QMainWindow):
 
         if json_string:
             self.output_json = json_string
-            self.copy_to_clipboard(json_string)
+            self.clipboard_signal.emit(json_string)
             self.add_output_message("JSON for 'TOOLS' generated and copied to clipboard!", "success")
         else:
             self.add_output_message("Failed to generate JSON for 'TOOLS'. Check logs for details.", "error")
