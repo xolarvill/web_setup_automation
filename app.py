@@ -19,6 +19,14 @@ from PySide6.QtCore import Qt, QTimer, QSize, QParallelAnimationGroup, QProperty
 from PySide6.QtGui import QClipboard, QIcon, QGuiApplication
 from qt_material import apply_stylesheet # type: ignore
 
+# 剪贴板操作备选方案
+try:
+    import pyperclip
+    PYPERCLIP_AVAILABLE = True
+except ImportError:
+    PYPERCLIP_AVAILABLE = False
+    print("Warning: pyperclip not available. Clipboard operations may not work on all platforms.")
+
 # 本地模块导入
 # 解析文本
 from utils.parse import (
@@ -1795,7 +1803,7 @@ class WSA(QMainWindow):
             json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
             # self.json_widget.setText(json_string)
             self.output_json = json_string
-            QGuiApplication.clipboard().setText(json_string)
+            self.copy_to_clipboard(json_string)
             self.add_output_message("JSON generated and copied to clipboard!", "success")
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
@@ -2322,7 +2330,7 @@ class WSA(QMainWindow):
             json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
             # self.json_widget.setText(json_string)
             self.output_json = json_string
-            QGuiApplication.clipboard().setText(json_string)
+            self.copy_to_clipboard(json_string)
             self.add_output_message("JSON generated and copied to clipboard!", "success")
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
@@ -2714,7 +2722,7 @@ class WSA(QMainWindow):
             json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
             # self.json_widget.setText(json_string)
             self.output_json = json_string
-            QGuiApplication.clipboard().setText(json_string)
+            self.copy_to_clipboard(json_string)
             self.add_output_message("JSON generated and copied to clipboard!", "success")
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
@@ -2863,7 +2871,7 @@ class WSA(QMainWindow):
             json_string = json.dumps(json_obj, indent=2, ensure_ascii=False)
             # self.json_widget.setText(json_string)
             self.output_json = json_string
-            QGuiApplication.clipboard().setText(json_string)
+            self.copy_to_clipboard(json_string)
             self.add_output_message("JSON generated and copied to clipboard!", "success")
         except Exception as e:
             self.add_output_message(f"Error generating JSON: {e}", "error")
@@ -2896,7 +2904,7 @@ class WSA(QMainWindow):
 
         if json_string:
             self.output_json = json_string
-            QGuiApplication.clipboard().setText(json_string)
+            self.copy_to_clipboard(json_string)
             self.add_output_message("JSON for 'TOOLS' generated and copied to clipboard!", "success")
         else:
             self.add_output_message("Failed to generate JSON for 'TOOLS'. Check logs for details.", "error")
@@ -2946,6 +2954,32 @@ class WSA(QMainWindow):
 
     def current_time(self):
         return datetime.now().strftime("%H:%M:%S")
+    
+    def copy_to_clipboard(self, text):
+        """
+        跨平台的剪贴板复制函数
+        优先使用PySide6的剪贴板，如果失败则回退到pyperclip
+        """
+        try:
+            # 首先尝试使用PySide6的剪贴板
+            clipboard = QGuiApplication.clipboard()
+            clipboard.setText(text)
+            self.add_output_message("Content copied to clipboard using Qt clipboard.", "success")
+            return True
+        except Exception as e:
+            self.add_output_message(f"Qt clipboard failed: {e}. Trying pyperclip...", "warning")
+            # 如果PySide6方法失败，尝试使用pyperclip
+            if PYPERCLIP_AVAILABLE:
+                try:
+                    pyperclip.copy(text)
+                    self.add_output_message("Content copied to clipboard using pyperclip.", "success")
+                    return True
+                except Exception as e2:
+                    self.add_output_message(f"pyperclip also failed: {e2}", "error")
+                    return False
+            else:
+                self.add_output_message("pyperclip not available. Clipboard operation failed.", "error")
+                return False
     
     def manual_secret_configure(self):
         """
