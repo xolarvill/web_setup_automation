@@ -908,23 +908,248 @@ class WSA(QMainWindow):
         
     def debug_aws_boto_upload(self):
         """
-        测试AWS是否可以正常上传
+        测试AWS是否可以正常上传 - 增强版，包含详细的网络和凭证检查
         """
         # 检查AWS上传器是否已初始化
         if self.aws_upload is None:
             self.add_output_message("AWS S3上传功能未初始化。请通过'SC CONFIGURE'按钮配置AWS凭证以启用此功能。", "error")
             return
-            
+        
+        success_count = 0
+        total_tests = 0
+        
+        self.add_output_message("=" * 50, "info")
+        self.add_output_message("开始执行AWS连接性诊断测试...", "info")
+        self.add_output_message("=" * 50, "info")
+        
+        # 1. 检查网络连接性
+        total_tests += 1
+        self.add_output_message("测试 1/5: 检查网络连接性...", "info")
         try:
-            # 尝试上传一个测试文件
-            path = get_resource_path('resources/test.txt')
-            result = self.aws_upload.upload_file(path)
-            if result:
-                self.add_output_message(f'AWS BOTO上传测试文件成功，文件路径为: {result}','success')
+            if self._test_network_connectivity():
+                self.add_output_message("✓ 网络连接性测试: 通过", "success")
+                success_count += 1
             else:
-                self.add_output_message('AWS BOTO上传测试文件失败','error')
+                self.add_output_message("✗ 网络连接性测试: 失败", "error")
         except Exception as e:
-            self.add_output_message(f'AWS BOTO上传测试文件过程中发生错误: {e}','error')
+            self.add_output_message("✗ 网络连接性测试: 失败 - " + str(e), "error")
+        
+        # 2. 检查AWS凭证有效性
+        total_tests += 1
+        self.add_output_message("\n测试 2/5: 验证AWS凭证有效性...", "info")
+        try:
+            if self._test_aws_credentials():
+                self.add_output_message("✓ AWS凭证验证: 通过", "success")
+                success_count += 1
+            else:
+                self.add_output_message("✗ AWS凭证验证: 失败", "error")
+        except Exception as e:
+            self.add_output_message("✗ AWS凭证验证: 失败 - " + str(e), "error")
+
+        # 3. 检查S3桶访问权限
+        total_tests += 1
+        self.add_output_message("\n测试 3/5: 检查S3存储桶访问权限...", "info")
+        try:
+            if self._test_s3_bucket_access():
+                self.add_output_message("✓ S3存储桶访问: 通过", "success")
+                success_count += 1
+            else:
+                self.add_output_message("✗ S3存储桶访问: 失败", "error")
+        except Exception as e:
+            self.add_output_message("✗ S3存储桶访问: 失败 - " + str(e), "error")
+
+        # 4. 检查上传功能
+        total_tests += 1
+        self.add_output_message("\n测试 4/5: 测试文件上传功能...", "info")
+        try:
+            if self._test_upload_functionality():
+                self.add_output_message("✓ 文件上传功能: 通过", "success")
+                success_count += 1
+            else:
+                self.add_output_message("✗ 文件上传功能: 失败", "error")
+        except Exception as e:
+            self.add_output_message("✗ 文件上传功能: 失败 - " + str(e), "error")
+
+        # 5. 检查CDN链接生成
+        total_tests += 1
+        self.add_output_message("\n测试 5/5: 检查CDN链接生成...", "info")
+        try:
+            if self._test_cdn_link_generation():
+                self.add_output_message("✓ CDN链接生成: 通过", "success")
+                success_count += 1
+            else:
+                self.add_output_message("✗ CDN链接生成: 失败", "error")
+        except Exception as e:
+            self.add_output_message("✗ CDN链接生成: 失败 - " + str(e), "error")
+
+        # 总结
+        self.add_output_message("\n" + "=" * 50, "info")
+        self.add_output_message("AWS诊断测试完成: {}/{} 项测试通过".format(success_count, total_tests), "info")
+        self.add_output_message("=" * 50, "info")
+        
+        if success_count == total_tests:
+            self.add_output_message("🎉 所有AWS连接测试均通过！AWS上传功能正常工作。", "success")
+        else:
+            failed_count = total_tests - success_count
+            self.add_output_message("⚠️  {} 项测试失败，请检查上述错误信息并解决问题。".format(failed_count), "error")
+        
+    def _test_network_connectivity(self):
+        """测试网络连接到AWS S3服务"""
+        try:
+            import socket
+            import ssl
+            
+            # 从S3Uploader获取区域信息
+            region_name = getattr(self.aws_upload, 'region_name', 'us-east-2')
+            s3_endpoint = "s3.{}.amazonaws.com".format(region_name)
+            port = 443
+            
+            self.add_output_message("  尝试连接到 {}:{}".format(s3_endpoint, port), "info")
+            
+            # 检查DNS解析
+            try:
+                addr_info = socket.getaddrinfo(s3_endpoint, port)
+                self.add_output_message("  ✓ DNS解析成功: {}".format(str(addr_info[0][:2])), "success")
+            except socket.gaierror as e:
+                self.add_output_message("  ✗ DNS解析失败: {}".format(str(e)), "error")
+                return False
+            
+            # 检查TCP连接
+            try:
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.settimeout(10)  # 10秒超时
+                addr = addr_info[0][4]  # 获取第一个解析的地址
+                result = sock.connect_ex(addr)
+                sock.close()
+                
+                if result == 0:
+                    self.add_output_message("  ✓ TCP连接成功到 {}".format(str(addr)), "success")
+                else:
+                    self.add_output_message("  ✗ TCP连接失败: 错误代码 {}".format(str(result)), "error")
+                    return False
+            except Exception as e:
+                self.add_output_message("  ✗ TCP连接测试失败: {}".format(str(e)), "error")
+                return False
+            
+            # 检查SSL/TLS连接
+            try:
+                context = ssl.create_default_context()
+                with socket.create_connection((s3_endpoint, port), timeout=10) as sock:
+                    with context.wrap_socket(sock, server_hostname=s3_endpoint) as ssock:
+                        self.add_output_message("  ✓ SSL/TLS连接成功", "success")
+                        # 获取证书信息
+                        cert = ssock.getpeercert()
+                        # 获取证书过期时间
+                        import datetime
+                        from ssl import CertificateError
+                        try:
+                            ssl.match_hostname(cert, s3_endpoint)
+                            self.add_output_message("  ✓ SSL证书验证通过", "success")
+                        except CertificateError as cert_error:
+                            self.add_output_message("  ✗ SSL证书验证失败: {}".format(str(cert_error)), "error")
+                            return False
+            except ssl.SSLError as e:
+                self.add_output_message("  ✗ SSL/TLS连接失败: {}".format(str(e)), "error")
+                return False
+            except Exception as e:
+                self.add_output_message("  ✗ SSL/TLS连接测试失败: {}".format(str(e)), "error")
+                return False
+            
+            return True
+        except Exception as e:
+            self.add_output_message("  ✗ 网络连通性检查过程中发生错误: {}".format(str(e)), "error")
+            return False
+
+    def _test_aws_credentials(self):
+        """测试AWS凭证是否有效"""
+        try:
+            # 尝试列出S3存储桶来验证凭证
+            self.add_output_message("  验证AWS凭证...", "info")
+            buckets = self.aws_upload.s3_client.list_buckets()
+            self.add_output_message("  ✓ AWS凭证验证成功", "success")
+            return True
+        except Exception as e:
+            self.add_output_message("  ✗ AWS凭证验证失败: {}".format(str(e)), "error")
+            return False
+
+    def _test_s3_bucket_access(self):
+        """测试对特定S3存储桶的访问权限"""
+        try:
+            bucket_name = getattr(self.aws_upload, 'bucket_name', 'pacdora-upload')
+            self.add_output_message("  检查对存储桶 '{}' 的访问权限...".format(bucket_name), "info")
+            
+            # 尝试获取存储桶的位置信息
+            location = self.aws_upload.s3_client.get_bucket_location(Bucket=bucket_name)
+            region = location['LocationConstraint']
+            if region is None:
+                region = 'us-east-1'  # S3默认区域
+            
+            self.add_output_message("  ✓ 存储桶访问成功，位置: {}".format(str(region)), "success")
+            return True
+        except Exception as e:
+            self.add_output_message("  ✗ 存储桶访问失败: {}".format(str(e)), "error")
+            return False
+
+    def _test_upload_functionality(self):
+        """测试文件上传功能"""
+        try:
+            import tempfile
+            import os
+            
+            self.add_output_message("  创建测试文件并尝试上传...", "info")
+            
+            # 创建一个临时测试文件
+            with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt', prefix='aws_test_') as temp_file:
+                temp_file.write("这是用于AWS S3上传功能测试的临时文件。\nTest file for AWS S3 upload functionality.")
+                temp_file_path = temp_file.name
+
+            try:
+                # 尝试上传测试文件
+                result = self.aws_upload.upload_file(temp_file_path)
+                if result:
+                    self.add_output_message("  ✓ 文件上传成功: {}".format(result), "success")
+                    # 如果上传成功，尝试删除刚上传的文件
+                    try:
+                        # 从CDN URL提取S3键
+                        s3_key = result.split('/')[-1]  # 获取文件名部分
+                        s3_key = "page-img/{}".format(s3_key)  # 默认前缀
+                        self.aws_upload.s3_client.delete_object(
+                            Bucket=self.aws_upload.bucket_name,
+                            Key=s3_key
+                        )
+                        self.add_output_message("  ✓ 已自动清理测试文件", "info")
+                    except:
+                        self.add_output_message("  ⚠️  无法自动清理测试文件", "warning")
+                    return True
+                else:
+                    self.add_output_message("  ✗ 文件上传失败", "error")
+                    return False
+            finally:
+                # 删除本地临时文件
+                os.unlink(temp_file_path)
+        except FileNotFoundError:
+            self.add_output_message("  ✗ 测试文件未找到", "error")
+            return False
+        except Exception as e:
+            self.add_output_message("  ✗ 文件上传测试失败: {}".format(str(e)), "error")
+            return False
+
+    def _test_cdn_link_generation(self):
+        """测试CDN链接生成"""
+        try:
+            bucket_host = getattr(self.aws_upload, 'bucket_host', '//cdn.pacdora.com/')
+            self.add_output_message("  检查CDN主机配置: {}".format(bucket_host), "info")
+            
+            # 简单检查CDN主机格式
+            if bucket_host.startswith(('//', 'http://', 'https://')):
+                self.add_output_message("  ✓ CDN主机格式正确", "success")
+                return True
+            else:
+                self.add_output_message("  ✗ CDN主机格式不正确，应以'//'或'http(s)://'开头", "error")
+                return False
+        except Exception as e:
+            self.add_output_message("  ✗ CDN链接生成检查失败: {}".format(str(e)), "error")
+            return False
         
     def request_confirmation(self, message: str, on_confirm: Callable[[bool], None]):
         self._on_confirm = on_confirm
